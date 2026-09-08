@@ -1,6 +1,6 @@
 # ROG ZOMBIE — Game Design Document
 
-Versione consolidata — 08/09/2026  
+Versione consolidata — 08/09/2026 — include la revisione CD REDUCTION  
 Destinazione nel repository Unity: `Docs/ROG_ZOMBIE_GDD.md`  
 Fonte: `ROG_ZOMBIE_WORLD_2026-09-08`, documento «ROG ZOMBIE — WORLD — Documento di riferimento».
 
@@ -182,6 +182,10 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - Regola base del danno: DANNO finale = ATK × (1 − DEF%).
 - ATK SPD: 100 = 1 colpo/s.
 - MOVE SPD: 100 = 2 m/s.
+- CD REDUCTION: STAT modificatore del PG, senza unità in secondi; VALORE BASE neutro = 100. CD REDUCTION 100 = 100% del CD BASE della singola ABILITÀ selezionata.
+- Ogni ABILITÀ mantiene il proprio CD BASE in secondi, definito nella relativa scheda PG.
+- Formula: CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100).
+- Esempio: CD BASE ABILITÀ 10 s e CD REDUCTION 90 → CD FINALE 9 s. Un valore CD REDUCTION più basso riduce il cooldown.
 - RANGE: 100 = 1 m nel sistema interno.
 - DEF interno: 100 corrisponde a 0% di modificatore mostrato al PLAYER.
 
@@ -189,22 +193,24 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 ## 11. ROSTER PG — STATS BASE
 
-| PG | ARMA | HP | ATK | DEF | MOVE SPD | ATK SPD | SKILL CD | RANGE |
+| PG | ARMA | HP | ATK | DEF | MOVE SPD | ATK SPD | CD REDUCTION | RANGE |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PG01 | Shotgun | 100 | 20 | +15% | 100 | 85 | 10 s | 3 m |
-| PG02 | Assault Rifle | 100 | 10 | 0% | 100 | 150 | 10 s | 10 m |
-| PG03 | Sniper Rifle | 80 | 50 | −10% | 100 | 70 | 8 s | 5 m |
-| PG04 | Grenade Launcher | 100 | 30 | 0% | 100 | 75 | 12 s | 5 m |
-| PG05 | Knife | 100 | 30 | −10% | 130 | 150 | 15 s | 2 m |
-| PG06 | Revolver | 120 | 40 | 0% | 100 | 80 | 20 s | 10 m |
-| PG07 | Bow | 100 | 30 | 0% | 110 | 110 | 10 s | 15 m |
-| PG08 | Heavy Machine Gun | 100 | 7 | +10% | 90 | 200 | 20 s | 8 m |
+| PG01 | Shotgun | 100 | 20 | +15% | 100 | 85 | 100 | 3 m |
+| PG02 | Assault Rifle | 100 | 10 | 0% | 100 | 150 | 100 | 10 m |
+| PG03 | Sniper Rifle | 80 | 50 | −10% | 100 | 70 | 100 | 5 m |
+| PG04 | Grenade Launcher | 100 | 30 | 0% | 100 | 75 | 100 | 5 m |
+| PG05 | Knife | 100 | 30 | −10% | 130 | 150 | 100 | 2 m |
+| PG06 | Revolver | 120 | 40 | 0% | 100 | 80 | 100 | 10 m |
+| PG07 | Bow | 100 | 30 | 0% | 110 | 110 | 100 | 15 m |
+| PG08 | Heavy Machine Gun | 100 | 7 | +10% | 90 | 200 | 100 | 8 m |
 
-Nota: le STATS sopra riportano gli ultimi valori definiti esplicitamente nel progetto. Le ABILITÀ possono avere CD propri diversi dallo SKILL CD base del PG.
+Nota: le STATS sopra riportano gli ultimi valori definiti esplicitamente nel progetto, inclusa la revisione CD REDUCTION. CD REDUCTION è una STAT modificatore con VALORE BASE 100 per PG01–PG08; i CD BASE in secondi restano esclusivamente nelle singole ABILITÀ e vengono modificati nel CD FINALE secondo la formula della sezione 10.
 
 <a id="sezione-12"></a>
 
 ## 12. ABILITÀ E PASSIVE DEI PG
+
+I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle singole ABILITÀ; restano invariati. Il CD FINALE dipende dalla STAT CD REDUCTION del PG secondo la formula della sezione 10.
 
 ### PG01 — Shotgun
 
@@ -375,8 +381,8 @@ Nota: le STATS sopra riportano gli ultimi valori definiti esplicitamente nel pro
 - Probabilità base di comparsa CHEST: 5%.
 - La CHEST assegna un BONUS a ogni PG della PARTY; ogni PG riceve il proprio BONUS casualmente.
 - I BONUS CHEST riguardano esclusivamente le STATS BASE.
-- STATS possibili: HP, ATK, DEF, MOVE SPD, ATK SPD, SKILL CD. RANGE escluso.
-- Ogni BONUS CHEST modifica la STAT del 5% del VALORE BASE; SKILL CD viene ridotto del 5% del VALORE BASE.
+- STATS possibili: HP, ATK, DEF, MOVE SPD, ATK SPD, CD REDUCTION. RANGE escluso.
+- Ogni BONUS CHEST modifica la STAT del 5% del VALORE BASE; il BONUS CD REDUCTION riduce la STAT CD REDUCTION del 5% del suo VALORE BASE. Con base 100 equivale a −5 punti: per esempio 100 → 95. La riduzione si applica alla STAT, non direttamente ai secondi del CD BASE delle ABILITÀ.
 
 | BONUS STAT CHEST | RATE |
 | --- | --- |
@@ -385,7 +391,7 @@ Nota: le STATS sopra riportano gli ultimi valori definiti esplicitamente nel pro
 | DEF | 22% |
 | MOVE SPD | 22% |
 | ATK SPD | 8% |
-| SKILL CD | 15% |
+| CD REDUCTION | 15% |
 
 <a id="sezione-20"></a>
 
@@ -497,10 +503,10 @@ Nota: le STATS sopra riportano gli ultimi valori definiti esplicitamente nel pro
 
 ## 27. PROF — UPGRADE PERMANENTI
 
-- Categorie definite: HP, ATK, DEF, MOVE SPD, ATK SPD, SKILL CD, CHEST RATE, G DROP, ITEM SLOT, MEDI KIT.
+- Categorie definite: HP, ATK, DEF, MOVE SPD, ATK SPD, CD REDUCTION, CHEST RATE, G DROP, ITEM SLOT, MEDI KIT.
 - HP / ATK / DEF / MOVE SPD / ATK SPD: ogni acquisto aggiunge 1% del VALORE BASE ORIGINALE.
-- SKILL CD: ogni acquisto riduce dell'1% il VALORE BASE ORIGINALE.
-- Costi iniziali definiti: HP 50 G; ATK 50 G; DEF 50 G; MOVE SPD 50 G; ATK SPD 100 G; SKILL CD 100 G.
+- CD REDUCTION: ogni acquisto riduce la STAT CD REDUCTION dell'1% del suo VALORE BASE ORIGINALE. Con base 100 equivale a −1 punto per acquisto: 100 → 99 → 98. La riduzione è sempre calcolata sul VALORE BASE ORIGINALE, non sul valore già modificato, e non modifica il CD BASE in secondi delle ABILITÀ.
+- Costi iniziali definiti: HP 50 G; ATK 50 G; DEF 50 G; MOVE SPD 50 G; ATK SPD 100 G; CD REDUCTION 100 G.
 - Dopo ogni acquisto dello stesso UPGRADE, il costo aumenta del 10% con arrotondamento per difetto.
 - CHEST RATE: costo iniziale 500 G; probabilità base CHEST 5%; incremento precedentemente definito come +1% del BASE per UPGRADE.
 - G DROP: costo iniziale 500 G; ogni UPGRADE aumenta del 10% il VALORE BASE del G DROP.
@@ -574,6 +580,11 @@ Nota: le STATS sopra riportano gli ultimi valori definiti esplicitamente nel pro
 - Tasto INTERAZIONE: F.
 - Tasto ABILITÀ: Q.
 - Ogni PG: 2 ABILITÀ ma 1 sola selezionata per RUN; 2 PASSIVE ma 1 sola selezionata per RUN.
+- CD REDUCTION: STAT modificatore con VALORE BASE neutro 100 per tutti i PG01–PG08; un valore più basso riduce il cooldown.
+- I CD BASE in secondi sono definiti esclusivamente nelle singole ABILITÀ. Formula: CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100). Esempio: CD BASE 10 s e CD REDUCTION 90 → CD FINALE 9 s.
+- BONUS CHEST CD REDUCTION: riduce la STAT del 5% del VALORE BASE; con base 100 equivale a 100 → 95, non a una riduzione diretta in secondi.
+- Ogni UPGRADE PROF CD REDUCTION riduce la STAT dell'1% del VALORE BASE ORIGINALE; con base 100 equivale a −1 punto per acquisto.
+- Eventuali cap/minimi e arrotondamenti di CD REDUCTION e del CD FINALE restano DA DEFINIRE.
 - Ogni PG: 3 SLOT BONUS.
 - SLOT ITEM: 1 iniziale, 3 UPGRADE massimi, 4 SLOT massimi.
 - Ingresso nuova AREA: cura 15% HP MASSIMI.
@@ -593,7 +604,8 @@ Le voci seguenti sono note editoriali di verifica. Evidenziano ciò che la fonte
 | HUB e NPC | MERCHANT, PROF, EXIT; possibili NPC liberati nelle quest. | Identità, dialoghi, condizioni di sblocco e servizi degli altri NPC. |
 | Attacchi base e ITEMS | Armi, ATK, RANGE e regola generale di attacco istantaneo definiti. | Geometria e bersagli degli attacchi delle singole armi, raggio base delle esplosioni di PG04, eccezioni al colpo istantaneo, uso e tasti degli ITEMS, bersagli di danni/cure/invisibilità e friendly fire. |
 | DEF e modificatori | DEF interno 100 = modificatore mostrato 0%; danno = ATK × (1 − DEF%). | Conversione completa fra DEF interna e percentuale mostrata, combinazione di bonus DEF e riduzioni come SCUDO, limiti e arrotondamento del danno. |
-| Cooldown | SKILL CD base del PG e CD specifici delle ABILITÀ entrambi presenti. | Relazione fra i due dati, applicazione degli UPGRADE SKILL CD ai CD specifici e momento di avvio del CD delle abilità che potenziano attacchi successivi. |
+| CD REDUCTION — regola consolidata | STAT modificatore del PG con VALORE BASE neutro 100; 100 = 100% del CD BASE ABILITÀ. CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100). Ogni ABILITÀ mantiene il proprio CD BASE in secondi. CHEST riduce la STAT di 5 punti con base 100; ogni UPGRADE PROF la riduce di 1 punto, calcolato sul VALORE BASE ORIGINALE. | Eventuali cap/limiti minimi o finali della STAT CD REDUCTION e regole di arrotondamento della STAT e del CD FINALE. |
+| Avvio del cooldown | CD BASE delle ABILITÀ conservati nelle schede PG. | Momento di avvio del CD delle abilità che potenziano attacchi successivi. |
 | Effetti e passive | Valori e condizioni conservati integralmente nelle schede PG. | Stacking e refresh non esplicitati, attribuzione delle KILL, base dell’1% HP curato dalla PASSIVA 1 di PG02, selezione per HP assoluti o percentuali di FUOCO CURATIVO, gestione dell’ITEM aggiuntivo di PG04. |
 | ABILITÀ BONUS | 10 abilità con STATS, RATE e UPGRADE. | Attivazione, mira e comportamento non esplicitati, frequenza del danno di AURA TOSSICA e interpretazione dell’UPGRADE DANNO di FIRE BULLET, che riporta ATK +15% anziché un danno base autonomo. |
 | MOB, BOSS e spawn | Totali per AREA, distribuzioni e FIRST SPAWN al 30% definiti. | Inclusione di BOSS/MINI BOSS nei totali e nel limite simultaneo, arrotondamento completo delle quantità per tipo, distanze OFF-SCREEN in presenza di PLAYER separati. |
