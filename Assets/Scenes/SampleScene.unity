@@ -424,7 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a40342508824f069c244204a887c528, type: 3}
   m_Name:
   m_EditorClassIdentifier:
-  moveSpeed: 100
+  playerDefinition: {fileID: 11400000, guid: 005f14b47f1b486391f326fedcb2239d, type: 2}
 --- !u!114 &700000005
 MonoBehaviour:
   m_ObjectHideFlags: 0
