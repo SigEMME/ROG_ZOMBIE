@@ -18,6 +18,6 @@ MonoBehaviour:
     atk: 7
     defPercent: 10
     moveSpeed: 90
-    attackSpeed: 200
+    attackSpeed: 600
     cdReduction: 100
     range: 800

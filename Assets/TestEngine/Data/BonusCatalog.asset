@@ -1,0 +1,299 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cfb500e054044e2e85e3e41f42bc2d6c, type: 3}
+  m_Name: BonusCatalog
+  m_EditorClassIdentifier:
+  Bonuses:
+  - Id: knives
+    Name: LANCIO COLTELLI
+    Weight: 16
+    Parameters:
+    - Key: DANNO
+      BaseValue: 10
+    - Key: RANGE
+      BaseValue: 10
+    - Key: CD
+      BaseValue: 6
+    - Key: N_COLTELLI
+      BaseValue: 1
+    Upgrades:
+    - Key: DANNO
+      Label: DANNO +10%
+      Weight: 30
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: RANGE
+      Label: RANGE +15%
+      Weight: 40
+      BasePercent: 15
+      FlatAmount: 0
+    - Key: CD
+      Label: CD -10%
+      Weight: 20
+      BasePercent: -10
+      FlatAmount: 0
+    - Key: N_COLTELLI
+      Label: N COLTELLI +1
+      Weight: 10
+      BasePercent: 0
+      FlatAmount: 1
+  - Id: pet
+    Name: PET
+    Weight: 6
+    Parameters:
+    - Key: DANNO
+      BaseValue: 10
+    - Key: ATK_SPD
+      BaseValue: 50
+    - Key: RANGE
+      BaseValue: 2
+    - Key: RICERCA
+      BaseValue: 5
+    - Key: N_PET
+      BaseValue: 1
+    Upgrades:
+    - Key: DANNO
+      Label: DANNO +10%
+      Weight: 50
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: ATK_SPD
+      Label: ATK SPD +10%
+      Weight: 40
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: N_PET
+      Label: N PET +1
+      Weight: 10
+      BasePercent: 0
+      FlatAmount: 1
+  - Id: aura
+    Name: AURA TOSSICA
+    Weight: 6
+    Parameters:
+    - Key: DANNO
+      BaseValue: 10
+    - Key: RAGGIO
+      BaseValue: 4
+    - Key: CD
+      BaseValue: 7
+    Upgrades:
+    - Key: DANNO
+      Label: DANNO +10%
+      Weight: 50
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: RAGGIO
+      Label: RAGGIO +10%
+      Weight: 30
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: CD
+      Label: CD -10%
+      Weight: 20
+      BasePercent: -10
+      FlatAmount: 0
+  - Id: ricochet
+    Name: RICOCHET
+    Weight: 6
+    Parameters:
+    - Key: DANNO
+      BaseValue: 40
+    - Key: RANGE
+      BaseValue: 5
+    - Key: RIMBALZI
+      BaseValue: 1
+    Upgrades:
+    - Key: DANNO
+      Label: DANNO +10%
+      Weight: 80
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: RIMBALZI
+      Label: N RIMBALZI +1
+      Weight: 20
+      BasePercent: 0
+      FlatAmount: 1
+  - Id: mines
+    Name: MINE
+    Weight: 16
+    Parameters:
+    - Key: DANNO
+      BaseValue: 10
+    - Key: RAGGIO
+      BaseValue: 3
+    - Key: CD
+      BaseValue: 7
+    - Key: DURATA
+      BaseValue: 5
+    Upgrades:
+    - Key: DANNO
+      Label: DANNO +10%
+      Weight: 40
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: RAGGIO
+      Label: RAGGIO +10%
+      Weight: 40
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: CD
+      Label: CD -10%
+      Weight: 20
+      BasePercent: -10
+      FlatAmount: 0
+  - Id: shield
+    Name: SCUDO
+    Weight: 16
+    Parameters:
+    - Key: RIDUZIONE
+      BaseValue: 40
+    - Key: CD
+      BaseValue: 6
+    Upgrades:
+    - Key: RIDUZIONE
+      Label: RIDUZIONE DANNO +5 punti
+      Weight: 50
+      BasePercent: 0
+      FlatAmount: 5
+    - Key: CD
+      Label: CD -10%
+      Weight: 50
+      BasePercent: -10
+      FlatAmount: 0
+  - Id: fire
+    Name: FIRE BULLET
+    Weight: 11
+    Parameters:
+    - Key: ATK_PERCENT
+      BaseValue: 15
+    - Key: DURATA
+      BaseValue: 3
+    - Key: BRUCIATURA
+      BaseValue: 2
+    - Key: DURATA_BRUCIATURA
+      BaseValue: 2
+    - Key: CD
+      BaseValue: 12
+    Upgrades:
+    - Key: DANNO
+      Label: DANNO +10% (base da definire)
+      Weight: 40
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: BRUCIATURA
+      Label: DANNO BRUCIATURA +50%
+      Weight: 40
+      BasePercent: 50
+      FlatAmount: 0
+    - Key: CD
+      Label: CD -10%
+      Weight: 20
+      BasePercent: -10
+      FlatAmount: 0
+  - Id: taser
+    Name: TASER
+    Weight: 6
+    Parameters:
+    - Key: DANNO
+      BaseValue: 5
+    - Key: RAGGIO
+      BaseValue: 4
+    - Key: BLOCK
+      BaseValue: 2
+    - Key: CD
+      BaseValue: 12
+    Upgrades:
+    - Key: DANNO
+      Label: DANNO +10%
+      Weight: 50
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: RAGGIO
+      Label: RAGGIO +10%
+      Weight: 30
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: BLOCK
+      Label: TEMPO BLOCK +25%
+      Weight: 5
+      BasePercent: 25
+      FlatAmount: 0
+    - Key: CD
+      Label: CD -10%
+      Weight: 15
+      BasePercent: -10
+      FlatAmount: 0
+  - Id: repulse
+    Name: REPULSE
+    Weight: 11
+    Parameters:
+    - Key: DANNO
+      BaseValue: 5
+    - Key: RAGGIO
+      BaseValue: 4
+    - Key: RESPINTA
+      BaseValue: 3
+    - Key: CD
+      BaseValue: 10
+    Upgrades:
+    - Key: DANNO
+      Label: DANNO +10%
+      Weight: 50
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: RAGGIO
+      Label: RAGGIO +10%
+      Weight: 30
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: RESPINTA
+      Label: RESPINTA +20%
+      Weight: 5
+      BasePercent: 20
+      FlatAmount: 0
+    - Key: CD
+      Label: CD -10%
+      Weight: 15
+      BasePercent: -10
+      FlatAmount: 0
+  - Id: slash
+    Name: SCIABOLATA
+    Weight: 6
+    Parameters:
+    - Key: DANNO
+      BaseValue: 15
+    - Key: RANGE
+      BaseValue: 4
+    - Key: CD
+      BaseValue: 15
+    Upgrades:
+    - Key: DANNO
+      Label: DANNO +10%
+      Weight: 40
+      BasePercent: 10
+      FlatAmount: 0
+    - Key: RANGE
+      Label: RANGE +15%
+      Weight: 40
+      BasePercent: 15
+      FlatAmount: 0
+    - Key: CD
+      Label: CD -10%
+      Weight: 20
+      BasePercent: -10
+      FlatAmount: 0
+  Slots: 3
+  NewAtZeroSlots: 100
+  NewAtOneOrTwoSlots: 50
+  NewAtFullSlots: 0
+

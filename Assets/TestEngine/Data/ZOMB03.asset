@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38356ff3ccaf424aa3f0cdc4327ca6cb, type: 3}
+  m_Name: ZOMB03
+  m_EditorClassIdentifier:
+  Kind: 2
+  BaseStats:
+    HP: 110
+    ATK: 20
+    DEF: 110
+    MoveSpeed: 90
+    AttackSpeed: 50
+    Range: 250
+  ExpDrop: 20
+  GoldDrop: 20
+  AggroInterval: 0.5
+  DeathSpriteSeconds: 3
+  StopDistance: 1
+  WindupSeconds: 0.5
+  ImpactRadius: 1.5
+  PreferredDistance: 15
+  RetreatDistance: 9
+  ProjectileSpeed: 15
+  PreExplosionSeconds: 2
+  ExplosionRadius: 4
+  ExplosionDamagePG: 50
+  ExplosionDamageMOB: 25
