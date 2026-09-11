@@ -1,10 +1,10 @@
 # ROG ZOMBIE — Game Design Document
 
-Versione consolidata — 10/09/2026 — aggiornamento completo fino alla BALISTICA GENERALE  
+Versione consolidata — 11/09/2026 — aggiornamento SCONFITTA, CD REDUCTION, DEF/SCUDO, EFFETTI PERSISTENTI, PROF e CHEST  
 Destinazione nel repository Unity: `Docs/ROG_ZOMBIE_GDD.md`  
 Fonti: `ROG_ZOMBIE_WORLD_2026-09-08`, documento «ROG ZOMBIE — WORLD — Documento di riferimento»; GDD con revisione CD REDUCTION; conversazione «Funzionamento ASTRA» (`6a9fce64-149c-83ed-ade6-79f191001021`).
 
-Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizzate in sezioni e tabelle Markdown. La base documentale più recente disponibile è il GDD aggiornato del 09/09/2026 (file locale salvato alle 20:22), derivato dal GDD dell’08/09/2026 con revisione CD REDUCTION. Le successive regole confermate nella conversazione «Funzionamento ASTRA», fino alla conferma finale della BALISTICA GENERALE, prevalgono sui dati precedenti incompatibili. Le note aggiunte per evidenziare lacune e ambiguità sono distinte dalle regole di gioco e non introducono nuove meccaniche.
+Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizzate in sezioni e tabelle Markdown. La base documentale più recente disponibile è il GDD aggiornato del 09/09/2026 (file locale salvato alle 20:22), derivato dal GDD dell’08/09/2026 con revisione CD REDUCTION. Le successive regole confermate nella conversazione «Funzionamento ASTRA», fino alla definizione di CHEST RATE come probabilità della seconda CHEST, prevalgono sui dati precedenti incompatibili. Le note aggiunte per evidenziare lacune e ambiguità sono distinte dalle regole di gioco e non introducono nuove meccaniche.
 
 ## Stato delle specifiche e uso nello sviluppo
 
@@ -211,7 +211,7 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - La CONFERMA di PREPARAZIONE RUN è distinta dalla CONFERMA di SELEZIONE PG.
 - Dopo CONFERMA PREPARAZIONE, il PLAYER non può effettuare azioni/modifiche alla configurazione. Può ANNULLARE la CONFERMA per tornare a modificarla.
 - La RUN parte quando tutti i PLAYER risultano contemporaneamente CONFERMATI, con le selezioni dei PG IA di loro competenza confermate.
-- La PARTY viene bloccata e si apre una SCHERMATA DI CARICAMENTO: generazione AREA iniziale, MOB del FIRST SPAWN, eventuale CHEST e MEDI KIT.
+- La PARTY viene bloccata e si apre una SCHERMATA DI CARICAMENTO: generazione AREA iniziale, MOB del FIRST SPAWN, prima CHEST garantita, eventuale seconda CHEST e MEDI KIT.
 - Il FIRST SPAWN rispetta le sezioni 14–15; CHEST e MEDI KIT le sezioni 19 e 26. Terminato il caricamento, inizia il GAMEPLAY.
 - La RUN parte da LVL 1; i CD delle ABILITÀ iniziano IN CD secondo la sezione 10.4.
 - Animazioni, suoni, aspetto definitivo delle icone e dimensioni dei pannelli restano da realizzare in sviluppo/testing.
@@ -250,12 +250,16 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - ABILITÀ selezionata: Q.
 - Munizioni infinite e nessun reload.
 - Gli ATTACCHI BASE seguono il comportamento definito per la singola arma: AREA HITSCAN, HITSCAN + AREA IMPATTO oppure PROIETTILI FISICI, secondo la classificazione della sezione 10.1. Gli attacchi con proiettile fisico hanno un tempo di viaggio e non sono genericamente istantanei.
-- Regola base del danno: DANNO finale = ATK × (1 − DEF%).
+- Regola base del danno: DANNO finale = ATK × (1 − DEF%), arrotondato all’intero più vicino con arrotondamento matematico (18,4 → 18; 18,5 → 19).
+- DEF massima: 90%, anche per la DEF propria dello SCUDO.
+- SCUDO è un elemento separato dal PLAYER, con propria DEF%: mitiga per primo il DANNO in ingresso; il residuo viene poi mitigato dalla DEF del PLAYER. Arrotondare soltanto il DANNO FINALE dopo entrambe le mitigazioni.
 - ATK SPD: 100 = 1 colpo/s.
 - MOVE SPD: 100 = 2 m/s.
 - CD REDUCTION: STAT modificatore del PG, senza unità in secondi; VALORE BASE neutro = 100. CD REDUCTION 100 = 100% del CD BASE della singola ABILITÀ selezionata.
 - Ogni ABILITÀ mantiene il proprio CD BASE in secondi, definito nella relativa scheda PG.
 - Formula: CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100).
+- CD REDUCTION non può scendere sotto 10.
+- Il CD FINALE viene arrotondato al decimo di secondo con arrotondamento matematico: cifra successiva inferiore a 5 per difetto, da 5 in su per eccesso (6,51 s → 6,5 s; 6,58 s → 6,6 s).
 - Esempio: CD BASE ABILITÀ 10 s e CD REDUCTION 90 → CD FINALE 9 s. Un valore CD REDUCTION più basso riduce il cooldown.
 - RANGE: 100 = 1 m nel sistema interno.
 - DEF interno: 100 corrisponde a 0% di modificatore mostrato al PLAYER.
@@ -344,6 +348,14 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - MOVIMENTO e RESUSCITARE un alleato non annullano INVISIBILITÀ.
 - Il BONUS MOVE SPD associato termina per il PG quando perde INVISIBILITÀ.
 - Alla fine dell’effetto i MOB possono nuovamente rilevare, seguire e attaccare quel PG secondo le normali regole di targeting.
+
+### 10.6 EFFETTI PERSISTENTI — REGOLA GENERALE PROVVISORIA
+
+- Riapplicare lo stesso EFFETTO PERSISTENTE allo stesso bersaglio non lo cumula: la nuova applicazione rinnova la DURATA.
+- Le regole specifiche esplicitamente definite prevalgono sempre su questa regola generale.
+- VELENO PG05: le applicazioni si cumulano e ciascuna mantiene la propria DURATA indipendente.
+- PYROMANIA PG04: le AREE INCENDIATE possono sovrapporsi e i loro DANNI si sommano.
+- VITAMINA C / FUOCO CURATIVO PG06: il BONUS non si cumula e una nuova applicazione rinnova la DURATA, come specificato nella scheda PG06.
 
 <a id="sezione-11"></a>
 
@@ -921,8 +933,8 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 ## 19. CHEST
 
-- Massimo 1 CHEST per AREA.
-- Probabilità base di comparsa CHEST: 5%.
+- Prima CHEST garantita in ogni AREA: probabilità di SPAWN 100%.
+- Il limite di 1 CHEST per AREA è eliminato. CHEST RATE determina la probabilità di SPAWN di una seconda CHEST: +1 punto percentuale per acquisto dell’UPGRADE PROF.
 - La CHEST assegna un BONUS a ogni PG della PARTY non in MORTE; ogni PG riceve il proprio BONUS casualmente e separatamente.
 - I BONUS CHEST riguardano esclusivamente le STATS BASE.
 - STATS possibili: HP, ATK, DEF, MOVE SPD, ATK SPD, CD REDUCTION. RANGE escluso.
@@ -939,8 +951,8 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 ### GENERAZIONE, RACCOLTA E BONUS HP
 
-- Durante il CARICAMENTO di ogni NUOVA AREA si verifica il CHEST RATE della RUN (base 5%). Un esito positivo genera la CHEST: massimo 1 per AREA.
-- Posizione CASUALE ad almeno 50 m dalla ZONA DI INIZIO; se non valida, ricalcolare finché viene trovata una posizione valida.
+- Durante la SCHERMATA DI CARICAMENTO di ogni NUOVA AREA si calcola lo SPAWN: prima CHEST garantita e verifica del CHEST RATE per l’eventuale seconda CHEST.
+- Ogni CHEST viene posizionata CASUALMENTE in una zona raggiungibile dal NAVMESH, ad almeno 80 m dalla ZONA DI INIZIO e almeno 10 m da MEDI KIT e altre CHEST. Se la posizione non è valida, ricalcolare finché viene trovata una posizione valida.
 - Un solo PG nel TRIGGER apre automaticamente la CHEST, anche in combattimento; non serve F. Forma e dimensioni del TRIGGER saranno definite in sviluppo/testing.
 - BONUS immediato a tutti i PG ATTIVI e in DOWN, indipendentemente dalla posizione nell’AREA; i PG in MORTE sono esclusi. Sorteggio individuale con i RATE della tabella.
 - Ogni PLAYER riceve un AVVISO A SCHERMO relativo al BONUS del proprio PG: visibile, comprensibile e non invasivo. Nessuna pausa del GAMEPLAY.
@@ -998,7 +1010,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 | 3 | AURA TOSSICA | DANNO 10; RAGGIO 4 m; CD 7 s. |
 | 4 | RICOCHET | DANNO rimbalzo 40% del danno originale; RANGE rimbalzo 5 m; N° RIMBALZI 1. |
 | 5 | MINE | DANNO 10; RAGGIO 3 m; CD 7 s; esplode se calpestata o dopo 5 s. |
-| 6 | SCUDO | RIDUZIONE DANNO 40%; dura fino alla prima HIT; CD 6 s dopo la scomparsa. |
+| 6 | SCUDO | Elemento separato con propria DEF 40%, massimo 90%; mitiga prima del PLAYER, poi il residuo viene mitigato dalla DEF del PLAYER (sezione 10). Dura fino alla prima HIT; CD 6 s dopo la scomparsa. |
 | 7 | FIRE BULLET | ATK +15%; durata 3 s; BRUCIATURA 2 HP/s per 2 s; CD 12 s. |
 | 8 | TASER | DANNO 5; RAGGIO 4 m; BLOCK 2 s (STUN); CD 12 s. |
 | 9 | REPULSE | DANNO 5; RAGGIO 4 m; RESPINTA 3 m; CD 10 s. |
@@ -1041,7 +1053,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 | LANCIO COLTELLI | N° COLTELLI | +1 |
 | PET | N° PET | +1 |
 | RICOCHET | N° RIMBALZI | +1 |
-| SCUDO | RIDUZIONE DANNO | +5 punti percentuali |
+| SCUDO | DEF DELLO SCUDO | +5 punti percentuali, fino al cap 90% |
 | FIRE BULLET | DANNO BRUCIATURA | +50% del VALORE BASE |
 | TASER | TEMPO BLOCK | +25% del VALORE BASE |
 | REPULSE | RESPINTA | +20% del VALORE BASE |
@@ -1057,7 +1069,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 | AURA TOSSICA | DANNO 50% · RAGGIO 30% · CD 20% |
 | RICOCHET | DANNO 80% · N° RIMBALZI 20% |
 | MINE | DANNO 40% · RAGGIO 40% · CD 20% |
-| SCUDO | RIDUZIONE DANNO 50% · CD 50% |
+| SCUDO | DEF DELLO SCUDO 50% · CD 50% |
 | FIRE BULLET | DANNO 40% · DANNO BRUCIATURA 40% · CD 20% |
 | TASER | DANNO 50% · RAGGIO 30% · TEMPO BLOCK 5% · CD 15% |
 | REPULSE | DANNO 50% · RAGGIO 30% · RESPINTA 5% · CD 15% |
@@ -1090,11 +1102,14 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 ## 27. PROF — UPGRADE PERMANENTI
 
 - Categorie definite: HP, ATK, DEF, MOVE SPD, ATK SPD, CD REDUCTION, CHEST RATE, G DROP, ITEM SLOT, MEDI KIT.
+- HP / ATK / MOVE SPD / ATK SPD / G DROP / MEDI KIT: nessun cap di acquisti.
+- DEF: UPGRADE fino al cap DEF 90%. CD REDUCTION: UPGRADE fino al minimo 10. ITEM SLOT: massimo 3 UPGRADE.
+- I COSTI attuali restano invariati per ora e verranno ribilanciati in fase di TEST.
 - HP / ATK / DEF / MOVE SPD / ATK SPD: ogni acquisto aggiunge 1% del VALORE BASE ORIGINALE.
 - CD REDUCTION: ogni acquisto riduce la STAT CD REDUCTION dell'1% del suo VALORE BASE ORIGINALE. Con base 100 equivale a −1 punto per acquisto: 100 → 99 → 98. La riduzione è sempre calcolata sul VALORE BASE ORIGINALE, non sul valore già modificato, e non modifica il CD BASE in secondi delle ABILITÀ.
 - Costi iniziali definiti: HP 50 G; ATK 50 G; DEF 50 G; MOVE SPD 50 G; ATK SPD 100 G; CD REDUCTION 100 G.
 - Dopo ogni acquisto dello stesso UPGRADE, il costo aumenta del 10% con arrotondamento per difetto.
-- CHEST RATE: costo iniziale 500 G; probabilità base CHEST 5%; incremento precedentemente definito come +1% del BASE per UPGRADE.
+- CHEST RATE: costo iniziale 500 G; ogni acquisto aggiunge +1 punto percentuale alla probabilità di SPAWN di una seconda CHEST nell’AREA. La prima CHEST resta garantita al 100%.
 - G DROP: costo iniziale 500 G; ogni UPGRADE aumenta del 10% il VALORE BASE del G DROP.
 - ITEM SLOT: 3 UPGRADE massimi; costi 1000 G → 1100 G → 1210 G; SLOT da 1 a massimo 4.
 - MEDI KIT: costo UPGRADE iniziale 250 G; ogni UPGRADE aggiunge +2 punti percentuali alla cura (10% → 12% → 14% ...); i costi successivi seguono +10% con arrotondamento per difetto.
@@ -1130,8 +1145,8 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - La sconfitta avviene quando tutti i PG sono contemporaneamente in DOWN.
 - La RUN termina e si torna all'HUB.
 - EXP, LVL della RUN, BONUS temporanei e ITEMS inutilizzati vengono persi.
-- Nuova regola: in caso di sconfitta viene perso il 50% del G ottenuto durante quella RUN; il restante 50% viene mantenuto.
-- La gestione esatta dell'arrotondamento del 50% G, in caso di valore dispari, è DA DEFINIRE.
+- In caso di sconfitta si mantiene il 50% del G ottenuto durante quella RUN, arrotondato per difetto; la parte restante viene persa.
+- Esempio: 101 G ottenuti nella RUN → 50 G mantenuti e 51 G persi.
 
 <a id="sezione-30"></a>
 
@@ -1147,9 +1162,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - SISTEMA DI SPAWN e distribuzione ZOMB01–ZOMB05 consolidati nelle sezioni 14–15. BALISTICA dei PG consolidata nella sezione 10.1; resta da esplicitare l’applicazione dello standard PROJECTILE SPD ai proiettili dei MOB e alle ABILITÀ non precisate.
 - Definire UI/HUD: HP, abilità, PASSIVA, SLOT BONUS, SLOT ITEM, EXP/LVL, G, indicatori DOWN e schermate di scelta.
 - PREPARAZIONE RUN e logica BANNER LEVEL UP consolidate nelle sezioni 8 e 20; realizzare la grafica definitiva e completare le schermate BONUS dove non descritte.
-- Definire le regole di stacking ancora non specificate. Sono già confermati lo stacking con DURATE indipendenti del VELENO di COLTELLI AVVELENATI e il DANNO additivo delle AREE di PYROMANIA; non estenderli automaticamente ad altri effetti.
-- Definire i valori/limiti finali degli UPGRADE permanenti del PROF dove non ancora fissati.
-- Definire l'arrotondamento del G perso/mantenuto in caso di sconfitta con importi dispari.
+- Ribilanciare i COSTI degli UPGRADE permanenti del PROF in fase di TEST; per ora restano quelli della sezione 27. Restano aperti solo gli aspetti PROF indicati nella sezione 32.
 - Bilanciamento complessivo di EXP/LVL, G, MOB per AREA, danni, cure, cooldown e probabilità.
 - Direzione Pixel Art, animazioni, VFX, SFX e musica.
 - Prototipo Unity del movimento, mira, attacco, abilità, spawn, BONUS, HUB e loop RUN.
@@ -1170,11 +1183,14 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - I CD BASE in secondi sono definiti esclusivamente nelle singole ABILITÀ. Formula: CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100). Esempio: CD BASE 10 s e CD REDUCTION 90 → CD FINALE 9 s.
 - BONUS CHEST CD REDUCTION: riduce la STAT del 5% del VALORE BASE; con base 100 equivale a 100 → 95, non a una riduzione diretta in secondi.
 - Ogni UPGRADE PROF CD REDUCTION riduce la STAT dell'1% del VALORE BASE ORIGINALE; con base 100 equivale a −1 punto per acquisto.
-- Eventuali cap/minimi e arrotondamenti di CD REDUCTION e del CD FINALE restano DA DEFINIRE.
+- CD REDUCTION minimo 10; CD FINALE arrotondato al decimo con arrotondamento matematico.
+- DEF massima 90%, inclusa la DEF propria dello SCUDO; SCUDO mitiga prima del PLAYER, poi il residuo è mitigato dalla DEF del PLAYER. DANNO FINALE arrotondato all’intero più vicino.
+- EFFETTI PERSISTENTI: di default non si cumulano e rinnovano la DURATA; prevalgono le regole specifiche (sezione 10.6).
+- Prima CHEST garantita al 100%; PROF CHEST RATE aggiunge +1 punto percentuale per acquisto alla probabilità della seconda CHEST. Posizioni raggiungibili NAVMESH, almeno 80 m dalla ZONA DI INIZIO e 10 m da MEDI KIT e altre CHEST.
 - Ogni PG: 3 SLOT BONUS.
 - SLOT ITEM: 1 iniziale, 3 UPGRADE massimi, 4 SLOT massimi.
 - Ingresso nuova AREA: PG VIVI +15% HP MASSIMI; PG in MORTE resuscitati al 50%, senza +15%; DOWN da resuscitare prima del passaggio.
-- Sconfitta PARTY: perdita del 50% del G ottenuto nella RUN.
+- Sconfitta PARTY: si mantiene il 50% del G ottenuto nella RUN arrotondato per difetto; si perde la parte restante.
 
 - RICALCOLO AGGRO: 0,5 s scaglionato; immediato se il BERSAGLIO entra in DOWN.
 - HIT/DANNO non altera il comportamento del MOB di per sé; STUN interrompe ogni AZIONE e richiede una ripartenza da capo.
@@ -1200,20 +1216,20 @@ Le voci seguenti sono note editoriali di verifica. Evidenziano ciò che la fonte
 | PARTY e sblocchi | 4 PG, roster di 8; PG selezionati BLOCKED; non sbloccati in silhouette. | PG inizialmente disponibili e condizioni di sblocco; dettagli di equipaggiamento/progressione degli IA non esplicitati. Distribuzione IA e responsabilità di selezione/conferma sono definite nella sezione 8. |
 | HUB e NPC | MERCHANT, PROF, EXIT; possibili NPC liberati nelle quest. | Identità, dialoghi, condizioni di sblocco e servizi degli altri NPC. |
 | Attacchi base e ITEMS | Armi, ATK, RANGE, ATTACCHI ad AREA e PROIETTILI definiti nelle sezioni 10–12. | Uso e tasti degli ITEMS, bersagli degli effetti ancora non esplicitati e friendly fire degli effetti non coperti dalle regole specifiche. I PROIETTILI FISICI dei PG attraversano gli alleati senza effetti (sezione 10.1). Gli ATTACCHI BASE PG01–PG08, il raggio delle esplosioni PG04 e le eccezioni sono ora descritti nelle sezioni 10–12. |
-| DEF e modificatori | DEF interno 100 = modificatore mostrato 0%; danno = ATK × (1 − DEF%). | Conversione completa fra DEF interna e percentuale mostrata, combinazione di bonus DEF e riduzioni come SCUDO, limiti e arrotondamento del danno. |
-| CD REDUCTION — regola consolidata | STAT modificatore del PG con VALORE BASE neutro 100; 100 = 100% del CD BASE ABILITÀ. CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100). Ogni ABILITÀ mantiene il proprio CD BASE in secondi. CHEST riduce la STAT di 5 punti con base 100; ogni UPGRADE PROF la riduce di 1 punto, calcolato sul VALORE BASE ORIGINALE. | Eventuali cap/limiti minimi o finali della STAT CD REDUCTION e regole di arrotondamento della STAT e del CD FINALE. |
+| DEF e modificatori | DEF interno 100 = modificatore mostrato 0%; danno = ATK × (1 − DEF%); DEF massima 90%, anche per SCUDO. SCUDO separato mitiga prima del PLAYER; DANNO FINALE arrotondato all’intero più vicino (sezione 10). | Conversione completa fra DEF interna e percentuale mostrata e combinazione dei bonus alla stessa DEF, dove non specificate. |
+| CD REDUCTION — regola consolidata | STAT neutra 100, minimo 10; CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100), arrotondato al decimo con arrotondamento matematico. CHEST −5 punti con base 100; PROF −1 punto sul VALORE BASE ORIGINALE. | Arrotondamento della STAT CD REDUCTION, se necessario: la decisione ai decimi riguarda il CD FINALE. |
 | Avvio del cooldown | CD BASE delle ABILITÀ conservati nelle schede PG. | Avvio del CD per le ABILITÀ non ancora precisate. COLPO GROSSO e FUOCO CURATIVO lo avviano al consumo dell’ultimo ATTACCO; COLPI RESPINGENTI al termine della DURATA; FILO SPINATO e PIOGGIA DI FRECCE all’attivazione. |
-| Effetti e passive | Valori e condizioni conservati integralmente nelle schede PG. | Stacking e refresh non ancora esplicitati per ciascun effetto, criterio generale di attribuzione delle KILL e base dell’1% HP curato dalla PASSIVA 1 di PG02. FUOCO CURATIVO e SCORTA ESPLOSIVA sono definiti nella sezione 12. |
+| Effetti e passive | Valori e condizioni delle schede PG conservati; regola generale provvisoria: nessun cumulo e rinnovo DURATA, salvo regole specifiche (sezione 10.6). | Criterio generale di attribuzione delle KILL e base dell’1% HP curato dalla PASSIVA 1 di PG02. |
 | ABILITÀ BONUS | 10 abilità con STATS, RATE e UPGRADE. | Attivazione, mira e comportamento non esplicitati, frequenza del danno di AURA TOSSICA e interpretazione dell’UPGRADE DANNO di FIRE BULLET, che riporta ATK +15% anziché un danno base autonomo. |
 | MOB, BOSS e spawn | Totali per AREA, distribuzione ZOMB01–ZOMB05, FIRST SPAWN 30%, arrotondamenti a discapito di ZOMB01, quantità residue, probabilità e OFF-SCREEN globale consolidati nelle sezioni 14–15. | Inclusione di BOSS/MINI BOSS nei totali e nel limite simultaneo. |
 | EXP per livello | +15% per livello e tabella LVL 1 → 11. | Regola esatta di arrotondamento «alla decina»: la fonte rinvia a una regola precedente senza esplicitarla e la tabella non è riproducibile con un unico arrotondamento semplice applicato ricorsivamente. Non sostituire i valori tabellari; definire il calcolo oltre le voci presenti, il livello massimo. L’EXP residua e i MULTI LVL UP sono definiti nella sezione 20. |
 | BONUS di fine AREA | 3 proposte STATS BASE + 2 proposte ABILITÀ BONUS; scelta di 1 su 5 per PLAYER. | Valori e RATE delle proposte STATS di fine AREA, non esplicitamente equiparati a quelli CHEST; destinatari e gestione delle scelte per i PG AI. |
 | CHEST e HP | BONUS CHEST del 5% del valore base; cura all’ingresso AREA del 15% HP massimi correnti. | Rapporto fra valore base, UPGRADE permanenti e BONUS temporanei dove non specificato. Per CHEST è definito: incremento HP MASSIMI aggiunto anche agli HP correnti (sezione 19). |
 | G e acquisti | Ogni PLAYER valido riceve l’intero G DROP; validità definita nella sezione 16; il G è detto COMUNE. | Saldo condiviso spendibile o saldi individuali accreditati in parallelo, titolarità degli acquisti/UPGRADE e applicazione dei potenziamenti G DROP in CO-OP. |
-| PROF | Incrementi, prezzi iniziali e ITEM SLOT massimo 4 definiti. | Cap e ambito di applicazione degli UPGRADE permanenti; conferma dell’incremento CHEST RATE, riportato come «precedentemente definito» a +1% del BASE. Non convertirlo automaticamente in +1 punto percentuale. |
+| PROF | Incrementi e prezzi nella sezione 27; nessun cap per HP, ATK, MOVE SPD, ATK SPD, G DROP, MEDI KIT; DEF massimo 90%, CD REDUCTION minimo 10; ITEM SLOT massimo 3 UPGRADE / 4 SLOT. CHEST RATE +1 punto percentuale per acquisto alla probabilità della seconda CHEST. | Ambito di applicazione degli UPGRADE permanenti e limite di acquisti CHEST RATE non esplicitato; costi da ribilanciare in TEST, invariati per ora. |
 | DOWN e morte | DOWN di 20 s; resurrezione con F per 5 s; ritorno al 50% HP massimi e 2 s di invulnerabilità. | Stato e possibilità di recupero alla scadenza dei 20 s, sconfitta con combinazioni di PG morti e DOWN, velocità/modalità del regresso se F viene rilasciato, distanza di interazione, interruzioni e comportamento dell’AI. |
 | Passaggio AREA | Resurrezione automatica dei PG in MORTE al 50%; cura di ingresso del 15% ai VIVI; DOWN da resuscitare prima. | Solo forma e dimensioni del TRIGGER, demandate a sviluppo/testing. DOWN da resuscitare prima; MORTE al 50% senza +15%; VIVI +15%: sezione 6. |
-| Fine RUN | Ritorno volontario dopo BOSS e sconfitta hanno effetti distinti; si perde il 50% del solo G guadagnato nella RUN in caso di sconfitta. | Arrotondamento del G dispari, decisione di proseguire/tornare in CO-OP, abbandono/disconnessione e relativo trattamento della RUN. |
+| Fine RUN | Ritorno volontario dopo BOSS e sconfitta hanno effetti distinti; alla sconfitta si mantiene il 50% del solo G guadagnato nella RUN arrotondato per difetto, perdendo il resto. | Decisione di proseguire/tornare in CO-OP, abbandono/disconnessione e relativo trattamento della RUN. |
 | DANNI PERIODICI | FILO SPINATO richiama esplicitamente la REGOLA GENERALE DEI DANNI PERIODICI; 10 HP/s e applicazione immediata ai MOB già nella fascia sono confermati. | Il testo completo della regola generale non è presente nelle fonti recuperate: frequenza e calcolo dei tick non vengono ricostruiti. |
 | CD al CAMBIO AREA | ABILITÀ DISPONIBILE resta disponibile; ABILITÀ ATTIVA termina e il suo CD riparte. | Il caso di un’ABILITÀ già IN CD ma non più ATTIVA non è esplicitato nella formulazione finale confermata. |
 | TAG degli elementi | Proposta di distinguere gli elementi mediante TAG. | DA CONFERMARE: uso dei TAG, elenco e soluzione tecnica non sono stati approvati. |
