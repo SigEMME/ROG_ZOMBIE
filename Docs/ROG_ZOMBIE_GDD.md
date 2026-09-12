@@ -4,7 +4,7 @@ Versione consolidata — 11/09/2026 — aggiornamento SCONFITTA, CD REDUCTION, D
 Destinazione nel repository Unity: `Docs/ROG_ZOMBIE_GDD.md`  
 Fonti: `ROG_ZOMBIE_WORLD_2026-09-08`, documento «ROG ZOMBIE — WORLD — Documento di riferimento»; GDD con revisione CD REDUCTION; conversazione «Funzionamento ASTRA» (`6a9fce64-149c-83ed-ade6-79f191001021`).
 
-Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizzate in sezioni e tabelle Markdown. La base documentale più recente disponibile è il GDD aggiornato del 09/09/2026 (file locale salvato alle 20:22), derivato dal GDD dell’08/09/2026 con revisione CD REDUCTION. Le successive regole confermate nella conversazione «Funzionamento ASTRA», fino alla definizione di CHEST RATE come probabilità della seconda CHEST, prevalgono sui dati precedenti incompatibili. Le note aggiunte per evidenziare lacune e ambiguità sono distinte dalle regole di gioco e non introducono nuove meccaniche.
+Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizzate in sezioni e tabelle Markdown. La base documentale più recente disponibile è il GDD aggiornato del 09/09/2026 (file locale salvato alle 20:22), derivato dal GDD dell’08/09/2026 con revisione CD REDUCTION. Le successive regole confermate nella conversazione «Funzionamento ASTRA», fino alle conferme sulla classificazione tecnica di ABILITÀ PG, PASSIVE PG, ABILITÀ BONUS, ITEMS e attacchi/effetti MOB, sugli stati logici, sulle collisioni DOWN/MORTE e ZOMB05, su PROJECTILE_MOB ↔ PROJECTILE_MOB, RIANIMAZIONE, NPC HUB e assenza di TAG tecnici dedicati, prevalgono sui dati precedenti incompatibili. Le note aggiunte per evidenziare lacune e ambiguità sono distinte dalle regole di gioco e non introducono nuove meccaniche.
 
 ## Stato delle specifiche e uso nello sviluppo
 
@@ -69,7 +69,7 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - Ogni AREA contiene un numero definito di MOB. L'AREA viene completata eliminando tutti i MOB previsti.
 - Una volta completata l'AREA, la PARTY raggiunge l'uscita, riceve la scelta BONUS di fine AREA e passa alla nuova AREA.
 - Entrando in una nuova AREA non è possibile tornare indietro.
-- Dopo la vittoria contro il BOSS della città il PLAYER può proseguire nella città successiva oppure tornare volontariamente all'HUB.
+- Dopo la vittoria contro il BOSS della città la decisione di PROSEGUIRE nella città successiva oppure TORNARE ALL’HUB spetta all’HOST; solo nella schermata dell’HOST compare il tasto per tornare all’HUB.
 - Se tutta la PARTY viene sconfitta, la RUN termina.
 
 <a id="sezione-3"></a>
@@ -118,15 +118,18 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 - L’AREA è COMPLETATA quando l’ultimo MOB previsto entra effettivamente in MORTE; per ZOMB05 questo avviene dopo l’ESPLOSIONE.
 - Si attiva l’USCITA. Se è OFF-SCREEN, un’ICONA DIREZIONALE ne indica la direzione; se è visibile non occorre un’indicazione aggiuntiva.
-- Tutti i PG VIVI devono essere contemporaneamente nel TRIGGER dell’USCITA. Forma e dimensioni sono da definire in sviluppo/testing.
+- Tutti i PG VIVI devono essere contemporaneamente nel TRIGGER dell’USCITA, di forma CIRCOLARE con RAGGIO 4 m. L’USCITA AREA usa TRIGGER_PG: rilevamento senza collisione fisica (sezione 10.8).
 - Finché manca un PG VIVO non succede nulla: i PG possono entrare e uscire liberamente dal TRIGGER.
 - I PG in DOWN impediscono il passaggio e devono essere RESUSCITATI prima. I PG in MORTE non devono raggiungere l’USCITA e non bloccano la transizione.
 - Soddisfatta la condizione, si apre la SCELTA BONUS di fine AREA e il GAMEPLAY viene completamente BLOCCATO: niente movimento, attacchi, ABILITÀ o ITEMS.
 - Ogni PLAYER sceglie 1 BONUS tra 5: 3 BONUS STATS BASE + 2 BONUS relativi alle ABILITÀ BONUS.
+- Per ciascun PG IA, il BONUS DI FINE AREA è scelto dal PLAYER responsabile.
+- Al completamento dell’AREA dopo il BOSS, la decisione tra PROSEGUIRE e TORNARE ALL’HUB spetta all’HOST. Solo nella schermata dell’HOST compare il tasto TORNA ALL’HUB.
 - Dopo la scelta e CONFERMA di tutti i PLAYER, una breve SCHERMATA DI CARICAMENTO prepara NUOVA AREA e FIRST SPAWN, applicando le regole SPAWN. Nello stesso caricamento vengono determinate/generate CHEST e MEDI KIT secondo le sezioni 19 e 26.
 - Terminato il caricamento, il FIRST SPAWN è già presente OFF-SCREEN e il GAMEPLAY riprende.
 - I PG VIVI recuperano il 15% degli HP MASSIMI correnti, senza superarli. I PG resuscitati dal DOWN prima del passaggio rientrano in questa categoria.
-- I PG in MORTE vengono RESUSCITATI automaticamente al 50% degli HP MASSIMI: non ricevono anche il 15%.
+- I PG in MORTE vengono RESUSCITATI automaticamente al 50% degli HP MASSIMI correnti: non ricevono anche il 15%.
+- Quando il proprio PG viene RESUSCITATO al CAMBIO AREA, il PLAYER in SPETTATORE esce automaticamente da tale stato: la visuale torna al proprio PG e il PLAYER ne riprende il controllo diretto (sezione 28).
 - Non è possibile tornare nell’AREA precedente. L’EXP DROP continua a crescere anche passando a una nuova CITTÀ e non si resetta.
 
 <a id="sezione-7"></a>
@@ -136,7 +139,11 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - L'HUB è una piccola zona sicura ed esplorabile tra le RUN.
 - MERCHANT: acquisto e gestione degli ITEMS tramite G.
 - PROF: acquisto degli UPGRADE permanenti tramite G.
-- EXIT: accesso alla preparazione e partenza della RUN.
+- Ogni PLAYER ha un saldo G personale; gli acquisti e gli UPGRADE sono personali per ogni PLAYER. L’ambito degli UPGRADE PROF è definito nella sezione 27.
+- RECLUTATORE: NPC necessario per sbloccare nuovi PG; viene sbloccato al completamento di CITTÀ 1 e inserito permanentemente nell’HUB.
+- Dal momento dello sblocco del RECLUTATORE, PG05, PG06, PG07 e PG08 sono tutti immediatamente acquistabili a 5000 G ciascuno, senza ordine obbligatorio. Ogni PG acquistato rimane permanentemente sbloccato.
+- EXIT: accesso alla preparazione e partenza della RUN tramite TRIGGER_PG e interazione con F, senza blocco fisico.
+- Gli NPC dell’HUB, inclusi RECLUTATORE, MERCHANT e PROF, hanno collisione fisica sul layer OSTACOLO e interazione con F tramite TRIGGER_PG. Ereditano le collisioni di OSTACOLO: bloccano PG e PET e collidono anche con PROJECTILE_PG e PROJECTILE_MOB. Nessun layer NPC o TAG dedicato.
 - La preparazione mostra 4 BANNER PG per la PARTY.
 - Il ROSTER contiene 8 PG. I PG confermati in SELEZIONE PG risultano BLOCKED; quelli non ancora sbloccati sono mostrati come silhouette.
 - Tutti i PLAYER devono confermare la preparazione prima della partenza.
@@ -147,7 +154,7 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 ### 8.1 ACCESSO E SCHERMATA PRINCIPALE
 
-- Nell’HUB, interagendo con il TRIGGER dell’USCITA/EXIT si apre direttamente PREPARAZIONE RUN.
+- Nell’HUB, interagendo con F nel TRIGGER_PG dell’USCITA/EXIT si apre direttamente PREPARAZIONE RUN.
 - La PARTY è sempre di 4 PG. La schermata mostra contemporaneamente la configurazione di tutti e 4.
 - I colori seguenti identificano gli elementi dei mockup di riferimento; non fissano la grafica definitiva.
 
@@ -156,12 +163,15 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 | NERO | Bordo dello schermo. |
 | ROSSO | 4 BANNER PG, uno per posto della PARTY; click sul proprio BANNER apre SELEZIONE PG. |
 | BLU | NOME PLAYER; per un PG IA viene mostrato il NOME PG. |
-| VERDE | SLOT ITEMS disponibili: numero individuale in base agli sblocchi, da 1 a 4; può differire fra membri della PARTY. |
+| VERDE | SLOT ITEMS disponibili per i PG controllati direttamente dai PLAYER: numero individuale in base agli sblocchi, da 1 a 4; può differire fra membri della PARTY. I PG IA non hanno ITEMS né SLOT ITEM utilizzabili. |
 | GIALLO | SLOT ABILITÀ ATTIVA selezionata. |
 | ROSA | SLOT PASSIVA ATTIVA selezionata. |
 | GRIGIO | CONFERMA della preparazione, necessaria per avviare la RUN. |
 
 ### 8.2 SELEZIONE PG — UX
+
+- PG01, PG02, PG03 e PG04 sono disponibili fin dall’inizio; PG05, PG06, PG07 e PG08 sono inizialmente BLOCCATI.
+- Dopo il completamento di CITTÀ 1, il RECLUTATORE permanente nell’HUB consente di acquistare immediatamente qualsiasi PG tra PG05–PG08 a 5000 G ciascuno, senza ordine obbligatorio. Lo sblocco di ciascun PG acquistato è permanente.
 
 | RIFERIMENTO | ELEMENTO / COMPORTAMENTO |
 | --- | --- |
@@ -175,7 +185,7 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 | VIOLA | DESCRIZIONE dell’ultima ABILITÀ/PASSIVA cliccata o selezionata. |
 | GRIGIO | CONFERMA PG + ABILITÀ + PASSIVA e ritorno a PREPARAZIONE RUN. |
 
-- Ogni PG dispone di 2 ABILITÀ e 2 PASSIVE: selezionarne esattamente 1 di ciascuna per la RUN. ABILITÀ con Q; PASSIVA automatica, senza occupare SLOT BONUS.
+- Ogni PG dispone di 2 ABILITÀ e 2 PASSIVE: selezionarne esattamente 1 di ciascuna per la RUN. ABILITÀ con Q per il PG controllato direttamente; per i PG IA, SPACE BAR + numero 1–3 secondo l’ordine dei PG IA assegnati al PLAYER responsabile. PASSIVA automatica, identica per PG IA e PG controllati direttamente, senza occupare SLOT BONUS.
 - CONFERMA è utilizzabile solo con 1 PG valido + 1 ABILITÀ + 1 PASSIVA selezionati.
 - Cliccando la CASELLA di un altro PG si azzerano ABILITÀ e PASSIVA selezionate e si aggiornano le opzioni: entrambe devono essere scelte di nuovo.
 - La CONFERMA registra la configurazione, rende il PG BLOCKED e riporta a PREPARAZIONE RUN; il BANNER mostra la configurazione confermata.
@@ -196,6 +206,8 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 ### 8.5 PLAYER E IA
 
+- ORDINE PLAYER in partita: l’HOST è sempre PLAYER 1; gli altri PLAYER sono numerati secondo l’ordine di ingresso in partita.
+
 | PLAYER | PG IA | RESPONSABILITÀ DELLA PREPARAZIONE IA |
 | --- | --- | --- |
 | 4 | 0 | Ogni PLAYER configura il proprio PG. |
@@ -205,6 +217,19 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 - In caso di abbandono durante PREPARAZIONE, il PG del PLAYER uscente cessa di essere BLOCKED; il posto è sostituito da IA.
 - La responsabilità IA viene riassegnata secondo il numero di PLAYER rimasti. Il PLAYER che riceve la nuova IA deve effettuare e CONFERMARE la relativa SELEZIONE PG.
+- Durante la RUN, se un PLAYER abbandona o si disconnette, il PG che controllava direttamente diventa automaticamente PG IA. Questo PG e gli eventuali PG IA già di sua responsabilità vengono riassegnati agli altri PLAYER secondo le regole di ASSEGNAZIONE IA già stabilite, in base al nuovo numero di PLAYER presenti. Perdita dei progressi e trattamento del G del PLAYER uscente: sezione 29.3.
+
+#### PG IA — EQUIPAGGIAMENTO, PROGRESSIONE E RESPONSABILITÀ
+
+- I PG IA non hanno ITEMS né SLOT ITEM utilizzabili.
+- L’ABILITÀ selezionata del PG IA viene attivata dal PLAYER responsabile con SPACE BAR + numero da 1 a 3, secondo l’ordine dei PG IA assegnati a quel PLAYER. Con un solo PG IA il comando è SPACE BAR + 1. L’IA non decide autonomamente quando attivarla.
+- La PASSIVA selezionata funziona in modo identico e automatico rispetto a un PG controllato direttamente da un PLAYER.
+- Il PLAYER responsabile sceglie i BONUS di LEVEL UP e i BONUS DI FINE AREA di ciascun PG IA assegnato.
+- Il PG IA riceve automaticamente il proprio BONUS CHEST con le stesse regole degli altri PG, senza una scelta specifica.
+- EXP, LVL, BONUS e progressione individuale durante la RUN sono identici a quelli degli altri PG.
+- I PG IA non hanno volontà propria: non cercano autonomamente MEDI KIT o CHEST e possono usarli solo incontrandoli durante il normale movimento, secondo le rispettive regole di utilizzo.
+- DOWN, RESURREZIONE e CAMBIO CONTROLLO sono definiti nella sezione 28.
+- Il comportamento generale dell’IA resta DA DEFINIRE e sarà affrontato successivamente.
 
 ### 8.6 CONFERMA, ANNULLAMENTO E AVVIO RUN
 
@@ -214,18 +239,23 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - La PARTY viene bloccata e si apre una SCHERMATA DI CARICAMENTO: generazione AREA iniziale, MOB del FIRST SPAWN, prima CHEST garantita, eventuale seconda CHEST e MEDI KIT.
 - Il FIRST SPAWN rispetta le sezioni 14–15; CHEST e MEDI KIT le sezioni 19 e 26. Terminato il caricamento, inizia il GAMEPLAY.
 - La RUN parte da LVL 1; i CD delle ABILITÀ iniziano IN CD secondo la sezione 10.4.
+- All’inizio di una RUN CO-OP si applica il BONUS CHEST RATE più alto tra i PLAYER presenti, secondo la sezione 19.
 - Animazioni, suoni, aspetto definitivo delle icone e dimensioni dei pannelli restano da realizzare in sviluppo/testing.
 
 <a id="sezione-9"></a>
 
 ## 9. ITEMS
 
+**Stato: definitivamente CONFERMATO.**
+
+- I PG IA non hanno ITEMS né SLOT ITEM utilizzabili; le regole degli SLOT ITEM seguenti riguardano i PG controllati direttamente dai PLAYER.
+
 | ITEM | AREA | DURATA | EFFETTO | DANNO / CURA | COSTO |
 | --- | --- | --- | --- | --- | --- |
 | MOLOTOV | Circolare, raggio 5 m | 5 s | Area incendiata | 5 HP/s | 50 G |
 | GRANATA | Circolare, raggio 2,5 m | Istantaneo | Esplosione | 40 HP | 50 G |
-| SMOKE | Circolare, raggio 5 m | 4 s | PG invisibile | — | 50 G |
-| POZIONE CURATIVA | Circolare, raggio 4 m | 4 s | Cura nell'area | 10 HP/s | 100 G |
+| SMOKE | Circolare, raggio 5 m | 4 s | Tutti i PG nell’AREA INVISIBILI | — | 50 G |
+| POZIONE CURATIVA | Circolare, raggio 4 m | 4 s | Cura i PG nell’AREA; ignora i MOB | 10 HP/s | 100 G |
 | TRAPPOLA | Rettangolare 1 × 4 m | 5 s | Slow 40% | 5 HP/s | 50 G |
 
 - SLOT ITEM di partenza: 1.
@@ -236,8 +266,63 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - Gli ITEMS possono essere solamente riordinati durante la PREPARAZIONE RUN, tramite drag & drop LMB e scambio se lo SLOT è occupato (sezione 8.4).
 - Gli ITEMS inutilizzati vengono persi in caso di sconfitta della RUN; vengono mantenuti se si torna volontariamente all'HUB dopo un BOSS.
 
-- LIMITE GENERALE: ogni SLOT ITEM contiene normalmente 1 ITEM, per tutti i PG. Il limite riguarda il singolo SLOT, non il totale posseduto dal PG.
+- LIMITE GENERALE: ogni SLOT ITEM contiene normalmente 1 ITEM, per tutti i PG che dispongono di SLOT ITEM; i PG IA ne sono esclusi. Il limite riguarda il singolo SLOT, non il totale posseduto dal PG.
 - Eccezione — PG04 / SCORTA ESPLOSIVA: fino a 3 GRANATE oppure 3 MOLOTOV dello stesso tipo per SLOT; gli altri ITEMS restano a 1 per SLOT.
+
+### 9.1 UTILIZZO, MIRA E CONSUMO — CONFERMATO
+
+- I tasti ITEM 1 / 2 / 3 / 4 corrispondono rispettivamente agli SLOT ITEM 1 / 2 / 3 / 4 del PG controllato dal PLAYER.
+- L’ITEM viene utilizzato tramite il tasto dello SLOT corrispondente.
+- Per gli ITEMS che richiedono MIRA/POSIZIONAMENTO, mantenendo premuto il tasto corrispondente viene mostrata l’ANTEPRIMA dell’AREA D’EFFETTO, posizionabile con il CURSORE; al rilascio del tasto l’ITEM viene utilizzato/lanciato.
+- Dopo l’uso l’ITEM viene consumato e lo SLOT resta VUOTO. Rimane valida SCORTA ESPLOSIVA di PG04: ogni utilizzo consuma 1 unità e lo SLOT si svuota al consumo dell’ultima unità.
+
+### 9.2 CENTRO, RANGE E ORIENTAMENTO — CONFERMATO
+
+- Tutti gli ITEMS hanno come centro dell’AREA la posizione del CURSORE al rilascio, salvo il limite di RANGE della TRAPPOLA.
+- MOLOTOV, GRANATA, SMOKE e POZIONE CURATIVA non hanno RANGE massimo di attivazione.
+- TRAPPOLA: RANGE massimo 7 m dal PG. Se il CURSORE è entro il RANGE, il centro coincide con il CURSORE; se è oltre il RANGE, anteprima e posizionamento si fermano a 7 m dal PG lungo la direzione PG→CURSORE.
+- La TRAPPOLA è orientata lungo la traiettoria PG→CURSORE, con il lato da 4 m come FRONTALE.
+
+### 9.3 BERSAGLI ED EFFETTI — CONFERMATO
+
+- Nessun FRIENDLY FIRE: gli effetti offensivi e di controllo degli ITEMS non colpiscono i PG; gli effetti benefici non influenzano i MOB.
+- MOLOTOV: colpisce solo i MOB; il DANNO parte al contatto con l’AREA INCENDIATA e infligge 5 DANNO ogni secondo finché il MOB rimane nell’AREA. Durata dell’AREA: 5 s.
+- GRANATA: una singola HIT da 40 DANNO a tutti i MOB presenti nell’AREA valida.
+- SMOKE: rende INVISIBILI tutti i PG nell’AREA e segue integralmente le regole di INVISIBILITÀ già definite nel GDD.
+- POZIONE CURATIVA: cura i PG nell’AREA di 10 HP ogni secondo per 4 s e ignora completamente i MOB.
+- TRAPPOLA: colpisce solo i MOB nell’AREA valida, infliggendo 5 DANNO ogni secondo e SLOW 40% durante la permanenza; durata massima dell’AREA: 5 s.
+
+### 9.4 AREE, MURI E OSTACOLI — CONFERMATO
+
+| ITEM | GEOMETRIA E SUDDIVISIONE | MURI / OSTACOLI |
+| --- | --- | --- |
+| GRANATA | Circolare, raggio 2,5 m; 4 SPICCHI da 90°. | Influenzano l’AREA. |
+| MOLOTOV | Circolare, raggio 5 m; 8 SPICCHI da 45°. | Influenzano l’AREA. |
+| TRAPPOLA | Rettangolare 1 × 4 m; 4 SEZIONI da 1 × 1 m. | Influenzano l’AREA. |
+| SMOKE | Circolare, raggio 5 m. | Nessun effetto sull’AREA. |
+| POZIONE CURATIVA | Circolare, raggio 4 m. | Nessun effetto sull’AREA. |
+
+- Per GRANATA, MOLOTOV e TRAPPOLA vale la stessa regola delle altre AREE: se un MURO/OSTACOLO intercetta anche parzialmente uno SPICCHIO/SEZIONE, quello SPICCHIO/SEZIONE viene eliminato integralmente e non genera alcun effetto. Gli altri SPICCHI/SEZIONI restano validi.
+- La suddivisione è soltanto geometrica e non genera HIT aggiuntive.
+- MURI/OSTACOLI non hanno effetto su SMOKE e POZIONE CURATIVA.
+- Non è previsto alcun comportamento specifico aggiuntivo di lancio/posizionamento rispetto a MURI/OSTACOLI, oltre alle regole delle AREE sopra definite.
+
+### 9.5 PROMEMORIA — SBLOCCHI TRAMITE QUEST
+
+- Alcuni ITEMS acquistabili presso il MERCHANT devono essere sbloccati tramite QUEST.
+- Quali ITEMS e quali QUEST restano DA DEFINIRE; questo promemoria non riapre le regole di funzionamento ITEMS confermate.
+
+### 9.6 CLASSIFICAZIONE TECNICA ITEMS — CONFERMATO
+
+I cinque ITEMS usano esclusivamente i layer esistenti AREA_EFFECT_MOB e AREA_EFFECT_PG, senza nuovi LAYER o TAG. Gli effetti e gli oggetti grafici non costituiscono ostacoli fisici. Restano invariati comandi, valori, tick, durata, bersagli e regole delle sezioni 9.1–9.4.
+
+| ITEM | GESTIONE TECNICA |
+| --- | --- |
+| GRANATA | Nessun proiettile fisico; effetto istantaneo AREA_EFFECT_MOB nel punto scelto. I 4 SPICCHI da 90° sono validati logicamente contro MURO/OSTACOLO. |
+| MOLOTOV | AREA_EFFECT_MOB persistente per 5 s, attraversabile da PG, MOB, PET e proiettili. Gli 8 SPICCHI da 45° sono validati logicamente contro MURO/OSTACOLO. |
+| SMOKE | AREA_EFFECT_PG persistente per 4 s, senza collisione fisica; rileva solo PG e applica logicamente INVISIBILITÀ. Ignora MURO/OSTACOLO. |
+| POZIONE CURATIVA | AREA_EFFECT_PG persistente per 4 s, senza collisione fisica; rileva solo PG e applica logicamente la CURA secondo i tick definiti. Ignora MURO/OSTACOLO. |
+| TRAPPOLA | AREA_EFFECT_MOB persistente per 5 s, attraversabile; le 4 SEZIONI da 1 × 1 m sono validate logicamente contro MURO/OSTACOLO. Applica DANNO e SLOW ai MOB nelle sezioni valide. |
 
 <a id="sezione-10"></a>
 
@@ -247,7 +332,9 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - Mira: mouse.
 - ATTACCO BASE: LMB; tenendo premuto LMB si mantiene il fuoco continuo.
 - INTERAZIONE: F.
-- ABILITÀ selezionata: Q.
+- ITEMS del PG controllato: tasti 1 / 2 / 3 / 4 per i rispettivi SLOT; pressione mantenuta per ANTEPRIMA AREA e MIRA/POSIZIONAMENTO, rilascio per utilizzo/lancio, consumo secondo la sezione 9.1.
+- ABILITÀ selezionata del PG controllato direttamente: Q.
+- ABILITÀ dei PG IA: attivazione da parte del PLAYER responsabile con SPACE BAR + numero 1–3, secondo l’ordine dei PG IA assegnati.
 - Munizioni infinite e nessun reload.
 - Gli ATTACCHI BASE seguono il comportamento definito per la singola arma: AREA HITSCAN, HITSCAN + AREA IMPATTO oppure PROIETTILI FISICI, secondo la classificazione della sezione 10.1. Gli attacchi con proiettile fisico hanno un tempo di viaggio e non sono genericamente istantanei.
 - Regola base del danno: DANNO finale = ATK × (1 − DEF%), arrotondato all’intero più vicino con arrotondamento matematico (18,4 → 18; 18,5 → 19).
@@ -259,10 +346,12 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - Ogni ABILITÀ mantiene il proprio CD BASE in secondi, definito nella relativa scheda PG.
 - Formula: CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100).
 - CD REDUCTION non può scendere sotto 10.
+- La STAT CD REDUCTION usa un valore intero: applicare il valore pieno risultante dal calcolo con arrotondamento matematico all’intero più vicino; frazione <0,5 per difetto, frazione ≥0,5 per eccesso (94,4 → 94; 94,5 → 95). Questa regola è distinta dall’arrotondamento del CD FINALE al decimo di secondo.
 - Il CD FINALE viene arrotondato al decimo di secondo con arrotondamento matematico: cifra successiva inferiore a 5 per difetto, da 5 in su per eccesso (6,51 s → 6,5 s; 6,58 s → 6,6 s).
 - Esempio: CD BASE ABILITÀ 10 s e CD REDUCTION 90 → CD FINALE 9 s. Un valore CD REDUCTION più basso riduce il cooldown.
 - RANGE: 100 = 1 m nel sistema interno.
-- DEF interno: 100 corrisponde a 0% di modificatore mostrato al PLAYER.
+- DEF interno: 100 corrisponde a 0% di modificatore mostrato al PLAYER; ogni +1/−1 punto interno equivale a +1/−1 punto percentuale. Percentuale mostrata = DEF interna − 100; per la formula del DANNO, DEF% = (DEF interna − 100) / 100. Esempi: DEF 115 = +15%; DEF 80 = −20%. Resta invariato il cap DEF 90%.
+- I BONUS PROF si sommano alla DEF BASE del PG. I BONUS CHEST e i BONUS STATS DI FINE AREA sono calcolati sul VALORE ATTUALE della STAT al momento dell’acquisizione, comprensivo degli UPGRADE permanenti del PROF e di tutti i precedenti BONUS STATS acquisiti durante la RUN, sia da CHEST sia da FINE AREA; le PASSIVE influenzano le STATS CORRENTI al momento dell’applicazione.
 
 ### 10.1 ATTACCHI E PROIETTILI — REGOLE GENERALI
 
@@ -307,15 +396,18 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - PERFORAZIONE: applica HIT/DANNO al MOB attraversato e prosegue finché sono disponibili PERFORAZIONI; sparisce quando colpisce l’ultimo MOB consentito. MURI/OSTACOLI e RANGE possono interromperlo prima.
 - La PERFORAZIONE modifica esclusivamente la regola standard «HIT MOB → sparisce». PG03 / CALIBRO PERFORANTE: 2 PERFORAZIONI → attraversa il 1° e il 2° MOB, danneggia il 3° e sparisce; DANNO e RANGE invariati.
 - PG01, PG04 e PG05 non usano questo volo fisico per l’ATTACCO BASE. Le ABILITÀ mantengono le regole specifiche delle proprie schede: la classificazione dell’ATTACCO BASE non ne cambia automaticamente la meccanica.
-- Non estendere ai PROIETTILI dei MOB le collisioni alleate dei PG: ZOMB04 conserva le proprie regole (sezione 13.8).
+- Le collisioni di PROJECTILE_PG e PROJECTILE_MOB sono distinte e confermate nella sezione 10.8. I proiettili di entrambi i layer attraversano i PET senza HIT, DANNO, distruzione o deviazione del proiettile; ZOMB04 conserva le proprie altre regole (sezione 13.8).
 
 ### 10.2 MURI E OSTACOLI
 
 - MURO: blocca MOVIMENTO e ATTACCHI; non può essere sorvolato.
 - OSTACOLO: blocca MOVIMENTO e ATTACCHI normali; può essere sorvolato dai PROIETTILI con traiettoria PARABOLICA.
 - Le eccezioni al blocco degli ATTACCHI sono definite nelle singole schede.
+- La BARRIERA di PG01 eredita le collisioni del layer OSTACOLO (sezione 10.8), conservando durata e proprietà della propria ABILITÀ.
 
-### 10.3 AREE CIRCOLARI — MURI E OSTACOLI
+### 10.3 AREE CIRCOLARI E AREE ITEMS — MURI E OSTACOLI
+
+- AREA_EFFECT_PG e AREA_EFFECT_MOB non hanno collisione fisica con MURO o OSTACOLO: queste coppie restano escluse dalla Layer Collision Matrix. Le verifiche geometriche di SPICCHI/SEZIONI contro MURI/OSTACOLI sono gestite dalla logica dell’ABILITÀ/AREA, conservando le regole ed eccezioni seguenti.
 
 | ATTACCO / EFFETTO | SUDDIVISIONE | REGOLA |
 | --- | --- | --- |
@@ -324,8 +416,17 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 | PG04 — COLPO GROSSO | 4 SPICCHI da 90° per singola esplosione | Stesse regole dell’ATTACCO BASE. |
 | PG04 — PYROMANIA | 4 SPICCHI da 90° per AREA INCENDIATA | Stesse regole dell’ATTACCO BASE. |
 | PG07 — LUCKY SHOT | 4 SPICCHI da 90° | Eliminazione completa dello SPICCHIO intercettato. |
+| AURA TOSSICA | 8 SPICCHI | Regole delle AREE DI EFFETTO con MURI/OSTACOLI; eliminazione completa dello SPICCHIO intercettato. |
+| MINE | 4 SPICCHI | Regole delle AREE DI EFFETTO con MURI/OSTACOLI; eliminazione completa dello SPICCHIO intercettato. |
+| TASER | 6 SPICCHI | Regole delle AREE DI EFFETTO con MURI/OSTACOLI; eliminazione completa dello SPICCHIO intercettato. |
+| REPULSE | 8 SPICCHI | Regole delle AREE DI EFFETTO con MURI/OSTACOLI; eliminazione completa dello SPICCHIO intercettato. |
+| SCIABOLATA | 4 SPICCHI nell’AREA a SEMICERCHIO | Regole delle AREE DI EFFETTO con MURI/OSTACOLI; eliminazione completa dello SPICCHIO intercettato. |
 | ZOMB03 — AREA DI DANNO | 8 SPICCHI da 45° | Eliminazione completa dello SPICCHIO intercettato. |
 | ZOMB05 — ESPLOSIONE | 8 SPICCHI da 45° | Eliminazione completa dello SPICCHIO intercettato. |
+| ITEM GRANATA | 4 SPICCHI da 90°; raggio 2,5 m | Eliminazione completa dello SPICCHIO intercettato. |
+| ITEM MOLOTOV | 8 SPICCHI da 45°; raggio 5 m | Eliminazione completa dello SPICCHIO intercettato. |
+| ITEM TRAPPOLA | 4 SEZIONI da 1 × 1 m; rettangolo 1 × 4 m | Eliminazione completa della SEZIONE intercettata; orientamento e RANGE secondo la sezione 9.2. |
+| ITEM SMOKE / POZIONE CURATIVA | Nessun taglio dell’AREA da parte di MURI/OSTACOLI | MURI/OSTACOLI non hanno effetto. |
 | PG07 — PIOGGIA DI FRECCE | Nessun taglio dell’AREA da parte di MURI/OSTACOLI | Le FRECCE ignorano MURI/OSTACOLI lungo la caduta e verificano solo il PUNTO D’IMPATTO. |
 
 - Se un MURO/OSTACOLO intercetta anche parzialmente uno SPICCHIO, l’intero SPICCHIO viene eliminato e non genera HIT/DANNO. Gli altri SPICCHI restano validi.
@@ -337,7 +438,9 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 - All’INIZIO RUN i CD di TUTTE le ABILITÀ partono da capo: ogni ABILITÀ inizia IN CD e diventa disponibile al completamento del proprio CD FINALE.
 - Al CAMBIO AREA un’ABILITÀ già DISPONIBILE rimane DISPONIBILE.
+- Al CAMBIO AREA un’ABILITÀ già IN CD ma non più ATTIVA mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA.
 - Le ABILITÀ ancora ATTIVE terminano al CAMBIO AREA; i loro CD ripartono da capo applicando CD REDUCTION. Eventuali ATTACCHI potenziati rimanenti di COLPO GROSSO e FUOCO CURATIVO vengono persi.
+- Eccezione — SCUDO: il CAMBIO AREA non lo disattiva (sezione 22.6).
 - RIPARTENZA del CD significa attesa dell’intero CD FINALE; non significa rendere immediatamente disponibile l’ABILITÀ.
 - Le specifiche terminazioni di EFFETTI e PASSIVE al CAMBIO AREA sono riportate nelle schede PG.
 
@@ -353,9 +456,120 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 - Riapplicare lo stesso EFFETTO PERSISTENTE allo stesso bersaglio non lo cumula: la nuova applicazione rinnova la DURATA.
 - Le regole specifiche esplicitamente definite prevalgono sempre su questa regola generale.
-- VELENO PG05: le applicazioni si cumulano e ciascuna mantiene la propria DURATA indipendente.
+- BRUCIATURA e VELENO, incluso VELENO PG05, seguono la REGOLA GENERALE DANNI DA STATO (sezione 10.7): ISTANZE cumulative fino a 5, DURATA condivisa rinnovata a ogni applicazione, anche al CAP.
 - PYROMANIA PG04: le AREE INCENDIATE possono sovrapporsi e i loro DANNI si sommano.
 - VITAMINA C / FUOCO CURATIVO PG06: il BONUS non si cumula e una nuova applicazione rinnova la DURATA, come specificato nella scheda PG06.
+- FIRE BULLET: ogni nuova HIT applica un’ISTANZA di BRUCIATURA secondo la REGOLA GENERALE DANNI DA STATO, con CAP di 5 ISTANZE e rinnovo della DURATA anche al CAP (sezioni 10.7 e 22.7).
+- TASER: se un MOB riceve lo STUN quando è già sotto effetto di STUN, la DURATA si rinnova (sezione 22.8).
+
+### 10.7 ATTRIBUZIONE KILL — REGOLA GENERALE
+
+- Una KILL viene attribuita al PG quando un MOB muore per un DANNO causato da quel PG, da qualsiasi fonte di DANNO riconducibile al PG.
+
+### 10.7 REGOLA GENERALE DANNI DA STATO — BRUCIATURA E VELENO
+
+- BRUCIATURA e VELENO seguono la stessa REGOLA GENERALE DANNI DA STATO.
+- Il primo tick di DANNO avviene 1 s dopo l’applicazione/rinnovo; i tick successivi avvengono ogni 1 s.
+- Ogni nuova ISTANZA dello stesso STATO sullo stesso bersaglio rinnova la DURATA completa dello STATO e aumenta il DANNO complessivo fino al CAP.
+- DANNO per tick = DANNO base dello STATO × numero ISTANZE.
+- Massimo 5 ISTANZE dello stesso STATO sullo stesso bersaglio.
+- Raggiunte 5 ISTANZE, ulteriori applicazioni non aumentano il DANNO ma rinnovano comunque la DURATA completa.
+- Le ISTANZE condividono la DURATA rinnovata: non hanno DURATE indipendenti.
+- Restano invariati i valori specifici di DANNO e DURATA definiti nelle singole schede.
+
+### 10.8 LAYER E MATRICE DELLE COLLISIONI — CONFERMATO
+
+#### DISTINZIONE PLAYER / PG E LAYER
+
+- PLAYER identifica il giocatore umano/connesso e le sue responsabilità; PG identifica il personaggio fisico nel mondo di gioco, controllato da un PLAYER oppure da IA. Il layer PG comprende entrambi i casi.
+- La distinzione PLAYER/PG non introduce un TAG o un layer fisico PLAYER. Per ora ROG ZOMBIE non utilizza TAG tecnici dedicati, inclusi TAG PG e MOB: l’identificazione avviene tramite LAYER + componenti/script + stati logici. I LAYER gestiscono collisioni e rilevamento, i componenti/script distinguono identità e comportamenti specifici. Nuovi TAG saranno introdotti solo se emergerà una necessità concreta durante lo sviluppo.
+
+| LAYER | CONTENUTO / FUNZIONE |
+| --- | --- |
+| PG | Tutti i PG, controllati da PLAYER o IA. |
+| MOB | ZOMB, MINI BOSS e BOSS. |
+| MURO | Elementi classificati come MURO. |
+| OSTACOLO | Elementi classificati come OSTACOLO; BARRIERA di PG01 e collider fisici degli NPC HUB ne ereditano le collisioni. |
+| PROJECTILE_PG | Proiettili fisici generati dai PG. |
+| PROJECTILE_MOB | Proiettili fisici generati dai MOB. |
+| PET | PET; collisioni e chiarimenti nella sezione 22.2. |
+| TRIGGER_PG | Rilevamento dei PG senza blocco fisico: CHEST, MEDI KIT, USCITA AREA, RIANIMAZIONE, EXIT HUB e interazione con NPC HUB. |
+| TRIGGER_MOB | Rilevamento dei MOB senza blocco fisico, incluso il TRIGGER della MINE. |
+| AREA_EFFECT_PG | Rilevamento/interazione degli effetti destinati ai PG. |
+| AREA_EFFECT_MOB | Rilevamento/interazione degli effetti destinati ai MOB. |
+
+#### COLLISIONI FISICHE E PROIETTILI
+
+Ogni coppia è simmetrica ed è riportata una sola volta. SÌ abilita la collisione; per i proiettili gli effetti della HIT e le eccezioni restano quelli delle rispettive schede. NO indica assenza di collisione. Le coppie non riportate non ricevono un valore predefinito.
+
+| COPPIA | COLLISIONE |
+| --- | --- |
+| PG ↔ PG | SÌ |
+| PG ↔ MOB | SÌ |
+| PG ↔ MURO | SÌ |
+| PG ↔ OSTACOLO | SÌ |
+| PG ↔ PROJECTILE_PG | NO |
+| PG ↔ PROJECTILE_MOB | SÌ |
+| MOB ↔ MOB | SÌ — collider fisico ridotto rispetto alla dimensione visiva, come nel TEST in engine, per rendere le orde più fluide. |
+| MOB ↔ MURO | SÌ |
+| MOB ↔ OSTACOLO | SÌ |
+| MOB ↔ PROJECTILE_PG | SÌ |
+| MOB ↔ PROJECTILE_MOB | NO |
+| PROJECTILE_PG ↔ MURO | SÌ |
+| PROJECTILE_PG ↔ OSTACOLO | SÌ |
+| PROJECTILE_PG ↔ PROJECTILE_PG | NO |
+| PROJECTILE_PG ↔ PROJECTILE_MOB | NO |
+| PROJECTILE_MOB ↔ MURO | SÌ |
+| PROJECTILE_MOB ↔ OSTACOLO | SÌ |
+| PROJECTILE_MOB ↔ PROJECTILE_MOB | NO |
+| PET ↔ PG | NO |
+| PET ↔ MOB | SÌ |
+| PET ↔ PET | SÌ |
+| PET ↔ MURO | SÌ |
+| PET ↔ OSTACOLO | SÌ |
+| PET ↔ PROJECTILE_PG | NO |
+| PET ↔ PROJECTILE_MOB | NO |
+
+- MOB ↔ MOB sostituisce la precedente regola generale di assenza di collisione. Non è stata specificata una misura numerica del collider ridotto. ZOMB05 mantiene tutte le normali collisioni del layer MOB anche in PRE-ESPLOSIONE, inclusa MOB ↔ MOB SÌ; la precedente eccezione di attraversamento/sovrapposizione è eliminata.
+- I PROJECTILE_PG e i PROJECTILE_MOB si attraversano senza interazione; PROJECTILE_PG ↔ PROJECTILE_PG e PROJECTILE_MOB ↔ PROJECTILE_MOB sono NO. I PROJECTILE_MOB si attraversano fra loro senza distruggersi, deviare o generare HIT/effetti reciproci.
+- I PET non hanno una meccanica HP/DANNO. PROJECTILE_PG e PROJECTILE_MOB attraversano completamente i PET senza HIT, DANNO, distruzione o deviazione del proiettile: i PET non diventano scudi mobili.
+- MURO ↔ MURO e MURO ↔ OSTACOLO sono esclusi dalle collisioni di gameplay da definire: riguardano elementi statici/inanimati del LEVEL DESIGN. Non viene introdotta un’interazione fisica fra essi.
+- Restano valide le eccezioni già definite nelle singole schede, comprese traiettorie PARABOLICHE e SPRITE DI MORTE. Gli stati logici e le variazioni di collisione confermate sono descritti sotto; le coppie non riportate non ricevono valori impliciti.
+
+#### TRIGGER E AREA_EFFECT — RILEVAMENTO SENZA COLLISIONE FISICA
+
+In questa tabella SÌ significa rilevamento/interazione con il destinatario, senza bloccarne il movimento; NO esclude il rilevamento della coppia.
+
+| COPPIA | RILEVAMENTO |
+| --- | --- |
+| PG ↔ TRIGGER_PG | SÌ |
+| MOB ↔ TRIGGER_MOB | SÌ |
+| PG ↔ TRIGGER_MOB | NO |
+| MOB ↔ TRIGGER_PG | NO |
+| PG ↔ AREA_EFFECT_PG | SÌ |
+| MOB ↔ AREA_EFFECT_MOB | SÌ |
+| PG ↔ AREA_EFFECT_MOB | NO |
+| MOB ↔ AREA_EFFECT_PG | NO |
+
+- AREA_EFFECT_PG e AREA_EFFECT_MOB rilevano/interagiscono rispettivamente solo con PG e MOB. Le verifiche contro MURO/OSTACOLO sono separate e gestite dalla logica dell’AREA (sezione 10.3): AREA_EFFECT_PG ↔ MURO, AREA_EFFECT_PG ↔ OSTACOLO, AREA_EFFECT_MOB ↔ MURO e AREA_EFFECT_MOB ↔ OSTACOLO non hanno collisione fisica e restano fuori dalla Layer Collision Matrix.
+- CHEST e MEDI KIT sono completamente attraversabili, senza collisione fisica con PG o MOB; funzionano tramite TRIGGER_PG, con oggetto visivo e collider IsTrigger. Non viene introdotto un layer fisico dedicato CHEST/MEDI KIT né un layer unico ITEM / INTERACTABLE.
+- La MINE è attraversabile fisicamente da PG e MOB, senza collisione fisica; il rilevamento del MOB avviene tramite TRIGGER_MOB. Restano validi il timer e le regole della sezione 22.5.
+- La BARRIERA di PG01 eredita le collisioni di OSTACOLO: blocca PG, MOB, PROJECTILE_PG e PROJECTILE_MOB; PET ↔ OSTACOLO è SÌ. Mantiene le proprietà temporanea, invalicabile e indistruttibile della propria scheda.
+
+- RIANIMAZIONE: TRIGGER_PG di raggio 2 m attorno al PG in DOWN, senza collisione fisica aggiuntiva; interazione con F e validità secondo la sezione 28.
+- NPC HUB: collider fisico OSTACOLO + TRIGGER_PG per l’interazione con F; EXIT HUB usa TRIGGER_PG e F senza blocco fisico. Non servono nuovi layer NPC o INTERACTABLE.
+
+#### STATI LOGICI E COLLISIONI — CONFERMATO
+
+- ATTIVO, DOWN, MORTE, RESURREZIONE, INVISIBILITÀ, INVULNERABILITÀ, STUN, SLOW, RESPINTA, BRUCIATURA, VELENO, RAGE, TENACIA, MARCHIO, GHOSTING e VITAMINA C sono stati, transizioni o modificatori logici: nessun LAYER o TAG dedicato. Le caratteristiche specifiche sono gestite tramite componenti/script.
+- DOWN: il PG mantiene il layer PG e tutte le sue normali collisioni fisiche. Le regole su azioni e bersagli restano quelle della sezione 28.
+- MORTE PG: il layer PG resta invariato, ma tutte le collisioni sono disabilitate. La SPRITE DI MORTE rimane a terra ed è completamente priva di collisioni; PG, MOB, PET e proiettili la attraversano senza interazioni.
+- RESURREZIONE: transizione logica che ripristina le normali collisioni del PG, mantenute anche durante i 2 s di INVULNERABILITÀ dopo la resurrezione. INVULNERABILITÀ modifica la gestione di HIT/DANNO, senza rendere il PG attraversabile.
+- INVISIBILITÀ e GHOSTING mantengono il layer PG e le collisioni normali. STUN, SLOW e RESPINTA mantengono il layer originale PG/MOB e tutte le collisioni normali; RESPINTA è uno spostamento forzato che MURO/OSTACOLO possono interrompere secondo le regole esistenti.
+- BRUCIATURA e VELENO sono danni da stato logici senza variazioni di layer/collisioni; restano validi tick, istanze, CAP e rinnovo della sezione 10.7. Non servono TAG Projectile_DOT o Projectile_Slow: gli effetti sono applicati dalla logica della HIT/abilità/ITEM.
+- RAGE, TENACIA, MARCHIO e VITAMINA C non modificano layer o collisioni. SCUDO è una protezione logica associata al PG, senza collider o layer proprio: mitigazione e consumo delle HIT seguono la sezione 22.6.
+- PRE-ESPLOSIONE ZOMB05 è uno stato logico che conserva layer MOB e tutte le collisioni normali, inclusa MOB ↔ MOB SÌ (sezione 13.9).
+- La classificazione completa delle meccaniche usa esclusivamente i layer esistenti e verifiche logiche: ITEMS nella sezione 9.6, ABILITÀ/PASSIVE PG nella sezione 12, attacchi/effetti MOB nella sezione 13.10 e ABILITÀ BONUS nella sezione 22.11. Non introduce modifiche a valori, durate, bersagli o regole specifiche già definite.
 
 <a id="sezione-11"></a>
 
@@ -384,8 +598,8 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - ATTACCO BASE: AREA HITSCAN istantanea, senza singoli proiettili; CONO di portata 3 m e ampiezza 90°, orientato verso il CURSORE. Colpisce tutti i MOB validi nel CONO con ATK 20 per ciascuno, prima della DEF; il DANNO non è suddiviso e non vengono simulati singoli pallettoni. RANGE interno 300 = portata 3 m. MURI e OSTACOLI bloccano l’ATTACCO verso i MOB schermati. ATK SPD 85 = 0,85 ATTACCHI/s.
 
-- ABILITÀ 1 — PESTONE: 40 DANNO; cono frontale 3 m × 5 m; CD 10 s.
-- ABILITÀ 2 — BARRIERA: piazza un muro invalicabile e indistruttibile di 7 m × 1 m; durata 5 s; CD 15 s.
+- ABILITÀ 1 — PESTONE: 40 DANNO; cono frontale 3 m × 5 m; CD 10 s, avviato all’attivazione.
+- ABILITÀ 2 — BARRIERA: piazza un muro invalicabile e indistruttibile di 7 m × 1 m; durata 5 s; CD 15 s, avviato all’attivazione. Eredita le collisioni del layer OSTACOLO (sezione 10.8).
 - PASSIVA 1: con HP <50% ottiene +15% DEF; l'effetto termina quando gli HP tornano ≥50%.
 - PASSIVA 2: con HP <50% ottiene +15% ATK; l'effetto termina quando gli HP tornano ≥50%.
 
@@ -393,16 +607,16 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - ATTACCO BASE: PROIETTILE BALISTICO non PERFORANTE, verso il CURSORE; ATK 10, RANGE 10 m, ATK SPD 150 = 1,5 ATTACCHI/s. Segue le REGOLE GENERALI DEI PROIETTILI.
 
-- ABILITÀ 1 — FUOCO RAPIDO: ATK SPD 300 (3 colpi/s); durata 3 s; CD 10 s.
-- ABILITÀ 2 — FUOCO DI SOPPRESSIONE: 30 DANNO; cono frontale 10 m / 45°; CD 12 s.
-- PASSIVA 1: con HP <30%, ogni KILL cura 1% HP; non ha effetto a HP ≥30%.
+- ABILITÀ 1 — FUOCO RAPIDO: ATK SPD 300 (3 colpi/s); durata 3 s; CD 10 s, avviato al termine dei 3 s di DURATA.
+- ABILITÀ 2 — FUOCO DI SOPPRESSIONE: 30 DANNO; cono frontale 10 m / 45°; CD 12 s, avviato all’attivazione.
+- PASSIVA 1: con HP <30%, ogni KILL cura 1% degli HP MASSIMI correnti di PG02; non ha effetto a HP ≥30%.
 - PASSIVA 2: ogni 15 KILL entra in RAGE per 2 s con +30% ATK.
 
 ### PG03 — Sniper Rifle
 
 - ATTACCO BASE: PROIETTILE BALISTICO non PERFORANTE di base; ATK 50, ATK SPD 70 = 0,7 ATTACCHI/s; RANGE interno 2000 = 20 m. Segue le REGOLE GENERALI DEI PROIETTILI.
-- ABILITÀ 1 — COLPO LASER: sostituisce COLPO PERFORANTE. Emette istantaneamente un RAGGIO verso il CURSORE; AREA 20 × 2 m (portata 20 m, larghezza 2 m); 50 DANNO una sola volta a ciascun MOB nell’AREA; CD BASE 10 s. Attraversa MURI e OSTACOLI: eccezione alla REGOLA DI BLOCCO.
-- ABILITÀ 2 — TRIPLO SPARO: 3 proiettili da 40 DANNO; cono totale 20 m / 30°; ogni proiettile copre 10°; sequenza SINISTRA → CENTRO → DESTRA; intervallo 0,3 s; CD BASE 15 s.
+- ABILITÀ 1 — COLPO LASER: sostituisce COLPO PERFORANTE. Emette istantaneamente un RAGGIO verso il CURSORE; AREA 20 × 2 m (portata 20 m, larghezza 2 m); 50 DANNO una sola volta a ciascun MOB nell’AREA; CD BASE 10 s, avviato all’attivazione. Attraversa MURI e OSTACOLI: eccezione alla REGOLA DI BLOCCO.
+- ABILITÀ 2 — TRIPLO SPARO: 3 proiettili da 40 DANNO; cono totale 20 m / 30°; ogni proiettile copre 10°; sequenza SINISTRA → CENTRO → DESTRA; intervallo 0,3 s; CD BASE 15 s, avviato all’attivazione.
 - PASSIVA 1 — CALIBRO PERFORANTE: rende PERFORANTI i PROIETTILI dell’ATTACCO BASE con 2 PERFORAZIONI. Il 1° e il 2° MOB ricevono DANNO e vengono attraversati; il 3° riceve DANNO e arresta il PROIETTILE. DANNO e RANGE dell’ATTACCO BASE restano invariati. MURI/OSTACOLI e limite RANGE possono interrompere prima la traiettoria.
 - PASSIVA 2 — PUNTO DEBOLE: l’ATTACCO BASE applica un MARCHIO al MOB colpito; il MOB marchiato ha DEF −20%; la HIT successiva sul MOB marchiato rimuove il MARCHIO.
 
@@ -420,7 +634,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - Genera direttamente 10 ESPLOSIONI, senza PROIETTILI, in posizioni RANDOM nell’AREA EFFETTO CIRCOLARE di RAGGIO 7 m.
 - Centro: posizione del CURSORE all’attivazione; nessun limite di distanza da PG04.
-- Sequenza CASUALE nell’arco complessivo di 3 s; CD BASE 12 s.
+- Sequenza CASUALE nell’arco complessivo di 3 s; CD BASE 12 s, avviato all’attivazione.
 - Eredita esclusivamente ATK e AREA ESPLOSIONE dell’ATTACCO BASE: ATK 30 e RAGGIO 1,5 m per esplosione. Non eredita traiettoria, RANGE o IMPATTO del PROIETTILE.
 - Le esplosioni possono sovrapporsi. Ogni esplosione applica indipendentemente il proprio DANNO; lo stesso MOB può ricevere HIT da più esplosioni.
 - Ogni AREA di esplosione segue la regola dei 4 SPICCHI da 90°, con eliminazione completa degli SPICCHI intercettati da MURI/OSTACOLI.
@@ -431,7 +645,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Modifica esclusivamente ATK e RAGGIO ESPLOSIONE. Le altre STATS e regole restano invariate, inclusa la geometria a 4 SPICCHI.
 - Nessuna DURATA massima: le cariche restano disponibili fino al consumo. Ogni ATTACCO effettuato consuma una carica, anche in caso di MISS.
 - CD BASE 10 s, avviato al consumo del 4° ATTACCO.
-- Al CAMBIO AREA le cariche residue vengono perse e, se l’ABILITÀ era ATTIVA, il CD riparte da capo. Se era DISPONIBILE, rimane DISPONIBILE.
+- Al CAMBIO AREA le cariche residue vengono perse e, se l’ABILITÀ era ATTIVA, il CD riparte da capo. Se era DISPONIBILE, rimane DISPONIBILE. Se era già IN CD ma non più ATTIVA, mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA.
 
 #### PASSIVA 1 — SCORTA ESPLOSIVA
 
@@ -452,15 +666,15 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 #### ABILITÀ 1 — INVISIBILITÀ
 
-- Rende INVISIBILE l’intera PARTY per 3,5 s e aumenta MOVE SPD del 15% durante l’effetto; CD BASE 15 s.
+- Rende INVISIBILE l’intera PARTY per 3,5 s e aumenta MOVE SPD del 15% durante l’effetto; CD BASE 15 s, avviato all’attivazione.
 - Applica le REGOLE GENERALI dello stato di INVISIBILITÀ (sezione 10.5), inclusa l’eccezione RESUSCITARE e l’interruzione individuale.
 
 #### ABILITÀ 2 — COLTELLI AVVELENATI
 
 - Lancia simultaneamente 8 COLTELLI a 360° attorno a PG05, distanziati di 45°. Uno segue esattamente il CURSORE; gli altri sono orientati rispetto a quello.
-- PROIETTILI BALISTICI non PERFORANTI; RANGE 10 m; 30 DANNO per COLTELLO; CD BASE 10 s.
+- PROIETTILI BALISTICI non PERFORANTI; RANGE 10 m; 30 DANNO per COLTELLO; CD BASE 10 s, avviato all’attivazione.
 - Seguono le REGOLE GENERALI DEI PROIETTILI: il primo MOB colpito riceve DANNO e VELENO e arresta il COLTELLO; MURI/OSTACOLI bloccano il PROIETTILE.
-- VELENO: 5 HP/s per 3 s per applicazione. Le applicazioni si sommano e ciascuna mantiene la propria DURATA indipendente; una nuova applicazione non rinnova le precedenti.
+- VELENO: DANNO base 5 HP/s, DURATA 3 s. Segue la REGOLA GENERALE DANNI DA STATO (sezione 10.7): DANNO per tick = 5 × numero ISTANZE, fino a 5 ISTANZE; ogni applicazione rinnova la DURATA completa di 3 s, anche al CAP. Primo tick 1 s dopo l’applicazione/rinnovo, poi ogni 1 s; le ISTANZE non hanno DURATE indipendenti.
 
 #### PASSIVA 1 — GHOSTING
 
@@ -473,7 +687,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - Conta i MOB COLPITI dagli ATTACCHI BASE: +1 per ciascun MOB colpito, anche più incrementi nello stesso ATTACCO.
 - Soglia 15; il contatore si ferma a 15 e l’eccedenza viene ignorata.
-- Raggiunta la soglia, il successivo ATTACCO BASE applica VELENO 5 HP/s per 3 s a tutti i MOB colpiti nell’AREA ATTACCO.
+- Raggiunta la soglia, il successivo ATTACCO BASE applica VELENO 5 HP/s per 3 s a tutti i MOB colpiti nell’AREA ATTACCO, secondo la REGOLA GENERALE DANNI DA STATO (sezione 10.7).
 - Dopo l’ATTACCO potenziato il contatore torna a 0 e inizia un nuovo ciclo.
 
 ### PG06 — Revolver
@@ -482,22 +696,22 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 #### ABILITÀ 1 — CURA AD AREA
 
-- Cura 40 HP ai PG entro RAGGIO 5 m, con centro PG06; PG06 è incluso tra i bersagli. CD BASE 20 s.
+- Cura 40 HP ai PG ATTIVI entro RAGGIO 5 m, con centro PG06; PG06 è incluso tra i bersagli. I PG in DOWN o MORTE sono esclusi. CD BASE 20 s, avviato all’attivazione.
 - MURI/OSTACOLI non bloccano la CURA.
-- NO OVERHEAL. I PG al 100% HP vengono considerati bersagli, ma recuperano 0 HP.
+- NO OVERHEAL. I PG al 100% HP restano bersagli validi, recuperano 0 HP e possono attivare VITAMINA C.
 
 #### ABILITÀ 2 — FUOCO CURATIVO
 
 - Potenzia i successivi 6 ATTACCHI BASE conservando il normale funzionamento e DANNO del REVOLVER.
-- Ogni HIT su un MOB genera in aggiunta una CURA di 15 HP verso un PG entro 15 m da PG06; PG06 è incluso. Un MISS non genera CURA.
+- Ogni HIT su un MOB genera in aggiunta una CURA di 15 HP verso un PG ATTIVO entro 15 m da PG06; PG06 è incluso. I PG in DOWN o MORTE sono esclusi. Un MISS non genera CURA.
 - Ogni ATTACCO effettuato consuma una carica, anche in caso di MISS. Nessuna DURATA massima; CD BASE 15 s, avviato al consumo del 6° ATTACCO.
-- La selezione del destinatario viene rivalutata per ciascun ATTACCO: percentuale HP più bassa → minor numero di HP effettivi → distanza minore da PG06 → scelta CASUALE in caso di ulteriore parità.
-- MURI/OSTACOLI non bloccano la CURA. NO OVERHEAL; un PG al 100% resta selezionabile ma recupera 0 HP. Se tutti i PG validi sono al 100%, la carica viene comunque consumata e nessuno recupera HP.
-- Al CAMBIO AREA perde le cariche residue; se ancora ATTIVA, il CD riparte da capo. Se DISPONIBILE, rimane DISPONIBILE.
+- La selezione del destinatario viene rivalutata per ciascun ATTACCO. I PG con HP <100% hanno sempre priorità sui PG al 100% HP, che restano validi ma sono ultima scelta. Fra i PG sotto il 100% HP: percentuale HP più bassa → minor numero di HP effettivi → distanza minore da PG06 → scelta CASUALE in perfetta parità.
+- MURI/OSTACOLI non impediscono la selezione né la CURA. NO OVERHEAL; un PG al 100% resta selezionabile ma recupera 0 HP. Se tutti i PG validi sono al 100%, la carica viene comunque consumata e nessuno recupera HP.
+- Al CAMBIO AREA perde le cariche residue; se ancora ATTIVA, il CD riparte da capo. Se DISPONIBILE, rimane DISPONIBILE. Se già IN CD ma non più ATTIVA, mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA.
 
 #### PASSIVA 1 — ELEMOSINA
 
-- Ogni KILL attribuita esclusivamente a PG06 effettua un roll del 3%; un successo genera 1 MEDI KIT fisico sul terreno.
+- Ogni KILL attribuita esclusivamente a PG06 secondo la regola generale della sezione 10.7, da qualsiasi fonte di DANNO riconducibile a PG06, effettua un roll del 3%; un successo genera 1 MEDI KIT fisico sul terreno.
 - Qualsiasi PG della PARTY può raccoglierlo passandoci sopra. Viene usato immediatamente e non occupa SLOT ITEM.
 - CURA base: 10% degli HP MASSIMI del PG che lo raccoglie; NO OVERHEAL. A HP pieni il TRIGGER ignora il PG e il MEDI KIT non viene consumato; valgono validità e priorità della sezione 26.
 - DURATA infinita nell’AREA: rimane fino alla RACCOLTA oppure scompare al CAMBIO AREA.
@@ -515,9 +729,9 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 #### ABILITÀ 1 — MULTI SHOT
 
-- 9 PROIETTILI BALISTICI non PERFORANTI generati simultaneamente; 20 DANNO per PROIETTILE; RANGE 7 m; CONO 80°; RESPINTA 5 m; CD BASE 10 s.
+- 9 PROIETTILI BALISTICI non PERFORANTI generati simultaneamente; 20 DANNO per PROIETTILE; RANGE 7 m; CONO 80°; RESPINTA 5 m; PROJECTILE SPD 20 m/s; CD BASE 10 s, avviato immediatamente all’attivazione.
 - Un PROIETTILE segue il CURSORE; gli altri sono distribuiti ogni 10°: −40°, −30°, −20°, −10°, 0°, +10°, +20°, +30°, +40°.
-- Lo stesso MOB può ricevere più HIT: i DANNI della stessa attivazione vengono sommati e la DEF viene applicata una sola volta al DANNO TOTALE.
+- Ogni PROIETTILE che colpisce genera una HIT separata e la DEF viene applicata separatamente a ogni HIT, anche se più PROIETTILI della stessa attivazione colpiscono lo stesso MOB.
 - Massimo una RESPINTA per MOB per attivazione. La direzione è quella del primo PROIETTILE che genera HIT; in caso di HIT simultanee si usa la media delle direzioni dei PROIETTILI coinvolti.
 - MURI/OSTACOLI bloccano i PROIETTILI e interrompono la RESPINTA prima dei 5 m quando incontrati.
 
@@ -525,7 +739,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - AREA BERSAGLIO CIRCOLARE, RAGGIO 6 m; centro sul CURSORE all’attivazione; RANGE di attivazione illimitato.
 - 20 FRECCE distribuite in posizioni CASUALI nell’AREA durante 3 s. Il tempo è regolare: prima a T = 0, ultima a T = 3 s, intervallo 3/19 s (circa 0,158 s).
-- Ogni FRECCIA è un singolo PROIETTILE, non un’esplosione: genera al massimo 1 HIT su 1 MOB, con 10 HP di DANNO prima della DEF.
+- La caduta delle FRECCE è solo rappresentazione grafica e non usa una velocità fisica di gameplay. La HIT avviene esattamente nel momento programmato per ciascuna FRECCIA. Non serve un’altezza fisica di SPAWN: basta generare graficamente la FRECCIA sopra il PUNTO D’IMPATTO. genera al massimo 1 HIT su 1 MOB, con 10 HP di DANNO prima della DEF.
 - Verifica esclusivamente il PUNTO D’IMPATTO: nessun MOB → MISS; più MOB sovrapposti → scelta CASUALE di un solo MOB.
 - Lo stesso MOB può ricevere più FRECCE; la DEF viene applicata separatamente a ciascuna HIT.
 - MURI/OSTACOLI non intercettano la caduta e non tagliano l’AREA.
@@ -535,7 +749,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - Roll del 2% solo quando un ATTACCO BASE genera una HIT effettiva su un MOB; nessun roll in caso di MISS.
 - Un successo genera una HIT AD AREA aggiuntiva pari al 30% dell’ATK di PG07; AREA CIRCOLARE di RAGGIO 3 m centrata sul MOB che ha generato il TRIGGER.
-- Il MOB originale è incluso. Il DANNO AD AREA è una HIT separata: la DEF si applica indipendentemente dall’ATTACCO BASE e individualmente a ogni MOB.
+- Il DANNO risultante di LUCKY SHOT viene arrotondato all’intero più vicino con arrotondamento matematico: parte decimale <0,5 per difetto; ≥0,5 per eccesso. Il DANNO AD AREA è una HIT separata: la DEF si applica indipendentemente dall’ATTACCO BASE e individualmente a ogni MOB.
 - Se l’ATTACCO BASE uccide il MOB, LUCKY SHOT può comunque attivarsi nel punto della sua MORTE e colpire gli altri MOB.
 - MURI/OSTACOLI eliminano interamente gli SPICCHI intercettati secondo la geometria a 4 SPICCHI da 90°. Gli SPICCHI non generano HIT separate.
 - La HIT di LUCKY SHOT non è un ATTACCO BASE e non genera ulteriori roll di LUCKY SHOT.
@@ -543,8 +757,8 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 #### PASSIVA 2 — CONCENTRAZIONE
 
 - Roll del 5% al lancio di ogni ATTACCO BASE, indipendentemente dalla futura HIT.
-- Un successo rende la FRECCIA PERFORANTE: massimo 3 MOB sulla stessa traiettoria. Il primo MOB effettivamente colpito riceve il 100% del DANNO; il secondo e il terzo il 50%, senza ulteriori riduzioni.
-- La DEF viene applicata separatamente a ciascuna HIT. La MORTE del primo MOB non interrompe la perforazione.
+- Un successo rende la FRECCIA PERFORANTE: massimo 3 MOB sulla stessa traiettoria. Il primo MOB effettivamente colpito riceve il 100% del DANNO effettivo corrente dell’ATTACCO BASE; il secondo e il terzo il 50% dello stesso DANNO, calcolato prima della DEF, senza ulteriori riduzioni. Il DANNO risultante viene arrotondato all’intero più vicino con arrotondamento matematico: parte decimale <0,5 per difetto; ≥0,5 per eccesso.
+- CONCENTRAZIONE propaga l’INTERA HIT dell’ATTACCO BASE: il primo, il secondo e il terzo MOB ricevono tutti gli eventuali effetti aggiuntivi associati alla HIT. La riduzione al 50% riguarda esclusivamente il DANNO, non gli altri effetti.
 - La FRECCIA segue le REGOLE GENERALI DEI PROIETTILI: MURI/OSTACOLI la bloccano e il RANGE resta quello dell’ATTACCO BASE.
 - CONCENTRAZIONE e LUCKY SHOT non possono essere attive insieme: ogni PG ha una sola PASSIVA selezionata per RUN.
 
@@ -555,8 +769,9 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 #### ABILITÀ 1 — FILO SPINATO
 
 - ANELLO di RAGGIO 7 m e SPESSORE 1 m, centrato sulla posizione di PG08 all’attivazione. Rimane fisso per 3 s e non segue PG08.
-- Solo la fascia dell’ANELLO genera effetti: 10 HP/s secondo la REGOLA GENERALE DEI DANNI PERIODICI richiamata nella conversazione e SLOW 25% mentre il MOB è nella fascia. All’uscita DANNO e SLOW cessano.
-- Un MOB già nella fascia di una SEZIONE valida all’attivazione riceve immediatamente gli effetti.
+- Solo la fascia dell’ANELLO genera effetti: per ciascun MOB il conteggio del DANNO PERIODICO parte nel momento in cui entra in contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA. All’uscita il DANNO PERIODICO termina.
+- SLOW 25% mentre il MOB è nella fascia; all’uscita lo SLOW cessa. Più applicazioni di FILO SPINATO non sommano lo SLOW.
+- Per un MOB già nella fascia di una SEZIONE valida all’attivazione, il conteggio del DANNO PERIODICO parte in quel momento e lo SLOW si applica immediatamente.
 - Non è una barriera fisica: i MOB attraversano liberamente; i PG attraversano senza effetti; i PROIETTILI attraversano normalmente.
 - 10 SEZIONI indipendenti da 36°. Alla generazione, se anche una sola parte di una SEZIONE interseca un MURO/OSTACOLO, l’intera SEZIONE viene eliminata.
 - Nessun minimo di SEZIONI valide. Con 0/10 non viene generato FILO SPINATO, ma l’ABILITÀ è comunque UTILIZZATA.
@@ -568,12 +783,12 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Per 3 s ogni HIT di ATTACCO BASE applica il normale DANNO e RESPINTA di 1,5 m nella direzione del PROIETTILE che genera quella HIT. Nessuna HIT → nessuna RESPINTA.
 - Ogni nuova HIT applica una nuova RESPINTA completa e indipendente, anche allo stesso MOB; MURI/OSTACOLI interrompono lo spostamento.
 - CD BASE 10 s, avviato al termine dei 3 s di DURATA.
-- Al CAMBIO AREA l’effetto termina e il CD segue la regola generale.
+- Se il CAMBIO AREA avviene durante i 3 s di COLPI RESPINGENTI, l’effetto termina immediatamente e da quel momento riparte l’intero CD.
 
 #### PASSIVA 1 — TENACIA
 
-- Ogni HIT effettiva generata da PG08 fornisce +0,2% DEF; BONUS massimo +30% (150 HIT). Ulteriori HIT al CAP non aumentano il BONUS.
-- Una HIT ricevuta da PG08 azzera immediatamente tutto il BONUS TENACIA. Le successive HIT generate possono ricominciare l’accumulo; a BONUS 0% non c’è nulla da perdere.
+- Esclusivamente ogni HIT effettiva generata dall’ATTACCO BASE di PG08 fornisce +0,2% DEF; BONUS massimo +30% (150 HIT). Ulteriori HIT al CAP non aumentano il BONUS. Altre fonti di DANNO/HIT attribuite a PG08 non incrementano TENACIA.
+- QUALSIASI HIT ricevuta da PG08 azzera immediatamente tutto il BONUS TENACIA, indipendentemente dal DANNO/HP effettivamente persi, anche con DANNO finale 0. Le successive HIT effettive dell’ATTACCO BASE possono ricominciare l’accumulo; a BONUS 0% non c’è nulla da perdere.
 - Al CAMBIO AREA il BONUS torna a 0%.
 - La DEF BASE +10% rimane separata e non viene persa; al CAP, BASE + TENACIA = +40% prima di altri modificatori.
 
@@ -582,8 +797,55 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Dopo 5 s consecutivi di FUOCO CONTINUATIVO si attivano immediatamente +30% ATK e −20% MOVE SPD.
 - Non è necessario generare HIT: si può sparare a vuoto. Gli intervalli ordinari fra colpi dovuti ad ATK SPD fanno parte del FUOCO CONTINUATIVO; ATK SPD non modifica la soglia temporale di 5 s.
 - RAGE dura finché il fuoco continua. Rilasciare il comando di ATTACCO azzera il contatore e, se attiva, termina immediatamente RAGE.
-- I modificatori si aggiungono a quelli già presenti. Alla fine di RAGE vengono rimossi esclusivamente i suoi modificatori.
+- I modificatori +30% ATK e −20% MOVE SPD sono calcolati sui valori CORRENTI di ATK e MOVE SPD al momento dell’applicazione, includendo i BONUS guadagnati in partita, non esclusivamente sui VALORI BASE. Alla fine di RAGE vengono rimossi esclusivamente i suoi modificatori.
 - DOWN e CAMBIO AREA terminano RAGE e azzerano il contatore, anche se al CAMBIO AREA il comando di ATTACCO è mantenuto.
+- STUN interrompe immediatamente RAGE e azzera il conteggio dei 5 s di FUOCO CONTINUATIVO. Il comportamento per altri stati futuri sarà definito quando verranno aggiunti.
+
+### CLASSIFICAZIONE TECNICA ABILITÀ PG — CONFERMATO
+
+Tutte le 16 ABILITÀ usano i LAYER esistenti o verifiche logiche, senza nuovi TAG o LAYER. Il PG mantiene il layer PG; stati e modificatori non ne cambiano le collisioni. Restano valide le proprietà e le eccezioni delle singole schede.
+
+| PG | ABILITÀ | GESTIONE TECNICA |
+| --- | --- | --- |
+| PG01 | PESTONE | AREA_EFFECT_MOB oppure verifica HITSCAN istantanea a CONO sui MOB; nessuna collisione fisica persistente. MURO/OSTACOLO bloccano secondo le regole dell’AREA. |
+| PG01 | BARRIERA | Layer OSTACOLO: blocca PG, MOB, PET, PROJECTILE_PG e PROJECTILE_MOB. |
+| PG02 | FUOCO RAPIDO | Modificatore logico temporaneo di ATK SPD; proiettili PROJECTILE_PG e collisioni invariate. |
+| PG02 | FUOCO DI SOPPRESSIONE | AREA_EFFECT_MOB oppure verifica HITSCAN istantanea a CONO sui MOB; nessuna collisione fisica persistente. MURO/OSTACOLO bloccano secondo le regole dell’AREA. |
+| PG03 | COLPO LASER | Verifica HITSCAN/AREA rettangolare 20 × 2 m sui MOB, tramite query logica o AREA_EFFECT_MOB; ignora MURO/OSTACOLO e non usa PROJECTILE_PG. |
+| PG03 | TRIPLO SPARO | I 3 colpi sono PROJECTILE_PG con le collisioni standard. |
+| PG04 | PIOGGIA DI GRANATE | Le 10 esplosioni sono AREA_EFFECT_MOB, senza proiettili fisici; validazione logica dei 4 SPICCHI contro MURO/OSTACOLO. |
+| PG04 | COLPO GROSSO | Stato logico a 4 cariche; conserva la gestione dell’ATTACCO BASE. Esplosione AREA_EFFECT_MOB con logica degli SPICCHI; nessun cambio delle collisioni. |
+| PG05 | INVISIBILITÀ | Stato logico del PG; layer e collisioni normali invariati. |
+| PG05 | COLTELLI AVVELENATI | Gli 8 coltelli sono PROJECTILE_PG con collisioni standard; VELENO applicato logicamente alla HIT. |
+| PG06 | CURA AD AREA | Effetto logico istantaneo sui PG entro 5 m, tramite AREA_EFFECT_PG o query logica; nessuna collisione fisica persistente. Ignora MURO/OSTACOLO. |
+| PG06 | FUOCO CURATIVO | Stato logico a 6 cariche; i colpi restano PROJECTILE_PG. CURA logica dopo HIT valida, senza proiettile/collider/layer aggiuntivo; ricerca entro 15 m secondo le priorità definite. |
+| PG07 | MULTI SHOT | I 9 proiettili sono PROJECTILE_PG con collisioni standard; RESPINTA applicata logicamente alla HIT. |
+| PG07 | PIOGGIA DI FRECCE | Nessun proiettile fisico di gameplay; ogni punto d’impatto verifica logicamente i MOB. Ignora MURO/OSTACOLO. |
+| PG08 | FILO SPINATO | AREA_EFFECT_MOB persistente nelle 10 SEZIONI definite; nessuna barriera fisica, attraversabile da PG, MOB e proiettili. MURO/OSTACOLO servono alla validazione iniziale delle SEZIONI. |
+| PG08 | COLPI RESPINGENTI | Stato logico temporaneo; proiettili PROJECTILE_PG e collisioni invariate. RESPINTA applicata alla HIT e soggetta alle normali collisioni. |
+
+### CLASSIFICAZIONE TECNICA PASSIVE PG — CONFERMATO
+
+Nessuna PASSIVA richiede nuovi TAG o LAYER. Le modifiche logiche mantengono layer e collisioni originali; valori e condizioni restano quelli delle schede.
+
+| PG | PASSIVA | GESTIONE TECNICA |
+| --- | --- | --- |
+| PG01 | PASSIVA 1 | Modificatore logico DEF; layer PG e collisioni invariati. |
+| PG01 | PASSIVA 2 | Modificatore logico ATK; layer PG e collisioni invariati. |
+| PG02 | PASSIVA 1 | CURA logica al verificarsi delle condizioni di HP/KILL; nessun collider aggiuntivo. |
+| PG02 | PASSIVA 2 | Contatore logico delle KILL e stato RAGE; collisioni invariate. |
+| PG03 | CALIBRO PERFORANTE | Modifica logica dei PROJECTILE_PG per le 2 PERFORAZIONI; layer e collisioni standard invariati. |
+| PG03 | PUNTO DEBOLE | MARCHIO logico sul MOB; nessuna modifica di layer/collisioni. |
+| PG04 | SCORTA ESPLOSIVA | Modifica della capacità degli SLOT ITEM; nessuna conseguenza su layer/collisioni. |
+| PG04 | PYROMANIA | AREE INCENDIATE AREA_EFFECT_MOB generate dalle esplosioni; verifica logica degli SPICCHI contro MURO/OSTACOLO, senza collisione fisica dell’AREA. |
+| PG05 | GHOSTING | Combinazione logica di INVISIBILITÀ e modificatore MOVE SPD; layer/collisioni invariati. |
+| PG05 | LAMA DI CICUTA | Contatore logico che applica VELENO ai MOB colpiti dall’ATTACCO BASE al raggiungimento della soglia. |
+| PG06 | ELEMOSINA | Il MEDI KIT generato è attraversabile e usa TRIGGER_PG secondo le regole esistenti. |
+| PG06 | VITAMINA C | Modificatore logico temporaneo ATK SPD; il rinnovo della DURATA non modifica le collisioni. |
+| PG07 | LUCKY SHOT | HIT AD AREA tramite AREA_EFFECT_MOB o verifica logica; validazione dei 4 SPICCHI contro MURO/OSTACOLO. |
+| PG07 | CONCENTRAZIONE | Modifica logica della FRECCIA PROJECTILE_PG, PERFORANTE quando il roll ha successo; nessun cambio layer. |
+| PG08 | TENACIA | Contatore e modificatore logico DEF; nessuna modifica fisica, anche all’azzeramento del BONUS. |
+| PG08 | RAGE | Stato logico temporaneo del PG; collisioni normali. |
 
 <a id="sezione-13"></a>
 
@@ -609,9 +871,10 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 ### 13.2 REGOLE GENERALI MOB — MOVIMENTO E COLLISIONI
 
 - Il MOB calcola il PERCORSO percorribile più breve verso il BERSAGLIO, aggirando MURI/OSTACOLI quando esiste un percorso valido. Adegua il percorso al cambio BERSAGLIO.
-- MOB ↔ MOB: nessuna collisione fisica; possono attraversarsi e sovrapporsi. Gli altri MOB non ostacolano il percorso.
+- MOB ↔ MOB: collisione fisica SÌ, con collider ridotto rispetto alla dimensione visiva del MOB, come nel TEST in engine, per rendere le orde più fluide. Non sono state definite dimensioni numeriche del collider. Questa regola sostituisce la precedente assenza di collisione fisica tra MOB e vale anche per ZOMB05 in PRE-ESPLOSIONE, senza eccezioni di attraversamento/sovrapposizione.
 - MOB ↔ PG: collisione fisica; si bloccano fisicamente e non si attraversano. La semplice collisione non infligge DANNO e non applica RESPINTA al PG.
 - MOB ↔ MURI/OSTACOLI: collisione fisica attiva, con blocco del MOVIMENTO.
+- MOB ↔ PROJECTILE_PG: SÌ; MOB ↔ PROJECTILE_MOB: NO. Matrice consolidata nella sezione 10.8.
 - Il DANNO deriva da ATTACCHI/HIT secondo la scheda del MOB.
 - BERSAGLIO irraggiungibile: il MOB continua a tentare di raggiungerlo, collidendo con l’OSTACOLO. Nessun TELEPORT, distruzione dell’OSTACOLO o abbandono dell’inseguimento; la selezione resta soggetta alla REGOLA AGGRO. Questa situazione è da evitare nel LEVEL DESIGN.
 - Distanza di arresto e comportamento entro RANGE sono specifici del MOB.
@@ -712,7 +975,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Il PROIETTILE segue le REGOLE DI COLLISIONE, mantiene la TRAIETTORIA iniziale e non segue il PG né corregge il percorso in base ai suoi spostamenti.
 - RANGE PROIETTILE = RANGE ZOMB04 = 30 m. Scompare al raggiungimento del RANGE massimo o alla prima COLLISIONE.
 - Una volta sparato prosegue autonomamente: cambio AGGRO, MOVIMENTO, STUN, RESPINTA o MORTE successivi di ZOMB04 non lo modificano. Anche una successiva ostruzione della TRAIETTORIA non annulla il PROIETTILE già sparato, che continua secondo le proprie regole di collisione.
-- PROJECTILE SPD standard 20 m/s è confermata per gli ATTACCHI BASE fisici dei PG. L’applicazione esplicita a ZOMB04 resta DA DEFINIRE; non vengono trasferite automaticamente le collisioni dei proiettili alleati.
+- PROJECTILE SPD ZOMB04 = 8 m/s. PROJECTILE SPD standard 20 m/s è confermata per gli ATTACCHI BASE fisici dei PG. Per PROJECTILE_MOB sono confermate collisioni con PG, MURO e OSTACOLO; nessuna collisione con MOB, PROJECTILE_PG o PET (sezione 10.8).
 
 #### STATI
 
@@ -743,7 +1006,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Qualsiasi effetto valido di RESPINTA può spostarlo. Se la stessa fonte infligge DANNO, il DANNO viene ignorato ma la RESPINTA si applica.
 - La RESPINTA e le HIT non interrompono, riavviano o modificano il timer. L’ESPLOSIONE avviene nella posizione occupata al termine dei 2 s.
 - I PROIETTILI dei PG continuano a COLLIDERE con ZOMB05 e terminano secondo le proprie regole, senza infliggergli DANNO.
-- Mantiene la COLLISIONE fisica con i PG e ne blocca il MOVIMENTO fino all’ESPLOSIONE. Gli altri MOB possono continuare ad attraversarlo e sovrapporsi.
+- Mantiene il layer MOB e tutte le normali COLLISIONI fino all’ESPLOSIONE, inclusa MOB ↔ MOB SÌ. Continua a bloccare i PG e a collidere con MURO/OSTACOLO secondo la matrice generale. La precedente eccezione che consentiva agli altri MOB di attraversarlo e sovrapporsi è eliminata.
 
 #### ESPLOSIONE — T = 2 s
 
@@ -760,9 +1023,23 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Il trigger di sostituzione SPAWN avviene solo all’ingresso in MORTE dopo l’ESPLOSIONE, non al raggiungimento di 0 HP.
 - Sequenza: **0 HP → PRE-ESPLOSIONE 2 s → ESPLOSIONE → MORTE → DROP + SPRITE DI MORTE + trigger SPAWN**. Lo SPAWN resta soggetto alle quantità residue dell’AREA.
 
+### 13.10 CLASSIFICAZIONE TECNICA ATTACCHI / EFFETTI MOB — CONFERMATO
+
+| MOB / EFFETTO | GESTIONE TECNICA |
+| --- | --- |
+| ZOMB01 / ZOMB02 / ZOMB05 — ATTACCO MELEE | HIT logica istantanea sul PG entro RANGE; nessun proiettile o AREA persistente e nessun nuovo layer. |
+| ZOMB03 — AREA DI DANNO | AREA_EFFECT_PG istantanea nel punto fissato a T = 0, generata al momento previsto dal ciclo dell’ATTACCO; HIT sui PG validi. Gli 8 SPICCHI da 45° sono validati logicamente contro MURO/OSTACOLO; nessuna collisione fisica persistente. |
+| ZOMB04 — PROIETTILE BALISTICO | PROJECTILE_MOB: collide con PG, MURO e OSTACOLO; attraversa MOB, PET, PROJECTILE_PG e PROJECTILE_MOB, secondo la matrice generale. |
+| ZOMB05 — PRE-ESPLOSIONE | Stato logico sul layer MOB; mantiene tutte le collisioni normali, inclusa MOB ↔ MOB SÌ. |
+| ZOMB05 — ESPLOSIONE | Verifica logica unica dell’AREA che interroga sia PG sia MOB validi, senza forzare l’effetto in un solo AREA_EFFECT_PG o AREA_EFFECT_MOB. Gli 8 SPICCHI da 45° sono validati logicamente contro MURO/OSTACOLO; restano invariati danni, destinatari e massimo di 1 HIT per bersaglio. |
+
+Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole specifiche delle sezioni 13.1–13.9.
+
 <a id="sezione-14"></a>
 
 ## 14. MOB PER AREA
+
+- MINI BOSS e BOSS non sono conteggiati nel totale/massimo dei MOB previsto per l’AREA.
 
 | CITTÀ | A1 | A2 | A3 | A4 | A5 | A6 |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -813,6 +1090,9 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 ## 15. SISTEMA DI SPAWN
 
+- MINI BOSS e BOSS non sono conteggiati né nel totale/massimo dei MOB dell’AREA né nel limite massimo dei MOB contemporaneamente presenti.
+- Il punto di SPAWN di MINI BOSS e BOSS è un punto specifico stabilito in fase di LEVEL DESIGN. Tutto il resto del loro funzionamento rimane DA DEFINIRE.
+
 ### 15.1 FIRST SPAWN E COMPOSIZIONE
 
 - FIRST SPAWN = 30% del totale MOB previsto nell’AREA: questi MOB sono già presenti quando i PG entrano. Il restante 70% viene generato progressivamente durante il combattimento.
@@ -857,7 +1137,10 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - G DROP base: ZOMB01 10 G; ZOMB02 15 G; ZOMB03 20 G; ZOMB04 15 G; ZOMB05 25 G.
 - Ogni PLAYER che possiede almeno un PG non in MORTE riceve il 100% del valore G del MOB. Se tutti i suoi PG sono in MORTE, non riceve G. I PG in DOWN soddisfano la condizione di non essere in MORTE.
-- Il G è COMUNE ai PLAYER validi: se un MOB droppa 10 G, ciascuno riceve 10 G; il valore non viene diviso.
+- Ogni PLAYER possiede un saldo G personale e indipendente. Il G viene accreditato integralmente nel saldo di ciascun PLAYER valido e non viene diviso né inserito in un saldo condiviso della PARTY.
+- Gli acquisti e gli UPGRADE sono personali per ogni PLAYER.
+- L’UPGRADE G DROP acquistato da un PLAYER modifica solo il G ricevuto da quel PLAYER; non modifica il G ricevuto dagli altri PLAYER.
+- Esempio senza UPGRADE G DROP: se un MOB droppa 10 G, ciascun PLAYER valido riceve 10 G nel proprio saldo personale.
 - In SINGLE PLAYER il G è relativo al PLAYER.
 - In CO-OP il G viene assegnato integralmente a ciascun PLAYER valido secondo la condizione sopra.
 - Il G viene mantenuto tra le RUN, salvo la penalità di sconfitta descritta più avanti.
@@ -894,15 +1177,19 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 | PLAYER | Almeno un proprio PG non in MORTE, anche se DOWN | 100% G |
 | PLAYER | Tutti i propri PG in MORTE | Nessun G |
 
-- Esempio: MOB con valore 20 EXP + 20 G, 4 PG validi e 2 PLAYER validi → 20 EXP a ciascun PG e 20 G a ciascun PLAYER.
+- Esempio senza UPGRADE G DROP: MOB con valore 20 EXP + 20 G, 4 PG validi e 2 PLAYER validi → 20 EXP a ciascun PG e 20 G nel saldo personale di ciascun PLAYER.
 
 <a id="sezione-17"></a>
 
 ## 17. SISTEMA DI PROGRESSIONE EXP / LVL
 
+- Ogni PG IA ha EXP, LVL, BONUS e progressione individuale durante la RUN identici a quelli degli altri PG.
+
 - EXP necessaria per LVL 1 → 2: 100.
 - Ogni livello successivo richiede il 15% di EXP in più rispetto al precedente.
-- Il valore viene arrotondato alla decina secondo la regola già adottata nel progetto.
+- Il valore viene arrotondato alla decina più vicina con criterio matematico: dividere per 10 l’EXP richiesta risultante dal +15%, arrotondare il quoziente all’intero più vicino (frazione <0,5 per difetto; frazione ≥0,5 per eccesso) e moltiplicare per 10.
+- I valori della tabella LVL 1 → 11 restano invariati; per i passaggi successivi si applicano il +15% rispetto al precedente e l’arrotondamento alla decina sopra definito.
+- Nessun CAP di LVL durante la RUN.
 - L'EXP e il LVL della RUN sono temporanei: vengono persi quando la RUN termina o quando si torna all'HUB dopo un BOSS.
 
 | PASSAGGIO | EXP RICHIESTA |
@@ -933,12 +1220,17 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 ## 19. CHEST
 
+- CHEST completamente attraversabili, senza collisione fisica con PG o MOB; rilevamento tramite collider IsTrigger sul layer TRIGGER_PG (sezione 10.8).
+
 - Prima CHEST garantita in ogni AREA: probabilità di SPAWN 100%.
-- Il limite di 1 CHEST per AREA è eliminato. CHEST RATE determina la probabilità di SPAWN di una seconda CHEST: +1 punto percentuale per acquisto dell’UPGRADE PROF.
+- Il limite di 1 CHEST per AREA è eliminato. CHEST RATE determina la probabilità di SPAWN di una seconda CHEST: +1 punto percentuale per acquisto dell’UPGRADE PROF, con CAP 100%.
+- CHEST RATE è legato al PLAYER. All’inizio di una RUN CO-OP si applica il BONUS CHEST RATE più alto tra i PLAYER presenti.
 - La CHEST assegna un BONUS a ogni PG della PARTY non in MORTE; ogni PG riceve il proprio BONUS casualmente e separatamente.
+- Anche il PG IA riceve automaticamente il proprio BONUS CHEST con le stesse regole degli altri PG, senza una scelta specifica.
 - I BONUS CHEST riguardano esclusivamente le STATS BASE.
+- Il VALORE BASE di riferimento, comune ai BONUS CHEST e ai BONUS STATS DI FINE AREA, è il VALORE ATTUALE della STAT al momento dell’acquisizione, comprensivo degli UPGRADE permanenti del PROF e di tutti i precedenti BONUS STATS acquisiti durante la RUN, sia da CHEST sia da FINE AREA. Questa regola sostituisce quella precedente basata sulla STAT all’avvio della RUN. Le PASSIVE influenzano le STATS CORRENTI.
 - STATS possibili: HP, ATK, DEF, MOVE SPD, ATK SPD, CD REDUCTION. RANGE escluso.
-- Ogni BONUS CHEST modifica la STAT del 5% del VALORE BASE; il BONUS CD REDUCTION riduce la STAT CD REDUCTION del 5% del suo VALORE BASE. Con base 100 equivale a −5 punti: per esempio 100 → 95. La riduzione si applica alla STAT, non direttamente ai secondi del CD BASE delle ABILITÀ.
+- Ogni BONUS CHEST aumenta la STAT del 5% del suo VALORE ATTUALE; il BONUS CD REDUCTION riduce invece la STAT CD REDUCTION del 5% del suo VALORE ATTUALE. La STAT CD REDUCTION risultante viene arrotondata matematicamente all’intero più vicino (<0,5 per difetto; ≥0,5 per eccesso), rispettando il minimo 10: per esempio 100 → 95 → 90 (95 × 0,95 = 90,25, arrotondato a 90). La riduzione si applica alla STAT, non direttamente ai secondi del CD BASE delle ABILITÀ; resta valido l’arrotondamento del CD FINALE al decimo di secondo.
 
 | BONUS STAT CHEST | RATE |
 | --- | --- |
@@ -954,10 +1246,11 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Durante la SCHERMATA DI CARICAMENTO di ogni NUOVA AREA si calcola lo SPAWN: prima CHEST garantita e verifica del CHEST RATE per l’eventuale seconda CHEST.
 - Ogni CHEST viene posizionata CASUALMENTE in una zona raggiungibile dal NAVMESH, ad almeno 80 m dalla ZONA DI INIZIO e almeno 10 m da MEDI KIT e altre CHEST. Se la posizione non è valida, ricalcolare finché viene trovata una posizione valida.
 - Un solo PG nel TRIGGER apre automaticamente la CHEST, anche in combattimento; non serve F. Forma e dimensioni del TRIGGER saranno definite in sviluppo/testing.
+- I PG IA non cercano autonomamente CHEST: possono aprirle solo incontrandole durante il normale movimento.
 - BONUS immediato a tutti i PG ATTIVI e in DOWN, indipendentemente dalla posizione nell’AREA; i PG in MORTE sono esclusi. Sorteggio individuale con i RATE della tabella.
 - Ogni PLAYER riceve un AVVISO A SCHERMO relativo al BONUS del proprio PG: visibile, comprensibile e non invasivo. Nessuna pausa del GAMEPLAY.
 - Dopo l’assegnazione la CHEST sparisce e non può essere riutilizzata.
-- BONUS HP: l’aumento degli HP MASSIMI viene aggiunto nella stessa quantità agli HP correnti. Con base 100: 60/100 → 65/105 → 70/110; a HP pieni 100/100 → 105/105. L’incremento resta il 5% del VALORE BASE originale, non del valore già potenziato.
+- BONUS HP: l’aumento degli HP MASSIMI viene aggiunto nella stessa quantità agli HP correnti. L’incremento è il 5% degli HP MASSIMI attuali nel momento dell’acquisizione, comprensivi degli UPGRADE permanenti del PROF e dei precedenti BONUS STATS acquisiti durante la RUN da CHEST e FINE AREA.
 
 <a id="sezione-20"></a>
 
@@ -965,6 +1258,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - Raggiunta una soglia EXP, il GAMEPLAY va automaticamente e completamente in PAUSA. Durante la pausa non avvengono combattimenti, KILL o nuova assegnazione EXP.
 - Per ogni PG interessato si generano sempre 3 BANNER; il PLAYER ne sceglie 1 e il BONUS è applicato immediatamente al relativo PG.
+- Per ciascun PG IA, la scelta del BONUS di LEVEL UP spetta al PLAYER responsabile.
 - I BANNER contengono NUOVE ABILITÀ BONUS oppure UPGRADE specifici di ABILITÀ BONUS già possedute. Non c’è una scelta intermedia di ABILITÀ o UPGRADE dopo il click sul BANNER.
 
 ### 20.1 GENERAZIONE BANNER
@@ -995,9 +1289,14 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 ## 21. COMPLETAMENTO AREA
 
 - A fine AREA ogni PLAYER sceglie 1 BONUS tra 5 proposte.
+- Per ciascun PG IA assegnato, il PLAYER responsabile sceglie il relativo BONUS DI FINE AREA tra le 5 proposte.
 - La composizione dei 5 BONUS è fissa: 3 BONUS STATS BASE + 2 BONUS relativi alle ABILITÀ BONUS.
+- I BONUS STATS DI FINE AREA seguono gli stessi RATE delle CHEST: HP 25%, ATK 8%, DEF 22%, MOVE SPD 22%, ATK SPD 8%, CD REDUCTION 15%.
+- Ogni BONUS STATS DI FINE AREA applica lo stesso +5% delle CHEST sul VALORE ATTUALE della STAT al momento dell’acquisizione, comprensivo degli UPGRADE permanenti del PROF e di tutti i precedenti BONUS STATS acquisiti durante la RUN, sia da CHEST sia da FINE AREA.
+- Per CD REDUCTION si applica una riduzione del 5% sul VALORE ATTUALE della STAT, con arrotondamento matematico del risultato all’intero più vicino e minimo 10; resta distinto l’arrotondamento del CD FINALE al decimo di secondo, secondo le sezioni 10 e 19.
 - Il completamento AREA può quindi comprendere entrambe le categorie già definite.
-- Dopo le scelte e la conferma di tutti i PLAYER, la PARTY passa alla nuova AREA.
+- Dopo le scelte e la conferma di tutti i PLAYER, la PARTY passa alla nuova AREA, salvo il ritorno all’HUB scelto dall’HOST dopo il BOSS (sezione 29.1).
+- Al completamento dell’AREA dopo il BOSS, la decisione tra PROSEGUIRE e TORNARE ALL’HUB spetta all’HOST. Solo nella schermata dell’HOST compare il tasto TORNA ALL’HUB.
 
 <a id="sezione-22"></a>
 
@@ -1005,16 +1304,122 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 | # | ABILITÀ BONUS | STATS BASE |
 | --- | --- | --- |
-| 1 | LANCIO COLTELLI | DANNO 10; RANGE 10 m; CD 6 s; N° COLTELLI 1. |
+| 1 | LANCIO COLTELLI | DANNO 10; RANGE 10 m; CD 6 s; N° COLTELLI 1; PROJECTILE SPD 20 m/s; suddivisione COLTELLI 45°. |
 | 2 | PET | DANNO 10; ATK SPD 50; RANGE 2 m; ricerca MOB entro 5 m; N° PET 1; sempre attivo. |
 | 3 | AURA TOSSICA | DANNO 10; RAGGIO 4 m; CD 7 s. |
-| 4 | RICOCHET | DANNO rimbalzo 40% del danno originale; RANGE rimbalzo 5 m; N° RIMBALZI 1. |
-| 5 | MINE | DANNO 10; RAGGIO 3 m; CD 7 s; esplode se calpestata o dopo 5 s. |
+| 4 | RICOCHET | DANNO rimbalzo 40% del danno originale; RANGE rimbalzo 5 m; N° RIMBALZI 1; probabilità di attivazione 40% per ogni HIT valida. |
+| 5 | MINE | DANNO 10; RAGGIO 3 m; CD 7 s; esplode se calpestata o dopo 5 s; TRIGGER circolare, raggio 1 m. |
 | 6 | SCUDO | Elemento separato con propria DEF 40%, massimo 90%; mitiga prima del PLAYER, poi il residuo viene mitigato dalla DEF del PLAYER (sezione 10). Dura fino alla prima HIT; CD 6 s dopo la scomparsa. |
 | 7 | FIRE BULLET | ATK +15%; durata 3 s; BRUCIATURA 2 HP/s per 2 s; CD 12 s. |
 | 8 | TASER | DANNO 5; RAGGIO 4 m; BLOCK 2 s (STUN); CD 12 s. |
 | 9 | REPULSE | DANNO 5; RAGGIO 4 m; RESPINTA 3 m; CD 10 s. |
 | 10 | SCIABOLATA | DANNO 15; semicerchio frontale; RANGE 4 m; CD 15 s. |
+
+### 22.1 LANCIO COLTELLI — DEFINIZIONI CONFERMATE
+
+- **1.1:** attivazione automatica secondo il proprio CD.
+- **1.2:** un COLTELLO segue il CURSORE; gli altri seguono la suddivisione in gradi. I COLTELLI aggiuntivi sono distribuiti ogni 45° rispetto a quello orientato verso il CURSORE.
+- **1.3:** PROIETTILI FISICI, velocità 20 m/s; seguono le regole dei PROIETTILI FISICI (sezione 10.1).
+
+### 22.2 PET — DEFINIZIONI CONFERMATE
+
+- **2.1:** il PET segue il PG e attacca automaticamente secondo le regole del suo RANGE e ATK SPD.
+- **2.2:** segue i movimenti del PG; se il PG è fermo si posiziona in maniera CASUALE all'interno di una AREA di 3 m attorno al PG.
+- **2.3:** il PET attacca il MOB più vicino in un RANGE di 5 m da lui; quando si trova a 2 m dal BERSAGLIO lo attacca.
+- **2.4:** l'ATTACCO è una HIT istantanea sul BERSAGLIO selezionato.
+- **2.5:** quando il PET è a 2 m dal BERSAGLIO lo attacca.
+- **2.6:** evita MURI/OSTACOLI, sceglie e segue i BERSAGLI validi secondo RANGE e NAV MESH.
+- **2.7:** i PET seguono tutti le stesse regole, collidono tra di loro.
+- LAYER PET: PET ↔ PG NO; PET ↔ MOB SÌ; PET ↔ PET SÌ; PET ↔ MURO SÌ; PET ↔ OSTACOLO SÌ; PET ↔ PROJECTILE_PG NO; PET ↔ PROJECTILE_MOB NO.
+- I PET non bloccano né vengono bloccati dai PG; non attraversano MOB, MURI o OSTACOLI e mantengono il movimento tramite NAV MESH già definito.
+- I PET non hanno una meccanica HP/DANNO. I proiettili dei PG e dei MOB li attraversano completamente senza HIT, DANNO, distruzione o deviazione del proiettile. L’assenza di collisione evita che i PET funzionino come scudi mobili.
+
+### 22.3 AURA TOSSICA — DEFINIZIONI CONFERMATE
+
+- **3.1:** attivazione automatica secondo CD.
+- **3.2:** il centro dell'AREA è posizionato sul PG.
+- **3.3:** il DANNO è ISTANTANEO.
+- **3.4:** l'effetto è ISTANTANEO.
+- **3.5:** l'AREA DI EFFETTO è divisa in 8 SPICCHI e segue le regole delle AREE DI EFFETTO su MURI/OSTACOLI (sezione 10.3).
+
+### 22.4 RICOCHET — DEFINIZIONI CONFERMATE
+
+- **4.1:** probabilità di attivazione 40% per ogni HIT valida.
+- **4.2:** il BERSAGLIO è il MOB più vicino nel RANGE di attivazione.
+- **4.3:** il RANGE RIMBALZO è il RANGE entro il quale il RIMBALZO può verificarsi.
+- **4.4:** il RIMBALZO non ha traiettoria; è un DANNO ISTANTANEO sul BERSAGLIO selezionato.
+- **4.5:** MURI/OSTACOLI non interferiscono sul RIMBALZO.
+- **4.6:** ogni RIMBALZO segue il comportamento del precedente.
+
+### 22.5 MINE — DEFINIZIONI CONFERMATE
+
+- **5.1:** ogni MINA viene generata a 1 m dal PG nella direzione opposta al CURSORE.
+- **5.2:** le MINE restano sul terreno fino all'ATTIVAZIONE o alla scomparsa.
+- **5.3:** le MINE hanno un TRIGGER circolare di raggio 1 m che si attiva quando un MOB ci entra in contatto. Il TRIGGER usa TRIGGER_MOB; le MINE sono attraversabili fisicamente da PG e MOB, senza collisione fisica.
+- **5.4:** dopo 5 s, se la MINA non viene attivata, esplode automaticamente infliggendo DANNO nella sua AREA DI EFFETTO.
+- **5.5:** i BERSAGLI validi sono tutti i MOB.
+- **5.6:** l'AREA DI EFFETTO è divisa in 4 SPICCHI e segue le regole delle altre AREE DI EFFETTO con MURI/OSTACOLI (sezione 10.3).
+
+### 22.6 SCUDO — DEFINIZIONI CONFERMATE
+
+- **6.1:** allo scadere del CD lo SCUDO viene generato automaticamente.
+- **6.2:** tutti i DANNI dei MOB sono HIT valide.
+- **6.3:** la HIT che distrugge lo SCUDO viene mitigata dalla DEF dello SCUDO, poi infligge DANNO al PG secondo le regole generali.
+- **6.4:** gli effetti che non infliggono DANNO non interagiscono con lo SCUDO.
+- **6.5:** in DOWN e MORTE lo SCUDO viene disattivato; il CD riparte ma lo SCUDO non può essere riattivato fin quando il PG non è in stato ATTIVO. Il CAMBIO AREA non disattiva lo SCUDO.
+
+### 22.7 FIRE BULLET — DEFINIZIONI CONFERMATE
+
+- **7.1:** FIRE BULLET si attiva automaticamente allo scadere del CD.
+- **7.2:** FIRE BULLET ha effetto solo sugli ATTACCHI BASE.
+- **7.3:** ogni HIT affetta da FIRE BULLET applica BRUCIATURA al BERSAGLIO.
+- **7.4:** ogni nuova HIT applica un’ISTANZA di BRUCIATURA secondo la REGOLA GENERALE DANNI DA STATO (sezione 10.7). DANNO base 2 HP/s e DURATA base 2 s invariati; DANNO per tick = DANNO base della BRUCIATURA × numero ISTANZE, fino a 5 ISTANZE. Ogni applicazione rinnova la DURATA completa, anche al CAP; primo tick 1 s dopo l’applicazione/rinnovo, poi ogni 1 s. Le ISTANZE non hanno DURATE indipendenti.
+- **7.5:** UPGRADE DANNO ha effetto solo sul DANNO dell'effetto BRUCIATURA; il BONUS ATK di FIRE BULLET si somma all'ATK corrente del PG.
+- **7.6:** quando FIRE BULLET è attivo, la BRUCIATURA viene applicata a tutti i MOB colpiti dall’ATTACCO BASE, inclusi gli ATTACCHI BASE ad AREA/multipli. Ogni MOB colpito riceve la propria istanza di BRUCIATURA.
+
+### 22.8 TASER — DEFINIZIONI CONFERMATE
+
+- **8.1:** attivazione automatica allo scadere del CD.
+- **8.2:** il centro dell'AREA è posizionato sul PG.
+- **8.3:** tutti i MOB ATTIVI all'interno dell'AREA DI EFFETTO sono BERSAGLI validi.
+- **8.4:** il DANNO e lo STUN si applicano istantaneamente.
+- **8.5:** l'AREA DI EFFETTO è divisa in 6 SPICCHI e segue le regole delle AREE DI EFFETTO con MURI/OSTACOLI (sezione 10.3).
+- **8.6:** se un MOB riceve lo STUN quando è già sotto effetto di STUN, la DURATA si rinnova.
+
+### 22.9 REPULSE — DEFINIZIONI CONFERMATE
+
+- **9.1:** attivazione automatica allo scadere del CD.
+- **9.2:** il centro dell'AREA è sul PG.
+- **9.3:** tutti i MOB ATTIVI all'interno dell'AREA DI EFFETTO sono BERSAGLI validi.
+- **9.4:** la direzione è calcolata dal PG verso il MOB colpito.
+- **9.5:** l'AREA DI EFFETTO è divisa in 8 SPICCHI e segue le regole generali delle AREE DI EFFETTO con MURI/OSTACOLI (sezione 10.3).
+- **9.6:** se durante la RESPINTA il MOB incontra un MURO/OSTACOLO si ferma.
+
+### 22.10 SCIABOLATA — DEFINIZIONI CONFERMATE
+
+- **10.1:** attivazione automatica allo scadere del CD.
+- **10.2:** l'orientamento segue la posizione del CURSORE.
+- **10.3:** semicerchio.
+- **10.4:** tutti i MOB ATTIVI all'interno dell'AREA DI EFFETTO sono BERSAGLI validi.
+- **10.5:** l’AREA a SEMICERCHIO è divisa in 4 SPICCHI e segue le regole generali delle AREE DI EFFETTO con MURI/OSTACOLI (sezione 10.3). Se un MURO/OSTACOLO intercetta anche parzialmente uno SPICCHIO, l’intero SPICCHIO viene eliminato e non genera HIT. Gli SPICCHI sono una suddivisione geometrica e non generano HIT aggiuntive.
+- **10.6:** HIT istantanea.
+
+### 22.11 CLASSIFICAZIONE TECNICA ABILITÀ BONUS — CONFERMATO
+
+| ABILITÀ BONUS | GESTIONE TECNICA |
+| --- | --- |
+| LANCIO COLTELLI | PROJECTILE_PG con collisioni standard. |
+| PET | Layer PET e collisioni definite nella sezione 22.2; nessun HP e nessuna collisione con i proiettili. |
+| AURA TOSSICA | Effetto istantaneo tramite AREA_EFFECT_MOB o verifica logica; MURO/OSTACOLO gestiti tramite gli 8 SPICCHI. |
+| RICOCHET | DANNO istantaneo logico sul MOB selezionato; nessun proiettile fisico aggiuntivo. |
+| MINE | Oggetto attraversabile; rilevamento TRIGGER_MOB ed esplosione AREA_EFFECT_MOB. |
+| SCUDO | Protezione logica associata al PG, senza collider o layer dedicato; mitigazione e consumo della HIT secondo la sezione 22.6. |
+| FIRE BULLET | Stato logico temporaneo applicato agli ATTACCHI BASE; i proiettili fisici restano PROJECTILE_PG e BRUCIATURA è applicata logicamente alla HIT. Gli ATTACCHI BASE ad AREA/multipli conservano la propria classificazione e le regole della sezione 22.7. |
+| TASER | AREA_EFFECT_MOB istantanea; DANNO e STUN sui MOB validi; 6 SPICCHI per MURO/OSTACOLO. |
+| REPULSE | AREA_EFFECT_MOB istantanea; DANNO e RESPINTA; 8 SPICCHI. |
+| SCIABOLATA | AREA_EFFECT_MOB o verifica HITSCAN a semicerchio; 4 SPICCHI e nessuna collisione fisica persistente. |
+
+Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle sezioni 22.1–22.10 restano invariati.
 
 <a id="sezione-23"></a>
 
@@ -1041,6 +1446,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Gli incrementi sono sempre calcolati sul VALORE BASE originale e non sul valore già potenziato.
 - Gli UPGRADE, inclusi gli SPECIALI, sono acquisibili più volte nella stessa RUN; per ora nessun CAP massimo al numero di acquisizioni (sezione 20).
 - DANNO: +10% del VALORE BASE.
+- FIRE BULLET: UPGRADE DANNO ha effetto solo sul DANNO dell'effetto BRUCIATURA; il BONUS ATK di FIRE BULLET si somma all'ATK corrente del PG (sezione 22.7).
 - RAGGIO: +10% del VALORE BASE.
 - RANGE: +15% del VALORE BASE.
 - ATK SPD: +10% del VALORE BASE.
@@ -1079,6 +1485,8 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 ## 26. MEDI KIT
 
+- MEDI KIT completamente attraversabili, senza collisione fisica con PG o MOB; rilevamento tramite collider IsTrigger sul layer TRIGGER_PG (sezione 10.8).
+
 ### GENERAZIONE NELL’AREA
 
 - Durante il CARICAMENTO della NUOVA AREA viene sorteggiata la quantità: 1, 2 oppure 3 MEDI KIT, con probabilità esatta **1/3 ciascuno**.
@@ -1089,6 +1497,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 ### TRIGGER, CURA E PRIORITÀ
 
 - Raccolta automatica entrando nel TRIGGER; non serve F, nessuna pausa. Forma e dimensioni del TRIGGER da definire in sviluppo/testing.
+- I PG IA non cercano autonomamente MEDI KIT: possono usarli solo incontrandoli durante il normale movimento, con le stesse regole di validità del TRIGGER.
 - I PG al 100% HP, in DOWN o in MORTE sono ignorati: non attivano né consumano il MEDI KIT.
 - Senza un PG valido, il MEDI KIT resta disponibile per una raccolta successiva.
 - Cura solo 1 PG valido nel TRIGGER, non tutta la PARTY. Con più PG validi contemporaneamente: HP% più bassa → HP effettivi più bassi → scelta CASUALE in perfetta parità.
@@ -1102,15 +1511,19 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 ## 27. PROF — UPGRADE PERMANENTI
 
 - Categorie definite: HP, ATK, DEF, MOVE SPD, ATK SPD, CD REDUCTION, CHEST RATE, G DROP, ITEM SLOT, MEDI KIT.
+- Gli acquisti e gli UPGRADE permanenti sono personali per ogni PLAYER.
+- HP, ATK, DEF, MOVE SPD, ATK SPD e CD REDUCTION sono legati al singolo PG.
+- CHEST RATE, G DROP, ITEM SLOT e MEDI KIT sono legati al PLAYER.
 - HP / ATK / MOVE SPD / ATK SPD / G DROP / MEDI KIT: nessun cap di acquisti.
 - DEF: UPGRADE fino al cap DEF 90%. CD REDUCTION: UPGRADE fino al minimo 10. ITEM SLOT: massimo 3 UPGRADE.
+- I BONUS PROF alla DEF si sommano alla DEF BASE del PG, modificando la base permanente con cui entra in RUN.
 - I COSTI attuali restano invariati per ora e verranno ribilanciati in fase di TEST.
 - HP / ATK / DEF / MOVE SPD / ATK SPD: ogni acquisto aggiunge 1% del VALORE BASE ORIGINALE.
 - CD REDUCTION: ogni acquisto riduce la STAT CD REDUCTION dell'1% del suo VALORE BASE ORIGINALE. Con base 100 equivale a −1 punto per acquisto: 100 → 99 → 98. La riduzione è sempre calcolata sul VALORE BASE ORIGINALE, non sul valore già modificato, e non modifica il CD BASE in secondi delle ABILITÀ.
 - Costi iniziali definiti: HP 50 G; ATK 50 G; DEF 50 G; MOVE SPD 50 G; ATK SPD 100 G; CD REDUCTION 100 G.
 - Dopo ogni acquisto dello stesso UPGRADE, il costo aumenta del 10% con arrotondamento per difetto.
-- CHEST RATE: costo iniziale 500 G; ogni acquisto aggiunge +1 punto percentuale alla probabilità di SPAWN di una seconda CHEST nell’AREA. La prima CHEST resta garantita al 100%.
-- G DROP: costo iniziale 500 G; ogni UPGRADE aumenta del 10% il VALORE BASE del G DROP.
+- CHEST RATE: costo iniziale 500 G; ogni acquisto aggiunge +1 punto percentuale alla probabilità di SPAWN di una seconda CHEST nell’AREA, fino al CAP 100%. La prima CHEST resta garantita al 100%. All’inizio di una RUN CO-OP si applica il BONUS CHEST RATE più alto tra i PLAYER presenti.
+- G DROP: costo iniziale 500 G; ogni UPGRADE aumenta del 10% il VALORE BASE del G DROP e modifica esclusivamente il G ricevuto dal PLAYER che lo ha acquistato.
 - ITEM SLOT: 3 UPGRADE massimi; costi 1000 G → 1100 G → 1210 G; SLOT da 1 a massimo 4.
 - MEDI KIT: costo UPGRADE iniziale 250 G; ogni UPGRADE aggiunge +2 punti percentuali alla cura (10% → 12% → 14% ...); i costi successivi seguono +10% con arrotondamento per difetto.
 
@@ -1119,16 +1532,39 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 ## 28. DOWN / MORTE / RESURREZIONE
 
 - A 0 HP un PG entra in stato DOWN.
-- In DOWN il PG non può agire e i MOB non lo considerano un bersaglio.
-- Durata DOWN: 20 s.
-- Un altro PG può resuscitarlo tenendo premuto F per 5 s.
-- Se F viene rilasciato prima del completamento, il progresso della resurrezione torna indietro.
+- In DOWN il PG non può agire e i MOB non lo considerano un bersaglio. Mantiene il layer PG e tutte le normali collisioni fisiche; DOWN è uno stato logico senza TAG dedicato.
+- Timer DOWN: 20 s. Alla scadenza, il PG entra in stato MORTE.
+- In MORTE il PG mantiene il layer PG ma non ha alcuna collisione fisica. La SPRITE DI MORTE rimane a terra senza collisioni ed è attraversabile da PG, MOB, PET e proiettili senza interazioni. MORTE è uno stato logico, senza LAYER o TAG dedicato.
+- Un altro PG sotto controllo diretto di un PLAYER può avviare la RIANIMAZIONE tenendo premuto F entro il TRIGGER_PG di raggio 2 m attorno al PG in DOWN, senza collisione fisica aggiuntiva. Il timer di RIANIMAZIONE avanza fino a 5 s; al raggiungimento dei 5 s il PG viene RESUSCITATO. Le RESURREZIONI eseguite dai PG sono consentite esclusivamente sotto controllo diretto di un PLAYER.
+- Un PG controllato da PLAYER in DOWN può essere resuscitato solo da un altro PLAYER; un PG IA in DOWN può essere resuscitato solo da un PLAYER. Un PG IA non esegue autonomamente RESURREZIONI.
+- Dopo la resurrezione, il PG IA rientra in formazione.
+- Durante l’interazione di RIANIMAZIONE, il timer DOWN di 20 s è in PAUSA.
+- Se l’interazione viene interrotta prima del completamento, il timer di RIANIMAZIONE regredisce verso 0 s e il timer DOWN riprende dal valore esatto in cui era stato congelato.
+- Se la RIANIMAZIONE riprende prima che il relativo timer raggiunga 0 s, riparte dal valore residuo; durante l’interazione il timer DOWN torna in PAUSA.
+- Nessun altro evento può interrompere la RIANIMAZIONE.
 - Il PG resuscitato torna con il 50% degli HP MASSIMI correnti, inclusi eventuali BONUS temporanei.
-- Dopo la resurrezione ottiene 2 s di invulnerabilità.
-- Se tutti i PG sono contemporaneamente in DOWN, la PARTY è SCONFITTA e la RUN termina.
-- I PG in DOWN devono essere RESUSCITATI prima del passaggio AREA. I PG in MORTE vengono RESUSCITATI automaticamente nella nuova AREA al 50% HP MASSIMI, senza cura aggiuntiva del 15% (sezione 6).
+- Dopo la resurrezione ottiene 2 s di invulnerabilità. La RESURREZIONE ripristina le normali collisioni del PG, che rimangono attive anche durante questi 2 s; RESURREZIONE e INVULNERABILITÀ sono gestite logicamente, senza nuovi LAYER o TAG.
+- Quando non rimane nessun PG in stato ATTIVO, la PARTY è SCONFITTA e la RUN termina: una combinazione composta esclusivamente da PG in DOWN e/o MORTE determina la SCONFITTA.
+- I PG in DOWN devono essere RESUSCITATI prima del passaggio AREA. I PG in MORTE vengono RESUSCITATI automaticamente nella nuova AREA al 50% degli HP MASSIMI correnti, senza cura aggiuntiva del 15% (sezione 6).
 
 - DROP G/EXP: un PG in DOWN riceve EXP, un PG in MORTE non la riceve. Il PLAYER riceve G finché possiede almeno un PG non in MORTE (sezione 16).
+
+### CAMBIO CONTROLLO IN DOWN
+
+- SINGLE PLAYER — 1 PLAYER + 3 PG IA: quando il PG del PLAYER entra in DOWN, il PLAYER assume automaticamente il controllo del primo PG IA nella lista. Appena il proprio PG viene resuscitato, il PLAYER torna automaticamente a controllarlo.
+- CO-OP — 2 PLAYER + 2 PG IA: ciascun PLAYER ha 1 PG IA assegnato. Quando il proprio PG entra in DOWN, il PLAYER assume automaticamente il controllo del proprio PG IA assegnato; quando il PG originale viene resuscitato, torna automaticamente a controllarlo.
+- CO-OP — 3 PLAYER + 1 PG IA: solo l’HOST ha un PG IA assegnato. Quando il PG dell’HOST entra in DOWN, l’HOST assume automaticamente il controllo del PG IA e torna automaticamente al proprio PG quando viene resuscitato. Gli altri 2 PLAYER non hanno PG IA assegnati e non applicano questa regola.
+- CO-OP — 4 PLAYER: non esistono PG IA; il cambio controllo non è applicabile.
+
+### STATO SPETTATORE
+
+- Se un PLAYER non ha più PG a disposizione ma la RUN è ancora ATTIVA, entra automaticamente in stato SPETTATORE.
+- La visuale è bloccata su un altro PG disponibile, inizialmente scelto casualmente.
+- LMB passa al PG precedente; RMB passa al PG successivo.
+- Il ciclo è circolare e segue l’ORDINE PLAYER, saltando i PLAYER senza PG disponibile: dopo l’ultimo si torna al primo e viceversa.
+- L’HOST è sempre PLAYER 1; gli altri PLAYER sono numerati secondo l’ordine di ingresso in partita.
+- Lo SPETTATORE controlla esclusivamente la visuale e non assume il controllo del PG osservato.
+- Quando il proprio PG viene RESUSCITATO al CAMBIO AREA, il PLAYER esce automaticamente da SPETTATORE, la visuale torna al proprio PG e il PLAYER ne riprende il controllo diretto. Si applicano le regole esistenti di resurrezione al CAMBIO AREA: 50% degli HP MASSIMI correnti, senza cura aggiuntiva del 15%.
 
 <a id="sezione-29"></a>
 
@@ -1136,17 +1572,26 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 ### 29.1 Vittoria e ritorno volontario
 
-- Dopo la vittoria contro il BOSS della CITTÀ il PLAYER può PROSEGUIRE oppure TORNARE ALL'HUB.
+- Dopo la vittoria contro il BOSS della CITTÀ, al completamento dell’AREA, la decisione tra PROSEGUIRE e TORNARE ALL’HUB spetta all’HOST.
+- Solo nella schermata dell’HOST compare il tasto TORNA ALL’HUB.
 - Se PROSEGUE: EXP, LVL, BONUS temporanei, ITEMS e G restano invariati e la RUN continua.
 - Se TORNA VOLONTARIAMENTE ALL'HUB: EXP, LVL e BONUS temporanei vengono persi; G e ITEMS inutilizzati vengono mantenuti.
 
 ### 29.2 Sconfitta
 
-- La sconfitta avviene quando tutti i PG sono contemporaneamente in DOWN.
+- La SCONFITTA avviene quando non rimane nessun PG in stato ATTIVO, quindi quando tutti i PG sono in DOWN e/o MORTE.
 - La RUN termina e si torna all'HUB.
 - EXP, LVL della RUN, BONUS temporanei e ITEMS inutilizzati vengono persi.
 - In caso di sconfitta si mantiene il 50% del G ottenuto durante quella RUN, arrotondato per difetto; la parte restante viene persa.
 - Esempio: 101 G ottenuti nella RUN → 50 G mantenuti e 51 G persi.
+
+### 29.3 Abbandono / disconnessione durante la RUN
+
+- Se un PLAYER abbandona o si disconnette durante la RUN, perde i progressi di quella RUN.
+- Il G guadagnato durante la RUN viene trattato secondo le regole della SCONFITTA: il PLAYER mantiene il 50% del G ottenuto durante quella RUN, arrotondato per difetto, e perde la parte restante.
+- Il PG controllato direttamente dal PLAYER uscente diventa automaticamente PG IA.
+- Questo PG e gli eventuali PG IA già di sua responsabilità vengono riassegnati agli altri PLAYER secondo le regole di ASSEGNAZIONE IA già stabilite nella sezione 8.5, in base al nuovo numero di PLAYER presenti.
+- La RUN può continuare per gli altri PLAYER secondo le condizioni di SCONFITTA già definite.
 
 <a id="sezione-30"></a>
 
@@ -1155,11 +1600,11 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 **DA DEFINIRE / DA SVILUPPARE:** tutti i punti seguenti restano aperti secondo la fonte.
 
 - Definire BOSS di ogni CITTÀ, relative STATS, fasi e meccaniche.
-- Definire MINI BOSS, EVENTI SPECIALI e livelli/quest bonus.
+- Definire MINI BOSS, EVENTI SPECIALI e livelli/quest bonus. Per MINI BOSS e BOSS sono già definiti l’esclusione dal totale/massimo dei MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti, e il punto di SPAWN specifico stabilito in fase di LEVEL DESIGN; tutto il resto rimane DA DEFINIRE.
 - Definire nomi propri, mappe, layout e identità visiva dettagliata delle CITTÀ e delle AREE.
 - Definire eventuali ulteriori MOB/varianti oltre ZOMB01–ZOMB05; la progettazione dei MOB è per ora conclusa con ZOMB05.
-- Definire il comportamento AI dei PG in SINGLE PLAYER e le specifiche dei futuri MOB. AGGRO, MOVIMENTO/COLLISIONI, HIT/DANNO/STUN, MORTE/DROP e le schede ZOMB01–ZOMB05 sono consolidati nella sezione 13.
-- SISTEMA DI SPAWN e distribuzione ZOMB01–ZOMB05 consolidati nelle sezioni 14–15. BALISTICA dei PG consolidata nella sezione 10.1; resta da esplicitare l’applicazione dello standard PROJECTILE SPD ai proiettili dei MOB e alle ABILITÀ non precisate.
+- Definire il comportamento generale AI dei PG, da affrontare successivamente; equipaggiamento, progressione, DOWN e cambio controllo dei PG IA sono definiti nelle sezioni 8 e 28. Definire le specifiche dei futuri MOB. AGGRO, MOVIMENTO/COLLISIONI, HIT/DANNO/STUN, MORTE/DROP e le schede ZOMB01–ZOMB05 sono consolidati nella sezione 13.
+- SISTEMA DI SPAWN e distribuzione ZOMB01–ZOMB05 consolidati nelle sezioni 14–15. BALISTICA dei PG consolidata nella sezione 10.1; PROJECTILE SPD ZOMB04 = 8 m/s è consolidata nella sezione 13.8. LANCIO COLTELLI: PROIETTILI FISICI con PROJECTILE SPD 20 m/s, secondo la sezione 22.1. Resta da esplicitare l’applicazione dello standard PROJECTILE SPD ai proiettili degli altri MOB e alle ABILITÀ non precisate.
 - Definire UI/HUD: HP, abilità, PASSIVA, SLOT BONUS, SLOT ITEM, EXP/LVL, G, indicatori DOWN e schermate di scelta.
 - PREPARAZIONE RUN e logica BANNER LEVEL UP consolidate nelle sezioni 8 e 20; realizzare la grafica definitiva e completare le schermate BONUS dove non descritte.
 - Ribilanciare i COSTI degli UPGRADE permanenti del PROF in fase di TEST; per ora restano quelli della sezione 27. Restano aperti solo gli aspetti PROF indicati nella sezione 32.
@@ -1173,33 +1618,69 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 ## 31. REGOLE CONSOLIDATE DA NON DIMENTICARE
 
+- LAYER e coppie confermate: sezione 10.8. PG comprende personaggi controllati da PLAYER o IA; PLAYER è distinto dal personaggio fisico. Nessun TAG tecnico dedicato per ora: identificazione tramite LAYER + componenti/script + stati logici; TAG futuri solo in caso di necessità concreta durante lo sviluppo.
+- Classificazione tecnica confermata senza nuovi LAYER: ABILITÀ/PASSIVE PG (sezione 12), ABILITÀ BONUS (22.11), ITEMS (9.6), attacchi/effetti MOB (13.10). Stati e modificatori non cambiano layer/collisioni, salvo le variazioni esplicite, in particolare MORTE PG.
+- PG in DOWN mantiene layer PG e collisioni normali; PG in MORTE e relativa SPRITE DI MORTE a terra non hanno collisioni. RESURREZIONE ripristina le collisioni normali, mantenute durante INVULNERABILITÀ.
+- ZOMB05 in PRE-ESPLOSIONE mantiene layer MOB e tutte le collisioni normali, inclusa MOB ↔ MOB SÌ; eliminata l’eccezione di attraversamento/sovrapposizione.
+- NPC HUB: collisione fisica OSTACOLO + interazione con F tramite TRIGGER_PG. EXIT HUB: TRIGGER_PG + F, senza blocco fisico.
+- PG ↔ PG/MOB/MURO/OSTACOLO/PROJECTILE_MOB SÌ; PG ↔ PROJECTILE_PG NO. MOB ↔ MOB SÌ con collider ridotto come nel TEST in engine; MOB ↔ PROJECTILE_MOB NO.
+- PROJECTILE_PG e PROJECTILE_MOB collidono con MURO/OSTACOLO; PROJECTILE_PG ↔ PROJECTILE_PG NO, PROJECTILE_PG ↔ PROJECTILE_MOB NO e PROJECTILE_MOB ↔ PROJECTILE_MOB NO. Restano valide le eccezioni specifiche già definite.
+- TRIGGER_PG rileva PG; TRIGGER_MOB rileva MOB; combinazioni incrociate NO, sempre senza blocco fisico. AREA_EFFECT_PG/AREA_EFFECT_MOB separati per destinatario; verifiche di SPICCHI/SEZIONI contro MURO/OSTACOLO nella logica dell’AREA.
+- CHEST e MEDI KIT completamente attraversabili, tramite TRIGGER_PG; MINE senza collisione fisica con PG/MOB, tramite TRIGGER_MOB. BARRIERA PG01 eredita le collisioni di OSTACOLO.
+- PET ↔ PG NO; PET ↔ MOB/PET/MURO/OSTACOLO SÌ; PET ↔ PROJECTILE_PG/PROJECTILE_MOB NO. Nessuna meccanica HP/DANNO per i PET: i proiettili li attraversano senza HIT, DANNO, distruzione o deviazione e i PET non fungono da scudi.
+
 - Nome ufficiale progetto: ROG ZOMBIE.
 - CO-OP fino a 4 giocatori.
 - PARTY sempre composta da 4 PG.
 - Tasto INTERAZIONE: F.
-- Tasto ABILITÀ: Q.
+- Tasto ABILITÀ del PG controllato direttamente: Q. ABILITÀ PG IA: SPACE BAR + numero 1–3 secondo l’ordine dei PG IA assegnati, attivata dal PLAYER responsabile; PASSIVA identica e automatica.
 - Ogni PG: 2 ABILITÀ ma 1 sola selezionata per RUN; 2 PASSIVE ma 1 sola selezionata per RUN.
 - CD REDUCTION: STAT modificatore con VALORE BASE neutro 100 per tutti i PG01–PG08; un valore più basso riduce il cooldown.
 - I CD BASE in secondi sono definiti esclusivamente nelle singole ABILITÀ. Formula: CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100). Esempio: CD BASE 10 s e CD REDUCTION 90 → CD FINALE 9 s.
-- BONUS CHEST CD REDUCTION: riduce la STAT del 5% del VALORE BASE; con base 100 equivale a 100 → 95, non a una riduzione diretta in secondi.
+- BONUS CHEST e BONUS STATS DI FINE AREA: stessi RATE (HP 25%, ATK 8%, DEF 22%, MOVE SPD 22%, ATK SPD 8%, CD REDUCTION 15%) e +5% sul VALORE ATTUALE della STAT al momento dell’acquisizione, comprensivo degli UPGRADE permanenti del PROF e di tutti i precedenti BONUS STATS acquisiti durante la RUN, sia da CHEST sia da FINE AREA.
+- BONUS CHEST e BONUS STATS DI FINE AREA CD REDUCTION: riducono la STAT del 5% del VALORE ATTUALE, con arrotondamento matematico del risultato all’intero più vicino e minimo 10; per esempio 100 → 95 → 90. Non riducono direttamente i secondi del CD BASE.
 - Ogni UPGRADE PROF CD REDUCTION riduce la STAT dell'1% del VALORE BASE ORIGINALE; con base 100 equivale a −1 punto per acquisto.
 - CD REDUCTION minimo 10; CD FINALE arrotondato al decimo con arrotondamento matematico.
+- STAT CD REDUCTION arrotondata matematicamente all’intero più vicino: frazione <0,5 per difetto; ≥0,5 per eccesso.
+- DEF interna 100 = 0%; ogni ±1 punto interno = ±1 punto percentuale. BONUS PROF aggiunti alla DEF BASE; BONUS CHEST e BONUS STATS DI FINE AREA calcolati sul VALORE ATTUALE della STAT al momento dell’acquisizione, comprensivo degli UPGRADE permanenti del PROF e di tutti i precedenti BONUS STATS acquisiti durante la RUN, sia da CHEST sia da FINE AREA; PASSIVE sulle STATS CORRENTI.
+- Avvio CD PG01–PG08 completamente definito nelle schede della sezione 12: all’attivazione, salvo FUOCO RAPIDO e COLPI RESPINGENTI al termine dei rispettivi 3 s, COLPO GROSSO al consumo del 4° ATTACCO e FUOCO CURATIVO al consumo del 6° ATTACCO. Restano valide le regole di INIZIO RUN e CAMBIO AREA.
 - DEF massima 90%, inclusa la DEF propria dello SCUDO; SCUDO mitiga prima del PLAYER, poi il residuo è mitigato dalla DEF del PLAYER. DANNO FINALE arrotondato all’intero più vicino.
 - EFFETTI PERSISTENTI: di default non si cumulano e rinnovano la DURATA; prevalgono le regole specifiche (sezione 10.6).
-- Prima CHEST garantita al 100%; PROF CHEST RATE aggiunge +1 punto percentuale per acquisto alla probabilità della seconda CHEST. Posizioni raggiungibili NAVMESH, almeno 80 m dalla ZONA DI INIZIO e 10 m da MEDI KIT e altre CHEST.
+- REGOLA GENERALE DANNI DA STATO — BRUCIATURA e VELENO: primo tick 1 s dopo applicazione/rinnovo, poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE; massimo 5 ISTANZE dello stesso STATO sullo stesso bersaglio. Ogni applicazione rinnova la DURATA completa, anche al CAP; oltre 5 ISTANZE il DANNO non aumenta. Le ISTANZE non hanno DURATE indipendenti (sezione 10.7).
+- Al CAMBIO AREA un’ABILITÀ già IN CD ma non più ATTIVA mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA. Restano invariate le regole per DISPONIBILE, ATTIVA e le eccezioni già definite (sezione 10.4).
+- Prima CHEST garantita al 100%; PROF CHEST RATE aggiunge +1 punto percentuale per acquisto alla probabilità della seconda CHEST, con CAP 100%. CHEST RATE è legato al PLAYER; all’inizio di una RUN CO-OP si applica il BONUS più alto tra i PLAYER presenti. Posizioni raggiungibili NAVMESH, almeno 80 m dalla ZONA DI INIZIO e 10 m da MEDI KIT e altre CHEST.
 - Ogni PG: 3 SLOT BONUS.
-- SLOT ITEM: 1 iniziale, 3 UPGRADE massimi, 4 SLOT massimi.
-- Ingresso nuova AREA: PG VIVI +15% HP MASSIMI; PG in MORTE resuscitati al 50%, senza +15%; DOWN da resuscitare prima del passaggio.
+- ABILITÀ BONUS: definizioni confermate 1.1–10.6 nelle sezioni 22.1–22.10. LANCIO COLTELLI: suddivisione 45°; MINE: TRIGGER circolare raggio 1 m; RICOCHET: probabilità di attivazione 40% per ogni HIT valida.
+- SCUDO: DOWN e MORTE lo disattivano e fanno ripartire il CD; riattivazione solo con PG ATTIVO. Il CAMBIO AREA non lo disattiva.
+- FIRE BULLET: ogni nuova HIT applica un’ISTANZA di BRUCIATURA secondo la REGOLA GENERALE DANNI DA STATO, aumentando il DANNO fino al CAP di 5 ISTANZE e rinnovando la DURATA completa anche al CAP; UPGRADE DANNO agisce solo sulla BRUCIATURA, BONUS ATK sommato all'ATK corrente del PG. La BRUCIATURA si applica a tutti i MOB colpiti dall’ATTACCO BASE, inclusi ATTACCHI BASE ad AREA/multipli.
+- SCIABOLATA: AREA a SEMICERCHIO divisa in 4 SPICCHI, secondo le regole generali delle AREE DI EFFETTO con MURI/OSTACOLI; SPICCHIO anche parzialmente intercettato eliminato integralmente, senza HIT aggiuntive.
+- PASSIVA 1 PG02: con HP <30%, ogni KILL cura 1% degli HP MASSIMI correnti di PG02; nessun effetto a HP ≥30%.
+- EXP/LVL: +15% rispetto al precedente, arrotondato alla decina più vicina con criterio matematico (quoziente EXP/10 all’intero più vicino: frazione <0,5 per difetto; ≥0,5 per eccesso, poi ×10). Valori della tabella LVL 1 → 11 invariati; nessun CAP di LVL.
+- MINI BOSS e BOSS esclusi dal totale/massimo MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti; punto di SPAWN specifico stabilito in fase di LEVEL DESIGN.
+- SLOT ITEM dei PG controllati direttamente: 1 iniziale, 3 UPGRADE massimi, 4 SLOT massimi. I PG IA non hanno ITEMS né SLOT ITEM utilizzabili.
+- ITEMS definitivamente CONFERMATI: tasti 1 / 2 / 3 / 4 per i rispettivi SLOT; pressione mantenuta per anteprima AREA e mira/posizionamento, rilascio per utilizzo/lancio. Consumo di 1 ITEM per uso; SLOT vuoto all’esaurimento, conservando l’eccezione SCORTA ESPLOSIVA.
+- Centro ITEMS sul CURSORE; nessun RANGE massimo salvo TRAPPOLA, limitata a 7 m lungo PG→CURSORE. TRAPPOLA orientata lungo PG→CURSORE con lato da 4 m come FRONTALE.
+- ITEMS senza FRIENDLY FIRE: MOLOTOV, GRANATA e TRAPPOLA colpiscono solo i MOB; SMOKE rende INVISIBILI tutti i PG nell’AREA secondo le regole già definite; POZIONE CURATIVA cura i PG e ignora i MOB.
+- AREE ITEMS: GRANATA raggio 2,5 m / 4 × 90°; MOLOTOV raggio 5 m / 8 × 45°; TRAPPOLA 1 × 4 m / 4 SEZIONI. SPICCHIO/SEZIONE anche parzialmente intercettato da MURI/OSTACOLI eliminato integralmente, senza HIT aggiuntive. SMOKE e POZIONE CURATIVA ignorano MURI/OSTACOLI. Nessun comportamento aggiuntivo di lancio/posizionamento.
+- Promemoria MERCHANT: alcuni ITEMS devono essere sbloccati tramite QUEST; quali ITEMS e quali QUEST restano DA DEFINIRE.
+- Ingresso nuova AREA: PG VIVI +15% HP MASSIMI; PG in MORTE resuscitati al 50% degli HP MASSIMI correnti, senza +15%; DOWN da resuscitare prima del passaggio.
+- DOWN: a 0 HP; timer 20 s, poi MORTE. SCONFITTA quando non rimane nessun PG ATTIVO, quindi solo DOWN e/o MORTE.
+- RIANIMAZIONE: solo tramite PG sotto controllo diretto di un PLAYER, con F entro TRIGGER_PG di raggio 2 m; timer 5 s; ritorno al 50% degli HP MASSIMI correnti e 2 s di invulnerabilità. Durante l’interazione il timer DOWN è in PAUSA; all’interruzione riprende dal valore congelato e il timer di RIANIMAZIONE regredisce verso 0. Riprendendo prima dello 0 si conserva il valore residuo. Nessun altro evento può interrompere la RIANIMAZIONE.
+- SPETTATORE automatico se il PLAYER non ha più PG a disposizione e la RUN è ancora ATTIVA: visuale bloccata su un altro PG disponibile scelto inizialmente a caso; LMB precedente, RMB successivo, ciclo circolare in ORDINE PLAYER saltando chi non ha PG disponibile. HOST = PLAYER 1; altri numerati per ordine di ingresso. Controllo della sola visuale. Alla resurrezione del proprio PG al CAMBIO AREA, uscita automatica da SPETTATORE, visuale sul proprio PG e ripresa del controllo diretto.
 - Sconfitta PARTY: si mantiene il 50% del G ottenuto nella RUN arrotondato per difetto; si perde la parte restante.
+- USCITA / PASSAGGIO AREA: TRIGGER CIRCOLARE con RAGGIO 4 m; tutti i PG VIVI devono trovarsi contemporaneamente al suo interno (sezione 6).
+- Al completamento dell’AREA dopo il BOSS, la decisione tra PROSEGUIRE e TORNARE ALL’HUB spetta all’HOST. Solo nella schermata dell’HOST compare il tasto TORNA ALL’HUB.
+- ABBANDONO / DISCONNESSIONE durante la RUN: il PLAYER uscente perde i progressi della RUN; il G guadagnato segue le regole della SCONFITTA. Il PG controllato diventa PG IA e, insieme agli eventuali PG IA già di sua responsabilità, viene riassegnato agli altri PLAYER secondo le regole di ASSEGNAZIONE IA già stabilite (sezioni 8.5 e 29.3).
 
 - RICALCOLO AGGRO: 0,5 s scaglionato; immediato se il BERSAGLIO entra in DOWN.
 - HIT/DANNO non altera il comportamento del MOB di per sé; STUN interrompe ogni AZIONE e richiede una ripartenza da capo.
 - MORTE MOB: DROP G/EXP automatico immediato; SPRITE DI MORTE per 3 s senza COLLISIONI con PG/MOB.
-- EXP integrale a ogni PG non in MORTE, inclusi DOWN; G integrali a ogni PLAYER con almeno un PG non in MORTE. Nessuna suddivisione.
+- EXP integrale a ogni PG non in MORTE, inclusi DOWN; G integrali nel saldo personale di ogni PLAYER con almeno un PG non in MORTE. Nessuna suddivisione. Acquisti e UPGRADE personali; G DROP modifica solo il G ricevuto dal PLAYER che lo ha acquistato.
+- PROF: HP, ATK, DEF, MOVE SPD, ATK SPD e CD REDUCTION legati al singolo PG; CHEST RATE, G DROP, ITEM SLOT e MEDI KIT legati al PLAYER.
 - AREE CIRCOLARI: PG04 e LUCKY SHOT 4 × 90°; ZOMB03 e ESPLOSIONE ZOMB05 8 × 45°; SPICCHIO intercettato eliminato integralmente, senza HIT separate.
 - ZOMB03: punto d’impatto fissato sulla posizione del BERSAGLIO a T = 0; AREA generata a T = 0,5 s; nuovo ATTACCO disponibile a T = 2 s.
 
-- ZOMB04: ATTACCO da fermo con PROIETTILE BALISTICO; posizione iniziale 15 m; arretramento sotto 9 m; ripresa dell’inseguimento oltre 30 m; VELOCITÀ PROIETTILE DA DEFINIRE.
+- ZOMB04: ATTACCO da fermo con PROIETTILE BALISTICO; posizione iniziale 15 m; arretramento sotto 9 m; ripresa dell’inseguimento oltre 30 m; PROJECTILE SPD = 8 m/s.
 - ZOMB05: 0 HP → PRE-ESPLOSIONE 2 s → ESPLOSIONE → MORTE → DROP e trigger SPAWN; 50 DANNO ai PG ATTIVI / 25 ai MOB prima della DEF; RAGGIO 4 m.
 - SPAWN: OFF-SCREEN da tutti i PG ATTIVI, NAVMESH valida e percorso verso almeno un PG ATTIVO; ZOMB05 escluso dal FIRST SPAWN con quota redistribuita 50/50 a ZOMB01/ZOMB02.
 
@@ -1213,27 +1694,18 @@ Le voci seguenti sono note editoriali di verifica. Evidenziano ciò che la fonte
 | --- | --- | --- |
 | Lore e vittoria finale | Esperimento scientifico; scienziato come possibile BOSS finale, non definitivo. | Identità e ruolo definitivo dello scienziato, cura, conclusione narrativa e comportamento dopo il BOSS della CITTÀ 5. |
 | Città e contenuti opzionali | 5 CITTÀ, 23 AREE; percorso principale lineare; possibili quest sotterranee. | Nomi, mappe, accesso e rientro dalle quest bonus, loro rapporto con il conteggio delle AREE e l’aumento dell’EXP DROP. |
-| PARTY e sblocchi | 4 PG, roster di 8; PG selezionati BLOCKED; non sbloccati in silhouette. | PG inizialmente disponibili e condizioni di sblocco; dettagli di equipaggiamento/progressione degli IA non esplicitati. Distribuzione IA e responsabilità di selezione/conferma sono definite nella sezione 8. |
-| HUB e NPC | MERCHANT, PROF, EXIT; possibili NPC liberati nelle quest. | Identità, dialoghi, condizioni di sblocco e servizi degli altri NPC. |
-| Attacchi base e ITEMS | Armi, ATK, RANGE, ATTACCHI ad AREA e PROIETTILI definiti nelle sezioni 10–12. | Uso e tasti degli ITEMS, bersagli degli effetti ancora non esplicitati e friendly fire degli effetti non coperti dalle regole specifiche. I PROIETTILI FISICI dei PG attraversano gli alleati senza effetti (sezione 10.1). Gli ATTACCHI BASE PG01–PG08, il raggio delle esplosioni PG04 e le eccezioni sono ora descritti nelle sezioni 10–12. |
-| DEF e modificatori | DEF interno 100 = modificatore mostrato 0%; danno = ATK × (1 − DEF%); DEF massima 90%, anche per SCUDO. SCUDO separato mitiga prima del PLAYER; DANNO FINALE arrotondato all’intero più vicino (sezione 10). | Conversione completa fra DEF interna e percentuale mostrata e combinazione dei bonus alla stessa DEF, dove non specificate. |
-| CD REDUCTION — regola consolidata | STAT neutra 100, minimo 10; CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100), arrotondato al decimo con arrotondamento matematico. CHEST −5 punti con base 100; PROF −1 punto sul VALORE BASE ORIGINALE. | Arrotondamento della STAT CD REDUCTION, se necessario: la decisione ai decimi riguarda il CD FINALE. |
-| Avvio del cooldown | CD BASE delle ABILITÀ conservati nelle schede PG. | Avvio del CD per le ABILITÀ non ancora precisate. COLPO GROSSO e FUOCO CURATIVO lo avviano al consumo dell’ultimo ATTACCO; COLPI RESPINGENTI al termine della DURATA; FILO SPINATO e PIOGGIA DI FRECCE all’attivazione. |
-| Effetti e passive | Valori e condizioni delle schede PG conservati; regola generale provvisoria: nessun cumulo e rinnovo DURATA, salvo regole specifiche (sezione 10.6). | Criterio generale di attribuzione delle KILL e base dell’1% HP curato dalla PASSIVA 1 di PG02. |
-| ABILITÀ BONUS | 10 abilità con STATS, RATE e UPGRADE. | Attivazione, mira e comportamento non esplicitati, frequenza del danno di AURA TOSSICA e interpretazione dell’UPGRADE DANNO di FIRE BULLET, che riporta ATK +15% anziché un danno base autonomo. |
-| MOB, BOSS e spawn | Totali per AREA, distribuzione ZOMB01–ZOMB05, FIRST SPAWN 30%, arrotondamenti a discapito di ZOMB01, quantità residue, probabilità e OFF-SCREEN globale consolidati nelle sezioni 14–15. | Inclusione di BOSS/MINI BOSS nei totali e nel limite simultaneo. |
-| EXP per livello | +15% per livello e tabella LVL 1 → 11. | Regola esatta di arrotondamento «alla decina»: la fonte rinvia a una regola precedente senza esplicitarla e la tabella non è riproducibile con un unico arrotondamento semplice applicato ricorsivamente. Non sostituire i valori tabellari; definire il calcolo oltre le voci presenti, il livello massimo. L’EXP residua e i MULTI LVL UP sono definiti nella sezione 20. |
-| BONUS di fine AREA | 3 proposte STATS BASE + 2 proposte ABILITÀ BONUS; scelta di 1 su 5 per PLAYER. | Valori e RATE delle proposte STATS di fine AREA, non esplicitamente equiparati a quelli CHEST; destinatari e gestione delle scelte per i PG AI. |
-| CHEST e HP | BONUS CHEST del 5% del valore base; cura all’ingresso AREA del 15% HP massimi correnti. | Rapporto fra valore base, UPGRADE permanenti e BONUS temporanei dove non specificato. Per CHEST è definito: incremento HP MASSIMI aggiunto anche agli HP correnti (sezione 19). |
-| G e acquisti | Ogni PLAYER valido riceve l’intero G DROP; validità definita nella sezione 16; il G è detto COMUNE. | Saldo condiviso spendibile o saldi individuali accreditati in parallelo, titolarità degli acquisti/UPGRADE e applicazione dei potenziamenti G DROP in CO-OP. |
-| PROF | Incrementi e prezzi nella sezione 27; nessun cap per HP, ATK, MOVE SPD, ATK SPD, G DROP, MEDI KIT; DEF massimo 90%, CD REDUCTION minimo 10; ITEM SLOT massimo 3 UPGRADE / 4 SLOT. CHEST RATE +1 punto percentuale per acquisto alla probabilità della seconda CHEST. | Ambito di applicazione degli UPGRADE permanenti e limite di acquisti CHEST RATE non esplicitato; costi da ribilanciare in TEST, invariati per ora. |
-| DOWN e morte | DOWN di 20 s; resurrezione con F per 5 s; ritorno al 50% HP massimi e 2 s di invulnerabilità. | Stato e possibilità di recupero alla scadenza dei 20 s, sconfitta con combinazioni di PG morti e DOWN, velocità/modalità del regresso se F viene rilasciato, distanza di interazione, interruzioni e comportamento dell’AI. |
-| Passaggio AREA | Resurrezione automatica dei PG in MORTE al 50%; cura di ingresso del 15% ai VIVI; DOWN da resuscitare prima. | Solo forma e dimensioni del TRIGGER, demandate a sviluppo/testing. DOWN da resuscitare prima; MORTE al 50% senza +15%; VIVI +15%: sezione 6. |
-| Fine RUN | Ritorno volontario dopo BOSS e sconfitta hanno effetti distinti; alla sconfitta si mantiene il 50% del solo G guadagnato nella RUN arrotondato per difetto, perdendo il resto. | Decisione di proseguire/tornare in CO-OP, abbandono/disconnessione e relativo trattamento della RUN. |
-| DANNI PERIODICI | FILO SPINATO richiama esplicitamente la REGOLA GENERALE DEI DANNI PERIODICI; 10 HP/s e applicazione immediata ai MOB già nella fascia sono confermati. | Il testo completo della regola generale non è presente nelle fonti recuperate: frequenza e calcolo dei tick non vengono ricostruiti. |
-| CD al CAMBIO AREA | ABILITÀ DISPONIBILE resta disponibile; ABILITÀ ATTIVA termina e il suo CD riparte. | Il caso di un’ABILITÀ già IN CD ma non più ATTIVA non è esplicitato nella formulazione finale confermata. |
-| TAG degli elementi | Proposta di distinguere gli elementi mediante TAG. | DA CONFERMARE: uso dei TAG, elenco e soluzione tecnica non sono stati approvati. |
-| Dettagli tecnici delle AREE | Numero/ampiezza SPICCHI, eliminazione completa e assenza di HIT separate sono confermati. | Orientamento iniziale degli SPICCHI e modalità tecnica delle verifiche geometriche non sono specificati. |
+| PARTY e sblocchi | 4 PG, roster di 8; PG selezionati BLOCKED; non sbloccati in silhouette. PG01–PG04 disponibili fin dall’inizio; PG05–PG08 inizialmente BLOCCATI, tutti immediatamente acquistabili dal RECLUTATORE dopo CITTÀ 1 a 5000 G ciascuno, senza ordine obbligatorio e con sblocco permanente. | Il comportamento generale IA resta DA DEFINIRE e sarà affrontato successivamente. Equipaggiamento, progressione, responsabilità delle scelte e distribuzione dei PG IA sono definiti nella sezione 8; DOWN, RESURREZIONE e CAMBIO CONTROLLO nella sezione 28. |
+| HUB e NPC | MERCHANT, PROF, EXIT; RECLUTATORE sbloccato al completamento di CITTÀ 1, inserito permanentemente nell’HUB e necessario per sbloccare nuovi PG (sezione 7); possibili NPC liberati nelle quest. | Identità, dialoghi, condizioni di sblocco e servizi degli altri NPC. |
+| Attacchi base e ITEMS | Armi, ATK, RANGE, ATTACCHI ad AREA e PROIETTILI definiti nelle sezioni 10–12. I PROIETTILI FISICI dei PG attraversano gli alleati senza effetti (sezione 10.1). Gli ATTACCHI BASE PG01–PG08, il raggio delle esplosioni PG04 e le eccezioni sono descritti nelle sezioni 10–12. ITEMS definitivamente CONFERMATI: comandi, consumo, mira, RANGE, bersagli, assenza di FRIENDLY FIRE e interazione con MURI/OSTACOLI nelle sezioni 9 e 10.3. Alcuni ITEMS del MERCHANT richiedono sblocco tramite QUEST. | Quali ITEMS acquistabili presso il MERCHANT richiedono sblocco e quali QUEST li sbloccano. Le regole di funzionamento ITEMS non sono più DA DEFINIRE. |
+| MOB, BOSS e spawn | Totali per AREA, distribuzione ZOMB01–ZOMB05, FIRST SPAWN 30%, arrotondamenti a discapito di ZOMB01, quantità residue, probabilità e OFF-SCREEN globale consolidati nelle sezioni 14–15. MINI BOSS e BOSS esclusi dal totale/massimo MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti; punto di SPAWN specifico stabilito in fase di LEVEL DESIGN. | Tutto il resto del funzionamento di MINI BOSS e BOSS, comprese STATS, fasi e meccaniche. |
+| PROF | Incrementi e prezzi nella sezione 27; nessun cap per HP, ATK, MOVE SPD, ATK SPD, G DROP, MEDI KIT; DEF massimo 90%, CD REDUCTION minimo 10; ITEM SLOT massimo 3 UPGRADE / 4 SLOT. HP, ATK, DEF, MOVE SPD, ATK SPD e CD REDUCTION legati al singolo PG; CHEST RATE, G DROP, ITEM SLOT e MEDI KIT legati al PLAYER. CHEST RATE +1 punto percentuale per acquisto, CAP 100%; in CO-OP, all’inizio RUN si applica il BONUS più alto tra i PLAYER presenti. | Costi da ribilanciare in TEST, invariati per ora. |
+| DOWN e morte | A 0 HP: DOWN con timer di 20 s, poi MORTE. SCONFITTA con nessun PG ATTIVO. RIANIMAZIONE con F entro TRIGGER_PG di raggio 2 m, timer 5 s, ritorno al 50% degli HP MASSIMI correnti e 2 s di invulnerabilità; solo PG sotto controllo diretto di un PLAYER. Timer DOWN in pausa durante l’interazione; all’interruzione riprende dal valore congelato e il timer di RIANIMAZIONE regredisce verso 0, riprendendo dal residuo se riavviato prima dello 0. Nessun altro evento interrompe la RIANIMAZIONE. Rientro in formazione dei PG IA, CAMBIO CONTROLLO e SPETTATORE definiti nella sezione 28. | Velocità del regresso del timer di RIANIMAZIONE verso 0 s. |
+| Passaggio AREA | TRIGGER USCITA CIRCOLARE con RAGGIO 4 m; tutti i PG VIVI devono trovarsi contemporaneamente al suo interno. Resurrezione automatica dei PG in MORTE al 50%, senza +15%; cura di ingresso del 15% ai VIVI; DOWN da resuscitare prima (sezione 6). | Nessun punto residuo relativo alla forma e alle dimensioni del TRIGGER USCITA. |
+| Fine RUN | Dopo il BOSS decide l’HOST tra PROSEGUIRE e TORNARE ALL’HUB; solo nella sua schermata compare il tasto TORNA ALL’HUB. Ritorno volontario e sconfitta hanno effetti distinti. In caso di abbandono/disconnessione il PLAYER perde i progressi della RUN e mantiene il 50% del solo G guadagnato nella RUN, arrotondato per difetto, secondo la SCONFITTA. Il PG controllato diventa PG IA; questo PG e gli eventuali PG IA già di sua responsabilità vengono riassegnati agli altri PLAYER secondo le regole stabilite (sezioni 8.5 e 29). | Gestione tecnica dell’HOST uscente, già segnalata nelle note di consolidamento; nessuna modalità tecnica viene introdotta. |
+| DANNI PERIODICI | FILO SPINATO: per ciascun MOB il conteggio parte al contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA e termina all’uscita. Per MOB già nella fascia valida all’attivazione, il conteggio parte in quel momento. MOLOTOV, TRAPPOLA e POZIONE CURATIVA: sezione 9.3. BRUCIATURA e VELENO: REGOLA GENERALE DANNI DA STATO (sezione 10.7), primo tick 1 s dopo applicazione/rinnovo e poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE, massimo 5 dello stesso STATO sullo stesso bersaglio; ogni applicazione rinnova la DURATA completa anche al CAP, senza DURATE indipendenti e senza ulteriore aumento del DANNO oltre il CAP. | Restano DA DEFINIRE soltanto le regole dei DANNI PERIODICI non esplicitate per eventuali altri effetti; la definizione di FILO SPINATO non viene estesa ad altre fonti. |
+| CD al CAMBIO AREA | ABILITÀ DISPONIBILE resta disponibile; ABILITÀ ATTIVA termina e il suo CD riparte. ABILITÀ già IN CD ma non più ATTIVA mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA. Eccezione — SCUDO: il CAMBIO AREA non lo disattiva (sezione 22.6). Per COLPI RESPINGENTI, se il CAMBIO AREA avviene durante i 3 s, l’effetto termina immediatamente e da quel momento riparte l’intero CD. | Nessun punto residuo relativo al CD già in corso al CAMBIO AREA. |
+| LAYER e matrice delle collisioni | Coppie confermate nella sezione 10.8, inclusa PROJECTILE_MOB ↔ PROJECTILE_MOB NO; MOB ↔ MOB SÌ anche per ZOMB05 in PRE-ESPLOSIONE, senza la precedente eccezione. Classificazione tecnica di ABILITÀ/PASSIVE PG, ABILITÀ BONUS, ITEMS e attacchi/effetti MOB confermata. RIANIMAZIONE usa TRIGGER_PG; NPC HUB usano OSTACOLO + TRIGGER_PG. Nessun TAG tecnico dedicato per ora; stati logici secondo la sezione 10.8. | Dimensioni numeriche del collider ridotto dei MOB. |
+| Dettagli tecnici delle AREE | Numero/ampiezza SPICCHI, eliminazione completa e assenza di HIT separate sono confermati. AREA_EFFECT_PG e AREA_EFFECT_MOB separati; MURO/OSTACOLO fuori dalla Layer Collision Matrix delle AREA_EFFECT, con verifica geometrica affidata alla logica dell’ABILITÀ/AREA. | Orientamento iniziale degli SPICCHI e modalità tecnica di implementazione delle verifiche geometriche non sono specificati. |
 
 I punti di bilanciamento, produzione artistica, prototipazione, multiplayer, salvataggio, testing e build restano quelli elencati nella sezione 30. Nessun valore aggiuntivo è stabilito da queste note.
 
@@ -1243,3 +1715,122 @@ I punti di bilanciamento, produzione artistica, prototipazione, multiplayer, sal
 - Il nuovo HITSCAN di PG04 sostituisce il precedente volo parabolico dell’ATTACCO BASE; restano le regole specifiche di destinazione e AREA già definite. Non sono introdotti nuovi criteri di intercettazione del raggio.
 - Restano non specificati: gestione tecnica dello SPAWN del proiettile dentro un ostacolo o con CURSORE coincidente con la bocca dell’arma; dettagli di rilascio drag & drop fuori dagli SLOT e trasferimenti fra PG; gestione dell’HOST uscente. Non vengono assegnati comportamenti impliciti.
 - La conferma finale di validità MEDI KIT aggiorna il vecchio consumo a HP pieni nel richiamo a ELEMOSINA. Non modifica roll del DROP, durata nell’AREA o esclusione da VITAMINA C.
+
+### REVISIONE — 12/09/2026 — 00:09 — PG06 / ATTRIBUZIONE KILL
+
+- Aggiornati i bersagli validi di CURA AD AREA e FUOCO CURATIVO, la priorità di FUOCO CURATIVO e il trattamento dei PG al 100% HP. Introdotta la regola generale di ATTRIBUZIONE KILL nella sezione 10.7 e applicata a ELEMOSINA; rimosso il relativo criterio dai punti DA DEFINIRE della sezione 32. Tutte le altre specifiche e gli altri punti non risolti restano invariati.
+
+### REVISIONE — 12/09/2026 — 00:30 — PG07 / BOW
+
+- MULTI SHOT: PROJECTILE SPD 20 m/s; CD BASE 10 s avviato immediatamente all’attivazione; ogni PROIETTILE che colpisce genera una HIT separata con DEF applicata separatamente, anche sullo stesso MOB. Sostituita la precedente somma dei DANNI prima della DEF.
+- PIOGGIA DI FRECCE: caduta solo grafica, senza velocità fisica di gameplay né altezza fisica di SPAWN; FRECCIA generata graficamente sopra il PUNTO D’IMPATTO e HIT esattamente al momento programmato. Conservate le altre regole, incluse 20 FRECCE da T = 0 a T = 3 s.
+- LUCKY SHOT: DANNO risultante arrotondato all’intero più vicino con arrotondamento matematico (<0,5 per difetto; ≥0,5 per eccesso).
+- CONCENTRAZIONE: primo MOB al 100% del DANNO effettivo corrente dell’ATTACCO BASE; secondo e terzo al 50%, calcolato prima della DEF; stesso arrotondamento matematico e DEF separata per ogni MOB. Propaga l’INTERA HIT e tutti gli effetti aggiuntivi anche al secondo e terzo MOB: solo il DANNO è ridotto al 50%.
+
+### REVISIONE — 12/09/2026 — 00:41 — PG08 / HEAVY MACHINE GUN
+
+- FILO SPINATO: conteggio individuale dal contatto con una SEZIONE/AREA valida, 10 DANNO ogni secondo di permanenza e termine del DANNO PERIODICO all’uscita; SLOW 25% non cumulabile tra più applicazioni.
+- COLPI RESPINGENTI: al CAMBIO AREA durante i 3 s, termine immediato dell’effetto e riavvio dell’intero CD da quel momento.
+- TENACIA: solo le HIT effettive dell’ATTACCO BASE di PG08 incrementano il BONUS di +0,2% DEF, con CAP invariato +30% / 150 HIT; altre fonti escluse. QUALSIASI HIT ricevuta azzera il BONUS, indipendentemente dal DANNO/HP persi.
+- RAGE: +30% ATK e −20% MOVE SPD calcolati sui valori CORRENTI al momento dell’applicazione, inclusi i BONUS guadagnati in partita. STUN interrompe RAGE e azzera il conteggio dei 5 s; altri stati futuri da definire quando aggiunti.
+- Aggiornati i richiami pertinenti nella sezione 32, limitando la definizione dei DANNI PERIODICI a FILO SPINATO. Tutte le altre specifiche e gli altri punti DA DEFINIRE restano invariati.
+
+### REVISIONE — 12/09/2026 — 00:47 — ZOMB04
+
+- Confermata PROJECTILE SPD ZOMB04 = 8 m/s. Aggiornate la scheda ZOMB04 (sezione 13.8), la sezione 30 e la sezione 31; il valore non viene esteso ad altri MOB o ABILITÀ.
+
+### REVISIONE — 12/09/2026 — 00:47 — SBLOCCO PG / RECLUTATORE
+
+- PG01, PG02, PG03 e PG04 disponibili fin dall’inizio; PG05, PG06, PG07 e PG08 inizialmente BLOCCATI.
+- Al completamento di CITTÀ 1 viene sbloccato il RECLUTATORE, NPC necessario per sbloccare nuovi PG, inserito permanentemente nell’HUB.
+- Da quel momento PG05–PG08 sono tutti immediatamente acquistabili a 5000 G ciascuno, senza ordine obbligatorio. Ogni PG acquistato rimane permanentemente sbloccato.
+- Integrate le regole nelle sezioni 7 e 8 e aggiornati i richiami nella sezione 32, rimuovendo soltanto i punti ora risolti. I dettagli di equipaggiamento/progressione dei PG IA ancora non definiti e tutti gli altri punti aperti restano invariati.
+
+### REVISIONE — 12/09/2026 — 01:15 — PG IA / EQUIPAGGIAMENTO, PROGRESSIONE, DOWN E CAMBIO CONTROLLO
+
+- PG IA senza ITEMS né SLOT ITEM utilizzabili; ABILITÀ attivata dal PLAYER responsabile con SPACE BAR + numero 1–3 secondo l’ordine dei PG IA assegnati; PASSIVA identica e automatica.
+- LEVEL UP e BONUS DI FINE AREA scelti dal PLAYER responsabile; BONUS CHEST automatico con le stesse regole degli altri PG; EXP, LVL, BONUS e progressione individuale durante la RUN identici agli altri PG.
+- RESURREZIONI eseguite esclusivamente da PG sotto controllo diretto di un PLAYER: PG controllato da PLAYER in DOWN resuscitabile solo da un altro PLAYER; PG IA in DOWN resuscitabile solo da un PLAYER, con rientro in formazione dopo la resurrezione.
+- CAMBIO CONTROLLO automatico in DOWN: primo PG IA della lista in SINGLE PLAYER; proprio PG IA assegnato per ciascun PLAYER in CO-OP a 2; solo HOST in CO-OP a 3; non applicabile in CO-OP a 4. Ritorno automatico al proprio PG appena resuscitato.
+- I PG IA non hanno volontà propria: non cercano autonomamente MEDI KIT/CHEST e possono usarli solo incontrandoli durante il normale movimento.
+- Aggiornati i richiami pertinenti, inclusa la sezione 32, rimuovendo soltanto i punti ora risolti. Il comportamento generale IA resta DA DEFINIRE e sarà affrontato successivamente. Tutte le altre specifiche restano invariate.
+
+### REVISIONE — 12/09/2026 — ITEMS DEFINITIVAMENTE CONFERMATI
+
+- Base ufficiale: contenuto integrale di ROG_ZOMBIE_GDD.md comprendente la REVISIONE — 12/09/2026 — 01:15 — PG IA / EQUIPAGGIAMENTO, PROGRESSIONE, DOWN E CAMBIO CONTROLLO.
+- Integrate esclusivamente le decisioni ITEMS nelle sezioni 9, 10/10.3, 31 e 32: comandi SLOT 1–4, anteprima durante la pressione e utilizzo al rilascio, consumo, centro sul CURSORE, RANGE e orientamento TRAPPOLA, bersagli, assenza di FRIENDLY FIRE, effetti e regole geometriche rispetto a MURI/OSTACOLI.
+- Nessun comportamento specifico aggiuntivo di lancio/posizionamento rispetto a MURI/OSTACOLI. SMOKE e POZIONE CURATIVA ignorano MURI/OSTACOLI; per GRANATA, MOLOTOV e TRAPPOLA eliminazione integrale dello SPICCHIO/SEZIONE intercettato anche parzialmente.
+- ITEMS definitivamente CONFERMATO. Mantenuto il promemoria: alcuni ITEMS del MERCHANT devono essere sbloccati tramite QUEST; quali ITEMS e quali QUEST restano DA DEFINIRE.
+- Conservate le regole PG IA e SCORTA ESPLOSIVA, i costi e i valori già definiti. Verificato mediante confronto con la base ufficiale che tutte le parti estranee all’aggiornamento ITEMS sono invariate.
+
+### REVISIONE — 12/09/2026 — DEF, MODIFICATORI, ARROTONDAMENTO STAT CD REDUCTION E AVVIO CD PG01–PG08
+
+- Nuova versione ufficiale di riferimento di ROG_ZOMBIE_GDD.md, basata esattamente sulla precedente versione ufficiale con revisione «ITEMS DEFINITIVAMENTE CONFERMATI».
+- Integrate esclusivamente le conferme successive: conversione completa DEF interna/percentuale mostrata; BONUS PROF sommati alla DEF BASE; BONUS CHEST riferiti alla STAT BASE all’avvio RUN, comprensiva del PROF; PASSIVE applicate alle STATS CORRENTI.
+- STAT CD REDUCTION a valore intero con arrotondamento matematico (<0,5 per difetto; ≥0,5 per eccesso). Conservata la distinta regola del CD FINALE al decimo di secondo.
+- Completato l’avvio CD di tutte le 16 ABILITÀ PG01–PG08. PESTONE, BARRIERA, FUOCO DI SOPPRESSIONE, COLPO LASER, TRIPLO SPARO, INVISIBILITÀ, COLTELLI AVVELENATI e CURA AD AREA: all’attivazione. FUOCO RAPIDO: al termine dei 3 s. PIOGGIA DI GRANATE: all’attivazione, confermato dall’utente durante questo aggiornamento.
+- Invariati i casi già consolidati: COLPO GROSSO al consumo del 4° ATTACCO; FUOCO CURATIVO al consumo del 6°; COLPI RESPINGENTI al termine dei 3 s; FILO SPINATO, MULTI SHOT e PIOGGIA DI FRECCE all’attivazione. Conservate le regole di INIZIO RUN e CAMBIO AREA.
+- Rimossi dalla sezione 32 i punti ora risolti su DEF e modificatori, arrotondamento della STAT CD REDUCTION, avvio cooldown e rapporto tra base RUN, PROF e CHEST. Gli altri punti DA DEFINIRE restano invariati.
+- Verificato mediante confronto integrale con la base ufficiale che tutte le parti estranee a queste modifiche e ai relativi richiami sono invariate; nessun altro valore, costo, effetto o regola è stato modificato.
+
+### REVISIONE — 12/09/2026 — ABILITÀ BONUS
+
+- Nuova versione ufficiale di riferimento di ROG_ZOMBIE_GDD.md, basata esattamente sull'ultima versione ufficiale integrale con revisione «DEF, MODIFICATORI, ARROTONDAMENTO STAT CD REDUCTION E AVVIO CD PG01–PG08».
+- Integrate esclusivamente le successive definizioni delle ABILITÀ BONUS confermate dall'utente: risposte 1.1–10.6, compresi PET 2.7 e SCUDO 6.5, e ultimi chiarimenti su LANCIO COLTELLI (suddivisione 45°), MINE (TRIGGER circolare raggio 1 m) e RICOCHET (probabilità di attivazione 40% per ogni HIT valida).
+- Aggiornate la sezione 22 e le relative STATS, i richiami a MURI/OSTACOLI, CAMBIO AREA, EFFETTI PERSISTENTI, UPGRADE DANNO di FIRE BULLET, PROJECTILE SPD e regole consolidate nelle sezioni 10, 24, 30 e 31, oltre ai punti pertinenti della sezione 32.
+- FIRE BULLET — punto 7.6 (interazione con ATTACCHI ad AREA/multipli) e SCIABOLATA — punto 10.5 (interazione con MURI/OSTACOLI) restano DA DEFINIRE.
+- Conservati tutti i valori precedenti di DANNO, RANGE, RAGGIO, CD, DURATA, ATK SPD, DEF, RATE di apparizione e UPGRADE. La probabilità di attivazione di RICOCHET è distinta dal DANNO rimbalzo già pari al 40% del danno originale.
+- Verificato mediante confronto integrale con la base ufficiale che tutte le parti estranee alle definizioni delle ABILITÀ BONUS e ai relativi richiami sono invariate. Nessun'altra specifica o punto DA DEFINIRE è stato modificato.
+
+
+### REVISIONE — 12/09/2026 — FIRE BULLET, SCIABOLATA, PASSIVA PG02, MINI BOSS/BOSS, EXP/LVL E BONUS STATS
+
+- Nuova versione ufficiale di riferimento di ROG_ZOMBIE_GDD.md, basata esattamente sull’ultima versione ufficiale integrale con revisione finale «ABILITÀ BONUS».
+- Integrate esclusivamente le decisioni confermate dopo quella versione: FIRE BULLET 7.6 applica BRUCIATURA a tutti i MOB colpiti dall’ATTACCO BASE, inclusi ATTACCHI BASE ad AREA/multipli; SCIABOLATA 10.5 ha AREA a SEMICERCHIO divisa in 4 SPICCHI e segue le regole generali delle AREE DI EFFETTO con MURI/OSTACOLI.
+- PASSIVA 1 PG02: con HP <30%, ogni KILL cura l’1% degli HP MASSIMI correnti di PG02; nessun effetto a HP ≥30%.
+- MINI BOSS e BOSS esclusi dal totale/massimo MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti; punto di SPAWN specifico stabilito in fase di LEVEL DESIGN. Tutto il resto del loro funzionamento rimane DA DEFINIRE.
+- EXP/LVL: arrotondamento alla decina con criterio matematico per eccesso/difetto del quoziente EXP/10 all’intero più vicino, quindi moltiplicazione per 10; nessun CAP di LVL. Conservati integralmente i valori della tabella LVL 1 → 11.
+- BONUS STATS DI FINE AREA: stessi RATE delle CHEST (HP 25%, ATK 8%, DEF 22%, MOVE SPD 22%, ATK SPD 8%, CD REDUCTION 15%) e stesso valore +5%.
+- NUOVA REGOLA SOSTITUTIVA: BONUS CHEST e BONUS STATS DI FINE AREA calcolano il +5% sul VALORE ATTUALE della STAT nel momento dell’acquisizione, includendo UPGRADE permanenti PROF e tutti i precedenti BONUS STATS della RUN, da CHEST e FINE AREA. Per CD REDUCTION si riduce del 5% il valore attuale, arrotondando la STAT risultante matematicamente all’intero più vicino e rispettando il minimo 10; resta invariato l’arrotondamento del CD FINALE al decimo di secondo.
+- Le note di revisione precedenti sono conservate come cronologia: le loro indicazioni sulla base iniziale RUN dei BONUS CHEST e sui punti FIRE BULLET 7.6 / SCIABOLATA 10.5 ancora DA DEFINIRE sono superate dalla presente revisione.
+- Aggiornate le sezioni pertinenti e i richiami; rimossi dai DA DEFINIRE soltanto i punti risolti. Verificato mediante confronto integrale che tutto il resto è identico alla versione base, incluse le tabelle EXP e MOB, gli UPGRADE PROF e gli UPGRADE delle ABILITÀ BONUS.
+
+
+### REVISIONE — 12/09/2026 — G PERSONALI, PROF, CHEST RATE, DOWN / MORTE / RIANIMAZIONE E SPETTATORE
+
+- Nuova versione ufficiale di riferimento di ROG_ZOMBIE_GDD.md, basata sulla versione ufficiale integrale con revisione finale «FIRE BULLET, SCIABOLATA, PASSIVA PG02, MINI BOSS/BOSS, EXP/LVL E BONUS STATS».
+- Integrate esclusivamente le successive decisioni confermate: saldo G, acquisti e UPGRADE personali; G DROP applicato solo al PLAYER acquirente; ambito PG/PLAYER degli UPGRADE PROF; CHEST RATE con CAP 100% e applicazione del BONUS più alto tra i PLAYER presenti all’inizio della RUN CO-OP.
+- Consolidati DOWN a 0 HP, timer DOWN di 20 s e passaggio in MORTE, SCONFITTA senza PG ATTIVI, RIANIMAZIONE con TRIGGER di raggio 2 m e timer di 5 s, pausa/ripresa del timer DOWN e regressione/ripresa dal residuo del timer di RIANIMAZIONE. Nessun altro evento può interrompere la RIANIMAZIONE. Conservati chi può rianimare, 50% degli HP MASSIMI correnti e 2 s di invulnerabilità.
+- Integrato SPETTATORE automatico con selezione iniziale casuale, LMB precedente / RMB successivo, ciclo circolare secondo ORDINE PLAYER e controllo della sola visuale. Alla resurrezione del proprio PG al CAMBIO AREA, uscita automatica da SPETTATORE e ripresa della visuale e del controllo diretto del proprio PG.
+- Aggiornati i richiami pertinenti e la sezione 32, rimuovendo solo i punti risolti. La velocità di regressione del timer di RIANIMAZIONE resta DA DEFINIRE. Le precedenti note di revisione sono conservate come cronologia.
+- Verificato mediante confronto con la base che tutte le altre parti sono invariate, comprese le tabelle EXP e MOB.
+
+### REVISIONE — 12/09/2026 — TRIGGER USCITA AREA, HOST DOPO BOSS, ABBANDONO / DISCONNESSIONE, DANNI DA STATO E CD AL CAMBIO AREA
+
+- Nuova versione ufficiale di riferimento di ROG_ZOMBIE_GDD.md, basata sulla versione ufficiale integrale con revisione finale «G PERSONALI, PROF, CHEST RATE, DOWN / MORTE / RIANIMAZIONE E SPETTATORE».
+- Integrate esclusivamente le cinque decisioni confermate richieste: TRIGGER USCITA / PASSAGGIO AREA CIRCOLARE con RAGGIO 4 m; decisione PROSEGUIRE / TORNARE ALL’HUB dopo il BOSS riservata all’HOST, con tasto TORNA ALL’HUB visibile solo nella sua schermata; perdita dei progressi della RUN e trattamento del G secondo SCONFITTA in caso di abbandono/disconnessione, conversione del PG controllato in PG IA e riassegnazione secondo le regole esistenti.
+- Consolidata la REGOLA GENERALE DANNI DA STATO per BRUCIATURA e VELENO: primo tick 1 s dopo applicazione/rinnovo, poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE; CAP di 5 ISTANZE dello stesso STATO sullo stesso bersaglio; DURATA completa rinnovata a ogni applicazione anche al CAP, senza aumento del DANNO oltre il CAP e senza DURATE indipendenti. Aggiornate le vecchie formulazioni incompatibili del VELENO, incluso PG05 / COLTELLI AVVELENATI, conservando i valori specifici.
+- Consolidato il mantenimento esatto del CD residuo per un’ABILITÀ già IN CD ma non più ATTIVA al CAMBIO AREA, con prosecuzione del conteggio nella nuova AREA. Invariate le regole per DISPONIBILE, ATTIVA e le eccezioni già definite.
+- Aggiornati sezioni pertinenti, richiami, regole consolidate e sezione 32. Tutte le altre parti sono invariate, comprese le tabelle e le precedenti note di revisione, conservate come cronologia.
+
+### REVISIONE — 12/09/2026 — LAYER, MATRICE DELLE COLLISIONI E PET
+
+- Base integrale: versione ufficiale con revisione finale «TRIGGER USCITA AREA, HOST DOPO BOSS, ABBANDONO / DISCONNESSIONE, DANNI DA STATO E CD AL CAMBIO AREA».
+- Integrate esclusivamente le successive decisioni sui LAYER e sulle collisioni della conversazione «Funzionamento ASTRA»: distinzione tecnica PLAYER/PG, coppie di PG, MOB e PROJECTILE, separazione TRIGGER_PG/TRIGGER_MOB e AREA_EFFECT_PG/AREA_EFFECT_MOB, rilevamento distinto dal blocco fisico e verifiche geometriche delle AREE affidate alla logica dell’ABILITÀ/AREA.
+- MOB ↔ MOB ora SÌ con collider ridotto come nel TEST in engine per rendere le orde più fluide, in sostituzione della precedente regola generale NO; MOB ↔ PROJECTILE_MOB NO. Nessuna dimensione del collider viene inventata.
+- Consolidati CHEST e MEDI KIT completamente attraversabili, MINE senza collisione fisica con PG/MOB e TRIGGER_MOB, BARRIERA di PG01 che eredita OSTACOLO.
+- Consolidate tutte le sette coppie dei PET, incluso PET ↔ PG NO. I PET non hanno meccanica HP/DANNO e i proiettili dei PG e dei MOB li attraversano senza HIT, DANNO, distruzione o deviazione; non funzionano da scudi mobili.
+- Aggiornate sezioni pertinenti, regole consolidate e sezione 32. Le coppie mancanti non sono completate; uso/elenco dei TAG restano DA CONFERMARE. Segnalato senza risolverlo il rapporto tra la nuova regola generale MOB ↔ MOB e la precedente formulazione di ZOMB05 in PRE-ESPLOSIONE.
+- Conservati integralmente tutti gli altri contenuti, valori, tabelle e note di revisione precedenti. Verificato il confronto con la base integrale: nessuna modifica esterna alle integrazioni sopra elencate e ai relativi richiami.
+
+
+### REVISIONE — 12/09/2026 — CLASSIFICAZIONE TECNICA, STATI LOGICI, COLLISIONI E TAG
+
+- Usato esattamente il file ufficiale integrale con revisione finale «LAYER, MATRICE DELLE COLLISIONI E PET» come base. Integrate esclusivamente le successive decisioni confermate nella conversazione «Funzionamento ASTRA».
+- Consolidata la classificazione tecnica di tutte le ABILITÀ PG, PASSIVE PG, ABILITÀ BONUS, ITEMS e attacchi/effetti MOB tramite LAYER esistenti e verifiche logiche; nessun nuovo layer. L’ESPLOSIONE di ZOMB05 usa una verifica logica unica su PG e MOB validi.
+- Confermati stati, transizioni e modificatori logici senza LAYER/TAG dedicati. DOWN mantiene le collisioni normali; MORTE PG e relativa SPRITE DI MORTE a terra non hanno collisioni. RESURREZIONE ripristina le collisioni normali, mantenute anche durante INVULNERABILITÀ.
+- Confermato PROJECTILE_MOB ↔ PROJECTILE_MOB = NO, senza HIT o effetti reciproci. ZOMB05 conserva le normali collisioni MOB anche in PRE-ESPLOSIONE, inclusa MOB ↔ MOB SÌ; eliminata la vecchia eccezione di attraversamento/sovrapposizione.
+- RIANIMAZIONE usa TRIGGER_PG senza collisione fisica aggiuntiva. NPC HUB: collider OSTACOLO + TRIGGER_PG per interazione con F. EXIT HUB: TRIGGER_PG + F, senza blocco fisico.
+- Per ora nessun TAG tecnico dedicato, inclusi PG e MOB: identificazione tramite LAYER + componenti/script + stati logici. Questa decisione finale supera le precedenti valutazioni sui singoli TAG; nuovi TAG solo se emergerà necessità concreta durante lo sviluppo.
+- Aggiornate le sezioni pertinenti e la sezione 31; rimossi dalla sezione 32 i dubbi risolti su TAG e collisioni. Conservati i punti ancora aperti, incluse le dimensioni numeriche del collider MOB, la velocità di regressione del timer di RIANIMAZIONE e i dettagli geometrici delle AREE non specificati.
+- Valori e contenuti estranei all’aggiornamento, tabelle di bilanciamento e note di revisione precedenti conservati invariati.
