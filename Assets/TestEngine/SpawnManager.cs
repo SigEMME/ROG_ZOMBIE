@@ -128,6 +128,10 @@ namespace RogZombie.TestEngine
 
         private bool HasRoom(Vector2 point)
         {
+            // Temporary barriers can appear after the AREA's initial navigation build.
+            Physics2D.SyncTransforms();
+            foreach (var collider in Physics2D.OverlapCircleAll(point, settings.ActorRadius))
+                if (collider.GetComponent<TestObstacle>() != null) return false;
             if (!settings.EnableMobSeparation) return true;
             foreach (var actor in Combatant.All)
                 if (actor != null && actor.Faction == Faction.MOB && actor.State != LifeState.Dead &&

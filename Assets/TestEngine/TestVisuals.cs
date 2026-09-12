@@ -36,6 +36,8 @@ namespace RogZombie.TestEngine
         {
             var go = Box("Projectile", position, Vector2.one * radius * 2f,
                 owner.Faction == Faction.PG ? Color.yellow : new Color(1f, 0.3f, 0.7f), 4);
+            int layer = LayerMask.NameToLayer(owner.Faction == Faction.PG ? "PROJECTILE_PG" : "PROJECTILE_MOB");
+            if (layer >= 0) go.layer = layer;
             go.AddComponent<Projectile>().Initialize(owner, direction, speed, range, damage, radius, penetrations, debug);
         }
 
@@ -71,6 +73,14 @@ namespace RogZombie.TestEngine
                 points[26] = origin;
                 FlashLine(points, Color.yellow);
             }
+        }
+
+        public static void FlashRectangle(Vector2 origin, Vector2 direction, float depth, float width)
+        {
+            direction.Normalize();
+            Vector2 side = new Vector2(-direction.y, direction.x) * width * .5f;
+            Vector2 front = origin + direction * depth;
+            FlashLine(new Vector3[] { origin - side, front - side, front + side, origin + side, origin - side }, Color.yellow);
         }
 
         private static void FlashLine(Vector3[] points, Color color)

@@ -18,9 +18,9 @@ TagManager:
   - MURO
   - OSTACOLO
   - TRIGGER_PG
-  - 
-  - 
-  - 
+  - PET
+  - PROJECTILE_PG
+  - PROJECTILE_MOB
   - 
   - 
   - 

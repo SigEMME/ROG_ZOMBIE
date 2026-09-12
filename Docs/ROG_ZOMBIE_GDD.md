@@ -118,7 +118,7 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 - L’AREA è COMPLETATA quando l’ultimo MOB previsto entra effettivamente in MORTE; per ZOMB05 questo avviene dopo l’ESPLOSIONE.
 - Si attiva l’USCITA. Se è OFF-SCREEN, un’ICONA DIREZIONALE ne indica la direzione; se è visibile non occorre un’indicazione aggiuntiva.
-- Tutti i PG VIVI devono essere contemporaneamente nel TRIGGER dell’USCITA, di forma CIRCOLARE con RAGGIO 4 m. L’USCITA AREA usa TRIGGER_PG: rilevamento senza collisione fisica (sezione 10.8).
+- Tutti i PG VIVI devono essere contemporaneamente nel TRIGGER dell’USCITA, di forma CIRCOLARE con RAGGIO 4 m. L’USCITA AREA usa TRIGGER_PG: rilevamento senza collisione fisica (sezione 10.9).
 - Finché manca un PG VIVO non succede nulla: i PG possono entrare e uscire liberamente dal TRIGGER.
 - I PG in DOWN impediscono il passaggio e devono essere RESUSCITATI prima. I PG in MORTE non devono raggiungere l’USCITA e non bloccano la transizione.
 - Soddisfatta la condizione, si apre la SCELTA BONUS di fine AREA e il GAMEPLAY viene completamente BLOCCATO: niente movimento, attacchi, ABILITÀ o ITEMS.
@@ -396,14 +396,14 @@ I cinque ITEMS usano esclusivamente i layer esistenti AREA_EFFECT_MOB e AREA_EFF
 - PERFORAZIONE: applica HIT/DANNO al MOB attraversato e prosegue finché sono disponibili PERFORAZIONI; sparisce quando colpisce l’ultimo MOB consentito. MURI/OSTACOLI e RANGE possono interromperlo prima.
 - La PERFORAZIONE modifica esclusivamente la regola standard «HIT MOB → sparisce». PG03 / CALIBRO PERFORANTE: 2 PERFORAZIONI → attraversa il 1° e il 2° MOB, danneggia il 3° e sparisce; DANNO e RANGE invariati.
 - PG01, PG04 e PG05 non usano questo volo fisico per l’ATTACCO BASE. Le ABILITÀ mantengono le regole specifiche delle proprie schede: la classificazione dell’ATTACCO BASE non ne cambia automaticamente la meccanica.
-- Le collisioni di PROJECTILE_PG e PROJECTILE_MOB sono distinte e confermate nella sezione 10.8. I proiettili di entrambi i layer attraversano i PET senza HIT, DANNO, distruzione o deviazione del proiettile; ZOMB04 conserva le proprie altre regole (sezione 13.8).
+- Le collisioni di PROJECTILE_PG e PROJECTILE_MOB sono distinte e confermate nella sezione 10.9. I proiettili di entrambi i layer attraversano i PET senza HIT, DANNO, distruzione o deviazione del proiettile; ZOMB04 conserva le proprie altre regole (sezione 13.8).
 
 ### 10.2 MURI E OSTACOLI
 
 - MURO: blocca MOVIMENTO e ATTACCHI; non può essere sorvolato.
 - OSTACOLO: blocca MOVIMENTO e ATTACCHI normali; può essere sorvolato dai PROIETTILI con traiettoria PARABOLICA.
 - Le eccezioni al blocco degli ATTACCHI sono definite nelle singole schede.
-- La BARRIERA di PG01 eredita le collisioni del layer OSTACOLO (sezione 10.8), conservando durata e proprietà della propria ABILITÀ.
+- La BARRIERA di PG01 eredita le collisioni del layer OSTACOLO (sezione 10.9), conservando durata e proprietà della propria ABILITÀ.
 
 ### 10.3 AREE CIRCOLARI E AREE ITEMS — MURI E OSTACOLI
 
@@ -456,17 +456,17 @@ I cinque ITEMS usano esclusivamente i layer esistenti AREA_EFFECT_MOB e AREA_EFF
 
 - Riapplicare lo stesso EFFETTO PERSISTENTE allo stesso bersaglio non lo cumula: la nuova applicazione rinnova la DURATA.
 - Le regole specifiche esplicitamente definite prevalgono sempre su questa regola generale.
-- BRUCIATURA e VELENO, incluso VELENO PG05, seguono la REGOLA GENERALE DANNI DA STATO (sezione 10.7): ISTANZE cumulative fino a 5, DURATA condivisa rinnovata a ogni applicazione, anche al CAP.
+- BRUCIATURA e VELENO, incluso VELENO PG05, seguono la REGOLA GENERALE DANNI DA STATO (sezione 10.8): ISTANZE cumulative fino a 5, DURATA condivisa rinnovata a ogni applicazione, anche al CAP.
 - PYROMANIA PG04: le AREE INCENDIATE possono sovrapporsi e i loro DANNI si sommano.
 - VITAMINA C / FUOCO CURATIVO PG06: il BONUS non si cumula e una nuova applicazione rinnova la DURATA, come specificato nella scheda PG06.
-- FIRE BULLET: ogni nuova HIT applica un’ISTANZA di BRUCIATURA secondo la REGOLA GENERALE DANNI DA STATO, con CAP di 5 ISTANZE e rinnovo della DURATA anche al CAP (sezioni 10.7 e 22.7).
+- FIRE BULLET: ogni nuova HIT applica un’ISTANZA di BRUCIATURA secondo la REGOLA GENERALE DANNI DA STATO, con CAP di 5 ISTANZE e rinnovo della DURATA anche al CAP (sezioni 10.8 e 22.7).
 - TASER: se un MOB riceve lo STUN quando è già sotto effetto di STUN, la DURATA si rinnova (sezione 22.8).
 
 ### 10.7 ATTRIBUZIONE KILL — REGOLA GENERALE
 
 - Una KILL viene attribuita al PG quando un MOB muore per un DANNO causato da quel PG, da qualsiasi fonte di DANNO riconducibile al PG.
 
-### 10.7 REGOLA GENERALE DANNI DA STATO — BRUCIATURA E VELENO
+### 10.8 REGOLA GENERALE DANNI DA STATO — BRUCIATURA E VELENO
 
 - BRUCIATURA e VELENO seguono la stessa REGOLA GENERALE DANNI DA STATO.
 - Il primo tick di DANNO avviene 1 s dopo l’applicazione/rinnovo; i tick successivi avvengono ogni 1 s.
@@ -477,7 +477,7 @@ I cinque ITEMS usano esclusivamente i layer esistenti AREA_EFFECT_MOB e AREA_EFF
 - Le ISTANZE condividono la DURATA rinnovata: non hanno DURATE indipendenti.
 - Restano invariati i valori specifici di DANNO e DURATA definiti nelle singole schede.
 
-### 10.8 LAYER E MATRICE DELLE COLLISIONI — CONFERMATO
+### 10.9 LAYER E MATRICE DELLE COLLISIONI — CONFERMATO
 
 #### DISTINZIONE PLAYER / PG E LAYER
 
@@ -566,7 +566,7 @@ In questa tabella SÌ significa rilevamento/interazione con il destinatario, sen
 - MORTE PG: il layer PG resta invariato, ma tutte le collisioni sono disabilitate. La SPRITE DI MORTE rimane a terra ed è completamente priva di collisioni; PG, MOB, PET e proiettili la attraversano senza interazioni.
 - RESURREZIONE: transizione logica che ripristina le normali collisioni del PG, mantenute anche durante i 2 s di INVULNERABILITÀ dopo la resurrezione. INVULNERABILITÀ modifica la gestione di HIT/DANNO, senza rendere il PG attraversabile.
 - INVISIBILITÀ e GHOSTING mantengono il layer PG e le collisioni normali. STUN, SLOW e RESPINTA mantengono il layer originale PG/MOB e tutte le collisioni normali; RESPINTA è uno spostamento forzato che MURO/OSTACOLO possono interrompere secondo le regole esistenti.
-- BRUCIATURA e VELENO sono danni da stato logici senza variazioni di layer/collisioni; restano validi tick, istanze, CAP e rinnovo della sezione 10.7. Non servono TAG Projectile_DOT o Projectile_Slow: gli effetti sono applicati dalla logica della HIT/abilità/ITEM.
+- BRUCIATURA e VELENO sono danni da stato logici senza variazioni di layer/collisioni; restano validi tick, istanze, CAP e rinnovo della sezione 10.8. Non servono TAG Projectile_DOT o Projectile_Slow: gli effetti sono applicati dalla logica della HIT/abilità/ITEM.
 - RAGE, TENACIA, MARCHIO e VITAMINA C non modificano layer o collisioni. SCUDO è una protezione logica associata al PG, senza collider o layer proprio: mitigazione e consumo delle HIT seguono la sezione 22.6.
 - PRE-ESPLOSIONE ZOMB05 è uno stato logico che conserva layer MOB e tutte le collisioni normali, inclusa MOB ↔ MOB SÌ (sezione 13.9).
 - La classificazione completa delle meccaniche usa esclusivamente i layer esistenti e verifiche logiche: ITEMS nella sezione 9.6, ABILITÀ/PASSIVE PG nella sezione 12, attacchi/effetti MOB nella sezione 13.10 e ABILITÀ BONUS nella sezione 22.11. Non introduce modifiche a valori, durate, bersagli o regole specifiche già definite.
@@ -577,7 +577,7 @@ In questa tabella SÌ significa rilevamento/interazione con il destinatario, sen
 
 | PG | ARMA | HP | ATK | DEF | MOVE SPD | ATK SPD | CD REDUCTION | RANGE |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| PG01 | Shotgun | 100 | 20 | +15% | 100 | 85 | 100 | 3 m |
+| PG01 | Shotgun | 100 | 20 | +15% | 100 | 85 | 100 | 4 m |
 | PG02 | Assault Rifle | 100 | 10 | 0% | 100 | 150 | 100 | 10 m |
 | PG03 | Sniper Rifle | 80 | 50 | −10% | 100 | 70 | 100 | 20 m |
 | PG04 | Grenade Launcher | 100 | 30 | 0% | 100 | 75 | 100 | 7 m |
@@ -596,10 +596,10 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 ### PG01 — Shotgun
 
-- ATTACCO BASE: AREA HITSCAN istantanea, senza singoli proiettili; CONO di portata 3 m e ampiezza 90°, orientato verso il CURSORE. Colpisce tutti i MOB validi nel CONO con ATK 20 per ciascuno, prima della DEF; il DANNO non è suddiviso e non vengono simulati singoli pallettoni. RANGE interno 300 = portata 3 m. MURI e OSTACOLI bloccano l’ATTACCO verso i MOB schermati. ATK SPD 85 = 0,85 ATTACCHI/s.
+- ATTACCO BASE: AREA HITSCAN istantanea, senza singoli proiettili; CONO di portata 4 m e ampiezza 75°, orientato verso il CURSORE. Colpisce tutti i MOB validi nel CONO con ATK 20 per ciascuno, prima della DEF; il DANNO non è suddiviso e non vengono simulati singoli pallettoni. RANGE interno 400 = portata 4 m. MURI e OSTACOLI bloccano l’ATTACCO verso i MOB schermati. ATK SPD 85 = 0,85 ATTACCHI/s.
 
-- ABILITÀ 1 — PESTONE: 40 DANNO; cono frontale 3 m × 5 m; CD 10 s, avviato all’attivazione.
-- ABILITÀ 2 — BARRIERA: piazza un muro invalicabile e indistruttibile di 7 m × 1 m; durata 5 s; CD 15 s, avviato all’attivazione. Eredita le collisioni del layer OSTACOLO (sezione 10.8).
+- ABILITÀ 1 — PESTONE: 40 DANNO; AREA RETTANGOLARE frontale 3 m × 7 m: larghezza frontale 3 m e profondità 7 m, a partire dal PG nella direzione PG→CURSORE. CD 10 s, avviato all’attivazione. Applica SLOW ai MOB colpiti: velocità di movimento ridotta del 30% per 3 s. La riapplicazione rinnova la durata senza cumulare lo stesso effetto, secondo le regole generali.
+- ABILITÀ 2 — BARRIERA: piazza un muro invalicabile e indistruttibile di 7 m × 1 m; durata 5 s; CD 15 s, avviato all’attivazione. Eredita le collisioni del layer OSTACOLO (sezione 10.9).
 - PASSIVA 1: con HP <50% ottiene +15% DEF; l'effetto termina quando gli HP tornano ≥50%.
 - PASSIVA 2: con HP <50% ottiene +15% ATK; l'effetto termina quando gli HP tornano ≥50%.
 
@@ -674,7 +674,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Lancia simultaneamente 8 COLTELLI a 360° attorno a PG05, distanziati di 45°. Uno segue esattamente il CURSORE; gli altri sono orientati rispetto a quello.
 - PROIETTILI BALISTICI non PERFORANTI; RANGE 10 m; 30 DANNO per COLTELLO; CD BASE 10 s, avviato all’attivazione.
 - Seguono le REGOLE GENERALI DEI PROIETTILI: il primo MOB colpito riceve DANNO e VELENO e arresta il COLTELLO; MURI/OSTACOLI bloccano il PROIETTILE.
-- VELENO: DANNO base 5 HP/s, DURATA 3 s. Segue la REGOLA GENERALE DANNI DA STATO (sezione 10.7): DANNO per tick = 5 × numero ISTANZE, fino a 5 ISTANZE; ogni applicazione rinnova la DURATA completa di 3 s, anche al CAP. Primo tick 1 s dopo l’applicazione/rinnovo, poi ogni 1 s; le ISTANZE non hanno DURATE indipendenti.
+- VELENO: DANNO base 5 HP/s, DURATA 3 s. Segue la REGOLA GENERALE DANNI DA STATO (sezione 10.8): DANNO per tick = 5 × numero ISTANZE, fino a 5 ISTANZE; ogni applicazione rinnova la DURATA completa di 3 s, anche al CAP. Primo tick 1 s dopo l’applicazione/rinnovo, poi ogni 1 s; le ISTANZE non hanno DURATE indipendenti.
 
 #### PASSIVA 1 — GHOSTING
 
@@ -687,7 +687,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - Conta i MOB COLPITI dagli ATTACCHI BASE: +1 per ciascun MOB colpito, anche più incrementi nello stesso ATTACCO.
 - Soglia 15; il contatore si ferma a 15 e l’eccedenza viene ignorata.
-- Raggiunta la soglia, il successivo ATTACCO BASE applica VELENO 5 HP/s per 3 s a tutti i MOB colpiti nell’AREA ATTACCO, secondo la REGOLA GENERALE DANNI DA STATO (sezione 10.7).
+- Raggiunta la soglia, il successivo ATTACCO BASE applica VELENO 5 HP/s per 3 s a tutti i MOB colpiti nell’AREA ATTACCO, secondo la REGOLA GENERALE DANNI DA STATO (sezione 10.8).
 - Dopo l’ATTACCO potenziato il contatore torna a 0 e inizia un nuovo ciclo.
 
 ### PG06 — Revolver
@@ -807,7 +807,7 @@ Tutte le 16 ABILITÀ usano i LAYER esistenti o verifiche logiche, senza nuovi TA
 
 | PG | ABILITÀ | GESTIONE TECNICA |
 | --- | --- | --- |
-| PG01 | PESTONE | AREA_EFFECT_MOB oppure verifica HITSCAN istantanea a CONO sui MOB; nessuna collisione fisica persistente. MURO/OSTACOLO bloccano secondo le regole dell’AREA. |
+| PG01 | PESTONE | AREA_EFFECT_MOB oppure verifica HITSCAN istantanea su AREA RETTANGOLARE frontale 3 m × 7 m (larghezza frontale 3 m, profondità 7 m) sui MOB; nessuna collisione fisica persistente. MURO/OSTACOLO bloccano secondo le regole dell’AREA. |
 | PG01 | BARRIERA | Layer OSTACOLO: blocca PG, MOB, PET, PROJECTILE_PG e PROJECTILE_MOB. |
 | PG02 | FUOCO RAPIDO | Modificatore logico temporaneo di ATK SPD; proiettili PROJECTILE_PG e collisioni invariate. |
 | PG02 | FUOCO DI SOPPRESSIONE | AREA_EFFECT_MOB oppure verifica HITSCAN istantanea a CONO sui MOB; nessuna collisione fisica persistente. MURO/OSTACOLO bloccano secondo le regole dell’AREA. |
@@ -874,7 +874,7 @@ Nessuna PASSIVA richiede nuovi TAG o LAYER. Le modifiche logiche mantengono laye
 - MOB ↔ MOB: collisione fisica SÌ, con collider ridotto rispetto alla dimensione visiva del MOB, come nel TEST in engine, per rendere le orde più fluide. Non sono state definite dimensioni numeriche del collider. Questa regola sostituisce la precedente assenza di collisione fisica tra MOB e vale anche per ZOMB05 in PRE-ESPLOSIONE, senza eccezioni di attraversamento/sovrapposizione.
 - MOB ↔ PG: collisione fisica; si bloccano fisicamente e non si attraversano. La semplice collisione non infligge DANNO e non applica RESPINTA al PG.
 - MOB ↔ MURI/OSTACOLI: collisione fisica attiva, con blocco del MOVIMENTO.
-- MOB ↔ PROJECTILE_PG: SÌ; MOB ↔ PROJECTILE_MOB: NO. Matrice consolidata nella sezione 10.8.
+- MOB ↔ PROJECTILE_PG: SÌ; MOB ↔ PROJECTILE_MOB: NO. Matrice consolidata nella sezione 10.9.
 - Il DANNO deriva da ATTACCHI/HIT secondo la scheda del MOB.
 - BERSAGLIO irraggiungibile: il MOB continua a tentare di raggiungerlo, collidendo con l’OSTACOLO. Nessun TELEPORT, distruzione dell’OSTACOLO o abbandono dell’inseguimento; la selezione resta soggetta alla REGOLA AGGRO. Questa situazione è da evitare nel LEVEL DESIGN.
 - Distanza di arresto e comportamento entro RANGE sono specifici del MOB.
@@ -975,7 +975,7 @@ Nessuna PASSIVA richiede nuovi TAG o LAYER. Le modifiche logiche mantengono laye
 - Il PROIETTILE segue le REGOLE DI COLLISIONE, mantiene la TRAIETTORIA iniziale e non segue il PG né corregge il percorso in base ai suoi spostamenti.
 - RANGE PROIETTILE = RANGE ZOMB04 = 30 m. Scompare al raggiungimento del RANGE massimo o alla prima COLLISIONE.
 - Una volta sparato prosegue autonomamente: cambio AGGRO, MOVIMENTO, STUN, RESPINTA o MORTE successivi di ZOMB04 non lo modificano. Anche una successiva ostruzione della TRAIETTORIA non annulla il PROIETTILE già sparato, che continua secondo le proprie regole di collisione.
-- PROJECTILE SPD ZOMB04 = 8 m/s. PROJECTILE SPD standard 20 m/s è confermata per gli ATTACCHI BASE fisici dei PG. Per PROJECTILE_MOB sono confermate collisioni con PG, MURO e OSTACOLO; nessuna collisione con MOB, PROJECTILE_PG o PET (sezione 10.8).
+- PROJECTILE SPD ZOMB04 = 8 m/s. PROJECTILE SPD standard 20 m/s è confermata per gli ATTACCHI BASE fisici dei PG. Per PROJECTILE_MOB sono confermate collisioni con PG, MURO e OSTACOLO; nessuna collisione con MOB, PROJECTILE_PG o PET (sezione 10.9).
 
 #### STATI
 
@@ -1220,7 +1220,7 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 
 ## 19. CHEST
 
-- CHEST completamente attraversabili, senza collisione fisica con PG o MOB; rilevamento tramite collider IsTrigger sul layer TRIGGER_PG (sezione 10.8).
+- CHEST completamente attraversabili, senza collisione fisica con PG o MOB; rilevamento tramite collider IsTrigger sul layer TRIGGER_PG (sezione 10.9).
 
 - Prima CHEST garantita in ogni AREA: probabilità di SPAWN 100%.
 - Il limite di 1 CHEST per AREA è eliminato. CHEST RATE determina la probabilità di SPAWN di una seconda CHEST: +1 punto percentuale per acquisto dell’UPGRADE PROF, con CAP 100%.
@@ -1373,7 +1373,7 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 - **7.1:** FIRE BULLET si attiva automaticamente allo scadere del CD.
 - **7.2:** FIRE BULLET ha effetto solo sugli ATTACCHI BASE.
 - **7.3:** ogni HIT affetta da FIRE BULLET applica BRUCIATURA al BERSAGLIO.
-- **7.4:** ogni nuova HIT applica un’ISTANZA di BRUCIATURA secondo la REGOLA GENERALE DANNI DA STATO (sezione 10.7). DANNO base 2 HP/s e DURATA base 2 s invariati; DANNO per tick = DANNO base della BRUCIATURA × numero ISTANZE, fino a 5 ISTANZE. Ogni applicazione rinnova la DURATA completa, anche al CAP; primo tick 1 s dopo l’applicazione/rinnovo, poi ogni 1 s. Le ISTANZE non hanno DURATE indipendenti.
+- **7.4:** ogni nuova HIT applica un’ISTANZA di BRUCIATURA secondo la REGOLA GENERALE DANNI DA STATO (sezione 10.8). DANNO base 2 HP/s e DURATA base 2 s invariati; DANNO per tick = DANNO base della BRUCIATURA × numero ISTANZE, fino a 5 ISTANZE. Ogni applicazione rinnova la DURATA completa, anche al CAP; primo tick 1 s dopo l’applicazione/rinnovo, poi ogni 1 s. Le ISTANZE non hanno DURATE indipendenti.
 - **7.5:** UPGRADE DANNO ha effetto solo sul DANNO dell'effetto BRUCIATURA; il BONUS ATK di FIRE BULLET si somma all'ATK corrente del PG.
 - **7.6:** quando FIRE BULLET è attivo, la BRUCIATURA viene applicata a tutti i MOB colpiti dall’ATTACCO BASE, inclusi gli ATTACCHI BASE ad AREA/multipli. Ogni MOB colpito riceve la propria istanza di BRUCIATURA.
 
@@ -1485,7 +1485,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 
 ## 26. MEDI KIT
 
-- MEDI KIT completamente attraversabili, senza collisione fisica con PG o MOB; rilevamento tramite collider IsTrigger sul layer TRIGGER_PG (sezione 10.8).
+- MEDI KIT completamente attraversabili, senza collisione fisica con PG o MOB; rilevamento tramite collider IsTrigger sul layer TRIGGER_PG (sezione 10.9).
 
 ### GENERAZIONE NELL’AREA
 
@@ -1618,7 +1618,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 
 ## 31. REGOLE CONSOLIDATE DA NON DIMENTICARE
 
-- LAYER e coppie confermate: sezione 10.8. PG comprende personaggi controllati da PLAYER o IA; PLAYER è distinto dal personaggio fisico. Nessun TAG tecnico dedicato per ora: identificazione tramite LAYER + componenti/script + stati logici; TAG futuri solo in caso di necessità concreta durante lo sviluppo.
+- LAYER e coppie confermate: sezione 10.9. PG comprende personaggi controllati da PLAYER o IA; PLAYER è distinto dal personaggio fisico. Nessun TAG tecnico dedicato per ora: identificazione tramite LAYER + componenti/script + stati logici; TAG futuri solo in caso di necessità concreta durante lo sviluppo.
 - Classificazione tecnica confermata senza nuovi LAYER: ABILITÀ/PASSIVE PG (sezione 12), ABILITÀ BONUS (22.11), ITEMS (9.6), attacchi/effetti MOB (13.10). Stati e modificatori non cambiano layer/collisioni, salvo le variazioni esplicite, in particolare MORTE PG.
 - PG in DOWN mantiene layer PG e collisioni normali; PG in MORTE e relativa SPRITE DI MORTE a terra non hanno collisioni. RESURREZIONE ripristina le collisioni normali, mantenute durante INVULNERABILITÀ.
 - ZOMB05 in PRE-ESPLOSIONE mantiene layer MOB e tutte le collisioni normali, inclusa MOB ↔ MOB SÌ; eliminata l’eccezione di attraversamento/sovrapposizione.
@@ -1646,7 +1646,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - Avvio CD PG01–PG08 completamente definito nelle schede della sezione 12: all’attivazione, salvo FUOCO RAPIDO e COLPI RESPINGENTI al termine dei rispettivi 3 s, COLPO GROSSO al consumo del 4° ATTACCO e FUOCO CURATIVO al consumo del 6° ATTACCO. Restano valide le regole di INIZIO RUN e CAMBIO AREA.
 - DEF massima 90%, inclusa la DEF propria dello SCUDO; SCUDO mitiga prima del PLAYER, poi il residuo è mitigato dalla DEF del PLAYER. DANNO FINALE arrotondato all’intero più vicino.
 - EFFETTI PERSISTENTI: di default non si cumulano e rinnovano la DURATA; prevalgono le regole specifiche (sezione 10.6).
-- REGOLA GENERALE DANNI DA STATO — BRUCIATURA e VELENO: primo tick 1 s dopo applicazione/rinnovo, poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE; massimo 5 ISTANZE dello stesso STATO sullo stesso bersaglio. Ogni applicazione rinnova la DURATA completa, anche al CAP; oltre 5 ISTANZE il DANNO non aumenta. Le ISTANZE non hanno DURATE indipendenti (sezione 10.7).
+- REGOLA GENERALE DANNI DA STATO — BRUCIATURA e VELENO: primo tick 1 s dopo applicazione/rinnovo, poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE; massimo 5 ISTANZE dello stesso STATO sullo stesso bersaglio. Ogni applicazione rinnova la DURATA completa, anche al CAP; oltre 5 ISTANZE il DANNO non aumenta. Le ISTANZE non hanno DURATE indipendenti (sezione 10.8).
 - Al CAMBIO AREA un’ABILITÀ già IN CD ma non più ATTIVA mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA. Restano invariate le regole per DISPONIBILE, ATTIVA e le eccezioni già definite (sezione 10.4).
 - Prima CHEST garantita al 100%; PROF CHEST RATE aggiunge +1 punto percentuale per acquisto alla probabilità della seconda CHEST, con CAP 100%. CHEST RATE è legato al PLAYER; all’inizio di una RUN CO-OP si applica il BONUS più alto tra i PLAYER presenti. Posizioni raggiungibili NAVMESH, almeno 80 m dalla ZONA DI INIZIO e 10 m da MEDI KIT e altre CHEST.
 - Ogni PG: 3 SLOT BONUS.
@@ -1702,9 +1702,9 @@ Le voci seguenti sono note editoriali di verifica. Evidenziano ciò che la fonte
 | DOWN e morte | A 0 HP: DOWN con timer di 20 s, poi MORTE. SCONFITTA con nessun PG ATTIVO. RIANIMAZIONE con F entro TRIGGER_PG di raggio 2 m, timer 5 s, ritorno al 50% degli HP MASSIMI correnti e 2 s di invulnerabilità; solo PG sotto controllo diretto di un PLAYER. Timer DOWN in pausa durante l’interazione; all’interruzione riprende dal valore congelato e il timer di RIANIMAZIONE regredisce verso 0, riprendendo dal residuo se riavviato prima dello 0. Nessun altro evento interrompe la RIANIMAZIONE. Rientro in formazione dei PG IA, CAMBIO CONTROLLO e SPETTATORE definiti nella sezione 28. | Velocità del regresso del timer di RIANIMAZIONE verso 0 s. |
 | Passaggio AREA | TRIGGER USCITA CIRCOLARE con RAGGIO 4 m; tutti i PG VIVI devono trovarsi contemporaneamente al suo interno. Resurrezione automatica dei PG in MORTE al 50%, senza +15%; cura di ingresso del 15% ai VIVI; DOWN da resuscitare prima (sezione 6). | Nessun punto residuo relativo alla forma e alle dimensioni del TRIGGER USCITA. |
 | Fine RUN | Dopo il BOSS decide l’HOST tra PROSEGUIRE e TORNARE ALL’HUB; solo nella sua schermata compare il tasto TORNA ALL’HUB. Ritorno volontario e sconfitta hanno effetti distinti. In caso di abbandono/disconnessione il PLAYER perde i progressi della RUN e mantiene il 50% del solo G guadagnato nella RUN, arrotondato per difetto, secondo la SCONFITTA. Il PG controllato diventa PG IA; questo PG e gli eventuali PG IA già di sua responsabilità vengono riassegnati agli altri PLAYER secondo le regole stabilite (sezioni 8.5 e 29). | Gestione tecnica dell’HOST uscente, già segnalata nelle note di consolidamento; nessuna modalità tecnica viene introdotta. |
-| DANNI PERIODICI | FILO SPINATO: per ciascun MOB il conteggio parte al contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA e termina all’uscita. Per MOB già nella fascia valida all’attivazione, il conteggio parte in quel momento. MOLOTOV, TRAPPOLA e POZIONE CURATIVA: sezione 9.3. BRUCIATURA e VELENO: REGOLA GENERALE DANNI DA STATO (sezione 10.7), primo tick 1 s dopo applicazione/rinnovo e poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE, massimo 5 dello stesso STATO sullo stesso bersaglio; ogni applicazione rinnova la DURATA completa anche al CAP, senza DURATE indipendenti e senza ulteriore aumento del DANNO oltre il CAP. | Restano DA DEFINIRE soltanto le regole dei DANNI PERIODICI non esplicitate per eventuali altri effetti; la definizione di FILO SPINATO non viene estesa ad altre fonti. |
+| DANNI PERIODICI | FILO SPINATO: per ciascun MOB il conteggio parte al contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA e termina all’uscita. Per MOB già nella fascia valida all’attivazione, il conteggio parte in quel momento. MOLOTOV, TRAPPOLA e POZIONE CURATIVA: sezione 9.3. BRUCIATURA e VELENO: REGOLA GENERALE DANNI DA STATO (sezione 10.8), primo tick 1 s dopo applicazione/rinnovo e poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE, massimo 5 dello stesso STATO sullo stesso bersaglio; ogni applicazione rinnova la DURATA completa anche al CAP, senza DURATE indipendenti e senza ulteriore aumento del DANNO oltre il CAP. | Restano DA DEFINIRE soltanto le regole dei DANNI PERIODICI non esplicitate per eventuali altri effetti; la definizione di FILO SPINATO non viene estesa ad altre fonti. |
 | CD al CAMBIO AREA | ABILITÀ DISPONIBILE resta disponibile; ABILITÀ ATTIVA termina e il suo CD riparte. ABILITÀ già IN CD ma non più ATTIVA mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA. Eccezione — SCUDO: il CAMBIO AREA non lo disattiva (sezione 22.6). Per COLPI RESPINGENTI, se il CAMBIO AREA avviene durante i 3 s, l’effetto termina immediatamente e da quel momento riparte l’intero CD. | Nessun punto residuo relativo al CD già in corso al CAMBIO AREA. |
-| LAYER e matrice delle collisioni | Coppie confermate nella sezione 10.8, inclusa PROJECTILE_MOB ↔ PROJECTILE_MOB NO; MOB ↔ MOB SÌ anche per ZOMB05 in PRE-ESPLOSIONE, senza la precedente eccezione. Classificazione tecnica di ABILITÀ/PASSIVE PG, ABILITÀ BONUS, ITEMS e attacchi/effetti MOB confermata. RIANIMAZIONE usa TRIGGER_PG; NPC HUB usano OSTACOLO + TRIGGER_PG. Nessun TAG tecnico dedicato per ora; stati logici secondo la sezione 10.8. | Dimensioni numeriche del collider ridotto dei MOB. |
+| LAYER e matrice delle collisioni | Coppie confermate nella sezione 10.9, inclusa PROJECTILE_MOB ↔ PROJECTILE_MOB NO; MOB ↔ MOB SÌ anche per ZOMB05 in PRE-ESPLOSIONE, senza la precedente eccezione. Classificazione tecnica di ABILITÀ/PASSIVE PG, ABILITÀ BONUS, ITEMS e attacchi/effetti MOB confermata. RIANIMAZIONE usa TRIGGER_PG; NPC HUB usano OSTACOLO + TRIGGER_PG. Nessun TAG tecnico dedicato per ora; stati logici secondo la sezione 10.9. | Dimensioni numeriche del collider ridotto dei MOB. |
 | Dettagli tecnici delle AREE | Numero/ampiezza SPICCHI, eliminazione completa e assenza di HIT separate sono confermati. AREA_EFFECT_PG e AREA_EFFECT_MOB separati; MURO/OSTACOLO fuori dalla Layer Collision Matrix delle AREA_EFFECT, con verifica geometrica affidata alla logica dell’ABILITÀ/AREA. | Orientamento iniziale degli SPICCHI e modalità tecnica di implementazione delle verifiche geometriche non sono specificati. |
 
 I punti di bilanciamento, produzione artistica, prototipazione, multiplayer, salvataggio, testing e build restano quelli elencati nella sezione 30. Nessun valore aggiuntivo è stabilito da queste note.
@@ -1834,3 +1834,23 @@ I punti di bilanciamento, produzione artistica, prototipazione, multiplayer, sal
 - Per ora nessun TAG tecnico dedicato, inclusi PG e MOB: identificazione tramite LAYER + componenti/script + stati logici. Questa decisione finale supera le precedenti valutazioni sui singoli TAG; nuovi TAG solo se emergerà necessità concreta durante lo sviluppo.
 - Aggiornate le sezioni pertinenti e la sezione 31; rimossi dalla sezione 32 i dubbi risolti su TAG e collisioni. Conservati i punti ancora aperti, incluse le dimensioni numeriche del collider MOB, la velocità di regressione del timer di RIANIMAZIONE e i dettagli geometrici delle AREE non specificati.
 - Valori e contenuti estranei all’aggiornamento, tabelle di bilanciamento e note di revisione precedenti conservati invariati.
+
+### REVISIONE — 12/09/2026 — PG01 ATTACCO BASE
+
+- Aggiornato esclusivamente PG01 ATTACCO BASE: AREA a CONO, RANGE 4 m (interno 400), AMPIEZZA 75°, in sostituzione del precedente cono 3 m × 90°. Aggiornate la tabella STATS BASE e la scheda PG01.
+- Restano invariati AREA HITSCAN istantanea, bersagli, DANNO, ATK SPD, orientamento verso il CURSORE, blocco dei MOB schermati da MURI/OSTACOLI e tutti gli altri aspetti dell’attacco e del PG01.
+
+### REVISIONE — 12/09/2026 — PG01 PESTONE RETTANGOLARE
+
+- PESTONE usa un’AREA RETTANGOLARE frontale 3 m × 7 m: il lato frontale è largo 3 m e la profondità è 7 m. Sostituisce la precedente geometria a cono.
+- Invariati 40 DANNO, CD BASE 10 s dall’attivazione, Q, bersagli MOB, schermatura MURO/OSTACOLO, CD REDUCTION e regole di INIZIO RUN/CAMBIO AREA. Nessuna modifica a BARRIERA o ATTACCO BASE.
+
+
+### REVISIONE — 12/09/2026 — PG01 PESTONE SLOW
+
+- PESTONE applica ai MOB colpiti SLOW del 30% per 3 s. La riapplicazione rinnova la durata senza cumulare lo stesso effetto, secondo le regole generali.
+- Invariati AREA RETTANGOLARE frontale 3 m × 7 m (larghezza 3 m, profondità 7 m), 40 DANNO e CD BASE 10 s.
+
+### REVISIONE — 12/09/2026 — CORREZIONE EDITORIALE DELLA NUMERAZIONE
+
+- Mantenuta ATTRIBUZIONE KILL come sezione 10.7; rinumerate REGOLA GENERALE DANNI DA STATO — BRUCIATURA E VELENO da 10.7 a 10.8 e LAYER E MATRICE DELLE COLLISIONI da 10.8 a 10.9. Aggiornati tutti e soli i riferimenti interni interessati. Nessuna modifica a valori, regole, testo di design o altre numerazioni.

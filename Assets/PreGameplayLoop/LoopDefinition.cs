@@ -9,6 +9,9 @@ namespace RogZombie.PreGameplayLoop
         public TestAreaSettings GeometryTemplate;
         public WeaponDefinition PG01Weapon;
         public MobDefinition ZOMB01;
+        public PG01AbilityCatalog PG01Abilities;
+        [Tooltip("Choose exactly one PG01 ability before RUN. Changes apply on Riprova test.")]
+        public PG01Ability SelectedAbility = PG01Ability.Pestone;
         [Tooltip("GDD section 14: C1 A1 and A2 totals. ZOMB01-only test composition.")]
         public int[] AreaTotals = { 100, 120 };
         [Tooltip("Technical level placement; no final level design is implied.")]
@@ -20,6 +23,8 @@ namespace RogZombie.PreGameplayLoop
                 return "Assegnare geometria, arma PG01 e ZOMB01.";
             if (PG01Weapon.PG.PlayerId != "PG01" || ZOMB01.Kind != MobKind.ZOMB01)
                 return "Questo slice richiede PG01 e ZOMB01.";
+            if (PG01Abilities == null || !PG01Abilities.IsValid || !System.Enum.IsDefined(typeof(PG01Ability), SelectedAbility))
+                return "Assegnare i dati ABILITA PG01 e selezionare PESTONE o BARRIERA.";
             if (AreaTotals == null || AreaTotals.Length != 2) return "Configurare esattamente due AREE test.";
             foreach (int total in AreaTotals)
                 if (total <= 0 || total % 10 != 0) return "Totali positivi multipli di 10: FIRST SPAWN 30% intero.";

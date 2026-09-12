@@ -18,5 +18,6 @@ MonoBehaviour:
   ProjectileSpeed: 20
   Penetrations: 0
   ConeWidth: 3
+  ConeAngle: 75
   ExplosionRadius: 1.5
   ProjectileRadius: 0.06

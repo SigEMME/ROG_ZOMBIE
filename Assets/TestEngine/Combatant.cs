@@ -15,6 +15,8 @@ namespace RogZombie.TestEngine
         [SerializeField] private bool preExplodes;
         [SerializeField] private bool showCollider;
         private CircleCollider2D body;
+        private float pestoneSlowUntil;
+        private float pestoneSlowPercent;
 
         public event Action<Combatant> Died;
         public event Action<Combatant> StateChanged;
@@ -26,6 +28,17 @@ namespace RogZombie.TestEngine
         public LifeState State => state;
         public bool IsActive => state == LifeState.Active;
         public float Radius => body != null ? body.radius : 0f;
+        public float PestoneSlowRemaining => Mathf.Max(0f, pestoneSlowUntil - Time.time);
+        public float MovementMetresPerSecond => stats.MetresPerSecond *
+            (PestoneSlowRemaining > 0f ? 1f - pestoneSlowPercent / 100f : 1f);
+
+        public void ApplyPestoneSlow(float percent, float seconds)
+        {
+            if (!IsActive || faction != Faction.MOB) return;
+            // GDD 10.6: this effect refreshes, never stacks. Stats remain independent.
+            pestoneSlowPercent = Mathf.Clamp(percent, 0f, 100f);
+            pestoneSlowUntil = Time.time + Mathf.Max(0f, seconds);
+        }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         private static void ResetRegistry() { All.Clear(); DamageApplied = null; }
@@ -35,6 +48,8 @@ namespace RogZombie.TestEngine
         public void Initialize(Faction side, CombatStats values, bool explodes = false)
         {
             faction = side;
+            pestoneSlowUntil = 0f;
+            pestoneSlowPercent = 0f;
             stats = values;
             currentHP = values.HP;
             state = LifeState.Active;
@@ -49,23 +64,29 @@ namespace RogZombie.TestEngine
             currentHP = Mathf.Min(stats.HP, currentHP + addedHealth);
         }
 
-        public void Hit(float attack)
+        public void Hit(float attack) => Hit(attack, false);
+
+        // New GDD-compliant effects can round the final mitigated HIT without changing
+        // the already validated legacy attacks in this prototype.
+        public bool Hit(float attack, bool roundFinalDamage)
         {
-            if (!IsActive) return;
+            if (!IsActive) return false;
             float damage = DamageMath.Calculate(attack, stats.DEF);
             // Invalid tuning must never turn an incoming HIT into healing.
             if (damage < 0f || float.IsNaN(damage) || float.IsInfinity(damage))
             {
                 Debug.LogError("HIT rejected: damage outside the defined non-negative domain. Check ATK/DEF tuning.", this);
-                return;
+                return false;
             }
+            if (roundFinalDamage) damage = Mathf.Floor(damage + .5f);
             float previousHP = currentHP;
             currentHP = Mathf.Max(0f, currentHP - damage);
             DamageApplied?.Invoke(this, previousHP - currentHP);
-            if (currentHP > 0f) return;
+            if (currentHP > 0f) return true;
             if (faction == Faction.PG) ChangeState(LifeState.Down);
             else if (preExplodes) ChangeState(LifeState.PreExplosion);
             else Die();
+            return true;
         }
 
         public bool Heal(float fraction)

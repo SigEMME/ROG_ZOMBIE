@@ -159,7 +159,7 @@ namespace RogZombie.TestEngine
                 corner = 1;
             }
             if (corners == null)
-                actor.Move((destination - (Vector2)transform.position).normalized * actor.Stats.MetresPerSecond * Time.deltaTime);
+                actor.Move((destination - (Vector2)transform.position).normalized * actor.MovementMetresPerSecond * Time.deltaTime);
             else WalkPath();
         }
 
@@ -169,7 +169,7 @@ namespace RogZombie.TestEngine
             while (corner < corners.Length && Vector2.Distance(transform.position, TestNavigation.FromNav(corners[corner])) < 0.001f) corner++;
             if (corner >= corners.Length) return;
             Vector2 offset = TestNavigation.FromNav(corners[corner]) - (Vector2)transform.position;
-            actor.Move(Vector2.ClampMagnitude(offset, actor.Stats.MetresPerSecond * Time.deltaTime));
+            actor.Move(Vector2.ClampMagnitude(offset, actor.MovementMetresPerSecond * Time.deltaTime));
         }
 
         private void ChooseTarget()

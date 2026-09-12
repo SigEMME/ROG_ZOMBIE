@@ -18,6 +18,9 @@ namespace RogZombie.TestEngine
 
         public void Build(Vector2 size)
         {
+            if (instance.valid) instance.Remove();
+            if (data != null) Destroy(data);
+            Ready = false;
             // Build on Unity's XZ navigation plane, then map path corners back to the game's XY plane.
             // No renderer, camera, ProjectSettings or navigation package changes are needed.
             var sources = new List<NavMeshBuildSource>
@@ -32,12 +35,15 @@ namespace RogZombie.TestEngine
             Physics2D.SyncTransforms();
             foreach (var wall in TestObstacle.All)
             {
-                Bounds bounds = wall.Bounds;
+                var box = wall.GetComponent<BoxCollider2D>();
+                Vector3 centre = box.transform.TransformPoint(box.offset);
+                Vector3 scale = box.transform.lossyScale;
                 sources.Add(new NavMeshBuildSource
                 {
                     shape = NavMeshBuildSourceShape.Box,
-                    transform = Matrix4x4.TRS(new Vector3(bounds.center.x, 1f, bounds.center.y), Quaternion.identity, Vector3.one),
-                    size = new Vector3(bounds.size.x, 2f, bounds.size.y), area = 1
+                    transform = Matrix4x4.TRS(new Vector3(centre.x, 1f, centre.y),
+                        Quaternion.Euler(0, -box.transform.eulerAngles.z, 0), Vector3.one),
+                    size = new Vector3(box.size.x * Mathf.Abs(scale.x), 2f, box.size.y * Mathf.Abs(scale.y)), area = 1
                 });
             }
             var settings = NavMesh.GetSettingsByIndex(0);

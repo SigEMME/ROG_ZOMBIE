@@ -21,6 +21,8 @@ namespace RogZombie.PreGameplayLoop
         public int AreaIndex { get; private set; }
         public int Gold { get; private set; }
         public float CdReduction => cdReduction;
+        public PG01AbilityRuntime Ability { get; private set; }
+        public bool GameplayRunning => Time.timeScale > 0 && (State == LoopState.Combat || State == LoopState.AreaComplete);
         public string Failure { get; private set; }
         public AreaStat[] Choices { get; private set; }
         public int Selected { get; private set; } = -1;
@@ -145,9 +147,12 @@ namespace RogZombie.PreGameplayLoop
             var weapon = go.AddComponent<PlayerWeapon>();
             if (runtimeWeapon != null) Destroy(runtimeWeapon);
             runtimeWeapon = Instantiate(Definition.PG01Weapon);
-            runtimeWeapon.ConeAngle = 90; // GDD PG01: 3m radial RANGE, 90 degrees.
+            runtimeWeapon.ConeAngle = 75; // GDD PG01: 4m radial RANGE, 75 degrees.
             weapon.Definition = runtimeWeapon;
             weapon.Muzzle = muzzle;
+            Ability = go.AddComponent<PG01AbilityRuntime>();
+            Ability.Initialize(this, Definition.SelectedAbility, Definition.PG01Abilities);
+            go.AddComponent<PG01AbilityInput>();
             go.SetActive(true);
         }
 
@@ -207,6 +212,7 @@ namespace RogZombie.PreGameplayLoop
 
         private IEnumerator NextArea()
         {
+            Ability.ChangeArea();
             Exit.Entered -= OpenBonus;
             areaRoot.gameObject.SetActive(false);
             Destroy(areaRoot.gameObject);
@@ -218,6 +224,10 @@ namespace RogZombie.PreGameplayLoop
         }
 
         public void AddGold(int value) => Gold += value;
+        public void RefreshNavigation()
+        {
+            if (Navigation != null && Settings != null) Navigation.Build(Settings.AreaSize);
+        }
         public void RestartTest()
         {
             if (Loading) return;

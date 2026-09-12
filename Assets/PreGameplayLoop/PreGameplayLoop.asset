@@ -19,3 +19,5 @@ MonoBehaviour:
   - 100
   - 120
   ExitPosition: {x: 12, y: 0}
+  PG01Abilities: {fileID: 11400000, guid: cc5762ad2fd24c72a3a143040eaa04b2, type: 2}
+  SelectedAbility: 0

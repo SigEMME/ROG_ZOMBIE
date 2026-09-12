@@ -111,7 +111,28 @@ namespace RogZombie.PreGameplayLoop.Editor
                         }
                         var mob = Combatant.All.Find(a => a.Faction == Faction.MOB && a.IsActive);
                         mob.transform.position = loop.Player.transform.position + Vector3.right * 2;
-                        Check(loop.Player.GetComponent<PlayerWeapon>().TryFireAt(mob.transform.position), "PG01 fires existing weapon");
+                        var weapon = loop.Player.GetComponent<PlayerWeapon>();
+                        Check(weapon.Definition.Kind == BaseAttackKind.AreaHitscan && weapon.Definition.Shape == AttackShape.Cone, "Runtime PG01 uses instant area hitscan cone");
+                        Check(Mathf.Approximately(loop.Player.Actor.Stats.RangeMetres, 4) && Mathf.Approximately(weapon.Definition.ConeAngle, 75), "Runtime PG01 cone is 4 m x 75 degrees");
+                        var probes = Combatant.All.FindAll(a => a.Faction == Faction.MOB && a.IsActive && a != mob).GetRange(0, 7);
+                        float[] distances = { 3.5f, 4f, 4.01f, 3.5f, 3.5f, 3f, 3f };
+                        float[] angles = { 0, 0, 0, 37.4f, -37.4f, 37.6f, -37.6f };
+                        bool[] hits = { true, true, false, true, true, false, false };
+                        var positions = new Vector3[probes.Count];
+                        int projectileCount = UnityEngine.Object.FindObjectsByType<Projectile>(FindObjectsSortMode.None).Length;
+                        for (int i = 0; i < probes.Count; i++)
+                        {
+                            positions[i] = probes[i].transform.position;
+                            probes[i].transform.position = loop.Player.transform.position + (Vector3)(AttackGeometry.Direction(angles[i]) * distances[i]);
+                        }
+                        Check(weapon.TryFireAt((Vector2)weapon.Muzzle.position + Vector2.right * 10), "PG01 fires existing weapon");
+                        for (int i = 0; i < probes.Count; i++)
+                        {
+                            Check(Mathf.Approximately(probes[i].CurrentHP, hits[i] ? 40 : 60), $"PG01 actual hit at {distances[i]} m / {angles[i]} degrees: expected hit={hits[i]}");
+                            probes[i].transform.position = positions[i];
+                        }
+                        Check(UnityEngine.Object.FindObjectsByType<Projectile>(FindObjectsSortMode.None).Length == projectileCount, "PG01 spawns no physical projectile");
+                        Check(!weapon.TryFireAt(mob.transform.position), "PG01 attack cooldown preserved");
                         Check(Mathf.Approximately(mob.CurrentHP, 40), "PG01 cone causes 20 damage to ZOMB01");
                         mob.Hit(10000);
                         mob.Die();
@@ -198,7 +219,7 @@ namespace RogZombie.PreGameplayLoop.Editor
                     case 11:
                         if (loop.State != LoopState.Defeat) return;
                         Check(Time.timeScale == 0, "Single PG DOWN ends slice");
-                        Finish(true, "Engine Play Mode: 100 + 120 ZOMB01; first spawn; replacement; actual PG01 cone hit; death; off-screen/NavMesh; exit; bonus pause/confirmation; persistent stats; 15% heal; second cycle; restart; defeat. Mob AI disabled by test harness while draining populations; manual feel/visual QA still required.");
+                        Finish(true, "Engine Play Mode: 100 + 120 ZOMB01; first spawn; replacement; actual PG01 4 m x 75 degree cone: hits at 3.5/4 m and +/-37.4 degrees, misses at 4.01 m and +/-37.6 degrees; no projectile; cooldown; death; off-screen/NavMesh; exit; bonus pause/confirmation; persistent stats; 15% heal; second cycle; restart; defeat. Mob AI disabled by test harness while draining populations; manual feel/visual QA still required.");
                         break;
                 }
             }

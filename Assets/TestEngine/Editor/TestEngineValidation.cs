@@ -45,7 +45,7 @@ namespace RogZombie.EditorTests
             var settings = AssetDatabase.LoadAssetAtPath<TestAreaSettings>("Assets/TestEngine/Data/TestAreaSettings.asset");
             Check(settings != null, "AREA settings must import.");
             Check(settings.Weapons.Length == 8 && settings.Mobs.Length == 5, "Roster counts.");
-            float[] ranges = { 3, 10, 20, 6, 2, 10, 15, 8 };
+            float[] ranges = { 4, 10, 20, 6, 2, 10, 15, 8 };
             for (int i = 0; i < 8; i++)
             {
                 var weapon = settings.Weapons[i];
@@ -56,6 +56,8 @@ namespace RogZombie.EditorTests
                 if (weapon.Kind == BaseAttackKind.PhysicalProjectile) Near(weapon.ProjectileSpeed, 20, "PG projectile speed.");
                 Check(weapon.Penetrations == 0, "No unselected passive penetration.");
             }
+            Check(settings.Weapons[0].Kind == BaseAttackKind.AreaHitscan && settings.Weapons[0].Shape == AttackShape.Cone, "PG01 instant area hitscan cone.");
+            Near(settings.Weapons[0].ConeAngle, 75, "PG01 GDD cone angle.");
             Near(settings.Mobs[3].ProjectileSpeed, 8, "Approved ZOMB04 speed.");
             Near(settings.Mobs[3].BaseStats.RangeMetres, 20, "ZOMB04 tuned range.");
             Near(settings.Weapons[1].PG.BaseStats.AttackSpeed, 400, "PG02 tuned ATK SPD.");

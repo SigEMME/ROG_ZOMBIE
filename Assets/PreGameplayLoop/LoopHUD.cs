@@ -9,7 +9,7 @@ namespace RogZombie.PreGameplayLoop
 
         private void OnGUI()
         {
-            GUI.Box(new Rect(8, 8, Screen.width - 16, 94), "Pre gameplay loop prototype | WASD / Mouse / LMB");
+            GUI.Box(new Rect(8, 8, Screen.width - 16, 94), "Pre gameplay loop prototype | WASD / Mouse / LMB / Q");
             GUI.Label(new Rect(20, 30, Screen.width - 160, 24), $"AREA {loop.AreaIndex + 1}/2 | {loop.State} | G {loop.Gold}");
             if (GUI.Button(new Rect(Screen.width - 140, 32, 115, 26), "Riprova test"))
                 loop.RestartTest();
@@ -17,7 +17,11 @@ namespace RogZombie.PreGameplayLoop
                 GUI.Label(new Rect(20, 58, Screen.width - 40, 26), $"PG01 HP {loop.Player.Actor.CurrentHP:0.#}/{loop.Player.Actor.Stats.HP:0.#} | CD REDUCTION {loop.CdReduction}");
             if (loop.Spawns != null)
                 GUI.Label(new Rect(20, 110, Screen.width - 40, 24), $"MOB {loop.Spawns.Alive}/{loop.Spawns.MaxSimultaneous} | Generati {loop.Spawns.TotalSpawned}/{loop.Settings.TotalMobs} | Morti {loop.Spawns.Killed}");
-            GUI.Label(new Rect(20, Screen.height - 34, Screen.width - 40, 28), "Slice: solo ZOMB01; EXP/LVL, abilita e passive esclusi; geometria provvisoria.");
+            if (loop.Ability != null)
+                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
+                    $"Q — {loop.Ability.Selected.ToString().ToUpperInvariant()} | CD {loop.Ability.CooldownRemaining:0.0} s" +
+                    (loop.Ability.Selected == PG01Ability.Barriera ? " | Tieni Q: anteprima, rilascia: piazza" : ""));
+            GUI.Label(new Rect(20, Screen.height - 34, Screen.width - 40, 28), "Slice: PG01 + ZOMB01; EXP/LVL e passive esclusi; geometria provvisoria.");
             if (loop.State == LoopState.AreaComplete)
             {
                 Vector3 view = loop.GameCamera.WorldToViewportPoint(loop.Exit.transform.position);
