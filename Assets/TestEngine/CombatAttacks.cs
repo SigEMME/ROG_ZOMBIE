@@ -28,7 +28,10 @@ namespace RogZombie.TestEngine
                 Vector2 offset = (Vector2)target.transform.position - origin;
                 bool inside;
                 if (weapon.Shape == AttackShape.Cone)
-                    inside = AttackGeometry.InCone(offset, direction, source.Stats.RangeMetres, weapon.ConeWidth);
+                    inside = weapon.ConeAngle > 0
+                        ? offset.sqrMagnitude <= source.Stats.RangeMetres * source.Stats.RangeMetres &&
+                          Vector2.Angle(direction, offset) <= weapon.ConeAngle * .5f
+                        : AttackGeometry.InCone(offset, direction, source.Stats.RangeMetres, weapon.ConeWidth);
                 else
                 {
                     // Use the actual MOB body, including collider offset and world scale.

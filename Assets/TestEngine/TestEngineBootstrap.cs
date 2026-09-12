@@ -4,7 +4,7 @@ using UnityEngine;
 namespace RogZombie.TestEngine
 {
     [DefaultExecutionOrder(-100)]
-    public sealed class TestEngineBootstrap : MonoBehaviour
+    public sealed class TestEngineBootstrap : MonoBehaviour, ISpawnWorld
     {
         public TestAreaSettings Settings;
         [Range(0, 7), Tooltip("0 = PG01, 7 = PG08. Changing PG restarts the test RUN.")]

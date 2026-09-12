@@ -49,6 +49,16 @@ namespace RogZombie.TestEngine
         public static void FlashFront(Vector2 origin, Vector2 direction, float range, WeaponDefinition definition)
         {
             Vector2 side = new Vector2(-direction.y, direction.x);
+            if (definition.Shape == AttackShape.Cone && definition.ConeAngle > 0)
+            {
+                var sector = new Vector3[27];
+                sector[0] = sector[26] = origin;
+                float facing = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+                for (int i = 0; i <= 24; i++)
+                    sector[i + 1] = origin + AttackGeometry.Direction(facing - definition.ConeAngle / 2 + i * definition.ConeAngle / 24) * range;
+                FlashLine(sector, Color.yellow);
+                return;
+            }
             if (definition.Shape == AttackShape.Cone)
                 FlashLine(new Vector3[] { origin, origin + direction * range + side * definition.ConeWidth * 0.5f,
                     origin + direction * range - side * definition.ConeWidth * 0.5f, origin }, Color.yellow);

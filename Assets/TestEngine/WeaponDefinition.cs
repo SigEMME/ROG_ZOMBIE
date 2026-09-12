@@ -16,6 +16,8 @@ namespace RogZombie.TestEngine
         public int Penetrations;
         [Tooltip("TEST ENGINE #2 specification: cone width at its far end.")]
         public float ConeWidth = 3f;
+        [Tooltip("Angular cone with radial RANGE. Zero preserves the older width-based test shape.")]
+        [Range(0f, 180f)] public float ConeAngle;
         public float ExplosionRadius = 1.5f;
         [Min(0f), InspectorName("GRENADE HIT DELAY (s)")]
         public float GrenadeHitDelay = 0.5f;

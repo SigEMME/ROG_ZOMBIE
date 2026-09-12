@@ -20,7 +20,7 @@ namespace RogZombie.TestEngine
         private bool initialized;
         private TestAreaSettings settings;
         private TestNavigation navigation;
-        private TestEngineBootstrap world;
+        private ISpawnWorld world;
         private Vector2 lastCandidate;
         private bool lastValid;
         public int TotalSpawned => totalSpawned;
@@ -29,7 +29,7 @@ namespace RogZombie.TestEngine
         public int MaxSimultaneous => maxSimultaneous;
         public bool InitialComplete { get; private set; }
 
-        public void Initialize(TestAreaSettings config, TestNavigation nav, TestEngineBootstrap owner)
+        public void Initialize(TestAreaSettings config, TestNavigation nav, ISpawnWorld owner)
         {
             if (initialized) throw new InvalidOperationException("SpawnManager is already initialized; refusing a duplicate spawn loop.");
             initialized = true;

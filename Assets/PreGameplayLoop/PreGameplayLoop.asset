@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e023cddd396747c3b0a88dbfb7fe7794, type: 3}
+  m_Name: PreGameplayLoop
+  m_EditorClassIdentifier:
+  GeometryTemplate: {fileID: 11400000, guid: 98df8c06ada24fda9bb059ca60e03923, type: 2}
+  PG01Weapon: {fileID: 11400000, guid: 80e0fe24276941b8b4c54fa8bbe9a970, type: 2}
+  ZOMB01: {fileID: 11400000, guid: f46a94a6bfed4325b96f3d2bd548d3a7, type: 2}
+  AreaTotals:
+  - 100
+  - 120
+  ExitPosition: {x: 12, y: 0}
