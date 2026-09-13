@@ -26,7 +26,7 @@ Il test è deliberatamente ridotto a un solo PG scelto fra PG01/PG02/PG03/PG04/P
 
 Le PASSIVE PG01 sono disponibili tramite `Selected Passive` in `PreGameplayLoop.asset`, indipendente dall'ABILITÀ. La nuova RUN acquisisce la selezione; l'HUD mostra stato e STATS effettive. Dettagli e test in `Docs/PG01PassivesPrototype.md`.
 
-Restano esclusi HUB, multiplayer, PG IA, altri PG/MOB, BOSS, CHEST e generazione ordinaria MEDI KIT (ELEMOSINA PG06 implementata), uso e acquisto ITEMS (PG04 dispone soltanto di controlli tecnici degli SLOT), effetti BONUS complessi ed EXP/LVL. I due slot BONUS abilità sono visibili ma disabilitati: questa è una schermata provvisoria, non l'intero sistema GDD 3+2. La selezione STATS distinta è una convenzione della UI di test, non una nuova regola definitiva di sorteggio. G viene conteggiato come diagnostica della RUN, senza economia persistente o regolamento del saldo a sconfitta.
+Restano esclusi HUB completo (è disponibile il supporto tecnico descritto sotto), multiplayer, PG IA, altri PG/MOB, BOSS, CHEST e generazione ordinaria MEDI KIT (ELEMOSINA PG06 implementata), uso e acquisto ITEMS (PG04 dispone soltanto di controlli tecnici degli SLOT), effetti BONUS complessi ed EXP/LVL. I due slot BONUS abilità sono visibili ma disabilitati: questa è una schermata provvisoria, non l'intero sistema GDD 3+2. La selezione STATS distinta è una convenzione della UI di test, non una nuova regola definitiva di sorteggio. G viene conteggiato come diagnostica della RUN, senza economia persistente o regolamento del saldo a sconfitta.
 
 Il GDD non fissa il raggio collider MOB: si conserva 0,35 m dal test esistente, con visuale provvisoria di 1 m. Non è un valore di bilanciamento approvato. Sono riusati separazione/steering e collisioni tramite sweep del test, senza cambiare la matrice Physics2D globale. Si registrano solo PG, MOB, MURO, OSTACOLO e TRIGGER_PG nei primi slot utente liberi. Per PG01 il cono ATTACCO BASE runtime usa 75°/4 m; le vecchie scene mantengono la geometria precedente. MOVE SPD usa la conversione GDD 100 = 2 m/s nello slice.
 
@@ -37,3 +37,13 @@ Nessuna modifica di GDD, PG asset, pacchetti, URP o versione Unity. Nessuna modi
 Il test automatico attraversa entrambe le popolazioni, controlla FIRST SPAWN, posizioni off-screen/NavMesh, una HIT reale del cono PG01, morte senza duplicati, rimpiazzi e cap, completamento, trigger, pausa, conferma singola, persistenza, cura 15%, secondo ciclo, reset e sconfitta. L'harness disabilita la IA durante lo svuotamento rapido e usa HIT di test per accelerare le morti: non misura il bilanciamento né sostituisce una partita manuale. L'esito effettivo è nel report consegnato, non va dedotto dalla sola presenza del test.
 
 Passo successivo: prova manuale di mira, inseguimento/collisioni dell'orda e leggibilità uscita, poi integrare EXP/LVL usando solo GDD. Definire il collider definitivo tramite testing e completare la schermata BONUS 3+2 quando gli effetti entrano nello scope.
+
+## HUB di prova — schermate implementate
+
+Nel nuovo HUB di prova è disponibile una RUN con un solo PG controllabile e l’intero ROSTER PG01–PG08 sbloccato. È una configurazione tecnica del prototipo: le regole complete di PARTY e sblocco del GDD restano quelle del gioco.
+
+La schermata PREPARAZIONE RUN segue il mockup `PREPARAZIONE-RUN_test.png` fornito dal proprietario: quattro BANNER visibili, soltanto il primo utilizzabile; gli altri tre bloccati e non interattivi, senza generare compagni IA. Il pulsante viola INDIETRO torna all’HUB conservando le modifiche effettuate fino a quel momento. Alla riapertura della preparazione la configurazione viene mantenuta.
+
+Aprire `Assets/Scenes/HubPrototype.unity` e premere Play. WASD muove il segnaposto; raggiungere EXIT e premere F. La SELEZIONE PG mantiene le scelte usando INDIETRO, senza confermarle. Occorre confermare PG, ABILITÀ e PASSIVA prima di avviare dalla PREPARAZIONE RUN. Il riquadro arancione descrive l’ultima ABILITÀ/PASSIVA selezionata.
+
+Verifica rapida in Unity: 106 controlli superati, zero warning durante la prova; controllo visivo delle schermate e navigazione completato. Nessuna RUN o prova di combattimento avviata. I dettagli, i limiti e le istruzioni del test sono in `Docs/HubPrototype.md`.

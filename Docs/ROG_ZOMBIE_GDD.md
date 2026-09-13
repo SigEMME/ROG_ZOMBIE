@@ -167,6 +167,7 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 | GIALLO | SLOT ABILITÀ ATTIVA selezionata. |
 | ROSA | SLOT PASSIVA ATTIVA selezionata. |
 | GRIGIO | CONFERMA della preparazione, necessaria per avviare la RUN. |
+| VIOLA | INDIETRO: chiude PREPARAZIONE RUN e riporta all’HUB, conservando le modifiche effettuate fino a quel momento. |
 
 ### 8.2 SELEZIONE PG — UX
 
@@ -182,7 +183,8 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 | BLU | STATS visibili: HP / ATK / DEF / MOVE SPD / ATK SPD / CD REDUCTION. RANGE è NASCOSTA e non viene mostrata. |
 | GIALLO | 2 CASELLE ABILITÀ; quella cliccata si illumina e viene selezionata. |
 | ROSA | 2 CASELLE PASSIVA; quella cliccata si illumina e viene selezionata. |
-| VIOLA | DESCRIZIONE dell’ultima ABILITÀ/PASSIVA cliccata o selezionata. |
+| ARANCIONE | DESCRIZIONE dell’ultima ABILITÀ/PASSIVA cliccata o selezionata. |
+| VIOLA | INDIETRO: torna a PREPARAZIONE RUN conservando PG, ABILITÀ e PASSIVA selezionati, senza confermarli. La configurazione resta DA CONFERMARE e non consente la partenza; il PG resta libero fino alla CONFERMA. |
 | GRIGIO | CONFERMA PG + ABILITÀ + PASSIVA e ritorno a PREPARAZIONE RUN. |
 
 - Ogni PG dispone di 2 ABILITÀ e 2 PASSIVE: selezionarne esattamente 1 di ciascuna per la RUN. ABILITÀ con Q per il PG controllato direttamente; per i PG IA, SPACE BAR + numero 1–3 secondo l’ordine dei PG IA assegnati al PLAYER responsabile. PASSIVA automatica, identica per PG IA e PG controllati direttamente, senza occupare SLOT BONUS.

@@ -1,0 +1,180 @@
+{
+  "Characters": [
+    {
+      "Name": "Shotgun",
+      "Description": "PG01\nShotgun\n\nATTACCO BASE ad AREA HITSCAN istantanea. Il cono segue la mira e colpisce tutti i MOB validi; MURI e OSTACOLI proteggono i bersagli schermati.",
+      "Options": [
+        {
+          "Name": "PESTONE",
+          "Description": "40 DANNO; AREA RETTANGOLARE frontale 3 m × 7 m: larghezza frontale 3 m e profondità 7 m, a partire dal PG nella direzione PG→CURSORE. CD 10 s, avviato all’attivazione. Applica SLOW ai MOB colpiti: velocità di movimento ridotta del 30% per 3 s. La riapplicazione rinnova la durata senza cumulare lo stesso effetto, secondo le regole generali."
+        },
+        {
+          "Name": "BARRIERA",
+          "Description": "piazza un muro invalicabile e indistruttibile di 7 m × 1 m; durata 5 s; CD 15 s, avviato all’attivazione. Eredita le collisioni del layer OSTACOLO (sezione 10.9)."
+        },
+        {
+          "Name": "PASSIVA 1",
+          "Description": "con HP <50% ottiene +15% DEF; l'effetto termina quando gli HP tornano ≥50%."
+        },
+        {
+          "Name": "PASSIVA 2",
+          "Description": "con HP <50% ottiene +15% ATK; l'effetto termina quando gli HP tornano ≥50%."
+        }
+      ]
+    },
+    {
+      "Name": "Assault Rifle",
+      "Description": "PG02\nAssault Rifle\n\nATTACCO BASE con proiettili balistici non perforanti, diretti verso il cursore. Tenendo premuto il comando di attacco si mantiene il fuoco.",
+      "Options": [
+        {
+          "Name": "FUOCO RAPIDO",
+          "Description": "BONUS temporaneo +40% ATK SPD corrente; durata 4 s; CD 10 s, avviato al termine dei 4 s di DURATA. Senza altri modificatori, ATK SPD passa da 400 a 560 = 5,6 ATTACCHI/s. Alla scadenza viene rimosso soltanto il BONUS temporaneo, preservando gli altri modificatori e BONUS acquisiti."
+        },
+        {
+          "Name": "FUOCO DI SOPPRESSIONE",
+          "Description": "raffica di 50 PROIETTILI FISICI in 3 s; 3 DANNO per PROIETTILE prima della DEF; RANGE 10 m. CONO frontale di ampiezza totale 50°, diviso in 5 SPICCHI da 10°, numerati da destra a sinistra. Ogni PROIETTILE è diretto lungo il CENTRO dello SPICCHIO corrente: −20°, −10°, 0°, +10°, +20° rispetto all’asse del CONO, nell’ordine da destra a sinistra. I PROIETTILI vengono sparati in successione, uno per lo SPICCHIO corrente, con sequenza 1-2-3-4-5-4-3-2-1-2-3-ecc., senza ripetere gli estremi e fino al 50° PROIETTILE. CD BASE 12 s, avviato all’attivazione. Sostituisce il precedente HITSCAN istantaneo a CONO da 30 DANNO."
+        },
+        {
+          "Name": "PASSIVA 1",
+          "Description": "con HP <30%, ogni KILL cura 1% degli HP MASSIMI correnti di PG02; non ha effetto a HP ≥30%."
+        },
+        {
+          "Name": "PASSIVA 2",
+          "Description": "ogni 15 KILL entra in RAGE per 2 s con +30% ATK. Al CAMBIO AREA il conteggio delle KILL resta; RAGE termina se attiva, rimuovendo soltanto il BONUS ATK temporaneo."
+        }
+      ]
+    },
+    {
+      "Name": "Sniper Rifle",
+      "Description": "PG03\nSniper Rifle\n\nATTACCO BASE con proiettile fisico. CALIBRO PERFORANTE permette di attraversare più MOB; PUNTO DEBOLE applica un MARCHIO.",
+      "Options": [
+        {
+          "Name": "COLPO LASER",
+          "Description": "sostituisce COLPO PERFORANTE. Emette istantaneamente un RAGGIO verso il CURSORE; AREA 20 × 2 m (portata 20 m, larghezza 2 m); 35 DANNO una sola volta a ciascun MOB nell’AREA; CD BASE 18 s, avviato all’attivazione. Attraversa MURI e OSTACOLI: eccezione alla REGOLA DI BLOCCO."
+        },
+        {
+          "Name": "TRIPLO SPARO",
+          "Description": "3 proiettili da 40 DANNO; cono totale 20 m / 30°; ogni proiettile copre 10°; sequenza SINISTRA → CENTRO → DESTRA; intervallo 0,5 s; CD BASE 10 s, avviato all’attivazione."
+        },
+        {
+          "Name": "CALIBRO PERFORANTE",
+          "Description": "rende PERFORANTI i PROIETTILI dell’ATTACCO BASE con 2 PERFORAZIONI. Il 1° e il 2° MOB ricevono DANNO e vengono attraversati; il 3° riceve DANNO e arresta il PROIETTILE. La prima HIT infligge il 100% del danno originale del PROIETTILE, la seconda il 70% (riduzione del 30%), la terza il 40% (riduzione del 60%), prima della DEF di ciascun bersaglio. Le riduzioni sono riferite al danno originale, non concatenate. Con ATK 50: 50 / 35 / 20 DANNO prima della DEF. RANGE invariato. MURI/OSTACOLI e limite RANGE possono interrompere prima la traiettoria."
+        },
+        {
+          "Name": "PUNTO DEBOLE",
+          "Description": "l’ATTACCO BASE applica un MARCHIO al MOB colpito; il MOB marchiato ha DEF −20%; la HIT successiva sul MOB marchiato rimuove il MARCHIO."
+        }
+      ]
+    },
+    {
+      "Name": "Grenade Launcher",
+      "Description": "PG04\nGrenade Launcher\n\nATTACCO BASE con esplosione ad area. La HIT avviene 0,3 s dopo il lancio, nel punto d’impatto determinato dalla mira.",
+      "Options": [
+        {
+          "Name": "PIOGGIA DI GRANATE",
+          "Description": "Genera direttamente 10 ESPLOSIONI, senza PROIETTILI, in posizioni RANDOM nell’AREA EFFETTO CIRCOLARE di RAGGIO 5 m.\nCentro: posizione del CURSORE all’attivazione; nessun limite di distanza da PG04.\nSequenza CASUALE nell’arco complessivo di 3 s; CD BASE 12 s, avviato all’attivazione.\nEredita esclusivamente ATK e AREA ESPLOSIONE dell’ATTACCO BASE: ATK 25 e RAGGIO 1,25 m per esplosione. Non eredita traiettoria, RANGE o IMPATTO del PROIETTILE.\nLe esplosioni possono sovrapporsi. Ogni esplosione applica indipendentemente il proprio DANNO; lo stesso MOB può ricevere HIT da più esplosioni.\nOgni AREA di esplosione segue la regola dei 4 SPICCHI da 90°, con eliminazione completa degli SPICCHI intercettati da MURI/OSTACOLI."
+        },
+        {
+          "Name": "COLPO GROSSO",
+          "Description": "Potenzia i successivi 4 ATTACCHI BASE: +80% ATK (25 → 45) e +50% RAGGIO ESPLOSIONE (1,25 → 1,875 m).\nModifica esclusivamente ATK e RAGGIO ESPLOSIONE. Le altre STATS e regole restano invariate, inclusa la geometria a 4 SPICCHI.\nNessuna DURATA massima: le cariche restano disponibili fino al consumo. Ogni ATTACCO effettuato consuma una carica, anche in caso di MISS.\nCD BASE 10 s, avviato al consumo del 4° ATTACCO.\nAl CAMBIO AREA le cariche residue vengono perse e, se l’ABILITÀ era ATTIVA, il CD riparte da capo. Se era DISPONIBILE, rimane DISPONIBILE. Se era già IN CD ma non più ATTIVA, mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA."
+        },
+        {
+          "Name": "SCORTA ESPLOSIVA",
+          "Description": "Quando selezionata, permette di accumulare fino a 3 GRANATE oppure 3 MOLOTOV dello stesso tipo per SLOT ITEM.\nInfluenza contemporaneamente entrambi i tipi di ITEM. Gli altri ITEMS restano a 1 per SLOT."
+        },
+        {
+          "Name": "PYROMANIA",
+          "Description": "Le AREE ESPLOSIONE diventano AREE INCENDIATE per 3 s, con 5 HP/s per AREA.\nSi applica ad ATTACCO BASE, PIOGGIA DI GRANATE e COLPO GROSSO.\nL’AREA INCENDIATA corrisponde all’AREA ESPLOSIONE: RAGGIO 1,25 m per ATTACCO BASE/PIOGGIA DI GRANATE; 1,875 m per COLPO GROSSO.\nLe AREE INCENDIATE possono sovrapporsi e i loro DANNI si sommano.\nMURI/OSTACOLI bloccano il DANNO secondo la regola dei 4 SPICCHI da 90°."
+        }
+      ]
+    },
+    {
+      "Name": "Knife",
+      "Description": "PG05\nKnife\n\nATTACCO BASE ravvicinato ad AREA. Può scegliere tra INVISIBILITÀ e COLTELLI AVVELENATI.",
+      "Options": [
+        {
+          "Name": "INVISIBILITÀ",
+          "Description": "Rende INVISIBILE l’intera PARTY per 3,5 s e aumenta MOVE SPD del 15% durante l’effetto; CD BASE 15 s, avviato all’attivazione.\nApplica le REGOLE GENERALI dello stato di INVISIBILITÀ (sezione 10.5), inclusa l’eccezione RESUSCITARE e l’interruzione individuale."
+        },
+        {
+          "Name": "COLTELLI AVVELENATI",
+          "Description": "Lancia simultaneamente 8 COLTELLI a 360° attorno a PG05, distanziati di 45°. Uno segue esattamente il CURSORE; gli altri sono orientati rispetto a quello.\nPROIETTILI BALISTICI non PERFORANTI; RANGE 10 m; 30 DANNO per COLTELLO; CD BASE 10 s, avviato all’attivazione.\nSeguono le REGOLE GENERALI DEI PROIETTILI: il primo MOB colpito riceve DANNO e VELENO e arresta il COLTELLO; MURI/OSTACOLI bloccano il PROIETTILE.\nVELENO: DANNO base 5 HP/s, DURATA 3 s. Segue la REGOLA GENERALE DANNI DA STATO (sezione 10.8): DANNO per tick = 5 × numero ISTANZE, fino a 5 ISTANZE; ogni applicazione rinnova la DURATA completa di 3 s, anche al CAP. Primo tick 1 s dopo l’applicazione/rinnovo, poi ogni 1 s; le ISTANZE non hanno DURATE indipendenti."
+        },
+        {
+          "Name": "GHOSTING",
+          "Description": "Con HP <30% prima della HIT, una HIT ricevuta attiva INVISIBILITÀ e +15% MOVE SPD per 2 s. Con HP ≥30% non si attiva.\nApplica le stesse REGOLE GENERALI di INVISIBILITÀ.\nHIT ricevute durante l’effetto non lo riattivano e non rinnovano la DURATA.\nSovrapposizione GHOSTING/INVISIBILITÀ su PG05: un solo BONUS +15% MOVE SPD; DURATA rinnovata usando quella dell’ultimo effetto applicato.\nTerminato l’effetto, la PASSIVA è subito disponibile per una nuova HIT che soddisfi le condizioni; nessun CD interno."
+        },
+        {
+          "Name": "LAMA DI CICUTA",
+          "Description": "Conta i MOB COLPITI dagli ATTACCHI BASE: +1 per ciascun MOB colpito, anche più incrementi nello stesso ATTACCO.\nSoglia 15; il contatore si ferma a 15 e l’eccedenza viene ignorata.\nRaggiunta la soglia, il successivo ATTACCO BASE applica VELENO 5 HP/s per 3 s a tutti i MOB colpiti nell’AREA ATTACCO, secondo la REGOLA GENERALE DANNI DA STATO (sezione 10.8).\nDopo l’ATTACCO potenziato il contatore torna a 0 e inizia un nuovo ciclo. Il contatore si conserva al CAMBIO AREA."
+        }
+      ]
+    },
+    {
+      "Name": "Revolver",
+      "Description": "PG06\nRevolver\n\nATTACCO BASE con proiettile fisico non perforante. Le ABILITÀ permettono di curare i PG.",
+      "Options": [
+        {
+          "Name": "CURA AD AREA",
+          "Description": "Cura 40 HP ai PG ATTIVI entro RAGGIO 5 m, con centro PG06; PG06 è incluso tra i bersagli. I PG in DOWN o MORTE sono esclusi. CD BASE 20 s, avviato all’attivazione.\nMURI/OSTACOLI non bloccano la CURA.\nNO OVERHEAL. I PG al 100% HP restano bersagli validi, recuperano 0 HP e possono attivare VITAMINA C."
+        },
+        {
+          "Name": "FUOCO CURATIVO",
+          "Description": "Potenzia i successivi 6 ATTACCHI BASE conservando il normale funzionamento e DANNO del REVOLVER.\nOgni HIT su un MOB genera in aggiunta una CURA di 15 HP verso un PG ATTIVO entro 15 m da PG06; PG06 è incluso. I PG in DOWN o MORTE sono esclusi. Un MISS non genera CURA.\nOgni ATTACCO effettuato consuma una carica, anche in caso di MISS. Nessuna DURATA massima; CD BASE 15 s, avviato al consumo del 6° ATTACCO.\nLa selezione del destinatario viene rivalutata per ciascun ATTACCO. I PG con HP <100% hanno sempre priorità sui PG al 100% HP, che restano validi ma sono ultima scelta. Fra i PG sotto il 100% HP: percentuale HP più bassa → minor numero di HP effettivi → distanza minore da PG06 → scelta CASUALE in perfetta parità. Se tutti i PG validi sono al 100% HP: distanza minore da PG06 → scelta CASUALE in perfetta parità.\nMURI/OSTACOLI non impediscono la selezione né la CURA. NO OVERHEAL; un PG al 100% resta selezionabile ma recupera 0 HP. Se tutti i PG validi sono al 100%, la carica viene comunque consumata e nessuno recupera HP.\nAl CAMBIO AREA perde le cariche residue; se ancora ATTIVA, il CD riparte da capo. Se DISPONIBILE, rimane DISPONIBILE. Se già IN CD ma non più ATTIVA, mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA."
+        },
+        {
+          "Name": "ELEMOSINA",
+          "Description": "Ogni KILL attribuita esclusivamente a PG06 secondo la regola generale della sezione 10.7, da qualsiasi fonte di DANNO riconducibile a PG06, effettua un roll del 3%; un successo genera 1 MEDI KIT fisico sul terreno.\nQualsiasi PG della PARTY può raccoglierlo passandoci sopra. Viene usato immediatamente e non occupa SLOT ITEM.\nCURA base: 10% degli HP MASSIMI del PG che lo raccoglie; NO OVERHEAL. A HP pieni il TRIGGER ignora il PG e il MEDI KIT non viene consumato; valgono validità e priorità della sezione 26.\nDURATA infinita nell’AREA: rimane fino alla RACCOLTA oppure scompare al CAMBIO AREA."
+        },
+        {
+          "Name": "VITAMINA C",
+          "Description": "Un PG considerato bersaglio di una CURA delle ABILITÀ di PG06 riceve +35% del proprio ATK SPD BASE per 4 s, anche se a HP pieni e con CURA effettiva pari a 0.\nCURA AD AREA: tutti i PG considerati entro 5 m, incluso PG06. FUOCO CURATIVO: solo il destinatario selezionato dopo una HIT valida; un MISS non applica VITAMINA C.\nIl BONUS non si cumula; una nuova applicazione rinnova la DURATA a 4 s. Ogni PG gestisce individualmente la propria DURATA.\nIl MEDI KIT di ELEMOSINA non attiva VITAMINA C. Al CAMBIO AREA gli effetti VITAMINA C ancora attivi terminano."
+        }
+      ]
+    },
+    {
+      "Name": "Bow",
+      "Description": "PG07\nBow\n\nATTACCO BASE con freccia fisica non perforante. Le ABILITÀ sono MULTI SHOT e PIOGGIA DI FRECCE.",
+      "Options": [
+        {
+          "Name": "MULTI SHOT",
+          "Description": "9 PROIETTILI BALISTICI non PERFORANTI generati simultaneamente; 20 DANNO per PROIETTILE; RANGE 7 m; CONO 80°; RESPINTA 5 m; PROJECTILE SPD 20 m/s; CD BASE 13 s, avviato immediatamente all’attivazione.\nUn PROIETTILE segue il CURSORE; gli altri sono distribuiti ogni 10°: −40°, −30°, −20°, −10°, 0°, +10°, +20°, +30°, +40°.\nOgni PROIETTILE che colpisce genera una HIT separata e la DEF viene applicata separatamente a ogni HIT, anche se più PROIETTILI della stessa attivazione colpiscono lo stesso MOB.\nRESPINTA progressiva in 0,25 s, con partenza rapida e rallentamento finale. Massimo una RESPINTA per MOB per attivazione. La direzione è quella del primo PROIETTILE che genera HIT; in caso di HIT simultanee si usa la media delle direzioni dei PROIETTILI coinvolti.\nMURI/OSTACOLI bloccano i PROIETTILI e interrompono la RESPINTA prima dei 5 m quando incontrati."
+        },
+        {
+          "Name": "PIOGGIA DI FRECCE",
+          "Description": "SISTEMA A RILASCIO: tenere premuto Q mostra l’anteprima dell’AREA EFFETTO, che segue il CURSORE; al rilascio di Q l’ABILITÀ si attiva nella posizione selezionata. L’anteprima non genera HIT e non avvia il CD; sequenza delle FRECCE e CD iniziano al rilascio.\nAREA BERSAGLIO CIRCOLARE, RAGGIO 3,5 m; centro sul CURSORE all’attivazione; RANGE di attivazione illimitato.\n20 FRECCE distribuite in posizioni CASUALI nell’AREA durante 3 s. Il tempo è regolare: prima a T = 0, ultima a T = 3 s, intervallo 3/19 s (circa 0,158 s).\nLa caduta delle FRECCE è solo rappresentazione grafica e non usa una velocità fisica di gameplay. La HIT avviene esattamente nel momento programmato per ciascuna FRECCIA. Non serve un’altezza fisica di SPAWN: basta generare graficamente la FRECCIA sopra il PUNTO D’IMPATTO. Ogni impatto genera un’AREA di DANNO CIRCOLARE di RAGGIO 0,25 m, con 10 HP di DANNO prima della DEF per ciascun MOB colpito.\nL’AREA è centrata sul PUNTO D’IMPATTO e colpisce tutti i MOB il cui corpo interseca il cerchio, una sola HIT per MOB per FRECCIA. Nessun MOB nell’AREA → MISS.\nLo stesso MOB può ricevere più FRECCE; la DEF viene applicata separatamente a ciascuna HIT.\nMURI/OSTACOLI non intercettano la caduta e non tagliano l’AREA.\nCD BASE 15 s, avviato all’attivazione. Al CAMBIO AREA termina immediatamente, annulla le FRECCE non ancora generate e applica la regola generale del CD."
+        },
+        {
+          "Name": "LUCKY SHOT",
+          "Description": "Roll del 5% solo quando un ATTACCO BASE genera una HIT effettiva su un MOB; nessun roll in caso di MISS.\nUn successo genera una HIT AD AREA aggiuntiva pari al 30% dell’ATK di PG07; AREA CIRCOLARE di RAGGIO 2 m centrata sul MOB che ha generato il TRIGGER.\nIl DANNO risultante di LUCKY SHOT viene arrotondato all’intero più vicino con arrotondamento matematico: parte decimale <0,5 per difetto; ≥0,5 per eccesso. Il DANNO AD AREA è una HIT separata: la DEF si applica indipendentemente dall’ATTACCO BASE e individualmente a ogni MOB.\nSe l’ATTACCO BASE uccide il MOB, LUCKY SHOT può comunque attivarsi nel punto della sua MORTE e colpire gli altri MOB.\nMURI/OSTACOLI eliminano interamente gli SPICCHI intercettati secondo la geometria a 4 SPICCHI da 90°. Gli SPICCHI non generano HIT separate.\nLa HIT di LUCKY SHOT non è un ATTACCO BASE e non genera ulteriori roll di LUCKY SHOT."
+        },
+        {
+          "Name": "CONCENTRAZIONE",
+          "Description": "Roll del 10% al lancio di ogni ATTACCO BASE, indipendentemente dalla futura HIT.\nUn successo rende la FRECCIA PERFORANTE: massimo 3 MOB sulla stessa traiettoria. Il primo MOB effettivamente colpito riceve il 100% del DANNO effettivo corrente dell’ATTACCO BASE; il secondo e il terzo il 50% dello stesso DANNO, calcolato prima della DEF, senza ulteriori riduzioni. Il DANNO risultante viene arrotondato all’intero più vicino con arrotondamento matematico: parte decimale <0,5 per difetto; ≥0,5 per eccesso.\nCONCENTRAZIONE propaga l’INTERA HIT dell’ATTACCO BASE: il primo, il secondo e il terzo MOB ricevono tutti gli eventuali effetti aggiuntivi associati alla HIT. La riduzione al 50% riguarda esclusivamente il DANNO, non gli altri effetti.\nLa FRECCIA segue le REGOLE GENERALI DEI PROIETTILI: MURI/OSTACOLI la bloccano e il RANGE resta quello dell’ATTACCO BASE.\nCONCENTRAZIONE e LUCKY SHOT non possono essere attive insieme: ogni PG ha una sola PASSIVA selezionata per RUN."
+        }
+      ]
+    },
+    {
+      "Name": "Heavy Machine Gun",
+      "Description": "PG08\nHeavy Machine Gun\n\nATTACCO BASE con proiettile fisico non perforante. Può scegliere FILO SPINATO o COLPI RESPINGENTI, con TENACIA o RAGE come PASSIVA.",
+      "Options": [
+        {
+          "Name": "FILO SPINATO",
+          "Description": "ANELLO di RAGGIO ESTERNO 4,5 m e SPESSORE 1 m (fascia da 3,5 a 4,5 m), centrato sulla posizione di PG08 all’attivazione. Rimane fisso per 4 s e non segue PG08.\nSolo la fascia dell’ANELLO genera effetti: per ciascun MOB il conteggio del DANNO PERIODICO parte nel momento in cui entra in contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA. All’uscita il DANNO PERIODICO termina.\nSLOW 35% mentre il MOB è nella fascia; all’uscita lo SLOW cessa. Più applicazioni di FILO SPINATO non sommano lo SLOW né il DANNO: ogni MOB riceve un solo DANNO di 10 al secondo anche in sovrapposizione.\nPer un MOB già nella fascia di una SEZIONE valida all’attivazione, il conteggio del DANNO PERIODICO parte in quel momento e lo SLOW si applica immediatamente.\nNon è una barriera fisica: i MOB attraversano liberamente; i PG attraversano senza effetti; i PROIETTILI attraversano normalmente.\n10 SEZIONI indipendenti da 36°. Alla generazione, se anche una sola parte di una SEZIONE interseca un MURO/OSTACOLO, l’intera SEZIONE viene eliminata.\nNessun minimo di SEZIONI valide. Con 0/10 non viene generato FILO SPINATO, ma l’ABILITÀ è comunque UTILIZZATA.\nCD BASE 16 s, avviato all’attivazione anche con 0/10 SEZIONI.\nAl CAMBIO AREA tutte le SEZIONI scompaiono; DANNO e SLOW terminano e il CD segue la regola generale."
+        },
+        {
+          "Name": "COLPI RESPINGENTI",
+          "Description": "Per 4 s ogni HIT di ATTACCO BASE applica il normale DANNO e RESPINTA di 1,5 m nella direzione del PROIETTILE che genera quella HIT. Nessuna HIT → nessuna RESPINTA.\nOgni RESPINTA è progressiva in 0,25 s, con partenza rapida e rallentamento finale, come MULTI SHOT.\nOgni nuova HIT applica una nuova RESPINTA completa e indipendente, anche allo stesso MOB; MURI/OSTACOLI interrompono lo spostamento.\nCD BASE 10 s, avviato al termine dei 4 s di DURATA.\nSe il CAMBIO AREA avviene durante i 4 s di COLPI RESPINGENTI, l’effetto termina immediatamente e da quel momento riparte l’intero CD."
+        },
+        {
+          "Name": "TENACIA",
+          "Description": "Esclusivamente ogni HIT effettiva generata dall’ATTACCO BASE di PG08 fornisce +0,2% DEF; BONUS massimo +30% (150 HIT). Ulteriori HIT al CAP non aumentano il BONUS. Altre fonti di DANNO/HIT attribuite a PG08 non incrementano TENACIA.\nQUALSIASI HIT ricevuta da PG08 azzera immediatamente tutto il BONUS TENACIA, indipendentemente dal DANNO/HP effettivamente persi, anche con DANNO finale 0. Le successive HIT effettive dell’ATTACCO BASE possono ricominciare l’accumulo; a BONUS 0% non c’è nulla da perdere.\nLa HIT che azzera TENACIA viene mitigata dalla DEF comprensiva del BONUS TENACIA accumulato, rispettando il CAP DEF del 90%; il BONUS viene rimosso dopo il calcolo di quella HIT. Le HIT successive usano la DEF senza TENACIA, salvo nuovo accumulo.\nAl CAMBIO AREA il BONUS torna a 0%.\nLa DEF BASE +10% rimane separata e non viene persa; al CAP, BASE + TENACIA = +40% prima di altri modificatori."
+        },
+        {
+          "Name": "RAGE",
+          "Description": "Dopo 5 s consecutivi di FUOCO CONTINUATIVO si attivano immediatamente +30% ATK e −20% MOVE SPD.\nNon è necessario generare HIT: si può sparare a vuoto. Gli intervalli ordinari fra colpi dovuti ad ATK SPD fanno parte del FUOCO CONTINUATIVO; ATK SPD non modifica la soglia temporale di 5 s.\nRAGE dura finché il fuoco continua. Rilasciare il comando di ATTACCO azzera il contatore e, se attiva, termina immediatamente RAGE.\nI modificatori +30% ATK e −20% MOVE SPD sono calcolati sui valori CORRENTI di ATK e MOVE SPD al momento dell’applicazione, includendo i BONUS guadagnati in partita, non esclusivamente sui VALORI BASE. Alla fine di RAGE vengono rimossi esclusivamente i suoi modificatori.\nDOWN e CAMBIO AREA terminano RAGE e azzerano il contatore, anche se al CAMBIO AREA il comando di ATTACCO è mantenuto.\nSTUN interrompe immediatamente RAGE e azzera il conteggio dei 5 s di FUOCO CONTINUATIVO. Il comportamento per altri stati futuri sarà definito quando verranno aggiunti."
+        }
+      ]
+    }
+  ]
+}

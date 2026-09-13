@@ -1,0 +1,108 @@
+PASS | Unity 6000.3.16f1 | checks=106 | warnings=0
+PASS HUB scene loads with definition and content
+PASS No gameplay session or combatants started
+PASS Initial HUB page
+PASS No start with empty selection
+PASS Banner blocked 2
+PASS Banner blocked 3
+PASS Banner blocked 4
+PASS First banner opens selection
+PASS Cannot confirm empty selection
+PASS PG selectable and options reset 0
+PASS Data available for PG 0
+PASS Ability alone insufficient 0
+PASS Last passive description selected 0
+PASS Last ability description selected 0
+PASS Back does not confirm 0
+PASS Preparation Back preserves draft in HUB 0
+PASS Reopen retains draft 0
+PASS Explicit selection confirmation unlocks preparation 0
+PASS RUN configuration valid without starting gameplay 0
+PASS HUB preserves confirmed configuration 0
+PASS Reopening clears confirmation only 0
+PASS PG selectable and options reset 1
+PASS Data available for PG 1
+PASS Ability alone insufficient 1
+PASS Last passive description selected 1
+PASS Last ability description selected 1
+PASS Back does not confirm 1
+PASS Preparation Back preserves draft in HUB 1
+PASS Reopen retains draft 1
+PASS Explicit selection confirmation unlocks preparation 1
+PASS RUN configuration valid without starting gameplay 1
+PASS HUB preserves confirmed configuration 1
+PASS Reopening clears confirmation only 1
+PASS PG selectable and options reset 2
+PASS Data available for PG 2
+PASS Ability alone insufficient 2
+PASS Last passive description selected 2
+PASS Last ability description selected 2
+PASS Back does not confirm 2
+PASS Preparation Back preserves draft in HUB 2
+PASS Reopen retains draft 2
+PASS Explicit selection confirmation unlocks preparation 2
+PASS RUN configuration valid without starting gameplay 2
+PASS HUB preserves confirmed configuration 2
+PASS Reopening clears confirmation only 2
+PASS PG selectable and options reset 3
+PASS Data available for PG 3
+PASS Ability alone insufficient 3
+PASS Last passive description selected 3
+PASS Last ability description selected 3
+PASS Back does not confirm 3
+PASS Preparation Back preserves draft in HUB 3
+PASS Reopen retains draft 3
+PASS Explicit selection confirmation unlocks preparation 3
+PASS RUN configuration valid without starting gameplay 3
+PASS HUB preserves confirmed configuration 3
+PASS Reopening clears confirmation only 3
+PASS PG selectable and options reset 4
+PASS Data available for PG 4
+PASS Ability alone insufficient 4
+PASS Last passive description selected 4
+PASS Last ability description selected 4
+PASS Back does not confirm 4
+PASS Preparation Back preserves draft in HUB 4
+PASS Reopen retains draft 4
+PASS Explicit selection confirmation unlocks preparation 4
+PASS RUN configuration valid without starting gameplay 4
+PASS HUB preserves confirmed configuration 4
+PASS Reopening clears confirmation only 4
+PASS PG selectable and options reset 5
+PASS Data available for PG 5
+PASS Ability alone insufficient 5
+PASS Last passive description selected 5
+PASS Last ability description selected 5
+PASS Back does not confirm 5
+PASS Preparation Back preserves draft in HUB 5
+PASS Reopen retains draft 5
+PASS Explicit selection confirmation unlocks preparation 5
+PASS RUN configuration valid without starting gameplay 5
+PASS HUB preserves confirmed configuration 5
+PASS Reopening clears confirmation only 5
+PASS PG selectable and options reset 6
+PASS Data available for PG 6
+PASS Ability alone insufficient 6
+PASS Last passive description selected 6
+PASS Last ability description selected 6
+PASS Back does not confirm 6
+PASS Preparation Back preserves draft in HUB 6
+PASS Reopen retains draft 6
+PASS Explicit selection confirmation unlocks preparation 6
+PASS RUN configuration valid without starting gameplay 6
+PASS HUB preserves confirmed configuration 6
+PASS Reopening clears confirmation only 6
+PASS PG selectable and options reset 7
+PASS Data available for PG 7
+PASS Ability alone insufficient 7
+PASS Last passive description selected 7
+PASS Last ability description selected 7
+PASS Back does not confirm 7
+PASS Preparation Back preserves draft in HUB 7
+PASS Reopen retains draft 7
+PASS Explicit selection confirmation unlocks preparation 7
+PASS RUN configuration valid without starting gameplay 7
+PASS HUB preserves confirmed configuration 7
+PASS Reopening clears confirmation only 7
+PASS Screen tests did not launch RUN
+Only preparation/selection screens tested. Combat, RUN loading, AREA transitions and balancing not executed. Play Mode left open for visual inspection.
