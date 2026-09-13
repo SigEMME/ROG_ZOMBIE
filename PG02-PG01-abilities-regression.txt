@@ -1,0 +1,162 @@
+PASS | Unity 6000.3.16f1 | checks=160 | warnings=353
+PASS RUN selects PESTONE only
+PASS PESTONE unavailable during initial CD
+PASS PESTONE starts RUN with full 10-second CD
+PASS BARRIERA unavailable when PESTONE is selected
+PASS Inspector choice cannot switch current RUN ability
+PASS Inactive CD preserves exact residue across AREA (7/7)
+PASS Available ability stays available across AREA
+PASS Active ability restarts full CD with current reduction (14,3/14,3)
+PASS Stat and seconds use mathematical rounding (14,3/14,3)
+PASS CD REDUCTION minimum 10 (1,5/1,5)
+PASS PESTONE depth asset = 7m (7/7)
+PASS PESTONE frontal width asset = 3m (3/3)
+PASS PESTONE SLOW asset = 30 percent (30/30)
+PASS PESTONE SLOW duration asset = 3s (3/3)
+PASS PESTONE activation succeeds
+PASS PESTONE rectangle 7m-depth/3m-width boundary (6.50, 0.00) (60/60)
+PASS PESTONE rectangle 7m-depth/3m-width boundary (7.00, 1.50) (60/60)
+PASS PESTONE rectangle 7m-depth/3m-width boundary (7.00, -1.50) (60/60)
+PASS PESTONE rectangle 7m-depth/3m-width boundary (7.01, 0.00) (100/100)
+PASS PESTONE rectangle 7m-depth/3m-width boundary (7.00, 1.51) (100/100)
+PASS PESTONE rectangle 7m-depth/3m-width boundary (-0.01, 0.00) (100/100)
+PASS PESTONE rectangle 7m-depth/3m-width boundary (0.50, 1.49) (60/60)
+PASS PESTONE rectangle 7m-depth/3m-width boundary (0.50, -1.49) (60/60)
+PASS PESTONE rectangle 7m-depth/3m-width boundary (0.00, 1.50) (60/60)
+PASS PESTONE rectangle 7m-depth/3m-width boundary (3.00, -1.51) (100/100)
+PASS SLOW only inside rectangle (6.50, 0.00) (1,4/1,4)
+PASS SLOW only inside rectangle (7.00, 1.50) (1,4/1,4)
+PASS SLOW only inside rectangle (7.00, -1.50) (1,4/1,4)
+PASS SLOW only inside rectangle (7.01, 0.00) (2/2)
+PASS SLOW only inside rectangle (7.00, 1.51) (2/2)
+PASS SLOW only inside rectangle (-0.01, 0.00) (2/2)
+PASS SLOW only inside rectangle (0.50, 1.49) (1,4/1,4)
+PASS SLOW only inside rectangle (0.50, -1.49) (1,4/1,4)
+PASS SLOW only inside rectangle (0.00, 1.50) (1,4/1,4)
+PASS SLOW only inside rectangle (3.00, -1.51) (2/2)
+PASS PESTONE does not damage PG (100/100)
+PASS PESTONE does not slow PG (2/2)
+PASS PESTONE CD begins on activation (10/10)
+PASS PESTONE repeated activation rejected during CD
+PASS PESTONE adds no physical collider/projectile
+PASS Rotated rectangle hits near-side target excluded by the old cone (60/60)
+PASS Rotated rectangle excludes target beyond side edge (100/100)
+PASS Rotated rectangle applies SLOW (1,4/1,4)
+PASS Rotated outside target has no SLOW (0/0)
+PASS MURO shields MOB from PESTONE (100/100)
+PASS Shielded MOB receives no SLOW (0/0)
+PASS Unshielded MOB receives SLOW (1,4/1,4)
+PASS Unshielded part of PESTONE stays effective (60/60)
+PASS PESTONE passes 40 damage through existing DEF evaluation (66/66)
+PASS PESTONE rounds final mitigated damage 35.5 to 36 (64/64)
+PASS OSTACOLO shields MOB from PESTONE (100/100)
+PASS Shielded MOB receives no SLOW (0/0)
+PASS Unshielded MOB receives SLOW (1,4/1,4)
+PASS Unshielded part of PESTONE stays effective (60/60)
+PASS PESTONE passes 40 damage through existing DEF evaluation (66/66)
+PASS PESTONE rounds final mitigated damage 35.5 to 36 (64/64)
+PASS SLOW starts with 3 simulation seconds (3/3)
+PASS SLOW preserves existing MOVE SPD modifier (150/150)
+PASS SLOW reduces current speed by 30 percent (2,1/2,1)
+PASS Actual movement uses slowed speed (1,05/1,05)
+PASS MOB AI movement uses 70 percent of current speed (0,006/0,006)
+PASS Reapplication refreshes full SLOW duration (3/3)
+PASS Reapplication does not stack SLOW (2,1/2,1)
+PASS MOVE SPD changes remain independent during SLOW (2,8/2,8)
+PASS Pause freezes SLOW duration (3/3)
+PASS SLOW survives original expiry after refresh (2,8/2,8)
+PASS SLOW expires after refreshed 3 seconds (0/0)
+PASS Expiry restores current speed including later modifiers (4/4)
+PASS Expiry does not overwrite MOVE SPD (200/200)
+PASS Actor initialization clears old SLOW (0/0)
+PASS PESTONE second use after elapsed CD
+PASS BONUS freezes CD (9,647/9,647)
+PASS BONUS blocks ability activation
+PASS AREA transition keeps exact inactive residual CD (9,647/9,647)
+PASS Ability selection/runtime persists into AREA 2
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New AREA MOB has no inherited SLOW (0/0)
+PASS New RUN selects BARRIERA only
+PASS BARRIERA starts RUN in 15-second CD
+PASS PESTONE unavailable when BARRIERA selected
+PASS Q hold begins barrier preview
+PASS Barrier centre clamps at 8m (8/8)
+PASS 7m side is perpendicular to PG-cursor direction (90/90)
+PASS Preview has no barrier and consumes no CD
+PASS Preview follows diagonal cursor (135/135)
+PASS Cancel preview costs no CD
+PASS Preview permits overlapping PG/MOB/PET
+PASS Q release places barrier despite overlapping actors
+PASS BARRIERA CD begins on release/spawn (15/15)
+PASS Barrier starts with full 5-second duration (5/5)
+PASS Barrier long side 7m (7/7)
+PASS Barrier depth 1m (1/1)
+PASS Barrier is physical OSTACOLO
+PASS Barrier has no HP/damage receiver
+PASS Barrier placement permits overlap with MURO
+PASS Navigation excludes active barrier centre
+PASS Overlapping 8 displaced outside barrier
+PASS Overlapping 9 displaced outside barrier
+PASS Overlapping 13 displaced outside barrier
+PASS BARRIERA repeat blocked during CD
+PASS OSTACOLO matrix blocks PG
+PASS OSTACOLO matrix blocks MOB
+PASS OSTACOLO matrix blocks PET
+PASS OSTACOLO matrix blocks PROJECTILE_PG
+PASS OSTACOLO matrix blocks PROJECTILE_MOB
+PASS PG cannot cross BARRIERA
+PASS MOB cannot cross BARRIERA
+PASS Both PG/MOB projectiles stop at barrier
+PASS Physical PET probe blocked: side=0,7544, contact=-0,0056, tolerance=0,01
+PASS Barrier lifetime counts during gameplay
+PASS Pause freezes barrier duration (4,499/4,499)
+PASS Pause freezes barrier CD (14,499/14,499)
+PASS Barrier disappears after 5 simulation seconds
+PASS Navigation restores traversable space after barrier expiry
+PASS Duration and CD run concurrently (about 10s CD left on expiry)
+PASS Expired barrier no longer blocks PG
+PASS Boundary overlap expels actor inside AREA, outside barrier
+PASS Barrier can activate again after cooldown
+PASS Runtime BARRIERA applies CD REDUCTION 10 (1,5/1,5)
+PASS Reduced CD permits another barrier while first remains active
+PASS Each simultaneous barrier retains independent lifetime
+PASS Barrier still active at AREA exit
+PASS AREA change removes active barrier immediately
+PASS AREA change restarts full current final CD for active barrier (1,5/1,5)
+PASS Barrier selection persists in AREA 2
+PASS DOWN/defeat prevents ability use
+Engine Play Mode tests completed. Uses runtime ability commands; physical keyboard/mouse feel remains a manual check. PET collision uses a physical probe because PET gameplay is outside this prototype.

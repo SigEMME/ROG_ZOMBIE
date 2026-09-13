@@ -22,6 +22,13 @@ namespace RogZombie.PreGameplayLoop
         public int Gold { get; private set; }
         public float CdReduction => cdReduction;
         public PG01AbilityRuntime Ability { get; private set; }
+        public PG01PassiveRuntime Passive { get; private set; }
+        public PG02AbilityRuntime PG02Ability { get; private set; }
+        public PG02PassiveRuntime PG02Passive { get; private set; }
+        public PG03AbilityRuntime PG03Ability { get; private set; }
+        public PG03PassiveRuntime PG03Passive { get; private set; }
+        public PG04AbilityRuntime PG04Ability { get; private set; }
+        public PG04ItemSlots PG04Items { get; private set; }
         public bool GameplayRunning => Time.timeScale > 0 && (State == LoopState.Combat || State == LoopState.AreaComplete);
         public string Failure { get; private set; }
         public AreaStat[] Choices { get; private set; }
@@ -124,7 +131,8 @@ namespace RogZombie.PreGameplayLoop
 
         private void CreatePlayer()
         {
-            var go = TestVisuals.Box("PG01", Settings.StartPosition, Vector2.one, Color.white, 3);
+            var selectedWeapon = Definition.SelectedWeapon;
+            var go = TestVisuals.Box(selectedWeapon.PG.PlayerId, Settings.StartPosition, Vector2.one, Color.white, 3);
             go.SetActive(false);
             go.transform.SetParent(transform); // Keep runtime HP/stats across area teardown.
             go.layer = LayerMask.NameToLayer("PG");
@@ -139,20 +147,51 @@ namespace RogZombie.PreGameplayLoop
             go.AddComponent<PlayerMovement>();
             go.AddComponent<PlayerAim>();
             Player = go.AddComponent<PlayerRuntime>();
-            Player.Initialize(Definition.PG01Weapon.PG);
+            Player.Initialize(selectedWeapon.PG);
+            Player.Actor.RoundFinalDamage = true; // GDD: round only after final DEF mitigation.
+            Ability = null; Passive = null; PG02Ability = null; PG02Passive = null; PG03Ability = null; PG03Passive = null; PG04Ability = null; PG04Items = null;
             cdReduction = Player.CdReduction;
             var muzzle = new GameObject("Bocca arma").transform;
             muzzle.SetParent(go.transform, false);
             muzzle.localPosition = new Vector3(.5f, 0, 0); // Existing test muzzle placement.
             var weapon = go.AddComponent<PlayerWeapon>();
             if (runtimeWeapon != null) Destroy(runtimeWeapon);
-            runtimeWeapon = Instantiate(Definition.PG01Weapon);
-            runtimeWeapon.ConeAngle = 75; // GDD PG01: 4m radial RANGE, 75 degrees.
+            runtimeWeapon = Instantiate(selectedWeapon);
+            if (Definition.SelectedPlayer == LoopPlayer.PG01) runtimeWeapon.ConeAngle = 75;
             weapon.Definition = runtimeWeapon;
             weapon.Muzzle = muzzle;
-            Ability = go.AddComponent<PG01AbilityRuntime>();
-            Ability.Initialize(this, Definition.SelectedAbility, Definition.PG01Abilities);
-            go.AddComponent<PG01AbilityInput>();
+            if (Definition.SelectedPlayer == LoopPlayer.PG01)
+            {
+                Passive = go.AddComponent<PG01PassiveRuntime>();
+                Passive.Initialize(Player.Actor, Definition.SelectedPassive);
+                Ability = go.AddComponent<PG01AbilityRuntime>();
+                Ability.Initialize(this, Definition.SelectedAbility, Definition.PG01Abilities);
+                go.AddComponent<PG01AbilityInput>();
+            }
+            else if (Definition.SelectedPlayer == LoopPlayer.PG02)
+            {
+                PG02Passive = go.AddComponent<PG02PassiveRuntime>();
+                PG02Passive.Initialize(this, Definition.SelectedPG02Passive);
+                PG02Ability = go.AddComponent<PG02AbilityRuntime>();
+                PG02Ability.Initialize(this, Definition.SelectedPG02Ability, Definition.PG02Abilities);
+                go.AddComponent<PG02AbilityInput>();
+            }
+            else if (Definition.SelectedPlayer == LoopPlayer.PG03)
+            {
+                PG03Passive = go.AddComponent<PG03PassiveRuntime>();
+                PG03Passive.Initialize(Definition.SelectedPG03Passive);
+                PG03Ability = go.AddComponent<PG03AbilityRuntime>();
+                PG03Ability.Initialize(this, Definition.SelectedPG03Ability, Definition.PG03Abilities);
+                go.AddComponent<PG03AbilityInput>();
+            }
+            else
+            {
+                PG04Items = go.AddComponent<PG04ItemSlots>();
+                PG04Items.Initialize(Definition.PG04TestItemSlots, Definition.SelectedPG04Passive);
+                PG04Ability = go.AddComponent<PG04AbilityRuntime>();
+                PG04Ability.Initialize(this, Definition.SelectedPG04Ability, Definition.SelectedPG04Passive, Definition.PG04Abilities);
+                go.AddComponent<PG04AbilityInput>();
+            }
             go.SetActive(true);
         }
 
@@ -212,7 +251,11 @@ namespace RogZombie.PreGameplayLoop
 
         private IEnumerator NextArea()
         {
-            Ability.ChangeArea();
+            if (Ability != null) Ability.ChangeArea();
+            if (PG02Ability != null) PG02Ability.ChangeArea();
+            if (PG03Ability != null) PG03Ability.ChangeArea();
+            if (PG04Ability != null) PG04Ability.ChangeArea();
+            if (PG02Passive != null) PG02Passive.ChangeArea();
             Exit.Entered -= OpenBonus;
             areaRoot.gameObject.SetActive(false);
             Destroy(areaRoot.gameObject);
@@ -231,6 +274,8 @@ namespace RogZombie.PreGameplayLoop
         public void RestartTest()
         {
             if (Loading) return;
+            string issue = Definition == null ? "LoopDefinition mancante." : Definition.Validate();
+            if (issue != null) { Fail(issue); return; }
             StopAllCoroutines();
             State = LoopState.Transition;
             Time.timeScale = 0;

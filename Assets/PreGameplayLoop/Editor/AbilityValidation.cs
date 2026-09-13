@@ -79,7 +79,10 @@ namespace RogZombie.PreGameplayLoop.Editor
                 foreach (var brain in UnityEngine.Object.FindObjectsByType<MobBrain>(FindObjectsSortMode.None)) brain.enabled = false;
                 if (loop != null && loop.Player != null)
                 {
-                    loop.Player.GetComponent<PG01AbilityInput>().enabled = false;
+                    var input = loop.Player.GetComponent<PG01AbilityInput>();
+                    if (input != null) input.enabled = false;
+                    var pg02Input = loop.Player.GetComponent<PG02AbilityInput>();
+                    if (pg02Input != null) pg02Input.enabled = false;
                     loop.Player.GetComponent<PlayerWeapon>().enabled = false;
                     loop.Player.GetComponent<PlayerMovement>().enabled = false;
                 }
@@ -137,6 +140,7 @@ namespace RogZombie.PreGameplayLoop.Editor
             while ((loop = UnityEngine.Object.FindFirstObjectByType<LoopSession>()) == null || loop.State != LoopState.Combat) yield return null;
             var originalDefinition = loop.Definition;
             var testDefinition = UnityEngine.Object.Instantiate(originalDefinition);
+            testDefinition.SelectedPlayer = LoopPlayer.PG01;
             loop.Definition = testDefinition;
             testDefinition.SelectedAbility = PG01Ability.Pestone;
             loop.RestartTest();

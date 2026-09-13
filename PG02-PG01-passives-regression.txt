@@ -1,0 +1,137 @@
+PASS | Unity 6000.3.16f1 | checks=135 | warnings=425
+PASS Invalid passive selection rejected
+PASS Valid independent passive/ability configuration
+PASS Passiva1 selected and inactive at full HP
+PASS Exactly one passive runtime
+PASS Inspector edits do not alter current RUN
+PASS Passiva1 strict HP threshold at 51
+PASS Effective DEF at threshold (115/115)
+PASS Effective ATK at threshold (20/20)
+PASS Passiva1 strict HP threshold at 50
+PASS Effective DEF at threshold (115/115)
+PASS Effective ATK at threshold (20/20)
+PASS Passiva1 strict HP threshold at 49
+PASS Effective DEF at threshold (130/130)
+PASS Effective ATK at threshold (20/20)
+PASS Crossing HIT uses previous DEF and final rounding (49/49)
+PASS Crossing HIT activates passive immediately
+PASS Repeated activation never stacks DEF (130/130)
+PASS Repeated activation never stacks ATK (20/20)
+PASS Heal reaches exact half HP (50/50)
+PASS Healing to half HP immediately deactivates
+PASS Crossing HIT uses previous DEF and final rounding (49/49)
+PASS Crossing HIT activates passive immediately
+PASS Repeated activation never stacks DEF (130/130)
+PASS Repeated activation never stacks ATK (20/20)
+PASS Heal reaches exact half HP (50/50)
+PASS Healing to half HP immediately deactivates
+PASS Crossing HIT uses previous DEF and final rounding (49/49)
+PASS Crossing HIT activates passive immediately
+PASS Repeated activation never stacks DEF (130/130)
+PASS Repeated activation never stacks ATK (20/20)
+PASS Heal reaches exact half HP (50/50)
+PASS Healing to half HP immediately deactivates
+PASS HIT crossing 50 percent is not retroactively mitigated (46/46)
+PASS Next HIT uses selected passive DEF (39/39)
+PASS Increasing max HP immediately activates at unchanged current HP
+PASS Decreasing max HP immediately deactivates
+PASS HP bonus grants correct health (54/54)
+PASS HP bonus changes persistent maximum (105/105)
+PASS HP bonus recalculates condition including granted health
+PASS ATK bonus while active uses persistent 20 -> 21 (21/21)
+PASS ATK passive remains separate after bonus (21/21)
+PASS Deactivation preserves ATK bonus at 21 (21/21)
+PASS Repeated persistent ATK bonus does not include passive (22,05/22,05)
+PASS Persistent DEF bonus excludes passive contribution (120,75/120,75)
+PASS DEF passive adds exactly 15 internal points (135,75/135,75)
+PASS Deactivation preserves DEF bonus (120,75/120,75)
+PASS DEF bonus under temporary cap remains persistent (189/189)
+PASS DEF mitigation cap is 90 percent (190/190)
+PASS Actual incoming HIT respects DEF cap (30/30)
+PASS Removing capped passive restores full persistent DEF (189/189)
+PASS DEF cap applies when passive inactive too (190/190)
+PASS Actual PG01 ATTACCO BASE fires
+PASS Actual outgoing HIT uses selected passive ATK (80/80)
+PASS Outgoing HIT rounds only after DEF (83/83)
+PASS Passive never scales fixed PESTONE 40 damage (60/60)
+PASS Passive condition remains active during BONUS pause
+PASS AREA preserves independent passive and ability RUN selections
+PASS Actual AREA bonus persists independently of passive (21/21)
+PASS AREA grants 15 percent max HP heal (55/55)
+PASS AREA heal reevaluates passive across threshold
+PASS Correct effective ATK after AREA (21/21)
+PASS DOWN disables passive
+PASS New RUN acquires changed passive configuration
+PASS New RUN independently acquires changed ability
+PASS New RUN resets HP (100/100)
+PASS New RUN resets bonuses (20/20)
+PASS New RUN has no stale temporary DEF (115/115)
+PASS New RUN starts with passive inactive
+PASS Valid independent passive/ability configuration
+PASS Passiva2 selected and inactive at full HP
+PASS Exactly one passive runtime
+PASS Inspector edits do not alter current RUN
+PASS Passiva2 strict HP threshold at 51
+PASS Effective DEF at threshold (115/115)
+PASS Effective ATK at threshold (20/20)
+PASS Passiva2 strict HP threshold at 50
+PASS Effective DEF at threshold (115/115)
+PASS Effective ATK at threshold (20/20)
+PASS Passiva2 strict HP threshold at 49
+PASS Effective DEF at threshold (115/115)
+PASS Effective ATK at threshold (23/23)
+PASS Crossing HIT uses previous DEF and final rounding (49/49)
+PASS Crossing HIT activates passive immediately
+PASS Repeated activation never stacks DEF (115/115)
+PASS Repeated activation never stacks ATK (23/23)
+PASS Heal reaches exact half HP (50/50)
+PASS Healing to half HP immediately deactivates
+PASS Crossing HIT uses previous DEF and final rounding (49/49)
+PASS Crossing HIT activates passive immediately
+PASS Repeated activation never stacks DEF (115/115)
+PASS Repeated activation never stacks ATK (23/23)
+PASS Heal reaches exact half HP (50/50)
+PASS Healing to half HP immediately deactivates
+PASS Crossing HIT uses previous DEF and final rounding (49/49)
+PASS Crossing HIT activates passive immediately
+PASS Repeated activation never stacks DEF (115/115)
+PASS Repeated activation never stacks ATK (23/23)
+PASS Heal reaches exact half HP (50/50)
+PASS Healing to half HP immediately deactivates
+PASS HIT crossing 50 percent is not retroactively mitigated (46/46)
+PASS Next HIT uses selected passive DEF (37/37)
+PASS Increasing max HP immediately activates at unchanged current HP
+PASS Decreasing max HP immediately deactivates
+PASS HP bonus grants correct health (54/54)
+PASS HP bonus changes persistent maximum (105/105)
+PASS HP bonus recalculates condition including granted health
+PASS ATK bonus while active uses persistent 20 -> 21 (21/21)
+PASS ATK passive remains separate after bonus (24,15/24,15)
+PASS Deactivation preserves ATK bonus at 21 (21/21)
+PASS Repeated persistent ATK bonus does not include passive (22,05/22,05)
+PASS Persistent DEF bonus excludes passive contribution (120,75/120,75)
+PASS DEF passive adds exactly 15 internal points (120,75/120,75)
+PASS Deactivation preserves DEF bonus (120,75/120,75)
+PASS DEF bonus under temporary cap remains persistent (189/189)
+PASS DEF mitigation cap is 90 percent (189/189)
+PASS Actual incoming HIT respects DEF cap (29/29)
+PASS Removing capped passive restores full persistent DEF (189/189)
+PASS DEF cap applies when passive inactive too (190/190)
+PASS Actual PG01 ATTACCO BASE fires
+PASS Actual outgoing HIT uses selected passive ATK (77/77)
+PASS Outgoing HIT rounds only after DEF (80/80)
+PASS Passive never scales fixed PESTONE 40 damage (60/60)
+PASS Passive condition remains active during BONUS pause
+PASS AREA preserves independent passive and ability RUN selections
+PASS Actual AREA bonus persists independently of passive (21/21)
+PASS AREA grants 15 percent max HP heal (35/35)
+PASS AREA heal reevaluates passive across threshold
+PASS Correct effective ATK after AREA (24,15/24,15)
+PASS DOWN disables passive
+PASS New RUN acquires changed passive configuration
+PASS New RUN independently acquires changed ability
+PASS New RUN resets HP (100/100)
+PASS New RUN resets bonuses (20/20)
+PASS New RUN has no stale temporary DEF (115/115)
+PASS New RUN starts with passive inactive
+Engine Play Mode tests completed. Both PG01 passives tested through runtime HIT, healing, stat bonuses, attacks, AREA transitions and fresh RUNs. Physical keyboard/mouse feel remains a manual check.

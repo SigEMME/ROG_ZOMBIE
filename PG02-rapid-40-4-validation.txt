@@ -1,0 +1,390 @@
+PASS | Unity 6000.3.16f1 | checks=388 | warnings=755
+PASS Invalid PG02 ability rejected
+PASS Invalid PG02 passive rejected
+PASS Valid combination FuocoRapido / Passiva1
+PASS Exactly PG02 runtime, no PG01 ability or passive attached
+PASS PG02 HP 100 (100/100)
+PASS PG02 ATK 10 (10/10)
+PASS PG02 internal DEF 100 = zero mitigation (100/100)
+PASS PG02 MOVE SPD 100 = 2m/s (2/2)
+PASS PG02 base ATK SPD 400 (400/400)
+PASS PG02 RANGE 10m (10/10)
+PASS Initial CD REDUCTION 100 (100/100)
+PASS Ability begins RUN unavailable
+PASS Full initial ability CD
+PASS New RUN has no personal KILLs (0/0)
+PASS Inspector PG change does not alter current RUN
+PASS Ability/passive are RUN snapshots
+PASS Suppression credits each actual MOB death exactly once (1/1)
+PASS Duplicate death/HIT gives no extra KILL (1/1)
+PASS Heal threshold at 31 (31/31)
+PASS Suppression credits each actual MOB death exactly once (2/2)
+PASS Duplicate death/HIT gives no extra KILL (2/2)
+PASS Heal threshold at 30 (30/30)
+PASS Suppression credits each actual MOB death exactly once (3/3)
+PASS Duplicate death/HIT gives no extra KILL (3/3)
+PASS Heal threshold at 29 (30/30)
+PASS Suppression credits each actual MOB death exactly once (6/6)
+PASS Duplicate death/HIT gives no extra KILL (6/6)
+PASS Multi-KILL reevaluates threshold after each 1 percent max HP heal (30,5/30,5)
+PASS Suppression credits each actual MOB death exactly once (8/8)
+PASS Duplicate death/HIT gives no extra KILL (8/8)
+PASS Modified max HP: heal 2, next KILL at 30 percent does not heal (60/60)
+PASS Test deaths and sourceless damage give no personal credit (8/8)
+PASS Another PG source gives no credit to PG02 (8/8)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2506
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2515
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2509
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2508
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2529
+PASS Same-frame repeat shot blocked
+PASS Actual projectile speed 20m/s (20/20)
+PASS Actual projectile HIT damage 10 (90/90)
+PASS Non-piercing projectile stops at first MOB (100/100)
+PASS Projectile ignores PG ally (100/100)
+PASS MURO stops projectile (100/100)
+PASS OSTACOLO stops projectile (100/100)
+PASS Projectile remains in flight before 10m
+PASS Actual travelled distance follows 20m/s (4,015/4,015)
+PASS Projectile expires at 10m / 0.5s flight
+PASS Beyond-range MOB untouched (100/100)
+PASS Projectile retains PG02 identity through lethal HIT (9/9)
+PASS Projectile corpse gives no duplicate credit (9/9)
+PASS FUOCO RAPIDO activation
+PASS Rapid duration starts at 4s (4/4)
+PASS Rapid CD does not start at activation (0/0)
+PASS 400 x 1.40 = 560 (560/560)
+PASS Rapid cannot stack/retrigger while active
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1788
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1812
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1791
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1787
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,18
+PASS Same-frame repeat shot blocked
+PASS ATK SPD bonus uses persistent 400 (420/420)
+PASS Rapid retains 40 percent on modified current speed (588/588)
+PASS Pause freezes Rapid duration (3,097/3,097)
+PASS Pause does not begin Rapid CD (0/0)
+PASS Rapid lasts 4 simulation seconds (4,001/4)
+PASS Rapid expiry removes only temporary bonus (420/420)
+PASS Rapid CD starts on expiry (10/10)
+PASS Suppression blocked by MURO (100/100)
+PASS Suppression 30 damage after DEF rounds 25.5 -> 26 (74/74)
+PASS Suppression blocked by OSTACOLO (100/100)
+PASS Suppression 30 damage after DEF rounds 25.5 -> 26 (74/74)
+PASS Reuse ability after completed CD
+PASS Rapid is still active at AREA exit
+PASS BONUS freezes CD (0/0)
+PASS BONUS freezes ability duration (3,643/3,643)
+PASS BONUS freezes RAGE (0/0)
+PASS AREA active ability restarts full reduced CD; inactive retains residue (1/1)
+PASS AREA ends RAGE immediately (0/0)
+PASS AREA preserves selected runtime instances
+PASS AREA preserves personal KILL count; test deaths give no credit (9/9)
+PASS AREA ends temporary ATK but preserves real bonus (10,5/10,5)
+PASS AREA removes Rapid modifier (400/400)
+PASS Available ability stays available on AREA change (0/0)
+PASS Valid combination FuocoRapido / Passiva2
+PASS Exactly PG02 runtime, no PG01 ability or passive attached
+PASS PG02 HP 100 (100/100)
+PASS PG02 ATK 10 (10/10)
+PASS PG02 internal DEF 100 = zero mitigation (100/100)
+PASS PG02 MOVE SPD 100 = 2m/s (2/2)
+PASS PG02 base ATK SPD 400 (400/400)
+PASS PG02 RANGE 10m (10/10)
+PASS Initial CD REDUCTION 100 (100/100)
+PASS Ability begins RUN unavailable
+PASS Full initial ability CD
+PASS New RUN has no personal KILLs (0/0)
+PASS Inspector PG change does not alter current RUN
+PASS Ability/passive are RUN snapshots
+PASS Suppression credits each actual MOB death exactly once (14/14)
+PASS Duplicate death/HIT gives no extra KILL (14/14)
+PASS 14 KILLs do not trigger RAGE
+PASS Suppression credits each actual MOB death exactly once (15/15)
+PASS Duplicate death/HIT gives no extra KILL (15/15)
+PASS 15 personal KILL threshold (15/15)
+PASS RAGE starts at 2 seconds (2/2)
+PASS RAGE +30 percent ATK (13/13)
+PASS RAGE does not contaminate persistent ATK bonus (10,5/10,5)
+PASS RAGE applies to current ATK after bonus (13,65/13,65)
+PASS Suppression credits each actual MOB death exactly once (30/30)
+PASS Duplicate death/HIT gives no extra KILL (30/30)
+PASS 30 KILL threshold (30/30)
+PASS New RAGE refreshes full duration (2/2)
+PASS RAGE refresh never stacks (13,65/13,65)
+PASS Pause freezes RAGE (2/2)
+PASS RAGE expires after two seconds (0/0)
+PASS RAGE expiry preserves acquired bonus (10,5/10,5)
+PASS Test deaths and sourceless damage give no personal credit (30/30)
+PASS Another PG source gives no credit to PG02 (30/30)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2514
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2511
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2517
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2524
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2501
+PASS Same-frame repeat shot blocked
+PASS Actual projectile speed 20m/s (20/20)
+PASS Actual projectile HIT damage 10 (90/90)
+PASS Non-piercing projectile stops at first MOB (100/100)
+PASS Projectile ignores PG ally (100/100)
+PASS MURO stops projectile (100/100)
+PASS OSTACOLO stops projectile (100/100)
+PASS Projectile remains in flight before 10m
+PASS Actual travelled distance follows 20m/s (4,068/4,068)
+PASS Projectile expires at 10m / 0.5s flight
+PASS Beyond-range MOB untouched (100/100)
+PASS Projectile retains PG02 identity through lethal HIT (31/31)
+PASS Projectile corpse gives no duplicate credit (31/31)
+PASS FUOCO RAPIDO activation
+PASS Rapid duration starts at 4s (4/4)
+PASS Rapid CD does not start at activation (0/0)
+PASS 400 x 1.40 = 560 (560/560)
+PASS Rapid cannot stack/retrigger while active
+PASS Suppression credits each actual MOB death exactly once (45/45)
+PASS Duplicate death/HIT gives no extra KILL (45/45)
+PASS RAGE and Rapid coexist: ATK 13 (13/13)
+PASS RAGE and Rapid coexist: ATK SPD 560 (560/560)
+PASS RAGE changes actual projectile damage to 13 (87/87)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1799
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1869
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1798
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1796
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1791
+PASS Same-frame repeat shot blocked
+PASS ATK SPD bonus uses persistent 400 (420/420)
+PASS Rapid retains 40 percent on modified current speed (588/588)
+PASS Pause freezes Rapid duration (2,884/2,884)
+PASS Pause does not begin Rapid CD (0/0)
+PASS Rapid lasts 4 simulation seconds (4,002/4)
+PASS Rapid expiry removes only temporary bonus (420/420)
+PASS Rapid CD starts on expiry (10/10)
+PASS Suppression blocked by MURO (100/100)
+PASS Suppression 30 damage after DEF rounds 25.5 -> 26 (74/74)
+PASS Suppression blocked by OSTACOLO (100/100)
+PASS Suppression 30 damage after DEF rounds 25.5 -> 26 (74/74)
+PASS Reuse ability after completed CD
+PASS Suppression credits each actual MOB death exactly once (60/60)
+PASS Duplicate death/HIT gives no extra KILL (60/60)
+PASS Suppression credits each actual MOB death exactly once (74/74)
+PASS Duplicate death/HIT gives no extra KILL (74/74)
+PASS Active RAGE with 14 kills toward next threshold
+PASS RAGE does not scale fixed suppression damage (70/70)
+PASS Rapid is still active at AREA exit
+PASS RAGE is still active at AREA exit
+PASS BONUS freezes CD (0/0)
+PASS BONUS freezes ability duration (3,539/3,539)
+PASS BONUS freezes RAGE (1,539/1,539)
+PASS AREA active ability restarts full reduced CD; inactive retains residue (1/1)
+PASS AREA ends RAGE immediately (0/0)
+PASS AREA preserves selected runtime instances
+PASS AREA preserves personal KILL count; test deaths give no credit (74/74)
+PASS AREA ends temporary ATK but preserves real bonus (10,5/10,5)
+PASS AREA removes Rapid modifier (400/400)
+PASS 14 KILL progress survives AREA (14/14)
+PASS Suppression credits each actual MOB death exactly once (75/75)
+PASS Duplicate death/HIT gives no extra KILL (75/75)
+PASS One KILL in new AREA reaches retained 15 threshold
+PASS Available ability stays available on AREA change (0/0)
+PASS Valid combination FuocoDiSoppressione / Passiva1
+PASS Exactly PG02 runtime, no PG01 ability or passive attached
+PASS PG02 HP 100 (100/100)
+PASS PG02 ATK 10 (10/10)
+PASS PG02 internal DEF 100 = zero mitigation (100/100)
+PASS PG02 MOVE SPD 100 = 2m/s (2/2)
+PASS PG02 base ATK SPD 400 (400/400)
+PASS PG02 RANGE 10m (10/10)
+PASS Initial CD REDUCTION 100 (100/100)
+PASS Ability begins RUN unavailable
+PASS Full initial ability CD
+PASS New RUN has no personal KILLs (0/0)
+PASS Inspector PG change does not alter current RUN
+PASS Ability/passive are RUN snapshots
+PASS Suppression credits each actual MOB death exactly once (1/1)
+PASS Duplicate death/HIT gives no extra KILL (1/1)
+PASS Heal threshold at 31 (31/31)
+PASS Suppression credits each actual MOB death exactly once (2/2)
+PASS Duplicate death/HIT gives no extra KILL (2/2)
+PASS Heal threshold at 30 (30/30)
+PASS Suppression credits each actual MOB death exactly once (3/3)
+PASS Duplicate death/HIT gives no extra KILL (3/3)
+PASS Heal threshold at 29 (30/30)
+PASS Suppression credits each actual MOB death exactly once (6/6)
+PASS Duplicate death/HIT gives no extra KILL (6/6)
+PASS Multi-KILL reevaluates threshold after each 1 percent max HP heal (30,5/30,5)
+PASS Suppression credits each actual MOB death exactly once (8/8)
+PASS Duplicate death/HIT gives no extra KILL (8/8)
+PASS Modified max HP: heal 2, next KILL at 30 percent does not heal (60/60)
+PASS Test deaths and sourceless damage give no personal credit (8/8)
+PASS Another PG source gives no credit to PG02 (8/8)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2515
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2526
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2519
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2519
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,25
+PASS Same-frame repeat shot blocked
+PASS Actual projectile speed 20m/s (20/20)
+PASS Actual projectile HIT damage 10 (90/90)
+PASS Non-piercing projectile stops at first MOB (100/100)
+PASS Projectile ignores PG ally (100/100)
+PASS MURO stops projectile (100/100)
+PASS OSTACOLO stops projectile (100/100)
+PASS Projectile remains in flight before 10m
+PASS Actual travelled distance follows 20m/s (4,066/4,066)
+PASS Projectile expires at 10m / 0.5s flight
+PASS Beyond-range MOB untouched (100/100)
+PASS Projectile retains PG02 identity through lethal HIT (9/9)
+PASS Projectile corpse gives no duplicate credit (9/9)
+PASS Suppression activation toward rotated cursor
+PASS Suppression radial/angle boundary 0 (70/70)
+PASS Suppression radial/angle boundary 1 (70/70)
+PASS Suppression radial/angle boundary 2 (70/70)
+PASS Suppression radial/angle boundary 3 (100/100)
+PASS Suppression radial/angle boundary 4 (100/100)
+PASS Suppression radial/angle boundary 5 (100/100)
+PASS Suppression radial/angle boundary 6 (100/100)
+PASS Suppression radial/angle boundary 7 (70/70)
+PASS Suppression ignores allied PG (100/100)
+PASS Suppression CD starts on activation (12/12)
+PASS Suppression has no physical projectile or persistent collider
+PASS Suppression repeat blocked by CD
+PASS Suppression blocked by MURO (100/100)
+PASS Suppression 30 damage after DEF rounds 25.5 -> 26 (74/74)
+PASS Suppression blocked by OSTACOLO (100/100)
+PASS Suppression 30 damage after DEF rounds 25.5 -> 26 (74/74)
+PASS Reuse ability after completed CD
+PASS Suppression applies CD REDUCTION 10 (1,2/1,2)
+PASS BONUS freezes CD (0,847/0,847)
+PASS BONUS freezes ability duration (0/0)
+PASS BONUS freezes RAGE (0/0)
+PASS AREA active ability restarts full reduced CD; inactive retains residue (0,847/0,847)
+PASS AREA ends RAGE immediately (0/0)
+PASS AREA preserves selected runtime instances
+PASS AREA preserves personal KILL count; test deaths give no credit (9/9)
+PASS AREA ends temporary ATK but preserves real bonus (10,5/10,5)
+PASS AREA removes Rapid modifier (400/400)
+PASS Available ability stays available on AREA change (0/0)
+PASS Valid combination FuocoDiSoppressione / Passiva2
+PASS Exactly PG02 runtime, no PG01 ability or passive attached
+PASS PG02 HP 100 (100/100)
+PASS PG02 ATK 10 (10/10)
+PASS PG02 internal DEF 100 = zero mitigation (100/100)
+PASS PG02 MOVE SPD 100 = 2m/s (2/2)
+PASS PG02 base ATK SPD 400 (400/400)
+PASS PG02 RANGE 10m (10/10)
+PASS Initial CD REDUCTION 100 (100/100)
+PASS Ability begins RUN unavailable
+PASS Full initial ability CD
+PASS New RUN has no personal KILLs (0/0)
+PASS Inspector PG change does not alter current RUN
+PASS Ability/passive are RUN snapshots
+PASS Suppression credits each actual MOB death exactly once (14/14)
+PASS Duplicate death/HIT gives no extra KILL (14/14)
+PASS 14 KILLs do not trigger RAGE
+PASS Suppression credits each actual MOB death exactly once (15/15)
+PASS Duplicate death/HIT gives no extra KILL (15/15)
+PASS 15 personal KILL threshold (15/15)
+PASS RAGE starts at 2 seconds (2/2)
+PASS RAGE +30 percent ATK (13/13)
+PASS RAGE does not contaminate persistent ATK bonus (10,5/10,5)
+PASS RAGE applies to current ATK after bonus (13,65/13,65)
+PASS Suppression credits each actual MOB death exactly once (30/30)
+PASS Duplicate death/HIT gives no extra KILL (30/30)
+PASS 30 KILL threshold (30/30)
+PASS New RAGE refreshes full duration (2/2)
+PASS RAGE refresh never stacks (13,65/13,65)
+PASS Pause freezes RAGE (2/2)
+PASS RAGE expires after two seconds (0/0)
+PASS RAGE expiry preserves acquired bonus (10,5/10,5)
+PASS Test deaths and sourceless damage give no personal credit (30/30)
+PASS Another PG source gives no credit to PG02 (30/30)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2516
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2508
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2522
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,25
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2515
+PASS Same-frame repeat shot blocked
+PASS Actual projectile speed 20m/s (20/20)
+PASS Actual projectile HIT damage 10 (90/90)
+PASS Non-piercing projectile stops at first MOB (100/100)
+PASS Projectile ignores PG ally (100/100)
+PASS MURO stops projectile (100/100)
+PASS OSTACOLO stops projectile (100/100)
+PASS Projectile remains in flight before 10m
+PASS Actual travelled distance follows 20m/s (4,035/4,035)
+PASS Projectile expires at 10m / 0.5s flight
+PASS Beyond-range MOB untouched (100/100)
+PASS Projectile retains PG02 identity through lethal HIT (31/31)
+PASS Projectile corpse gives no duplicate credit (31/31)
+PASS Suppression activation toward rotated cursor
+PASS Suppression radial/angle boundary 0 (70/70)
+PASS Suppression radial/angle boundary 1 (70/70)
+PASS Suppression radial/angle boundary 2 (70/70)
+PASS Suppression radial/angle boundary 3 (100/100)
+PASS Suppression radial/angle boundary 4 (100/100)
+PASS Suppression radial/angle boundary 5 (100/100)
+PASS Suppression radial/angle boundary 6 (100/100)
+PASS Suppression radial/angle boundary 7 (70/70)
+PASS Suppression ignores allied PG (100/100)
+PASS Suppression CD starts on activation (12/12)
+PASS Suppression has no physical projectile or persistent collider
+PASS Suppression repeat blocked by CD
+PASS Suppression blocked by MURO (100/100)
+PASS Suppression 30 damage after DEF rounds 25.5 -> 26 (74/74)
+PASS Suppression blocked by OSTACOLO (100/100)
+PASS Suppression 30 damage after DEF rounds 25.5 -> 26 (74/74)
+PASS Reuse ability after completed CD
+PASS Suppression applies CD REDUCTION 10 (1,2/1,2)
+PASS Suppression credits each actual MOB death exactly once (45/45)
+PASS Duplicate death/HIT gives no extra KILL (45/45)
+PASS Suppression credits each actual MOB death exactly once (59/59)
+PASS Duplicate death/HIT gives no extra KILL (59/59)
+PASS Active RAGE with 14 kills toward next threshold
+PASS RAGE does not scale fixed suppression damage (70/70)
+PASS RAGE is still active at AREA exit
+PASS BONUS freezes CD (0,76/0,76)
+PASS BONUS freezes ability duration (0/0)
+PASS BONUS freezes RAGE (1,56/1,56)
+PASS AREA active ability restarts full reduced CD; inactive retains residue (0,76/0,76)
+PASS AREA ends RAGE immediately (0/0)
+PASS AREA preserves selected runtime instances
+PASS AREA preserves personal KILL count; test deaths give no credit (59/59)
+PASS AREA ends temporary ATK but preserves real bonus (10,5/10,5)
+PASS AREA removes Rapid modifier (400/400)
+PASS 14 KILL progress survives AREA (14/14)
+PASS Suppression credits each actual MOB death exactly once (60/60)
+PASS Duplicate death/HIT gives no extra KILL (60/60)
+PASS One KILL in new AREA reaches retained 15 threshold
+PASS Available ability stays available on AREA change (0/0)
+PASS Restart acquires PG01 and disposes PG02 state
+Engine Play Mode tests completed. PG02 four combinations: runtime firing, projectile HITs, abilities, personal KILLs, passives and AREA transitions. Input feel/balancing are not tested.

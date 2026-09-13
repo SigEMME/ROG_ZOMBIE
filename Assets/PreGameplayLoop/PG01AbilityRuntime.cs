@@ -59,7 +59,7 @@ namespace RogZombie.PreGameplayLoop
             Vector2 direction = (cursor - origin).normalized;
             if (direction == Vector2.zero) direction = transform.right;
             cooldown.Restart(data.PestoneBaseCooldown, session.CdReduction);
-            PestoneEffect.Cast(origin, direction, data);
+            PestoneEffect.Cast(origin, direction, data, session.Player.Actor);
             TestVisuals.FlashRectangle(origin, direction, data.PestoneDepth, data.PestoneWidth);
             return true;
         }

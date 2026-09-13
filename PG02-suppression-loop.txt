@@ -1,0 +1,2 @@
+PASS | assertions=259 | Unity=6000.3.16f1
+Engine Play Mode: 100 + 120 ZOMB01; first spawn; replacement; actual PG01 4 m x 75 degree cone: hits at 3.5/4 m and +/-37.4 degrees, misses at 4.01 m and +/-37.6 degrees; no projectile; cooldown; death; off-screen/NavMesh; exit; bonus pause/confirmation; persistent stats; 15% heal; second cycle; restart; defeat. Mob AI disabled by test harness while draining populations; manual feel/visual QA still required.

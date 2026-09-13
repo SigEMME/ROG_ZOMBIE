@@ -17,7 +17,7 @@ MonoBehaviour:
     hp: 80
     atk: 50
     defPercent: -10
-    moveSpeed: 100
-    attackSpeed: 70
+    moveSpeed: 110
+    attackSpeed: 60
     cdReduction: 100
     range: 2000

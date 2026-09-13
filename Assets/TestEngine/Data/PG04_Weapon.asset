@@ -18,6 +18,6 @@ MonoBehaviour:
   ProjectileSpeed: 20
   Penetrations: 0
   ConeWidth: 3
-  ExplosionRadius: 1.5
-  GrenadeHitDelay: 0.5
+  ExplosionRadius: 1.25
+  GrenadeHitDelay: 0.3
   ProjectileRadius: 0.06

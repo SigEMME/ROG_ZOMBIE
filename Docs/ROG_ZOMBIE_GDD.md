@@ -394,7 +394,7 @@ I cinque ITEMS usano esclusivamente i layer esistenti AREA_EFFECT_MOB e AREA_EFF
 | RANGE massimo | Sparisce immediatamente; la distanza percorsa non supera il RANGE dell’attacco/arma. |
 
 - PERFORAZIONE: applica HIT/DANNO al MOB attraversato e prosegue finché sono disponibili PERFORAZIONI; sparisce quando colpisce l’ultimo MOB consentito. MURI/OSTACOLI e RANGE possono interromperlo prima.
-- La PERFORAZIONE modifica esclusivamente la regola standard «HIT MOB → sparisce». PG03 / CALIBRO PERFORANTE: 2 PERFORAZIONI → attraversa il 1° e il 2° MOB, danneggia il 3° e sparisce; DANNO e RANGE invariati.
+- La PERFORAZIONE modifica la regola standard «HIT MOB → sparisce»; eventuali modificatori del DANNO seguono la specifica della PASSIVA. PG03 / CALIBRO PERFORANTE: 2 PERFORAZIONI → attraversa il 1° e il 2° MOB, danneggia il 3° e sparisce. DANNO della prima HIT 100%, seconda HIT 70% (−30%), terza HIT 40% (−60%) del danno originale del PROIETTILE, prima della DEF di ciascun bersaglio; RANGE invariato.
 - PG01, PG04 e PG05 non usano questo volo fisico per l’ATTACCO BASE. Le ABILITÀ mantengono le regole specifiche delle proprie schede: la classificazione dell’ATTACCO BASE non ne cambia automaticamente la meccanica.
 - Le collisioni di PROJECTILE_PG e PROJECTILE_MOB sono distinte e confermate nella sezione 10.9. I proiettili di entrambi i layer attraversano i PET senza HIT, DANNO, distruzione o deviazione del proiettile; ZOMB04 conserva le proprie altre regole (sezione 13.8).
 
@@ -578,9 +578,9 @@ In questa tabella SÌ significa rilevamento/interazione con il destinatario, sen
 | PG | ARMA | HP | ATK | DEF | MOVE SPD | ATK SPD | CD REDUCTION | RANGE |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | PG01 | Shotgun | 100 | 20 | +15% | 100 | 85 | 100 | 4 m |
-| PG02 | Assault Rifle | 100 | 10 | 0% | 100 | 150 | 100 | 10 m |
-| PG03 | Sniper Rifle | 80 | 50 | −10% | 100 | 70 | 100 | 20 m |
-| PG04 | Grenade Launcher | 100 | 30 | 0% | 100 | 75 | 100 | 7 m |
+| PG02 | Assault Rifle | 100 | 10 | 0% | 100 | 400 | 100 | 10 m |
+| PG03 | Sniper Rifle | 80 | 50 | −10% | 110 | 60 | 100 | 20 m |
+| PG04 | Grenade Launcher | 100 | 25 | 0% | 100 | 65 | 100 | 7 m |
 | PG05 | Knife | 100 | 30 | −10% | 130 | 150 | 100 | 2 m |
 | PG06 | Revolver | 120 | 40 | 0% | 100 | 80 | 100 | 10 m |
 | PG07 | Bow | 100 | 30 | 0% | 110 | 110 | 100 | 15 m |
@@ -605,43 +605,44 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 ### PG02 — Assault Rifle
 
-- ATTACCO BASE: PROIETTILE BALISTICO non PERFORANTE, verso il CURSORE; ATK 10, RANGE 10 m, ATK SPD 150 = 1,5 ATTACCHI/s. Segue le REGOLE GENERALI DEI PROIETTILI.
+- ATTACCO BASE: PROIETTILE BALISTICO non PERFORANTE, verso il CURSORE; ATK 10, RANGE 10 m, ATK SPD BASE 400 = 4 ATTACCHI/s. Segue le REGOLE GENERALI DEI PROIETTILI.
 
-- ABILITÀ 1 — FUOCO RAPIDO: ATK SPD 300 (3 colpi/s); durata 3 s; CD 10 s, avviato al termine dei 3 s di DURATA.
-- ABILITÀ 2 — FUOCO DI SOPPRESSIONE: 30 DANNO; cono frontale 10 m / 45°; CD 12 s, avviato all’attivazione.
+- ABILITÀ 1 — FUOCO RAPIDO: BONUS temporaneo +40% ATK SPD corrente; durata 4 s; CD 10 s, avviato al termine dei 4 s di DURATA. Senza altri modificatori, ATK SPD passa da 400 a 560 = 5,6 ATTACCHI/s. Alla scadenza viene rimosso soltanto il BONUS temporaneo, preservando gli altri modificatori e BONUS acquisiti.
+- ABILITÀ 2 — FUOCO DI SOPPRESSIONE: raffica di 50 PROIETTILI FISICI in 3 s; 3 DANNO per PROIETTILE prima della DEF; RANGE 10 m. CONO frontale di ampiezza totale 50°, diviso in 5 SPICCHI da 10°, numerati da destra a sinistra. Ogni PROIETTILE è diretto lungo il CENTRO dello SPICCHIO corrente: −20°, −10°, 0°, +10°, +20° rispetto all’asse del CONO, nell’ordine da destra a sinistra. I PROIETTILI vengono sparati in successione, uno per lo SPICCHIO corrente, con sequenza 1-2-3-4-5-4-3-2-1-2-3-ecc., senza ripetere gli estremi e fino al 50° PROIETTILE. CD BASE 12 s, avviato all’attivazione. Sostituisce il precedente HITSCAN istantaneo a CONO da 30 DANNO.
 - PASSIVA 1: con HP <30%, ogni KILL cura 1% degli HP MASSIMI correnti di PG02; non ha effetto a HP ≥30%.
-- PASSIVA 2: ogni 15 KILL entra in RAGE per 2 s con +30% ATK.
+- PASSIVA 2: ogni 15 KILL entra in RAGE per 2 s con +30% ATK. Al CAMBIO AREA il conteggio delle KILL resta; RAGE termina se attiva, rimuovendo soltanto il BONUS ATK temporaneo.
 
 ### PG03 — Sniper Rifle
 
-- ATTACCO BASE: PROIETTILE BALISTICO non PERFORANTE di base; ATK 50, ATK SPD 70 = 0,7 ATTACCHI/s; RANGE interno 2000 = 20 m. Segue le REGOLE GENERALI DEI PROIETTILI.
-- ABILITÀ 1 — COLPO LASER: sostituisce COLPO PERFORANTE. Emette istantaneamente un RAGGIO verso il CURSORE; AREA 20 × 2 m (portata 20 m, larghezza 2 m); 50 DANNO una sola volta a ciascun MOB nell’AREA; CD BASE 10 s, avviato all’attivazione. Attraversa MURI e OSTACOLI: eccezione alla REGOLA DI BLOCCO.
-- ABILITÀ 2 — TRIPLO SPARO: 3 proiettili da 40 DANNO; cono totale 20 m / 30°; ogni proiettile copre 10°; sequenza SINISTRA → CENTRO → DESTRA; intervallo 0,3 s; CD BASE 15 s, avviato all’attivazione.
-- PASSIVA 1 — CALIBRO PERFORANTE: rende PERFORANTI i PROIETTILI dell’ATTACCO BASE con 2 PERFORAZIONI. Il 1° e il 2° MOB ricevono DANNO e vengono attraversati; il 3° riceve DANNO e arresta il PROIETTILE. DANNO e RANGE dell’ATTACCO BASE restano invariati. MURI/OSTACOLI e limite RANGE possono interrompere prima la traiettoria.
+- ATTACCO BASE: PROIETTILE BALISTICO non PERFORANTE di base; ATK 50, ATK SPD 60 = 0,6 ATTACCHI/s; RANGE interno 2000 = 20 m. Segue le REGOLE GENERALI DEI PROIETTILI.
+- ABILITÀ 1 — COLPO LASER: sostituisce COLPO PERFORANTE. Emette istantaneamente un RAGGIO verso il CURSORE; AREA 20 × 2 m (portata 20 m, larghezza 2 m); 35 DANNO una sola volta a ciascun MOB nell’AREA; CD BASE 18 s, avviato all’attivazione. Attraversa MURI e OSTACOLI: eccezione alla REGOLA DI BLOCCO.
+- ABILITÀ 2 — TRIPLO SPARO: 3 proiettili da 40 DANNO; cono totale 20 m / 30°; ogni proiettile copre 10°; sequenza SINISTRA → CENTRO → DESTRA; intervallo 0,5 s; CD BASE 10 s, avviato all’attivazione.
+- PASSIVA 1 — CALIBRO PERFORANTE: rende PERFORANTI i PROIETTILI dell’ATTACCO BASE con 2 PERFORAZIONI. Il 1° e il 2° MOB ricevono DANNO e vengono attraversati; il 3° riceve DANNO e arresta il PROIETTILE. La prima HIT infligge il 100% del danno originale del PROIETTILE, la seconda il 70% (riduzione del 30%), la terza il 40% (riduzione del 60%), prima della DEF di ciascun bersaglio. Le riduzioni sono riferite al danno originale, non concatenate. Con ATK 50: 50 / 35 / 20 DANNO prima della DEF. RANGE invariato. MURI/OSTACOLI e limite RANGE possono interrompere prima la traiettoria.
 - PASSIVA 2 — PUNTO DEBOLE: l’ATTACCO BASE applica un MARCHIO al MOB colpito; il MOB marchiato ha DEF −20%; la HIT successiva sul MOB marchiato rimuove il MARCHIO.
 
 ### PG04 — Grenade Launcher
 
 #### ATTACCO BASE
 
-- ATK 30; ATK SPD 75 = 0,75 ATTACCHI/s; RANGE interno 700 = 7 m.
-- HITSCAN + AREA IMPATTO: il punto d’impatto è determinato istantaneamente nella direzione di mira, entro RANGE 7 m, senza PROIETTILE FISICO in volo. Se il CURSORE è oltre 7 m, la destinazione è limitata a 7 m nella sua direzione.
+- ATK 25; ATK SPD 65 = 0,65 ATTACCHI/s; RANGE interno 700 = 7 m.
+- HITSCAN + AREA IMPATTO: il punto d’impatto è determinato al lancio nella direzione di mira, entro RANGE 7 m, senza PROIETTILE FISICO in volo. Se il CURSORE è oltre 7 m, la destinazione è limitata a 7 m nella sua direzione.
 - Si applica l’AREA CIRCOLARE nel punto d’impatto. Resta la regola specifica di determinazione della destinazione: solo un MURO può anticipare l’impatto; OSTACOLI e MOB non lo anticipano. Il precedente volo PARABOLICO dell’ATTACCO BASE è sostituito dall’HITSCAN; le ABILITÀ conservano le proprie regole.
-- AREA ESPLOSIONE CIRCOLARE, RAGGIO 1,5 m: 30 DANNO a ciascun MOB valido prima della DEF.
+- La HIT dell’ATTACCO BASE avviene 0,3 s dopo il lancio, nel punto d’impatto determinato al lancio. Il ritardo si applica anche agli ATTACCHI BASE potenziati da COLPO GROSSO; PIOGGIA DI GRANATE conserva la propria sequenza. PYROMANIA si attiva all’esplosione, con primo tick immediato all’attivazione dell’AREA INCENDIATA.
+- AREA ESPLOSIONE CIRCOLARE, RAGGIO 1,25 m: 25 DANNO a ciascun MOB valido prima della DEF.
 - MURI/OSTACOLI interrompono l’AREA secondo la regola dei 4 SPICCHI da 90° (sezione 10.3).
 
 #### ABILITÀ 1 — PIOGGIA DI GRANATE
 
-- Genera direttamente 10 ESPLOSIONI, senza PROIETTILI, in posizioni RANDOM nell’AREA EFFETTO CIRCOLARE di RAGGIO 7 m.
+- Genera direttamente 10 ESPLOSIONI, senza PROIETTILI, in posizioni RANDOM nell’AREA EFFETTO CIRCOLARE di RAGGIO 5 m.
 - Centro: posizione del CURSORE all’attivazione; nessun limite di distanza da PG04.
 - Sequenza CASUALE nell’arco complessivo di 3 s; CD BASE 12 s, avviato all’attivazione.
-- Eredita esclusivamente ATK e AREA ESPLOSIONE dell’ATTACCO BASE: ATK 30 e RAGGIO 1,5 m per esplosione. Non eredita traiettoria, RANGE o IMPATTO del PROIETTILE.
+- Eredita esclusivamente ATK e AREA ESPLOSIONE dell’ATTACCO BASE: ATK 25 e RAGGIO 1,25 m per esplosione. Non eredita traiettoria, RANGE o IMPATTO del PROIETTILE.
 - Le esplosioni possono sovrapporsi. Ogni esplosione applica indipendentemente il proprio DANNO; lo stesso MOB può ricevere HIT da più esplosioni.
 - Ogni AREA di esplosione segue la regola dei 4 SPICCHI da 90°, con eliminazione completa degli SPICCHI intercettati da MURI/OSTACOLI.
 
 #### ABILITÀ 2 — COLPO GROSSO
 
-- Potenzia i successivi 4 ATTACCHI BASE: +80% ATK (30 → 54) e +50% RAGGIO ESPLOSIONE (1,5 → 2,25 m).
+- Potenzia i successivi 4 ATTACCHI BASE: +80% ATK (25 → 45) e +50% RAGGIO ESPLOSIONE (1,25 → 1,875 m).
 - Modifica esclusivamente ATK e RAGGIO ESPLOSIONE. Le altre STATS e regole restano invariate, inclusa la geometria a 4 SPICCHI.
 - Nessuna DURATA massima: le cariche restano disponibili fino al consumo. Ogni ATTACCO effettuato consuma una carica, anche in caso di MISS.
 - CD BASE 10 s, avviato al consumo del 4° ATTACCO.
@@ -656,7 +657,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - Le AREE ESPLOSIONE diventano AREE INCENDIATE per 3 s, con 5 HP/s per AREA.
 - Si applica ad ATTACCO BASE, PIOGGIA DI GRANATE e COLPO GROSSO.
-- L’AREA INCENDIATA corrisponde all’AREA ESPLOSIONE: RAGGIO 1,5 m per ATTACCO BASE/PIOGGIA DI GRANATE; 2,25 m per COLPO GROSSO.
+- L’AREA INCENDIATA corrisponde all’AREA ESPLOSIONE: RAGGIO 1,25 m per ATTACCO BASE/PIOGGIA DI GRANATE; 1,875 m per COLPO GROSSO.
 - Le AREE INCENDIATE possono sovrapporsi e i loro DANNI si sommano.
 - MURI/OSTACOLI bloccano il DANNO secondo la regola dei 4 SPICCHI da 90°.
 
@@ -809,8 +810,8 @@ Tutte le 16 ABILITÀ usano i LAYER esistenti o verifiche logiche, senza nuovi TA
 | --- | --- | --- |
 | PG01 | PESTONE | AREA_EFFECT_MOB oppure verifica HITSCAN istantanea su AREA RETTANGOLARE frontale 3 m × 7 m (larghezza frontale 3 m, profondità 7 m) sui MOB; nessuna collisione fisica persistente. MURO/OSTACOLO bloccano secondo le regole dell’AREA. |
 | PG01 | BARRIERA | Layer OSTACOLO: blocca PG, MOB, PET, PROJECTILE_PG e PROJECTILE_MOB. |
-| PG02 | FUOCO RAPIDO | Modificatore logico temporaneo di ATK SPD; proiettili PROJECTILE_PG e collisioni invariate. |
-| PG02 | FUOCO DI SOPPRESSIONE | AREA_EFFECT_MOB oppure verifica HITSCAN istantanea a CONO sui MOB; nessuna collisione fisica persistente. MURO/OSTACOLO bloccano secondo le regole dell’AREA. |
+| PG02 | FUOCO RAPIDO | Modificatore logico temporaneo +40% ATK SPD corrente; proiettili PROJECTILE_PG e collisioni invariate. |
+| PG02 | FUOCO DI SOPPRESSIONE | Raffica di 50 PROIETTILI FISICI su PROJECTILE_PG in 3 s, 3 DANNO per PROIETTILE, RANGE 10 m. Distribuzione sequenziale sui CENTRI dei 5 SPICCHI da 10° del CONO di 50°, da destra a sinistra e ritorno, senza ripetere gli estremi. I PROIETTILI seguono le regole generali applicabili dei proiettili fisici; non usa una query HITSCAN a CONO né un collider AREA_EFFECT_MOB. |
 | PG03 | COLPO LASER | Verifica HITSCAN/AREA rettangolare 20 × 2 m sui MOB, tramite query logica o AREA_EFFECT_MOB; ignora MURO/OSTACOLO e non usa PROJECTILE_PG. |
 | PG03 | TRIPLO SPARO | I 3 colpi sono PROJECTILE_PG con le collisioni standard. |
 | PG04 | PIOGGIA DI GRANATE | Le 10 esplosioni sono AREA_EFFECT_MOB, senza proiettili fisici; validazione logica dei 4 SPICCHI contro MURO/OSTACOLO. |
@@ -834,7 +835,7 @@ Nessuna PASSIVA richiede nuovi TAG o LAYER. Le modifiche logiche mantengono laye
 | PG01 | PASSIVA 2 | Modificatore logico ATK; layer PG e collisioni invariati. |
 | PG02 | PASSIVA 1 | CURA logica al verificarsi delle condizioni di HP/KILL; nessun collider aggiuntivo. |
 | PG02 | PASSIVA 2 | Contatore logico delle KILL e stato RAGE; collisioni invariate. |
-| PG03 | CALIBRO PERFORANTE | Modifica logica dei PROJECTILE_PG per le 2 PERFORAZIONI; layer e collisioni standard invariati. |
+| PG03 | CALIBRO PERFORANTE | Modifica logica dei PROJECTILE_PG dell’ATTACCO BASE: 2 PERFORAZIONI e DANNO 100% / 70% / 40% sulle tre HIT; layer e collisioni standard invariati. |
 | PG03 | PUNTO DEBOLE | MARCHIO logico sul MOB; nessuna modifica di layer/collisioni. |
 | PG04 | SCORTA ESPLOSIVA | Modifica della capacità degli SLOT ITEM; nessuna conseguenza su layer/collisioni. |
 | PG04 | PYROMANIA | AREE INCENDIATE AREA_EFFECT_MOB generate dalle esplosioni; verifica logica degli SPICCHI contro MURO/OSTACOLO, senza collisione fisica dell’AREA. |
@@ -1643,7 +1644,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - CD REDUCTION minimo 10; CD FINALE arrotondato al decimo con arrotondamento matematico.
 - STAT CD REDUCTION arrotondata matematicamente all’intero più vicino: frazione <0,5 per difetto; ≥0,5 per eccesso.
 - DEF interna 100 = 0%; ogni ±1 punto interno = ±1 punto percentuale. BONUS PROF aggiunti alla DEF BASE; BONUS CHEST e BONUS STATS DI FINE AREA calcolati sul VALORE ATTUALE della STAT al momento dell’acquisizione, comprensivo degli UPGRADE permanenti del PROF e di tutti i precedenti BONUS STATS acquisiti durante la RUN, sia da CHEST sia da FINE AREA; PASSIVE sulle STATS CORRENTI.
-- Avvio CD PG01–PG08 completamente definito nelle schede della sezione 12: all’attivazione, salvo FUOCO RAPIDO e COLPI RESPINGENTI al termine dei rispettivi 3 s, COLPO GROSSO al consumo del 4° ATTACCO e FUOCO CURATIVO al consumo del 6° ATTACCO. Restano valide le regole di INIZIO RUN e CAMBIO AREA.
+- Avvio CD PG01–PG08 completamente definito nelle schede della sezione 12: all’attivazione, salvo FUOCO RAPIDO al termine dei suoi 4 s e COLPI RESPINGENTI al termine dei suoi 3 s, COLPO GROSSO al consumo del 4° ATTACCO e FUOCO CURATIVO al consumo del 6° ATTACCO. Restano valide le regole di INIZIO RUN e CAMBIO AREA.
 - DEF massima 90%, inclusa la DEF propria dello SCUDO; SCUDO mitiga prima del PLAYER, poi il residuo è mitigato dalla DEF del PLAYER. DANNO FINALE arrotondato all’intero più vicino.
 - EFFETTI PERSISTENTI: di default non si cumulano e rinnovano la DURATA; prevalgono le regole specifiche (sezione 10.6).
 - REGOLA GENERALE DANNI DA STATO — BRUCIATURA e VELENO: primo tick 1 s dopo applicazione/rinnovo, poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE; massimo 5 ISTANZE dello stesso STATO sullo stesso bersaglio. Ogni applicazione rinnova la DURATA completa, anche al CAP; oltre 5 ISTANZE il DANNO non aumenta. Le ISTANZE non hanno DURATE indipendenti (sezione 10.8).
@@ -1854,3 +1855,64 @@ I punti di bilanciamento, produzione artistica, prototipazione, multiplayer, sal
 ### REVISIONE — 12/09/2026 — CORREZIONE EDITORIALE DELLA NUMERAZIONE
 
 - Mantenuta ATTRIBUZIONE KILL come sezione 10.7; rinumerate REGOLA GENERALE DANNI DA STATO — BRUCIATURA E VELENO da 10.7 a 10.8 e LAYER E MATRICE DELLE COLLISIONI da 10.8 a 10.9. Aggiornati tutti e soli i riferimenti interni interessati. Nessuna modifica a valori, regole, testo di design o altre numerazioni.
+
+### REVISIONE — 12/09/2026 — PG02 ATK SPD BASE E FUOCO RAPIDO
+
+- Confermato ATK SPD BASE PG02 = 400, equivalente a 4 ATTACCHI/s, in sostituzione del precedente 150.
+- FUOCO RAPIDO applica un BONUS temporaneo +30% ATK SPD corrente, in sostituzione del precedente valore fisso 300. Senza altri modificatori: 400 × 1,30 = 520, equivalente a 5,2 ATTACCHI/s.
+- Invariati DURATA 3 s e CD BASE 10 s, avviato al termine della DURATA. Alla scadenza viene rimosso soltanto il BONUS temporaneo, preservando gli altri modificatori e BONUS acquisiti.
+- Aggiornate tabella STATS PG, scheda PG02 e classificazione tecnica di FUOCO RAPIDO. Nessuna modifica alle altre regole, ai valori degli altri PG o alle revisioni precedenti.
+
+### REVISIONE — 13/09/2026 — PG02 FUOCO RAPIDO +40% PER 4 s
+
+- FUOCO RAPIDO: BONUS temporaneo +40% ATK SPD corrente per 4 s. Questa revisione supera i precedenti +30% e DURATA 3 s riportati nelle note storiche.
+- ATK SPD BASE PG02 invariato a 400; senza altri modificatori, FUOCO RAPIDO porta ATK SPD a 560 = 5,6 ATTACCHI/s.
+- CD BASE invariato a 10 s, avviato al termine dei 4 s di DURATA. Alla scadenza viene rimosso soltanto il BONUS temporaneo, preservando gli altri modificatori e BONUS acquisiti.
+- Aggiornate scheda PG02, classificazione tecnica e regola consolidata di avvio CD. COLPI RESPINGENTI conserva DURATA 3 s; nessuna modifica alle altre meccaniche. Revisioni precedenti conservate come storico.
+
+### REVISIONE — 13/09/2026 — PG02 FUOCO DI SOPPRESSIONE A PROIETTILI FISICI
+
+- FUOCO DI SOPPRESSIONE sostituisce il precedente HITSCAN a CONO da 30 DANNO con una raffica di 50 PROIETTILI FISICI in 3 s, ciascuno da 3 DANNO prima della DEF.
+- Ampiezza totale del CONO 50°, divisa in 5 SPICCHI da 10°. Numerazione da destra a sinistra e sequenza di sparo 1-2-3-4-5-4-3-2-1-2-3-ecc., senza duplicare gli estremi, fino a 50 PROIETTILI complessivi.
+- Confermati RANGE 10 m e CD BASE 12 s, avviato all’attivazione. I valori intermedi discussi di 60 PROIETTILI e 2 DANNO per PROIETTILE sono superati.
+- Aggiornate scheda PG02 e classificazione tecnica su PROJECTILE_PG. Nessuna modifica a FUOCO RAPIDO, alle PASSIVE o agli altri PG; revisioni precedenti conservate come storico.
+
+### REVISIONE — 13/09/2026 — PG02 CENTRO SPICCHI E TEST PROTOTIPO OK
+
+- Conferma del proprietario: ogni PROIETTILE di FUOCO DI SOPPRESSIONE segue il CENTRO dello SPICCHIO corrente. Direzioni relative all’asse del CONO: −20°, −10°, 0°, +10°, +20°, poi ritorno senza ripetere gli estremi.
+- Invariati 50 PROIETTILI in 3 s, 3 DANNO per PROIETTILE prima della DEF, RANGE 10 m e CD BASE 12 s dall’attivazione. Aggiornate scheda PG02 e classificazione tecnica; nessuna modifica alle altre regole.
+- Il proprietario ha comunicato «test su PG02 esito OK» dopo l’aggiornamento del prototipo. Registrato l’esito positivo della prova utente; dettagli dei test automatici e limiti tecnici in Docs/PG02Prototype.md. La conferma riguarda il prototipo e non introduce ulteriori regole di gameplay.
+
+### REVISIONE — 13/09/2026 — PG03 CD ABILITÀ E INTERVALLO TRIPLO SPARO
+
+- COLPO LASER: CD BASE modificato da 10 s a 18 s, sempre avviato all’attivazione.
+- TRIPLO SPARO: CD BASE modificato da 15 s a 10 s, sempre avviato all’attivazione; intervallo tra i colpi modificato da 0,3 s a 0,5 s.
+- Modifiche confermate dal proprietario. Danni, numero di proiettili, geometria, RANGE, sequenza e tutte le altre regole restano invariati. Revisioni precedenti conservate come storico.
+
+### REVISIONE — 13/09/2026 — PG03 MOVE SPD 110
+
+- MOVE SPD BASE di PG03 modificato da 100 a 110 su richiesta del proprietario. Aggiornati tabella STATS e asset PG03 nel repository; tutte le altre STATS e regole restano invariate.
+
+### REVISIONE — 13/09/2026 — PG03 CALIBRO PERFORANTE E ATK SPD 60
+
+- ATK SPD BASE PG03 da 70 a 60: 0,6 ATTACCHI/s, intervallo 100/60 s.
+- CALIBRO PERFORANTE: prima HIT al 100%, seconda con DANNO ridotto del 30% e terza del 60% rispetto al danno originale del PROIETTILE, prima della DEF. Con ATK 50: 50 / 35 / 20. Il conteggio delle HIT riparte per ogni PROIETTILE; non si estende alle ABILITÀ.
+- Invariati 2 PERFORAZIONI, arresto sul terzo MOB, RANGE, blocco da MURI/OSTACOLI e tutte le altre regole. Revisioni precedenti conservate come storico.
+
+### REVISIONE — 13/09/2026 — COLPO LASER DANNO 35
+
+- DANNO di COLPO LASER ridotto da 50 a 35 prima della DEF, su richiesta del proprietario. Invariati AREA 20 × 2 m, una HIT per MOB, attraversamento di MURI/OSTACOLI e CD BASE 18 s dall’attivazione.
+
+### REVISIONE — 13/09/2026 — PG04 ATK, ATK SPD E PIOGGIA DI GRANATE
+
+- ATK BASE PG04 da 30 a 25; ATK SPD da 75 a 70 (0,7 ATTACCHI/s). COLPO GROSSO +80% porta ATK base 25 a 45.
+- RAGGIO dell’AREA EFFETTO di PIOGGIA DI GRANATE da 7 m a 5 m. RAGGIO delle singole esplosioni invariato a 1,5 m; RANGE dell’ATTACCO BASE invariato a 7 m.
+
+### REVISIONE — 13/09/2026 — PG04 ATK SPD 65 E RAGGIO ATTACCO BASE 1,25 m
+
+- ATK SPD PG04 da 70 a 65 (0,65 ATTACCHI/s); RAGGIO ATTACCO BASE da 1,5 m a 1,25 m.
+- Per ereditarietà, le singole esplosioni di PIOGGIA DI GRANATE hanno RAGGIO 1,25 m; COLPO GROSSO applica +50% e raggiunge 1,875 m. PYROMANIA segue le rispettive geometrie. AREA EFFETTO di PIOGGIA DI GRANATE invariata a RAGGIO 5 m.
+
+### REVISIONE — 13/09/2026 — PG04 DELAY ATTACCO BASE
+
+- Inserito delay di 0,3 s tra lancio dell’ATTACCO BASE e HIT, su richiesta del proprietario. Nessun proiettile fisico introdotto; cadenza e consumo delle cariche restano legati al lancio.

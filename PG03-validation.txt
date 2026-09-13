@@ -1,0 +1,308 @@
+PASS | Unity 6000.3.16f1 | checks=306 | warnings=877
+PASS Only PG03 is instantiated at test startup
+PASS Invalid PG03 ability rejected
+PASS Invalid PG03 passive rejected
+PASS Valid PG03 combination ColpoLaser/CalibroPerforante
+PASS PG03 runtime only, no PG01/PG02 runtime
+PASS PG03 HP 80 (80/80)
+PASS PG03 ATK 50 (50/50)
+PASS PG03 DEF -10 percent (90/90)
+PASS PG03 MOVE SPD 110 (110/110)
+PASS PG03 moves at 2.2 m/s (2,2/2,2)
+PASS PG03 ATK SPD 70 (70/70)
+PASS PG03 range 20m (20/20)
+PASS Fresh RUN begins in full cooldown without active ability
+PASS Full initial CD (18/18)
+PASS Negative DEF increases incoming 10 damage to 11 (69/69)
+PASS Current RUN preserves selected ability/passive snapshots
+PASS Same-frame base shot blocked by cadence
+PASS Base physical speed 20m/s (20/20)
+PASS Base attack has real travel time (500/500)
+PASS Base projectile penetration target 1 (450/450)
+PASS Base projectile penetration target 2 (450/450)
+PASS Base projectile penetration target 3 (450/450)
+PASS Base projectile penetration target 4 (500/500)
+PASS Base projectile ignores allied PG (500/500)
+PASS Base attack stopped by MURO (500/500)
+PASS Base attack stopped by OSTACOLO (500/500)
+PASS Base projectile expires at range 20m (500/500)
+PASS Persistent ATK bonus 5 percent (52,5/52,5)
+PASS Laser activation with rotated rectangle
+PASS Laser exact rectangle boundary 0 (450/450)
+PASS Laser exact rectangle boundary 1 (450/450)
+PASS Laser exact rectangle boundary 2 (450/450)
+PASS Laser exact rectangle boundary 3 (500/500)
+PASS Laser exact rectangle boundary 4 (500/500)
+PASS Laser exact rectangle boundary 5 (500/500)
+PASS Laser ignores PG ally (500/500)
+PASS Laser 18s base scaled by CD REDUCTION 10 (1,8/1,8)
+PASS Instant laser cannot repeat during CD
+PASS Laser uses no physical projectile
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser damage is applied once (450/450)
+PASS Laser can consume an existing MARCHIO
+PASS Laser fixed 50 after marked DEF 95 rounds 52.5 to 53 (447/447)
+PASS Laser consumes MARCHIO after damage
+PASS Laser mark consumption preserves DEF (115/115)
+PASS Activate PG03 ability before AREA transition
+PASS BONUS freezes PG03 cooldown (1,793/1,793)
+PASS BONUS freezes pending triple shots (0/0)
+PASS AREA active restarts cooldown; inactive preserves exact residue (1,793/1,793)
+PASS AREA cancels pending shots
+PASS AREA retains PG03 and selected ability/passive instances
+PASS AREA preserves acquired bonus (52,5/52,5)
+PASS AREA removes old physical projectiles
+PASS Available ability remains available on AREA change (0/0)
+PASS Activate before DOWN and RUN reset
+PASS DOWN prevents PG03 ability and base attack
+PASS RUN reset removes previous bonuses (50/50)
+PASS RUN reset restores full PG03 HP (80/80)
+PASS RUN reset clears pending shots
+PASS RUN reset removes in-flight projectiles
+PASS New RUN acquires PG03 configuration
+PASS Valid PG03 combination ColpoLaser/PuntoDebole
+PASS PG03 runtime only, no PG01/PG02 runtime
+PASS PG03 HP 80 (80/80)
+PASS PG03 ATK 50 (50/50)
+PASS PG03 DEF -10 percent (90/90)
+PASS PG03 MOVE SPD 110 (110/110)
+PASS PG03 moves at 2.2 m/s (2,2/2,2)
+PASS PG03 ATK SPD 70 (70/70)
+PASS PG03 range 20m (20/20)
+PASS Fresh RUN begins in full cooldown without active ability
+PASS Full initial CD (18/18)
+PASS Negative DEF increases incoming 10 damage to 11 (69/69)
+PASS Current RUN preserves selected ability/passive snapshots
+PASS Same-frame base shot blocked by cadence
+PASS Base physical speed 20m/s (20/20)
+PASS Base attack has real travel time (500/500)
+PASS Base projectile penetration target 1 (450/450)
+PASS Base projectile penetration target 2 (500/500)
+PASS Base projectile penetration target 3 (500/500)
+PASS Base projectile penetration target 4 (500/500)
+PASS Base projectile ignores allied PG (500/500)
+PASS First base HIT applies MARCHIO
+PASS MARCHIO preserves persistent DEF (100/100)
+PASS MARCHIO applies -20 DEF points (80/80)
+PASS Actual base attack interval 100/70 (1,431/1,429)
+PASS Second base HIT uses reduced DEF: damage 60 (390/390)
+PASS Second HIT consumes without reapplying MARCHIO
+PASS DEF restored after second HIT (100/100)
+PASS Third HIT uses normal DEF and reapplies MARCHIO (340/340)
+PASS Persistent DEF change while marked remains independent (95/95)
+PASS Next non-base HIT uses marked DEF: 42 damage (298/298)
+PASS Consumption preserves changed persistent DEF (115/115)
+PASS Any next HIT consumes MARCHIO
+PASS Base attack stopped by MURO (500/500)
+PASS Base attack stopped by OSTACOLO (500/500)
+PASS Base projectile expires at range 20m (500/500)
+PASS Persistent ATK bonus 5 percent (52,5/52,5)
+PASS Laser activation with rotated rectangle
+PASS Laser exact rectangle boundary 0 (450/450)
+PASS Laser exact rectangle boundary 1 (450/450)
+PASS Laser exact rectangle boundary 2 (450/450)
+PASS Laser exact rectangle boundary 3 (500/500)
+PASS Laser exact rectangle boundary 4 (500/500)
+PASS Laser exact rectangle boundary 5 (500/500)
+PASS Laser ignores PG ally (500/500)
+PASS Laser 18s base scaled by CD REDUCTION 10 (1,8/1,8)
+PASS Instant laser cannot repeat during CD
+PASS Laser uses no physical projectile
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser never applies PUNTO DEBOLE
+PASS Laser damage is applied once (450/450)
+PASS Laser can consume an existing MARCHIO
+PASS Laser fixed 50 after marked DEF 95 rounds 52.5 to 53 (447/447)
+PASS Laser consumes MARCHIO after damage
+PASS Laser mark consumption preserves DEF (115/115)
+PASS Activate PG03 ability before AREA transition
+PASS BONUS freezes PG03 cooldown (1,794/1,794)
+PASS BONUS freezes pending triple shots (0/0)
+PASS AREA active restarts cooldown; inactive preserves exact residue (1,794/1,794)
+PASS AREA cancels pending shots
+PASS AREA retains PG03 and selected ability/passive instances
+PASS AREA preserves acquired bonus (52,5/52,5)
+PASS AREA removes old physical projectiles
+PASS Available ability remains available on AREA change (0/0)
+PASS Activate before DOWN and RUN reset
+PASS DOWN prevents PG03 ability and base attack
+PASS RUN reset removes previous bonuses (50/50)
+PASS RUN reset restores full PG03 HP (80/80)
+PASS RUN reset clears pending shots
+PASS RUN reset removes in-flight projectiles
+PASS New RUN acquires PG03 configuration
+PASS Valid PG03 combination TriploSparo/CalibroPerforante
+PASS PG03 runtime only, no PG01/PG02 runtime
+PASS PG03 HP 80 (80/80)
+PASS PG03 ATK 50 (50/50)
+PASS PG03 DEF -10 percent (90/90)
+PASS PG03 MOVE SPD 110 (110/110)
+PASS PG03 moves at 2.2 m/s (2,2/2,2)
+PASS PG03 ATK SPD 70 (70/70)
+PASS PG03 range 20m (20/20)
+PASS Fresh RUN begins in full cooldown without active ability
+PASS Full initial CD (10/10)
+PASS Negative DEF increases incoming 10 damage to 11 (69/69)
+PASS Current RUN preserves selected ability/passive snapshots
+PASS Same-frame base shot blocked by cadence
+PASS Base physical speed 20m/s (20/20)
+PASS Base attack has real travel time (500/500)
+PASS Base projectile penetration target 1 (450/450)
+PASS Base projectile penetration target 2 (450/450)
+PASS Base projectile penetration target 3 (450/450)
+PASS Base projectile penetration target 4 (500/500)
+PASS Base projectile ignores allied PG (500/500)
+PASS Base attack stopped by MURO (500/500)
+PASS Base attack stopped by OSTACOLO (500/500)
+PASS Base projectile expires at range 20m (500/500)
+PASS Persistent ATK bonus 5 percent (52,5/52,5)
+PASS Triple sector centre 0 (0/0)
+PASS Triple projectile speed (20/20)
+PASS Triple spawns at muzzle (0/0)
+PASS Triple activation
+PASS Triple 10s base scaled by CD REDUCTION 10 (1/1)
+PASS Active triple cannot overlap
+PASS Triple projectiles have travel time (500/500)
+PASS Pause freezes triple sequence (1/1)
+PASS Pause freezes triple cooldown (1/1)
+PASS Triple sector centre 1 (0/0)
+PASS Triple projectile speed (20/20)
+PASS Triple spawns at muzzle (0/0)
+PASS Triple sector centre 2 (0/0)
+PASS Triple projectile speed (20/20)
+PASS Triple spawns at muzzle (0/0)
+PASS Exactly three shots (3/3)
+PASS Second shot after 0.5s (0,502/0,5)
+PASS Third shot after 1s (1,002/1)
+PASS Triple fixed 40 damage despite ATK bonus (460/460)
+PASS CALIBRO PERFORANTE does not extend to abilities (500/500)
+PASS Triple never applies PUNTO DEBOLE
+PASS Triple fixed 40 damage despite ATK bonus (460/460)
+PASS CALIBRO PERFORANTE does not extend to abilities (500/500)
+PASS Triple never applies PUNTO DEBOLE
+PASS Triple fixed 40 damage despite ATK bonus (460/460)
+PASS CALIBRO PERFORANTE does not extend to abilities (500/500)
+PASS Triple never applies PUNTO DEBOLE
+PASS Triple reactivation after completed duration/CD
+PASS MURO blocks triple projectiles (500/500)
+PASS Triple can consume an existing MARCHIO
+PASS Triple fixed 40 against marked DEF 80 deals 48 (452/452)
+PASS Triple consumes MARCHIO without reapplying
+PASS Triple mark consumption restores DEF (100/100)
+PASS Activate PG03 ability before AREA transition
+PASS Triple burst active at BONUS entry
+PASS BONUS freezes PG03 cooldown (0,996/0,996)
+PASS BONUS freezes pending triple shots (1/1)
+PASS AREA active restarts cooldown; inactive preserves exact residue (1/1)
+PASS AREA cancels pending shots
+PASS AREA retains PG03 and selected ability/passive instances
+PASS AREA preserves acquired bonus (52,5/52,5)
+PASS AREA removes old physical projectiles
+PASS Available ability remains available on AREA change (0/0)
+PASS Activate before DOWN and RUN reset
+PASS RUN reset starts with pending triple shots
+PASS DOWN prevents PG03 ability and base attack
+PASS RUN reset removes previous bonuses (50/50)
+PASS RUN reset restores full PG03 HP (80/80)
+PASS RUN reset clears pending shots
+PASS RUN reset removes in-flight projectiles
+PASS New RUN acquires PG03 configuration
+PASS Valid PG03 combination TriploSparo/PuntoDebole
+PASS PG03 runtime only, no PG01/PG02 runtime
+PASS PG03 HP 80 (80/80)
+PASS PG03 ATK 50 (50/50)
+PASS PG03 DEF -10 percent (90/90)
+PASS PG03 MOVE SPD 110 (110/110)
+PASS PG03 moves at 2.2 m/s (2,2/2,2)
+PASS PG03 ATK SPD 70 (70/70)
+PASS PG03 range 20m (20/20)
+PASS Fresh RUN begins in full cooldown without active ability
+PASS Full initial CD (10/10)
+PASS Negative DEF increases incoming 10 damage to 11 (69/69)
+PASS Current RUN preserves selected ability/passive snapshots
+PASS Same-frame base shot blocked by cadence
+PASS Base physical speed 20m/s (20/20)
+PASS Base attack has real travel time (500/500)
+PASS Base projectile penetration target 1 (450/450)
+PASS Base projectile penetration target 2 (500/500)
+PASS Base projectile penetration target 3 (500/500)
+PASS Base projectile penetration target 4 (500/500)
+PASS Base projectile ignores allied PG (500/500)
+PASS First base HIT applies MARCHIO
+PASS MARCHIO preserves persistent DEF (100/100)
+PASS MARCHIO applies -20 DEF points (80/80)
+PASS Actual base attack interval 100/70 (1,429/1,429)
+PASS Second base HIT uses reduced DEF: damage 60 (390/390)
+PASS Second HIT consumes without reapplying MARCHIO
+PASS DEF restored after second HIT (100/100)
+PASS Third HIT uses normal DEF and reapplies MARCHIO (340/340)
+PASS Persistent DEF change while marked remains independent (95/95)
+PASS Next non-base HIT uses marked DEF: 42 damage (298/298)
+PASS Consumption preserves changed persistent DEF (115/115)
+PASS Any next HIT consumes MARCHIO
+PASS Base attack stopped by MURO (500/500)
+PASS Base attack stopped by OSTACOLO (500/500)
+PASS Base projectile expires at range 20m (500/500)
+PASS Persistent ATK bonus 5 percent (52,5/52,5)
+PASS Triple sector centre 0 (0/0)
+PASS Triple projectile speed (20/20)
+PASS Triple spawns at muzzle (0/0)
+PASS Triple activation
+PASS Triple 10s base scaled by CD REDUCTION 10 (1/1)
+PASS Active triple cannot overlap
+PASS Triple projectiles have travel time (500/500)
+PASS Pause freezes triple sequence (1/1)
+PASS Pause freezes triple cooldown (1/1)
+PASS Triple sector centre 1 (0/0)
+PASS Triple projectile speed (20/20)
+PASS Triple spawns at muzzle (0/0)
+PASS Triple sector centre 2 (0/0)
+PASS Triple projectile speed (20/20)
+PASS Triple spawns at muzzle (0/0)
+PASS Exactly three shots (3/3)
+PASS Second shot after 0.5s (0,501/0,5)
+PASS Third shot after 1s (1,003/1)
+PASS Triple fixed 40 damage despite ATK bonus (460/460)
+PASS CALIBRO PERFORANTE does not extend to abilities (500/500)
+PASS Triple never applies PUNTO DEBOLE
+PASS Triple fixed 40 damage despite ATK bonus (460/460)
+PASS CALIBRO PERFORANTE does not extend to abilities (500/500)
+PASS Triple never applies PUNTO DEBOLE
+PASS Triple fixed 40 damage despite ATK bonus (460/460)
+PASS CALIBRO PERFORANTE does not extend to abilities (500/500)
+PASS Triple never applies PUNTO DEBOLE
+PASS Triple reactivation after completed duration/CD
+PASS MURO blocks triple projectiles (500/500)
+PASS Triple can consume an existing MARCHIO
+PASS Triple fixed 40 against marked DEF 80 deals 48 (452/452)
+PASS Triple consumes MARCHIO without reapplying
+PASS Triple mark consumption restores DEF (100/100)
+PASS Activate PG03 ability before AREA transition
+PASS Triple burst active at BONUS entry
+PASS BONUS freezes PG03 cooldown (0,996/0,996)
+PASS BONUS freezes pending triple shots (1/1)
+PASS AREA active restarts cooldown; inactive preserves exact residue (1/1)
+PASS AREA cancels pending shots
+PASS AREA retains PG03 and selected ability/passive instances
+PASS AREA preserves acquired bonus (52,5/52,5)
+PASS AREA removes old physical projectiles
+PASS Available ability remains available on AREA change (0/0)
+PASS Activate before DOWN and RUN reset
+PASS RUN reset starts with pending triple shots
+PASS DOWN prevents PG03 ability and base attack
+PASS RUN reset removes previous bonuses (50/50)
+PASS RUN reset restores full PG03 HP (80/80)
+PASS RUN reset clears pending shots
+PASS RUN reset removes in-flight projectiles
+PASS New RUN acquires PG03 configuration
+PASS All tests and resets used PG03 only
+Engine Play Mode tests completed. PG03 only, four combinations: actual shots, abilities, passives and AREA transitions. Input feel/balancing are not tested.

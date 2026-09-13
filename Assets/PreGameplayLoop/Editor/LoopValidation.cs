@@ -20,6 +20,7 @@ namespace RogZombie.PreGameplayLoop.Editor
         private static float hpAfterBonus, atkAfterBonus, pausedTime;
         private static Vector3 pausedPosition;
         private static LoopSession loop;
+        private static bool configured;
 
         static LoopValidation()
         {
@@ -52,7 +53,7 @@ namespace RogZombie.PreGameplayLoop.Editor
         private static void OnPlayState(PlayModeStateChange state)
         {
             if (state == PlayModeStateChange.EnteredPlayMode && SessionState.GetBool(Key + "Running", false))
-            { step = 0; assertions = 0; started = EditorApplication.timeSinceStartup; loop = null; }
+            { step = 0; assertions = 0; started = EditorApplication.timeSinceStartup; loop = null; configured = false; }
             if (state == PlayModeStateChange.EnteredEditMode)
             {
                 if (SessionState.GetBool(Key + "Running", false)) Finish(false, "Test interrotto prima del completamento.");
@@ -92,6 +93,15 @@ namespace RogZombie.PreGameplayLoop.Editor
                 if (EditorApplication.timeSinceStartup - started > 180) throw new TimeoutException("Engine smoke test timeout, step=" + step);
                 if (loop == null) loop = UnityEngine.Object.FindFirstObjectByType<LoopSession>();
                 if (loop == null) return;
+                if (!configured && loop.State == LoopState.Combat)
+                {
+                    configured = true;
+                    var definition = UnityEngine.Object.Instantiate(loop.Definition);
+                    definition.SelectedPlayer = LoopPlayer.PG01;
+                    loop.Definition = definition;
+                    loop.RestartTest();
+                    return;
+                }
                 foreach (var brain in UnityEngine.Object.FindObjectsByType<MobBrain>(FindObjectsSortMode.None)) brain.enabled = false;
                 if (loop.State == LoopState.Error) throw new InvalidOperationException(loop.Failure);
                 switch (step)

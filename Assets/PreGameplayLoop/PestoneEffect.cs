@@ -16,7 +16,7 @@ namespace RogZombie.PreGameplayLoop
 
         // Instant MOB query, with the same per-target obstruction rule as the PG01 cone.
         // GDD 10.3 applies sector removal only to explicitly listed effects, not PESTONE.
-        public static int Cast(Vector2 origin, Vector2 direction, PG01AbilityCatalog data)
+        public static int Cast(Vector2 origin, Vector2 direction, PG01AbilityCatalog data, Combatant source = null)
         {
             if (direction.sqrMagnitude == 0) return 0;
             direction.Normalize();
@@ -28,7 +28,7 @@ namespace RogZombie.PreGameplayLoop
                 Vector2 position = target.transform.position;
                 if (!Contains(position - origin, direction, data.PestoneDepth, data.PestoneWidth) ||
                     !AttackGeometry.ClearLine(origin, position)) continue;
-                if (!target.Hit(data.PestoneDamage, roundFinalDamage: true)) continue;
+                if (!target.Hit(data.PestoneDamage, roundFinalDamage: true, source: source)) continue;
                 target.ApplyPestoneSlow(data.PestoneSlowPercent, data.PestoneSlowDuration);
                 hits++;
             }

@@ -1,0 +1,51 @@
+FAIL | Unity 6000.3.16f1 | checks=45 | warnings=77
+PASS Invalid PG02 ability rejected
+PASS Invalid PG02 passive rejected
+PASS Valid combination FuocoRapido / Passiva1
+PASS Exactly PG02 runtime, no PG01 ability or passive attached
+PASS PG02 HP 100 (100/100)
+PASS PG02 ATK 10 (10/10)
+PASS PG02 internal DEF 100 = zero mitigation (100/100)
+PASS PG02 MOVE SPD 100 = 2m/s (2/2)
+PASS PG02 base ATK SPD 400 (400/400)
+PASS PG02 RANGE 10m (10/10)
+PASS Initial CD REDUCTION 100 (100/100)
+PASS Ability begins RUN unavailable
+PASS Full initial ability CD
+PASS New RUN has no personal KILLs (0/0)
+PASS Inspector PG change does not alter current RUN
+PASS Ability/passive are RUN snapshots
+PASS Suppression credits each actual MOB death exactly once (1/1)
+PASS Duplicate death/HIT gives no extra KILL (1/1)
+PASS Heal threshold at 31 (31/31)
+PASS Suppression credits each actual MOB death exactly once (2/2)
+PASS Duplicate death/HIT gives no extra KILL (2/2)
+PASS Heal threshold at 30 (30/30)
+PASS Suppression credits each actual MOB death exactly once (3/3)
+PASS Duplicate death/HIT gives no extra KILL (3/3)
+PASS Heal threshold at 29 (30/30)
+PASS Suppression credits each actual MOB death exactly once (6/6)
+PASS Duplicate death/HIT gives no extra KILL (6/6)
+PASS Multi-KILL reevaluates threshold after each 1 percent max HP heal (30,5/30,5)
+PASS Suppression credits each actual MOB death exactly once (8/8)
+PASS Duplicate death/HIT gives no extra KILL (8/8)
+PASS Modified max HP: heal 2, next KILL at 30 percent does not heal (60/60)
+PASS Test deaths and sourceless damage give no personal credit (8/8)
+PASS Another PG source gives no credit to PG02 (8/8)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2502
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2516
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2505
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2513
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2501
+PASS Same-frame repeat shot blocked
+PASS Actual projectile speed 20m/s (20/20)
+System.InvalidOperationException: Actual projectile HIT damage 10 (100/90)
+  at RogZombie.PreGameplayLoop.Editor.PG02Validation.Check (System.Boolean condition, System.String message) [0x0001f] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\PG02Validation.cs:98
+  at RogZombie.PreGameplayLoop.Editor.PG02Validation.Near (System.Single actual, System.Single expected, System.String message, System.Single tolerance) [0x00000] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\PG02Validation.cs:101
+  at RogZombie.PreGameplayLoop.Editor.PG02Validation+<Checks>d__21.MoveNext () [0x00c13] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\PG02Validation.cs:292
+  at RogZombie.PreGameplayLoop.Editor.PG02Validation.Tick () [0x00127] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\PG02Validation.cs:89

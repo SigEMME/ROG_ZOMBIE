@@ -15,9 +15,9 @@ MonoBehaviour:
   playerId: PG04
   baseStats:
     hp: 100
-    atk: 30
+    atk: 25
     defPercent: 0
     moveSpeed: 100
-    attackSpeed: 75
+    attackSpeed: 65
     cdReduction: 100
-    range: 600
+    range: 700

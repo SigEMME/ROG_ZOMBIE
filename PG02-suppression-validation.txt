@@ -1,0 +1,822 @@
+PASS | Unity 6000.3.16f1 | checks=820 | warnings=929
+PASS Invalid PG02 ability rejected
+PASS Invalid PG02 passive rejected
+PASS Valid combination FuocoRapido / Passiva1
+PASS Exactly PG02 runtime, no PG01 ability or passive attached
+PASS PG02 HP 100 (100/100)
+PASS PG02 ATK 10 (10/10)
+PASS PG02 internal DEF 100 = zero mitigation (100/100)
+PASS PG02 MOVE SPD 100 = 2m/s (2/2)
+PASS PG02 base ATK SPD 400 (400/400)
+PASS PG02 RANGE 10m (10/10)
+PASS Initial CD REDUCTION 100 (100/100)
+PASS Ability begins RUN unavailable
+PASS Full initial ability CD
+PASS New RUN has no personal KILLs (0/0)
+PASS Inspector PG change does not alter current RUN
+PASS Ability/passive are RUN snapshots
+PASS Sourced lethal HIT credits each MOB death exactly once (1/1)
+PASS Duplicate death/HIT gives no extra KILL (1/1)
+PASS Heal threshold at 31 (31/31)
+PASS Sourced lethal HIT credits each MOB death exactly once (2/2)
+PASS Duplicate death/HIT gives no extra KILL (2/2)
+PASS Heal threshold at 30 (30/30)
+PASS Sourced lethal HIT credits each MOB death exactly once (3/3)
+PASS Duplicate death/HIT gives no extra KILL (3/3)
+PASS Heal threshold at 29 (30/30)
+PASS Sourced lethal HIT credits each MOB death exactly once (6/6)
+PASS Duplicate death/HIT gives no extra KILL (6/6)
+PASS Multi-KILL reevaluates threshold after each 1 percent max HP heal (30,5/30,5)
+PASS Sourced lethal HIT credits each MOB death exactly once (8/8)
+PASS Duplicate death/HIT gives no extra KILL (8/8)
+PASS Modified max HP: heal 2, next KILL at 30 percent does not heal (60/60)
+PASS Test deaths and sourceless damage give no personal credit (8/8)
+PASS Another PG source gives no credit to PG02 (8/8)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2529
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2515
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2523
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2507
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,25
+PASS Same-frame repeat shot blocked
+PASS Actual projectile speed 20m/s (20/20)
+PASS Actual projectile HIT damage 10 (90/90)
+PASS Non-piercing projectile stops at first MOB (100/100)
+PASS Projectile ignores PG ally (100/100)
+PASS MURO stops projectile (100/100)
+PASS OSTACOLO stops projectile (100/100)
+PASS Projectile remains in flight before 10m
+PASS Actual travelled distance follows 20m/s (4,017/4,017)
+PASS Projectile expires at 10m / 0.5s flight
+PASS Beyond-range MOB untouched (100/100)
+PASS Projectile retains PG02 identity through lethal HIT (9/9)
+PASS Projectile corpse gives no duplicate credit (9/9)
+PASS FUOCO RAPIDO activation
+PASS Rapid duration starts at 4s (4/4)
+PASS Rapid CD does not start at activation (0/0)
+PASS 400 x 1.40 = 560 (560/560)
+PASS Rapid cannot stack/retrigger while active
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1802
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,181
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1804
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1797
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1815
+PASS Same-frame repeat shot blocked
+PASS ATK SPD bonus uses persistent 400 (420/420)
+PASS Rapid retains 40 percent on modified current speed (588/588)
+PASS Pause freezes Rapid duration (3,092/3,092)
+PASS Pause does not begin Rapid CD (0/0)
+PASS Rapid lasts 4 simulation seconds (4,004/4)
+PASS Rapid expiry removes only temporary bonus (420/420)
+PASS Rapid CD starts on expiry (10/10)
+PASS Reuse ability after completed CD
+PASS Selected ability is still active at AREA exit
+PASS BONUS freezes CD (0/0)
+PASS BONUS freezes ability duration (3,596/3,596)
+PASS BONUS freezes RAGE (0/0)
+PASS AREA active ability restarts full reduced CD; inactive retains residue (1/1)
+PASS AREA ends RAGE immediately (0/0)
+PASS AREA cancels remaining burst/duration
+PASS AREA preserves selected runtime instances
+PASS AREA preserves personal KILL count; test deaths give no credit (9/9)
+PASS AREA ends temporary ATK but preserves real bonus (10,5/10,5)
+PASS AREA removes Rapid modifier (400/400)
+PASS Available ability stays available on AREA change (0/0)
+PASS Valid combination FuocoRapido / Passiva2
+PASS Exactly PG02 runtime, no PG01 ability or passive attached
+PASS PG02 HP 100 (100/100)
+PASS PG02 ATK 10 (10/10)
+PASS PG02 internal DEF 100 = zero mitigation (100/100)
+PASS PG02 MOVE SPD 100 = 2m/s (2/2)
+PASS PG02 base ATK SPD 400 (400/400)
+PASS PG02 RANGE 10m (10/10)
+PASS Initial CD REDUCTION 100 (100/100)
+PASS Ability begins RUN unavailable
+PASS Full initial ability CD
+PASS New RUN has no personal KILLs (0/0)
+PASS Inspector PG change does not alter current RUN
+PASS Ability/passive are RUN snapshots
+PASS Sourced lethal HIT credits each MOB death exactly once (14/14)
+PASS Duplicate death/HIT gives no extra KILL (14/14)
+PASS 14 KILLs do not trigger RAGE
+PASS Sourced lethal HIT credits each MOB death exactly once (15/15)
+PASS Duplicate death/HIT gives no extra KILL (15/15)
+PASS 15 personal KILL threshold (15/15)
+PASS RAGE starts at 2 seconds (2/2)
+PASS RAGE +30 percent ATK (13/13)
+PASS RAGE does not contaminate persistent ATK bonus (10,5/10,5)
+PASS RAGE applies to current ATK after bonus (13,65/13,65)
+PASS Sourced lethal HIT credits each MOB death exactly once (30/30)
+PASS Duplicate death/HIT gives no extra KILL (30/30)
+PASS 30 KILL threshold (30/30)
+PASS New RAGE refreshes full duration (2/2)
+PASS RAGE refresh never stacks (13,65/13,65)
+PASS Pause freezes RAGE (2/2)
+PASS RAGE expires after two seconds (0/0)
+PASS RAGE expiry preserves acquired bonus (10,5/10,5)
+PASS Test deaths and sourceless damage give no personal credit (30/30)
+PASS Another PG source gives no credit to PG02 (30/30)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2509
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2549
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2518
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2504
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2501
+PASS Same-frame repeat shot blocked
+PASS Actual projectile speed 20m/s (20/20)
+PASS Actual projectile HIT damage 10 (90/90)
+PASS Non-piercing projectile stops at first MOB (100/100)
+PASS Projectile ignores PG ally (100/100)
+PASS MURO stops projectile (100/100)
+PASS OSTACOLO stops projectile (100/100)
+PASS Projectile remains in flight before 10m
+PASS Actual travelled distance follows 20m/s (4,084/4,084)
+PASS Projectile expires at 10m / 0.5s flight
+PASS Beyond-range MOB untouched (100/100)
+PASS Projectile retains PG02 identity through lethal HIT (31/31)
+PASS Projectile corpse gives no duplicate credit (31/31)
+PASS FUOCO RAPIDO activation
+PASS Rapid duration starts at 4s (4/4)
+PASS Rapid CD does not start at activation (0/0)
+PASS 400 x 1.40 = 560 (560/560)
+PASS Rapid cannot stack/retrigger while active
+PASS Sourced lethal HIT credits each MOB death exactly once (45/45)
+PASS Duplicate death/HIT gives no extra KILL (45/45)
+PASS RAGE and Rapid coexist: ATK 13 (13/13)
+PASS RAGE and Rapid coexist: ATK SPD 560 (560/560)
+PASS RAGE changes actual projectile damage to 13 (87/87)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1804
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,18
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1815
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1798
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 5,6/s: interval=0,1789
+PASS Same-frame repeat shot blocked
+PASS ATK SPD bonus uses persistent 400 (420/420)
+PASS Rapid retains 40 percent on modified current speed (588/588)
+PASS Pause freezes Rapid duration (2,887/2,887)
+PASS Pause does not begin Rapid CD (0/0)
+PASS Rapid lasts 4 simulation seconds (4,001/4)
+PASS Rapid expiry removes only temporary bonus (420/420)
+PASS Rapid CD starts on expiry (10/10)
+PASS Reuse ability after completed CD
+PASS Sourced lethal HIT credits each MOB death exactly once (60/60)
+PASS Duplicate death/HIT gives no extra KILL (60/60)
+PASS Sourced lethal HIT credits each MOB death exactly once (74/74)
+PASS Duplicate death/HIT gives no extra KILL (74/74)
+PASS Active RAGE with 14 kills toward next threshold
+PASS Selected ability is still active at AREA exit
+PASS RAGE is still active at AREA exit
+PASS BONUS freezes CD (0/0)
+PASS BONUS freezes ability duration (3,649/3,649)
+PASS BONUS freezes RAGE (1,649/1,649)
+PASS AREA active ability restarts full reduced CD; inactive retains residue (1/1)
+PASS AREA ends RAGE immediately (0/0)
+PASS AREA cancels remaining burst/duration
+PASS AREA preserves selected runtime instances
+PASS AREA preserves personal KILL count; test deaths give no credit (74/74)
+PASS AREA ends temporary ATK but preserves real bonus (10,5/10,5)
+PASS AREA removes Rapid modifier (400/400)
+PASS 14 KILL progress survives AREA (14/14)
+PASS Sourced lethal HIT credits each MOB death exactly once (75/75)
+PASS Duplicate death/HIT gives no extra KILL (75/75)
+PASS One KILL in new AREA reaches retained 15 threshold
+PASS Available ability stays available on AREA change (0/0)
+PASS Valid combination FuocoDiSoppressione / Passiva1
+PASS Exactly PG02 runtime, no PG01 ability or passive attached
+PASS PG02 HP 100 (100/100)
+PASS PG02 ATK 10 (10/10)
+PASS PG02 internal DEF 100 = zero mitigation (100/100)
+PASS PG02 MOVE SPD 100 = 2m/s (2/2)
+PASS PG02 base ATK SPD 400 (400/400)
+PASS PG02 RANGE 10m (10/10)
+PASS Initial CD REDUCTION 100 (100/100)
+PASS Ability begins RUN unavailable
+PASS Full initial ability CD
+PASS New RUN has no personal KILLs (0/0)
+PASS Inspector PG change does not alter current RUN
+PASS Ability/passive are RUN snapshots
+PASS Sourced lethal HIT credits each MOB death exactly once (1/1)
+PASS Duplicate death/HIT gives no extra KILL (1/1)
+PASS Heal threshold at 31 (31/31)
+PASS Sourced lethal HIT credits each MOB death exactly once (2/2)
+PASS Duplicate death/HIT gives no extra KILL (2/2)
+PASS Heal threshold at 30 (30/30)
+PASS Sourced lethal HIT credits each MOB death exactly once (3/3)
+PASS Duplicate death/HIT gives no extra KILL (3/3)
+PASS Heal threshold at 29 (30/30)
+PASS Sourced lethal HIT credits each MOB death exactly once (6/6)
+PASS Duplicate death/HIT gives no extra KILL (6/6)
+PASS Multi-KILL reevaluates threshold after each 1 percent max HP heal (30,5/30,5)
+PASS Sourced lethal HIT credits each MOB death exactly once (8/8)
+PASS Duplicate death/HIT gives no extra KILL (8/8)
+PASS Modified max HP: heal 2, next KILL at 30 percent does not heal (60/60)
+PASS Test deaths and sourceless damage give no personal credit (8/8)
+PASS Another PG source gives no credit to PG02 (8/8)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2518
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2539
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2501
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2523
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,253
+PASS Same-frame repeat shot blocked
+PASS Actual projectile speed 20m/s (20/20)
+PASS Actual projectile HIT damage 10 (90/90)
+PASS Non-piercing projectile stops at first MOB (100/100)
+PASS Projectile ignores PG ally (100/100)
+PASS MURO stops projectile (100/100)
+PASS OSTACOLO stops projectile (100/100)
+PASS Projectile remains in flight before 10m
+PASS Actual travelled distance follows 20m/s (4,022/4,022)
+PASS Projectile expires at 10m / 0.5s flight
+PASS Beyond-range MOB untouched (100/100)
+PASS Projectile retains PG02 identity through lethal HIT (9/9)
+PASS Projectile corpse gives no duplicate credit (9/9)
+PASS Sector centre direction for shot 1
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Physical burst activation
+PASS Burst duration 3 seconds (3/3)
+PASS Suppression CD begins at activation (12/12)
+PASS Suppression does not apply Rapid modifier (400/400)
+PASS Active burst cannot retrigger
+PASS Sector centre direction for shot 2
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 3
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 4
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 5
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 6
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 7
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 8
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 9
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 10
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Pause stops burst emissions (10/10)
+PASS Pause freezes burst duration (2,447/2,447)
+PASS Pause freezes burst cooldown (11,447/11,447)
+PASS Emitted projectile does not follow cursor (0/0)
+PASS Sector centre direction for shot 11
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 12
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 13
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 14
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 15
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 16
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 17
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 18
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 19
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 20
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 21
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 22
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 23
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 24
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 25
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 26
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 27
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 28
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 29
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 30
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 31
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 32
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 33
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 34
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 35
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 36
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 37
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 38
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 39
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 40
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 41
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 42
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 43
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 44
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 45
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 46
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 47
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 48
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 49
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 50
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Exactly 50 physical projectiles (50/50)
+PASS First-to-last emission spans 3 seconds (3,002/3)
+PASS Uniform scheduled emission 1 (0,062/0,061)
+PASS Uniform scheduled emission 2 (0,126/0,122)
+PASS Uniform scheduled emission 3 (0,186/0,184)
+PASS Uniform scheduled emission 4 (0,246/0,245)
+PASS Uniform scheduled emission 5 (0,309/0,306)
+PASS Uniform scheduled emission 6 (0,368/0,367)
+PASS Uniform scheduled emission 7 (0,429/0,429)
+PASS Uniform scheduled emission 8 (0,49/0,49)
+PASS Uniform scheduled emission 9 (0,553/0,551)
+PASS Uniform scheduled emission 10 (0,613/0,612)
+PASS Uniform scheduled emission 11 (0,675/0,673)
+PASS Uniform scheduled emission 12 (0,737/0,735)
+PASS Uniform scheduled emission 13 (0,796/0,796)
+PASS Uniform scheduled emission 14 (0,859/0,857)
+PASS Uniform scheduled emission 15 (0,919/0,918)
+PASS Uniform scheduled emission 16 (0,982/0,98)
+PASS Uniform scheduled emission 17 (1,042/1,041)
+PASS Uniform scheduled emission 18 (1,106/1,102)
+PASS Uniform scheduled emission 19 (1,165/1,163)
+PASS Uniform scheduled emission 20 (1,225/1,224)
+PASS Uniform scheduled emission 21 (1,288/1,286)
+PASS Uniform scheduled emission 22 (1,347/1,347)
+PASS Uniform scheduled emission 23 (1,409/1,408)
+PASS Uniform scheduled emission 24 (1,469/1,469)
+PASS Uniform scheduled emission 25 (1,533/1,531)
+PASS Uniform scheduled emission 26 (1,592/1,592)
+PASS Uniform scheduled emission 27 (1,654/1,653)
+PASS Uniform scheduled emission 28 (1,716/1,714)
+PASS Uniform scheduled emission 29 (1,779/1,776)
+PASS Uniform scheduled emission 30 (1,838/1,837)
+PASS Uniform scheduled emission 31 (1,899/1,898)
+PASS Uniform scheduled emission 32 (1,96/1,959)
+PASS Uniform scheduled emission 33 (2,021/2,02)
+PASS Uniform scheduled emission 34 (2,085/2,082)
+PASS Uniform scheduled emission 35 (2,146/2,143)
+PASS Uniform scheduled emission 36 (2,205/2,204)
+PASS Uniform scheduled emission 37 (2,267/2,265)
+PASS Uniform scheduled emission 38 (2,328/2,327)
+PASS Uniform scheduled emission 39 (2,39/2,388)
+PASS Uniform scheduled emission 40 (2,45/2,449)
+PASS Uniform scheduled emission 41 (2,513/2,51)
+PASS Uniform scheduled emission 42 (2,572/2,571)
+PASS Uniform scheduled emission 43 (2,634/2,633)
+PASS Uniform scheduled emission 44 (2,694/2,694)
+PASS Uniform scheduled emission 45 (2,758/2,755)
+PASS Uniform scheduled emission 46 (2,819/2,816)
+PASS Uniform scheduled emission 47 (2,878/2,878)
+PASS Uniform scheduled emission 48 (2,939/2,939)
+PASS Uniform scheduled emission 49 (3,002/3)
+PASS Cooldown continued during burst (8,998/9)
+PASS No extra shots after duration (50/50)
+PASS All burst projectiles expire at range
+PASS Projectile damage is not instant (100/100)
+PASS Three fixed damage after DEF and final rounding 100 (97/97)
+PASS Suppression cannot pierce first MOB (100/100)
+PASS Suppression passes through allied PG (100/100)
+PASS Projectile damage is not instant (100/100)
+PASS Three fixed damage after DEF and final rounding 115 (97/97)
+PASS Suppression cannot pierce first MOB (100/100)
+PASS Suppression passes through allied PG (100/100)
+PASS Projectile damage is not instant (100/100)
+PASS Three fixed damage after DEF and final rounding 190 (100/100)
+PASS Suppression cannot pierce first MOB (100/100)
+PASS Suppression passes through allied PG (100/100)
+PASS Suppression blocked by MURO (100/100)
+PASS Suppression blocked by OSTACOLO (100/100)
+PASS Suppression range remains 10m (100/100)
+PASS Physical suppression kill attributed to PG02 (10/10)
+PASS Fixed damage remains 3 including during RAGE (97/97)
+PASS Same MOB can receive separate projectile HITs (94/94)
+PASS Reuse ability after completed CD
+PASS Suppression applies CD REDUCTION 10 (1,2/1,2)
+PASS Completed reduced cooldown cannot overlap active burst
+PASS Selected ability is still active at AREA exit
+PASS BONUS freezes CD (0/0)
+PASS BONUS freezes ability duration (1,345/1,345)
+PASS BONUS freezes RAGE (0/0)
+PASS AREA active ability restarts full reduced CD; inactive retains residue (1,2/1,2)
+PASS AREA ends RAGE immediately (0/0)
+PASS AREA cancels remaining burst/duration
+PASS AREA preserves selected runtime instances
+PASS AREA preserves personal KILL count; test deaths give no credit (10/10)
+PASS AREA ends temporary ATK but preserves real bonus (10,5/10,5)
+PASS AREA removes Rapid modifier (400/400)
+PASS Available ability stays available on AREA change (0/0)
+PASS Valid combination FuocoDiSoppressione / Passiva2
+PASS Exactly PG02 runtime, no PG01 ability or passive attached
+PASS PG02 HP 100 (100/100)
+PASS PG02 ATK 10 (10/10)
+PASS PG02 internal DEF 100 = zero mitigation (100/100)
+PASS PG02 MOVE SPD 100 = 2m/s (2/2)
+PASS PG02 base ATK SPD 400 (400/400)
+PASS PG02 RANGE 10m (10/10)
+PASS Initial CD REDUCTION 100 (100/100)
+PASS Ability begins RUN unavailable
+PASS Full initial ability CD
+PASS New RUN has no personal KILLs (0/0)
+PASS Inspector PG change does not alter current RUN
+PASS Ability/passive are RUN snapshots
+PASS Sourced lethal HIT credits each MOB death exactly once (14/14)
+PASS Duplicate death/HIT gives no extra KILL (14/14)
+PASS 14 KILLs do not trigger RAGE
+PASS Sourced lethal HIT credits each MOB death exactly once (15/15)
+PASS Duplicate death/HIT gives no extra KILL (15/15)
+PASS 15 personal KILL threshold (15/15)
+PASS RAGE starts at 2 seconds (2/2)
+PASS RAGE +30 percent ATK (13/13)
+PASS RAGE does not contaminate persistent ATK bonus (10,5/10,5)
+PASS RAGE applies to current ATK after bonus (13,65/13,65)
+PASS Sourced lethal HIT credits each MOB death exactly once (30/30)
+PASS Duplicate death/HIT gives no extra KILL (30/30)
+PASS 30 KILL threshold (30/30)
+PASS New RAGE refreshes full duration (2/2)
+PASS RAGE refresh never stacks (13,65/13,65)
+PASS Pause freezes RAGE (2/2)
+PASS RAGE expires after two seconds (0/0)
+PASS RAGE expiry preserves acquired bonus (10,5/10,5)
+PASS Test deaths and sourceless damage give no personal credit (30/30)
+PASS Another PG source gives no credit to PG02 (30/30)
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2507
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2505
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2526
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2509
+PASS Same-frame repeat shot blocked
+PASS Actual projectile cadence 4/s: interval=0,2509
+PASS Same-frame repeat shot blocked
+PASS Actual projectile speed 20m/s (20/20)
+PASS Actual projectile HIT damage 10 (90/90)
+PASS Non-piercing projectile stops at first MOB (100/100)
+PASS Projectile ignores PG ally (100/100)
+PASS MURO stops projectile (100/100)
+PASS OSTACOLO stops projectile (100/100)
+PASS Projectile remains in flight before 10m
+PASS Actual travelled distance follows 20m/s (4,028/4,028)
+PASS Projectile expires at 10m / 0.5s flight
+PASS Beyond-range MOB untouched (100/100)
+PASS Projectile retains PG02 identity through lethal HIT (31/31)
+PASS Projectile corpse gives no duplicate credit (31/31)
+PASS Sector centre direction for shot 1
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Physical burst activation
+PASS Burst duration 3 seconds (3/3)
+PASS Suppression CD begins at activation (12/12)
+PASS Suppression does not apply Rapid modifier (400/400)
+PASS Active burst cannot retrigger
+PASS Sector centre direction for shot 2
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 3
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 4
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 5
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 6
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 7
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 8
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 9
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 10
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Pause stops burst emissions (10/10)
+PASS Pause freezes burst duration (2,447/2,447)
+PASS Pause freezes burst cooldown (11,447/11,447)
+PASS Emitted projectile does not follow cursor (0/0)
+PASS Sector centre direction for shot 11
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 12
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 13
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 14
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 15
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 16
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 17
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 18
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 19
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 20
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 21
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 22
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 23
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 24
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 25
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 26
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 27
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 28
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 29
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 30
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 31
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 32
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 33
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 34
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 35
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 36
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 37
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 38
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 39
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 40
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 41
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 42
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 43
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 44
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 45
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 46
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 47
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 48
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 49
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Sector centre direction for shot 50
+PASS Spawn at current muzzle (0/0)
+PASS Suppression uses weapon projectile speed (20/20)
+PASS Exactly 50 physical projectiles (50/50)
+PASS First-to-last emission spans 3 seconds (3/3)
+PASS Uniform scheduled emission 1 (0,062/0,061)
+PASS Uniform scheduled emission 2 (0,124/0,122)
+PASS Uniform scheduled emission 3 (0,186/0,184)
+PASS Uniform scheduled emission 4 (0,246/0,245)
+PASS Uniform scheduled emission 5 (0,307/0,306)
+PASS Uniform scheduled emission 6 (0,369/0,367)
+PASS Uniform scheduled emission 7 (0,43/0,429)
+PASS Uniform scheduled emission 8 (0,493/0,49)
+PASS Uniform scheduled emission 9 (0,553/0,551)
+PASS Uniform scheduled emission 10 (0,613/0,612)
+PASS Uniform scheduled emission 11 (0,675/0,673)
+PASS Uniform scheduled emission 12 (0,735/0,735)
+PASS Uniform scheduled emission 13 (0,798/0,796)
+PASS Uniform scheduled emission 14 (0,858/0,857)
+PASS Uniform scheduled emission 15 (0,919/0,918)
+PASS Uniform scheduled emission 16 (0,981/0,98)
+PASS Uniform scheduled emission 17 (1,043/1,041)
+PASS Uniform scheduled emission 18 (1,103/1,102)
+PASS Uniform scheduled emission 19 (1,166/1,163)
+PASS Uniform scheduled emission 20 (1,226/1,224)
+PASS Uniform scheduled emission 21 (1,286/1,286)
+PASS Uniform scheduled emission 22 (1,349/1,347)
+PASS Uniform scheduled emission 23 (1,41/1,408)
+PASS Uniform scheduled emission 24 (1,472/1,469)
+PASS Uniform scheduled emission 25 (1,531/1,531)
+PASS Uniform scheduled emission 26 (1,592/1,592)
+PASS Uniform scheduled emission 27 (1,653/1,653)
+PASS Uniform scheduled emission 28 (1,716/1,714)
+PASS Uniform scheduled emission 29 (1,776/1,776)
+PASS Uniform scheduled emission 30 (1,838/1,837)
+PASS Uniform scheduled emission 31 (1,902/1,898)
+PASS Uniform scheduled emission 32 (1,961/1,959)
+PASS Uniform scheduled emission 33 (2,02/2,02)
+PASS Uniform scheduled emission 34 (2,082/2,082)
+PASS Uniform scheduled emission 35 (2,144/2,143)
+PASS Uniform scheduled emission 36 (2,208/2,204)
+PASS Uniform scheduled emission 37 (2,266/2,265)
+PASS Uniform scheduled emission 38 (2,332/2,327)
+PASS Uniform scheduled emission 39 (2,39/2,388)
+PASS Uniform scheduled emission 40 (2,451/2,449)
+PASS Uniform scheduled emission 41 (2,512/2,51)
+PASS Uniform scheduled emission 42 (2,573/2,571)
+PASS Uniform scheduled emission 43 (2,637/2,633)
+PASS Uniform scheduled emission 44 (2,696/2,694)
+PASS Uniform scheduled emission 45 (2,757/2,755)
+PASS Uniform scheduled emission 46 (2,818/2,816)
+PASS Uniform scheduled emission 47 (2,88/2,878)
+PASS Uniform scheduled emission 48 (2,94/2,939)
+PASS Uniform scheduled emission 49 (3/3)
+PASS Cooldown continued during burst (9/9)
+PASS No extra shots after duration (50/50)
+PASS All burst projectiles expire at range
+PASS Projectile damage is not instant (100/100)
+PASS Three fixed damage after DEF and final rounding 100 (97/97)
+PASS Suppression cannot pierce first MOB (100/100)
+PASS Suppression passes through allied PG (100/100)
+PASS Projectile damage is not instant (100/100)
+PASS Three fixed damage after DEF and final rounding 115 (97/97)
+PASS Suppression cannot pierce first MOB (100/100)
+PASS Suppression passes through allied PG (100/100)
+PASS Projectile damage is not instant (100/100)
+PASS Three fixed damage after DEF and final rounding 190 (100/100)
+PASS Suppression cannot pierce first MOB (100/100)
+PASS Suppression passes through allied PG (100/100)
+PASS Suppression blocked by MURO (100/100)
+PASS Suppression blocked by OSTACOLO (100/100)
+PASS Suppression range remains 10m (100/100)
+PASS Sourced lethal HIT credits each MOB death exactly once (45/45)
+PASS Duplicate death/HIT gives no extra KILL (45/45)
+PASS RAGE active before fixed damage test
+PASS Physical suppression kill attributed to PG02 (46/46)
+PASS Fixed damage remains 3 including during RAGE (97/97)
+PASS Same MOB can receive separate projectile HITs (94/94)
+PASS Reuse ability after completed CD
+PASS Suppression applies CD REDUCTION 10 (1,2/1,2)
+PASS Completed reduced cooldown cannot overlap active burst
+PASS Sourced lethal HIT credits each MOB death exactly once (60/60)
+PASS Duplicate death/HIT gives no extra KILL (60/60)
+PASS Sourced lethal HIT credits each MOB death exactly once (74/74)
+PASS Duplicate death/HIT gives no extra KILL (74/74)
+PASS Active RAGE with 14 kills toward next threshold
+PASS Selected ability is still active at AREA exit
+PASS RAGE is still active at AREA exit
+PASS BONUS freezes CD (0/0)
+PASS BONUS freezes ability duration (1,394/1,394)
+PASS BONUS freezes RAGE (1,596/1,596)
+PASS AREA active ability restarts full reduced CD; inactive retains residue (1,2/1,2)
+PASS AREA ends RAGE immediately (0/0)
+PASS AREA cancels remaining burst/duration
+PASS AREA preserves selected runtime instances
+PASS AREA preserves personal KILL count; test deaths give no credit (74/74)
+PASS AREA ends temporary ATK but preserves real bonus (10,5/10,5)
+PASS AREA removes Rapid modifier (400/400)
+PASS 14 KILL progress survives AREA (14/14)
+PASS Sourced lethal HIT credits each MOB death exactly once (75/75)
+PASS Duplicate death/HIT gives no extra KILL (75/75)
+PASS One KILL in new AREA reaches retained 15 threshold
+PASS Available ability stays available on AREA change (0/0)
+PASS Start burst immediately before RUN reset
+PASS RUN reset begins with active burst
+PASS Restart acquires PG01 and disposes PG02 state
+PASS RUN reset removes in-flight burst projectiles
+Engine Play Mode tests completed. PG02 four combinations: runtime firing, projectile HITs, abilities, personal KILLs, passives and AREA transitions. Input feel/balancing are not tested.

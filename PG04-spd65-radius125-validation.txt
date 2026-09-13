@@ -1,0 +1,424 @@
+PASS | Unity 6000.3.16f1 | checks=422 | warnings=821
+PASS Only PG04 instantiated at suite startup
+PASS Invalid PG04 ability rejected
+PASS Invalid PG04 passive rejected
+PASS Valid PG04 combination PioggiaDiGranate/ScortaEsplosiva
+PASS No PG01/PG02/PG03 abilities attached
+PASS PG04 HP 100 (100/100)
+PASS PG04 ATK 25 (25/25)
+PASS PG04 DEF neutral (100/100)
+PASS PG04 MOVE SPD 100 = 2m/s (2/2)
+PASS PG04 ATK SPD 65 (65/65)
+PASS Corrected PG04 RANGE 7m (7/7)
+PASS Full initial cooldown (12/12)
+PASS Fresh RUN starts unavailable without active effect
+PASS PG04 selections are RUN snapshots
+PASS Two independently configured test slots (2/2)
+PASS Both explosive item types stack to passive limit
+PASS Both explosive item types stack to passive limit
+PASS Both explosive item types stack to passive limit
+PASS No overflow above per-slot cap
+PASS Cannot mix item kinds within a slot
+PASS Each consumption removes one unit
+PASS Remaining stack (2/2)
+PASS Each consumption removes one unit
+PASS Remaining stack (1/1)
+PASS Each consumption removes one unit
+PASS Remaining stack (0/0)
+PASS Exhausted slot is empty
+PASS Other item capacity remains one: Smoke
+PASS Other item capacity remains one: PozioneCurativa
+PASS Other item capacity remains one: Trappola
+PASS MOB and OSTACOLO do not anticipate base impact (0/0)
+PASS Base explosion radius 1.25m (1,25/1,25)
+PASS Base explosion damage 25 (25/25)
+PASS Instant impact plus optional immediate PYROMANIA tick (475/475)
+PASS Exact radial boundary included (475/475)
+PASS Outside explosion radius excluded (500/500)
+PASS No friendly fire (500/500)
+PASS No damage along hitscan path (500/500)
+PASS Base attack creates no travelling projectile
+PASS Base shot cadence enforced
+PASS Actual base cadence 0.65 attacks/s (1,54/1,538)
+PASS Far cursor clamped at RANGE 7m from PG (0/0)
+PASS MURO anticipates impact at its near face (2,75/2,75)
+PASS Whole sector removed by MURO (500/500)
+PASS Valid sector damage after DEF and final rounding (479/479)
+PASS Whole sector removed by OSTACOLO (500/500)
+PASS Valid sector damage after DEF and final rounding (479/479)
+PASS Rain accepts cursor beyond base attack range
+PASS Rain starts CD at activation using CD REDUCTION (1,2/1,2)
+PASS Active rain cannot retrigger
+PASS Pause prevents pending rain explosions (0/0)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Exactly ten rain explosions (10/10)
+PASS All rain explosions occur within 3 seconds
+PASS Rain positions are distinct random samples
+PASS Rain cooldown progresses during duration (0/0)
+PASS Each rain explosion creates fire only with PYROMANIA (0/0)
+PASS Activate before AREA transition
+PASS PG04 ability active at BONUS entry
+PASS BONUS pauses CD (1,196/1,196)
+PASS BONUS pauses rain (2,996/2,996)
+PASS BONUS preserves charges (0/0)
+PASS Load test item before AREA transition
+PASS Active AREA change restarts full reduced CD (1,2/1,2)
+PASS AREA cancels rain and residual charges
+PASS AREA retains PG04 selection and inventory instances
+PASS AREA preserves stored items (1/1)
+PASS AREA preserves real stat bonus (26,25/26,25)
+PASS AREA removes old burning areas
+PASS Available ability stays available on AREA change (0/0)
+PASS Activate before DOWN/reset
+PASS DOWN prevents PG04 commands
+PASS RUN reset removes previous bonuses (25/25)
+PASS RUN reset restores HP (100/100)
+PASS RUN reset removes pending rain/charges
+PASS RUN reset clears technical inventory (0/0)
+PASS RUN reset clears burning areas
+PASS Valid PG04 combination PioggiaDiGranate/Pyromania
+PASS No PG01/PG02/PG03 abilities attached
+PASS PG04 HP 100 (100/100)
+PASS PG04 ATK 25 (25/25)
+PASS PG04 DEF neutral (100/100)
+PASS PG04 MOVE SPD 100 = 2m/s (2/2)
+PASS PG04 ATK SPD 65 (65/65)
+PASS Corrected PG04 RANGE 7m (7/7)
+PASS Full initial cooldown (12/12)
+PASS Fresh RUN starts unavailable without active effect
+PASS PG04 selections are RUN snapshots
+PASS Two independently configured test slots (2/2)
+PASS Both explosive item types stack to passive limit
+PASS No overflow above per-slot cap
+PASS Cannot mix item kinds within a slot
+PASS Each consumption removes one unit
+PASS Remaining stack (0/0)
+PASS Exhausted slot is empty
+PASS Other item capacity remains one: Smoke
+PASS Other item capacity remains one: PozioneCurativa
+PASS Other item capacity remains one: Trappola
+PASS MOB and OSTACOLO do not anticipate base impact (0/0)
+PASS Base explosion radius 1.25m (1,25/1,25)
+PASS Base explosion damage 25 (25/25)
+PASS Instant impact plus optional immediate PYROMANIA tick (470/470)
+PASS Exact radial boundary included (470/470)
+PASS Outside explosion radius excluded (500/500)
+PASS No friendly fire (500/500)
+PASS No damage along hitscan path (500/500)
+PASS Base attack creates no travelling projectile
+PASS Base shot cadence enforced
+PASS Actual base cadence 0.65 attacks/s (1,54/1,538)
+PASS Far cursor clamped at RANGE 7m from PG (0/0)
+PASS MURO anticipates impact at its near face (2,75/2,75)
+PASS Whole sector removed by MURO (500/500)
+PASS Valid sector damage after DEF and final rounding (475/475)
+PASS Whole sector removed by OSTACOLO (500/500)
+PASS Valid sector damage after DEF and final rounding (475/475)
+PASS PYROMANIA first tick at activation
+PASS Immediate 25 explosion + 5 fire (470/470)
+PASS Entering between ticks does not cause immediate damage (500/500)
+PASS Area clock ticks at 1 second independent of entry (495/495)
+PASS Outside MOB receives no tick (470/470)
+PASS Pause freezes burning area clock (1,945/1,945)
+PASS Pause causes no fire damage (495/495)
+PASS Second periodic tick at 2 seconds (490/490)
+PASS Reentry joins existing area clock (465/465)
+PASS PYROMANIA ignores PG ally (500/500)
+PASS Fire expires at 3 seconds
+PASS No tick at expiry or afterward (490/490)
+PASS Burning area lethal tick credits PG04 exactly once (1/1)
+PASS Overlapping areas sum their immediate damage (490/490)
+PASS Overlapping areas retain independent periodic damage (480/480)
+PASS Rain accepts cursor beyond base attack range
+PASS Rain starts CD at activation using CD REDUCTION (1,2/1,2)
+PASS Active rain cannot retrigger
+PASS Pause prevents pending rain explosions (0/0)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Rain explosion within 5m of activation cursor
+PASS Rain inherits base explosion radius (1,25/1,25)
+PASS Rain inherits current base ATK after bonus (26,25/26,25)
+PASS Exactly ten rain explosions (10/10)
+PASS All rain explosions occur within 3 seconds
+PASS Rain positions are distinct random samples
+PASS Rain cooldown progresses during duration (0/0)
+PASS Each rain explosion creates fire only with PYROMANIA (10/10)
+PASS Activate before AREA transition
+PASS PG04 ability active at BONUS entry
+PASS BONUS pauses CD (1,196/1,196)
+PASS BONUS pauses rain (2,996/2,996)
+PASS BONUS preserves charges (0/0)
+PASS Load test item before AREA transition
+PASS Active AREA change restarts full reduced CD (1,2/1,2)
+PASS AREA cancels rain and residual charges
+PASS AREA retains PG04 selection and inventory instances
+PASS AREA preserves stored items (1/1)
+PASS AREA preserves real stat bonus (26,25/26,25)
+PASS AREA removes old burning areas
+PASS Available ability stays available on AREA change (0/0)
+PASS Activate before DOWN/reset
+PASS DOWN prevents PG04 commands
+PASS RUN reset removes previous bonuses (25/25)
+PASS RUN reset restores HP (100/100)
+PASS RUN reset removes pending rain/charges
+PASS RUN reset clears technical inventory (0/0)
+PASS RUN reset clears burning areas
+PASS Valid PG04 combination ColpoGrosso/ScortaEsplosiva
+PASS No PG01/PG02/PG03 abilities attached
+PASS PG04 HP 100 (100/100)
+PASS PG04 ATK 25 (25/25)
+PASS PG04 DEF neutral (100/100)
+PASS PG04 MOVE SPD 100 = 2m/s (2/2)
+PASS PG04 ATK SPD 65 (65/65)
+PASS Corrected PG04 RANGE 7m (7/7)
+PASS Full initial cooldown (10/10)
+PASS Fresh RUN starts unavailable without active effect
+PASS PG04 selections are RUN snapshots
+PASS Two independently configured test slots (2/2)
+PASS Both explosive item types stack to passive limit
+PASS Both explosive item types stack to passive limit
+PASS Both explosive item types stack to passive limit
+PASS No overflow above per-slot cap
+PASS Cannot mix item kinds within a slot
+PASS Each consumption removes one unit
+PASS Remaining stack (2/2)
+PASS Each consumption removes one unit
+PASS Remaining stack (1/1)
+PASS Each consumption removes one unit
+PASS Remaining stack (0/0)
+PASS Exhausted slot is empty
+PASS Other item capacity remains one: Smoke
+PASS Other item capacity remains one: PozioneCurativa
+PASS Other item capacity remains one: Trappola
+PASS MOB and OSTACOLO do not anticipate base impact (0/0)
+PASS Base explosion radius 1.25m (1,25/1,25)
+PASS Base explosion damage 25 (25/25)
+PASS Instant impact plus optional immediate PYROMANIA tick (475/475)
+PASS Exact radial boundary included (475/475)
+PASS Outside explosion radius excluded (500/500)
+PASS No friendly fire (500/500)
+PASS No damage along hitscan path (500/500)
+PASS Base attack creates no travelling projectile
+PASS Base shot cadence enforced
+PASS Actual base cadence 0.65 attacks/s (1,54/1,538)
+PASS Far cursor clamped at RANGE 7m from PG (0/0)
+PASS MURO anticipates impact at its near face (2,75/2,75)
+PASS Whole sector removed by MURO (500/500)
+PASS Valid sector damage after DEF and final rounding (479/479)
+PASS Whole sector removed by OSTACOLO (500/500)
+PASS Valid sector damage after DEF and final rounding (479/479)
+PASS Activate COLPO GROSSO
+PASS Four charges (4/4)
+PASS COLPO GROSSO CD waits for fourth shot (0/0)
+PASS Charges do not rewrite persistent ATK (25/25)
+PASS Unused charges do not expire (4/4)
+PASS Cannot stack active charges
+PASS COLPO GROSSO +80 percent on current ATK (47,25/47,25)
+PASS COLPO GROSSO radius +50 percent (1,875/1,875)
+PASS Permanent bonus remains independent (26,25/26,25)
+PASS Every shot consumes a charge including MISS (3/3)
+PASS Cooldown still absent before fourth shot (0/0)
+PASS Expanded explosion actual damage (453/453)
+PASS COLPO GROSSO +80 percent on current ATK (47,25/47,25)
+PASS COLPO GROSSO radius +50 percent (1,875/1,875)
+PASS Permanent bonus remains independent (26,25/26,25)
+PASS Every shot consumes a charge including MISS (2/2)
+PASS Cooldown still absent before fourth shot (0/0)
+PASS COLPO GROSSO +80 percent on current ATK (47,25/47,25)
+PASS COLPO GROSSO radius +50 percent (1,875/1,875)
+PASS Permanent bonus remains independent (26,25/26,25)
+PASS Every shot consumes a charge including MISS (1/1)
+PASS Cooldown still absent before fourth shot (0/0)
+PASS COLPO GROSSO +80 percent on current ATK (47,25/47,25)
+PASS COLPO GROSSO radius +50 percent (1,875/1,875)
+PASS Permanent bonus remains independent (26,25/26,25)
+PASS Every shot consumes a charge including MISS (0/0)
+PASS Fourth shot begins full reduced 10s cooldown (1/1)
+PASS Fourth charge ends COLPO GROSSO
+PASS Inactive cooldown retains residue (0,998/0,998)
+PASS Next base shot retains permanent bonus without temporary boost (26,25/26,25)
+PASS Base radius restored after fourth shot (1,25/1,25)
+PASS Activate before AREA transition
+PASS PG04 ability active at BONUS entry
+PASS BONUS pauses CD (0/0)
+PASS BONUS pauses rain (0/0)
+PASS BONUS preserves charges (4/4)
+PASS Load test item before AREA transition
+PASS Active AREA change restarts full reduced CD (1/1)
+PASS AREA cancels rain and residual charges
+PASS AREA retains PG04 selection and inventory instances
+PASS AREA preserves stored items (1/1)
+PASS AREA preserves real stat bonus (26,25/26,25)
+PASS AREA removes old burning areas
+PASS Available ability stays available on AREA change (0/0)
+PASS Activate before DOWN/reset
+PASS DOWN prevents PG04 commands
+PASS RUN reset removes previous bonuses (25/25)
+PASS RUN reset restores HP (100/100)
+PASS RUN reset removes pending rain/charges
+PASS RUN reset clears technical inventory (0/0)
+PASS RUN reset clears burning areas
+PASS Valid PG04 combination ColpoGrosso/Pyromania
+PASS No PG01/PG02/PG03 abilities attached
+PASS PG04 HP 100 (100/100)
+PASS PG04 ATK 25 (25/25)
+PASS PG04 DEF neutral (100/100)
+PASS PG04 MOVE SPD 100 = 2m/s (2/2)
+PASS PG04 ATK SPD 65 (65/65)
+PASS Corrected PG04 RANGE 7m (7/7)
+PASS Full initial cooldown (10/10)
+PASS Fresh RUN starts unavailable without active effect
+PASS PG04 selections are RUN snapshots
+PASS Two independently configured test slots (2/2)
+PASS Both explosive item types stack to passive limit
+PASS No overflow above per-slot cap
+PASS Cannot mix item kinds within a slot
+PASS Each consumption removes one unit
+PASS Remaining stack (0/0)
+PASS Exhausted slot is empty
+PASS Other item capacity remains one: Smoke
+PASS Other item capacity remains one: PozioneCurativa
+PASS Other item capacity remains one: Trappola
+PASS MOB and OSTACOLO do not anticipate base impact (0/0)
+PASS Base explosion radius 1.25m (1,25/1,25)
+PASS Base explosion damage 25 (25/25)
+PASS Instant impact plus optional immediate PYROMANIA tick (470/470)
+PASS Exact radial boundary included (470/470)
+PASS Outside explosion radius excluded (500/500)
+PASS No friendly fire (500/500)
+PASS No damage along hitscan path (500/500)
+PASS Base attack creates no travelling projectile
+PASS Base shot cadence enforced
+PASS Actual base cadence 0.65 attacks/s (1,539/1,538)
+PASS Far cursor clamped at RANGE 7m from PG (0/0)
+PASS MURO anticipates impact at its near face (2,75/2,75)
+PASS Whole sector removed by MURO (500/500)
+PASS Valid sector damage after DEF and final rounding (475/475)
+PASS Whole sector removed by OSTACOLO (500/500)
+PASS Valid sector damage after DEF and final rounding (475/475)
+PASS PYROMANIA first tick at activation
+PASS Immediate 25 explosion + 5 fire (470/470)
+PASS Entering between ticks does not cause immediate damage (500/500)
+PASS Area clock ticks at 1 second independent of entry (495/495)
+PASS Outside MOB receives no tick (470/470)
+PASS Pause freezes burning area clock (1,949/1,949)
+PASS Pause causes no fire damage (495/495)
+PASS Second periodic tick at 2 seconds (490/490)
+PASS Reentry joins existing area clock (465/465)
+PASS PYROMANIA ignores PG ally (500/500)
+PASS Fire expires at 3 seconds
+PASS No tick at expiry or afterward (490/490)
+PASS Burning area lethal tick credits PG04 exactly once (1/1)
+PASS Overlapping areas sum their immediate damage (490/490)
+PASS Overlapping areas retain independent periodic damage (480/480)
+PASS Activate COLPO GROSSO
+PASS Four charges (4/4)
+PASS COLPO GROSSO CD waits for fourth shot (0/0)
+PASS Charges do not rewrite persistent ATK (25/25)
+PASS Unused charges do not expire (4/4)
+PASS Cannot stack active charges
+PASS COLPO GROSSO +80 percent on current ATK (47,25/47,25)
+PASS COLPO GROSSO radius +50 percent (1,875/1,875)
+PASS Permanent bonus remains independent (26,25/26,25)
+PASS Every shot consumes a charge including MISS (3/3)
+PASS Cooldown still absent before fourth shot (0/0)
+PASS Expanded explosion actual damage (448/448)
+PASS Fire inherits expanded radius (1,875/1,875)
+PASS COLPO GROSSO +80 percent on current ATK (47,25/47,25)
+PASS COLPO GROSSO radius +50 percent (1,875/1,875)
+PASS Permanent bonus remains independent (26,25/26,25)
+PASS Every shot consumes a charge including MISS (2/2)
+PASS Cooldown still absent before fourth shot (0/0)
+PASS Fire inherits expanded radius (1,875/1,875)
+PASS COLPO GROSSO +80 percent on current ATK (47,25/47,25)
+PASS COLPO GROSSO radius +50 percent (1,875/1,875)
+PASS Permanent bonus remains independent (26,25/26,25)
+PASS Every shot consumes a charge including MISS (1/1)
+PASS Cooldown still absent before fourth shot (0/0)
+PASS Fire inherits expanded radius (1,875/1,875)
+PASS COLPO GROSSO +80 percent on current ATK (47,25/47,25)
+PASS COLPO GROSSO radius +50 percent (1,875/1,875)
+PASS Permanent bonus remains independent (26,25/26,25)
+PASS Every shot consumes a charge including MISS (0/0)
+PASS Fourth shot begins full reduced 10s cooldown (1/1)
+PASS Fire inherits expanded radius (1,875/1,875)
+PASS Fourth charge ends COLPO GROSSO
+PASS Inactive cooldown retains residue (0,996/0,996)
+PASS Next base shot retains permanent bonus without temporary boost (26,25/26,25)
+PASS Base radius restored after fourth shot (1,25/1,25)
+PASS Activate before AREA transition
+PASS PG04 ability active at BONUS entry
+PASS BONUS pauses CD (0/0)
+PASS BONUS pauses rain (0/0)
+PASS BONUS preserves charges (4/4)
+PASS Load test item before AREA transition
+PASS Active AREA change restarts full reduced CD (1/1)
+PASS AREA cancels rain and residual charges
+PASS AREA retains PG04 selection and inventory instances
+PASS AREA preserves stored items (1/1)
+PASS AREA preserves real stat bonus (26,25/26,25)
+PASS AREA removes old burning areas
+PASS Available ability stays available on AREA change (0/0)
+PASS Activate before DOWN/reset
+PASS DOWN prevents PG04 commands
+PASS RUN reset removes previous bonuses (25/25)
+PASS RUN reset restores HP (100/100)
+PASS RUN reset removes pending rain/charges
+PASS RUN reset clears technical inventory (0/0)
+PASS RUN reset clears burning areas
+PASS Entire suite ran PG04 only
+Engine Play Mode tests completed. PG04 only, four combinations: actual shots, abilities, passives and AREA transitions. Input feel/balancing are not tested.

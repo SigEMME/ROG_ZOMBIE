@@ -20,11 +20,14 @@ namespace RogZombie.TestEngine
         public float Speed => speed;
         private Faction sourceFaction;
         private Combatant source;
+        private bool roundFinalDamage;
+        public IProjectileHitEffect HitEffect { private get; set; }
         private readonly HashSet<Combatant> hitActors = new HashSet<Combatant>();
 
         public void Initialize(Combatant owner, Vector2 heading, float velocity, float maxRange, float attack, float colliderRadius, int piercing, bool debug)
         {
             source = owner;
+            roundFinalDamage = owner.RoundFinalDamage;
             sourceFaction = owner.Faction;
             direction = heading.normalized;
             speed = velocity; range = maxRange; damage = attack; radius = colliderRadius;
@@ -53,7 +56,8 @@ namespace RogZombie.TestEngine
                 // Normal MOB attacks target PGs; friendly MOB damage is explicitly reserved for ZOMB05.
                 if (actor.Faction == sourceFaction) continue;
                 hitActors.Add(actor);
-                actor.Hit(damage);
+                if (HitEffect != null) HitEffect.ResolveHit(actor, damage, roundFinalDamage, source, hitActors.Count - 1);
+                else actor.Hit(damage, roundFinalDamage, source);
                 if (penetrations-- <= 0) { Destroy(gameObject); return; }
             }
             transform.position += (Vector3)(direction * step);

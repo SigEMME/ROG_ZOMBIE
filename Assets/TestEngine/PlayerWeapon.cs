@@ -10,6 +10,10 @@ namespace RogZombie.TestEngine
         public WeaponDefinition Definition;
         public Transform Muzzle;
         public bool ShowDebug;
+        public System.Action<Vector2, Vector2, CombatStats> BaseAttackOverride { get; set; }
+        public System.Func<bool> InputBlocked { get; set; }
+        public int? BasePenetrationsOverride { get; set; }
+        public IProjectileHitEffect BaseProjectileEffect { get; set; }
         private Combatant actor;
         private PlayerAim aim;
         private float readyAt;
@@ -39,7 +43,7 @@ namespace RogZombie.TestEngine
 
         private void LateUpdate()
         {
-            if (Time.timeScale == 0f || actor == null || !actor.IsActive || Definition == null || Muzzle == null || TestHUD.PointerOverControls) return;
+            if (Time.timeScale == 0f || actor == null || !actor.IsActive || Definition == null || Muzzle == null || TestHUD.PointerOverControls || (InputBlocked != null && InputBlocked())) return;
             if (Mouse.current == null || !Mouse.current.leftButton.isPressed || Time.time < readyAt) return;
             if (!aim.TryGetCursorWorldPosition(out var cursor)) return;
             TryFireAt(cursor);
@@ -51,20 +55,22 @@ namespace RogZombie.TestEngine
             Vector2 origin = Muzzle.position;
             Vector2 offset = cursor - origin;
             // Degenerate aiming has no defined shot direction; wait for a valid point.
-            if (offset.sqrMagnitude < 0.000001f || actor.Stats.AttackSpeed <= 0f) return false;
-            readyAt = Time.time + actor.Stats.AttackInterval;
+            var stats = actor.EffectiveStats;
+            if (offset.sqrMagnitude < 0.000001f || stats.AttackSpeed <= 0f) return false;
+            readyAt = Time.time + stats.AttackInterval;
             Vector2 direction = offset.normalized;
             float range = actor.Stats.RangeMetres;
-            switch (Definition.Kind)
+            if (BaseAttackOverride != null) BaseAttackOverride(origin, cursor, stats);
+            else switch (Definition.Kind)
             {
                 case BaseAttackKind.PhysicalProjectile:
                     TestVisuals.SpawnProjectile(actor, origin, direction, Definition.ProjectileSpeed, range,
-                        actor.Stats.ATK, Definition.ProjectileRadius, Definition.Penetrations, ShowDebug);
+                        stats.ATK, Definition.ProjectileRadius, BasePenetrationsOverride ?? Definition.Penetrations, ShowDebug).HitEffect = BaseProjectileEffect;
                     break;
                 case BaseAttackKind.HitscanArea:
                     lastImpact = AttackGeometry.WallImpact(origin, origin + direction * Mathf.Min(offset.magnitude, range));
                     explosions.Add(new PendingExplosion { Point = lastImpact, At = Time.time + Definition.GrenadeHitDelay,
-                        Radius = Definition.ExplosionRadius, Damage = actor.Stats.ATK });
+                        Radius = Definition.ExplosionRadius, Damage = stats.ATK });
                     break;
                 case BaseAttackKind.AreaHitscan:
                     CombatAttacks.Frontal(actor, transform.position, direction, Definition);

@@ -17,11 +17,27 @@ namespace RogZombie.TestEngine
         private CircleCollider2D body;
         private float pestoneSlowUntil;
         private float pestoneSlowPercent;
+        private Combatant lethalSource;
 
         public event Action<Combatant> Died;
+        public event Action<Combatant> Killed;
         public event Action<Combatant> StateChanged;
         public static event Action<Combatant, float> DamageApplied;
         public CombatStats Stats => stats;
+        // Stats/SetStats are persistent. Combat consumes a separate temporary view.
+        public ICombatStatModifier PassiveModifier { get; set; }
+        public ICombatStatModifier AbilityModifier { get; set; }
+        public ICombatHitEffect HitEffect { get; set; }
+        public CombatStats EffectiveStats
+        {
+            get
+            {
+                var current = AbilityModifier != null ? AbilityModifier.Apply(stats) : stats;
+                current = PassiveModifier != null ? PassiveModifier.Apply(current) : current;
+                return HitEffect != null ? HitEffect.Apply(current) : current;
+            }
+        }
+        public bool RoundFinalDamage { get; set; }
         public float CurrentHP => currentHP;
         public float HealthFraction => stats.HP > 0f ? currentHP / stats.HP : 0f;
         public Faction Faction => faction;
@@ -48,6 +64,8 @@ namespace RogZombie.TestEngine
         public void Initialize(Faction side, CombatStats values, bool explodes = false)
         {
             faction = side;
+            lethalSource = null;
+            HitEffect?.AfterHit();
             pestoneSlowUntil = 0f;
             pestoneSlowPercent = 0f;
             stats = values;
@@ -68,19 +86,21 @@ namespace RogZombie.TestEngine
 
         // New GDD-compliant effects can round the final mitigated HIT without changing
         // the already validated legacy attacks in this prototype.
-        public bool Hit(float attack, bool roundFinalDamage)
+        public bool Hit(float attack, bool roundFinalDamage, Combatant source = null)
         {
             if (!IsActive) return false;
-            float damage = DamageMath.Calculate(attack, stats.DEF);
+            float damage = DamageMath.Calculate(attack, EffectiveStats.DEF);
             // Invalid tuning must never turn an incoming HIT into healing.
             if (damage < 0f || float.IsNaN(damage) || float.IsInfinity(damage))
             {
                 Debug.LogError("HIT rejected: damage outside the defined non-negative domain. Check ATK/DEF tuning.", this);
                 return false;
             }
-            if (roundFinalDamage) damage = Mathf.Floor(damage + .5f);
+            if (roundFinalDamage || RoundFinalDamage) damage = Mathf.Floor(damage + .5f);
             float previousHP = currentHP;
             currentHP = Mathf.Max(0f, currentHP - damage);
+            if (currentHP <= 0f) lethalSource = source;
+            HitEffect?.AfterHit();
             DamageApplied?.Invoke(this, previousHP - currentHP);
             if (currentHP > 0f) return true;
             if (faction == Faction.PG) ChangeState(LifeState.Down);
@@ -102,6 +122,11 @@ namespace RogZombie.TestEngine
             if (body != null) body.enabled = false;
             ChangeState(LifeState.Dead);
             Died?.Invoke(this);
+            // Credit only a lethal HIT with a known PG source, once at effective death.
+            var killer = lethalSource;
+            lethalSource = null;
+            if (faction == Faction.MOB && killer != null && killer.Faction == Faction.PG)
+                killer.Killed?.Invoke(this);
         }
 
         private void ChangeState(LifeState next)

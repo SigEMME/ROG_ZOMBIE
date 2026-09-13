@@ -42,7 +42,8 @@ namespace RogZombie.TestEngine
                     inside = AttackGeometry.CircleIntersectsSemicircle((Vector2)bounds.center - origin,
                         Mathf.Max(bounds.extents.x, bounds.extents.y), direction, source.Stats.RangeMetres);
                 }
-                if (inside && AttackGeometry.ClearLine(origin, target.transform.position)) target.Hit(source.Stats.ATK);
+                if (inside && AttackGeometry.ClearLine(origin, target.transform.position))
+                    target.Hit(source.EffectiveStats.ATK, source.RoundFinalDamage, source);
             }
         }
     }
