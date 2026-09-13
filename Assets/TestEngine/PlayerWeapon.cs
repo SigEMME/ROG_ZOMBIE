@@ -57,6 +57,7 @@ namespace RogZombie.TestEngine
             // Degenerate aiming has no defined shot direction; wait for a valid point.
             var stats = actor.EffectiveStats;
             if (offset.sqrMagnitude < 0.000001f || stats.AttackSpeed <= 0f) return false;
+            actor.NotifyAction();
             readyAt = Time.time + stats.AttackInterval;
             Vector2 direction = offset.normalized;
             float range = actor.Stats.RangeMetres;

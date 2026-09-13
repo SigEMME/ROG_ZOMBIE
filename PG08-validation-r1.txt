@@ -1,0 +1,142 @@
+FAIL | Unity 6000.3.16f1 | checks=133 | warnings=275
+PASS Suite starts PG08 only
+PASS Annulus middle inside
+PASS Annulus inner hole excluded
+PASS Annulus outside excluded
+PASS Body overlaps inner rim
+PASS Body overlaps outer rim
+PASS Blocker in hole does not delete ring
+PASS Tiny blocker deletes intersected sector
+PASS Other sector unaffected
+PASS Wire min CD1.6 (1,6/1,6)
+PASS Push CD modifier (9,5/9,5)
+PASS Valid combination FiloSpinato/Tenacia
+PASS Only PG08 runtime instantiated
+PASS HP100 (100/100)
+PASS ATK7 (7/7)
+PASS DEF+10% (110/110)
+PASS ATK SPD200 (200/200)
+PASS MOVE90=1.8m/s (1,8/1,8)
+PASS RANGE8 (8/8)
+PASS Full CD at RUN start (16/16)
+PASS Initial CD prevents activation
+PASS RUN snapshots both selections
+PASS Cadence blocks immediate repeat
+PASS Physical projectile speed20 (20/20)
+PASS ATK7 against DEF15% rounds to6 (494/494)
+PASS Base never pierces (500/500)
+PASS Ally crossed without damage (100/100)
+PASS Only TENACIA counts base HIT (1/1)
+PASS Base actual interval0.5s (0,502/0,5)
+PASS MISS expires at range8
+PASS MISS does not add TENACIA (1/1)
+PASS Obstacle blocks base projectile (500/500)
+PASS First HIT fractional DEF0.2 (110,2/110,2)
+PASS TENACIA150 hits (150/150)
+PASS TENACIA additive cap +30 (140/140)
+PASS No accumulation past cap (140/140)
+PASS DEF bonus acquired on persistent value (115,5/115,5)
+PASS TENACIA preserves acquired bonus (145,5/145,5)
+PASS Zero-damage HIT clears TENACIA (0/0)
+PASS No permanent bonus lost (115,5/115,5)
+PASS Incoming HIT removes only TENACIA (110/110)
+PASS Global DEF cap90% (190/190)
+PASS Persistent DEF preserved after cap reset (185/185)
+PASS Wire activation
+PASS All10 valid sections
+PASS Wire has no immediate damage tick (500/500)
+PASS Wire slow immediate (1,5/1,5)
+PASS Hole has no slow (2/2)
+PASS Ring does not follow PG (0/0)
+PASS Overlapping SLOW stays25% (1,5/1,5)
+PASS One shared tick10 DEF15% rounds9 (491/491)
+PASS Hole no damage (500/500)
+PASS Outside no damage (500/500)
+PASS Ally no damage (100/100)
+PASS Wire HIT does not add TENACIA (0/0)
+PASS Exit immediately clears SLOW (2/2)
+PASS Reentry restarts one-second clock (491/491)
+PASS Reentry gets its own tick (482/482)
+PASS Ring removal clears slow (2/2)
+PASS Wire three ticks over3s (470/470)
+PASS Natural expiry clears slow (2/2)
+PASS Partial overlap removes entire36-degree section (9/9)
+PASS Deleted section has no contact away from blocker
+PASS Zero-section cast still used
+PASS Zero-section cast starts full CD (16/16)
+PASS Zero-section ring not active
+PASS Reduced-CD wire cast
+PASS Reduced CD allows overlapping rings
+PASS Activate before transition
+PASS BONUS pauses CD (15,995/15,995)
+PASS BONUS pauses ability duration (0/0)
+PASS BONUS pauses fire counter (0/0)
+PASS AREA restarts active CD (16/16)
+PASS AREA preserves choices and PG
+PASS AREA clears effects
+PASS AREA resets held-fire progress (0/0)
+PASS AREA resets TENACIA (0/0)
+PASS AREA retains acquired ATK bonus (7,35/7,35)
+PASS AREA removes rings and motions
+PASS AREA removes projectiles
+PASS Inactive CD residue preserved (16/16)
+PASS Ready stays ready (0/0)
+PASS DOWN immediately clears RAGE
+PASS DOWN blocks Q
+PASS RUN resets persistent bonus (7/7)
+PASS RUN resets hits (0/0)
+PASS RUN resets fire progress (0/0)
+PASS RUN resets effects
+PASS Valid combination FiloSpinato/Rage
+PASS Only PG08 runtime instantiated
+PASS HP100 (100/100)
+PASS ATK7 (7/7)
+PASS DEF+10% (110/110)
+PASS ATK SPD200 (200/200)
+PASS MOVE90=1.8m/s (1,8/1,8)
+PASS RANGE8 (8/8)
+PASS Full CD at RUN start (16/16)
+PASS Initial CD prevents activation
+PASS RUN snapshots both selections
+PASS Cadence blocks immediate repeat
+PASS Physical projectile speed20 (19,998/20)
+PASS ATK7 against DEF15% rounds to6 (494/494)
+PASS Base never pierces (500/500)
+PASS Ally crossed without damage (100/100)
+PASS Only TENACIA counts base HIT (0/0)
+PASS Base actual interval0.5s (0,501/0,5)
+PASS MISS expires at range8
+PASS MISS does not add TENACIA (0/0)
+PASS Obstacle blocks base projectile (500/500)
+PASS Holding without an initial shot does not start RAGE
+PASS RAGE below5s inactive
+PASS RAGE at5s active on MISS
+PASS RAGE ATK+30% (9,1/9,1)
+PASS RAGE MOVE-20% (72/72)
+PASS Continuous RAGE does not accumulate (9,1/9,1)
+PASS RAGE keeps activation snapshot plus new bonus (9,45/9,45)
+PASS RAGE release retains new ATK bonus (7,35/7,35)
+PASS RAGE removes only its modifier (7,35/7,35)
+PASS RAGE release retains MOVE bonus (94,5/94,5)
+PASS RAGE reactivation uses updated current stats (9,555/9,555)
+PASS STUN clears RAGE and counter
+PASS STUN blocks ability
+PASS STUN cannot accumulate fire
+PASS STUN recovery requires new shot
+PASS AREA held LMB requires fresh fire count
+PASS Wire activation
+PASS All10 valid sections
+PASS Wire has no immediate damage tick (500/500)
+PASS Wire slow immediate (1,5/1,5)
+PASS Hole has no slow (2/2)
+PASS Ring does not follow PG (0/0)
+PASS Overlapping SLOW stays25% (1,5/1,5)
+PASS One shared tick10 DEF15% rounds9 (491/491)
+System.InvalidOperationException: Hole no damage (493/500)
+  at RogZombie.PreGameplayLoop.Editor.PG08Validation.Check (System.Boolean condition, System.String message) [0x0001f] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\PG08Validation.cs:110 
+  at RogZombie.PreGameplayLoop.Editor.PG08Validation.Near (System.Single actual, System.Single expected, System.String message, System.Single tolerance) [0x00000] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\PG08Validation.cs:113 
+  at RogZombie.PreGameplayLoop.Editor.PG08Validation+<WireChecks>d__30.MoveNext () [0x002b3] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\PG08Validation.cs:317 
+  at RogZombie.PreGameplayLoop.Editor.PG08Validation+<Checks>d__24.MoveNext () [0x0053e] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\PG08Validation.cs:193 
+  at RogZombie.PreGameplayLoop.Editor.PG08Validation.Tick () [0x0011c] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\PG08Validation.cs:101 
+Warnings:
+Sprite Tiling might not appear correctly because the Sprite used is not generated with Full Rect. To fix this, change the Mesh Type in the Sprite's import setting to Full Rect

@@ -1,0 +1,344 @@
+PASS | Unity 6000.3.16f1 | checks=342 | warnings=947
+PASS Suite starts PG07 only
+PASS Valid combination MultiShot/LuckyShot
+PASS Only PG07 runtime instantiated
+PASS PG07 HP100 (100/100)
+PASS PG07 ATK30 (30/30)
+PASS PG07 DEF neutral (100/100)
+PASS PG07 ATK SPD110 (110/110)
+PASS PG07 MOVE110 (2,2/2,2)
+PASS PG07 RANGE15 (15/15)
+PASS Initial full CD (10/10)
+PASS RUN starts with cooldown
+PASS RUN snapshots passive
+PASS Cadence prevents immediate repeat
+PASS Base HIT30 DEF15 final rounding26 (474/474)
+PASS Failed concentration/default shot not piercing (500/500)
+PASS No friendly fire (100/100)
+PASS Exactly one roll at valid trigger (1/1)
+PASS Probability failure path (0/0)
+PASS Actual cadence1.1/s (0,909/0,909)
+PASS MISS rolls only CONCENTRAZIONE (0/0)
+PASS RANGE15 expires projectile
+PASS MURO/OSTACOLO stops arrows (500/500)
+PASS MURO/OSTACOLO stops arrows (500/500)
+PASS Lucky30 percent ATK30=9 then DEF gives8 (492/492)
+PASS Lucky radius3 excludes outside (500/500)
+PASS Lucky area does not recursively roll (1/1)
+PASS Lucky success5 percent including lethal base HIT (1/1)
+PASS Surviving trigger receives separate base and area HIT (461/461)
+PASS Lucky30 percent ATK30=9 then DEF gives8 (492/492)
+PASS Lucky radius3 excludes outside (500/500)
+PASS Lucky area does not recursively roll (1/1)
+PASS Lucky success5 percent including lethal base HIT (1/1)
+PASS Lucky removes full blocked quadrant even for otherwise clear target (500/500)
+PASS Activate MULTI SHOT
+PASS Nine simultaneous projectiles (9/9)
+PASS CD10 starts at activation with reduction (1/1)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Multi fixed damage20 (480/480)
+PASS Multi pushes5m (5/5)
+PASS Multi range7 expires remaining shots
+PASS Multi toward push blocker
+PASS MURO interrupts push before5m
+PASS Simultaneous projectiles apply separate HITs (460/460)
+PASS Maximum one push per MOB per volley (1/1)
+PASS Simultaneous directions averaged (5/5)
+PASS Average direction cancels vertical components (50/50)
+PASS Abilities never roll base-attack passives (4/4)
+PASS Activate before AREA transition
+PASS BONUS pauses CD (0,995/0,995)
+PASS BONUS pauses pending arrows (0/0)
+PASS AREA restarts active rain CD, preserves inactive CD (0,995/0,995)
+PASS AREA preserves PG07 selections
+PASS AREA cancels remaining rain
+PASS AREA preserves bonus ATK (31,5/31,5)
+PASS AREA clears old projectiles
+PASS Ready CD preserved (0/0)
+PASS DOWN prevents abilities
+PASS RUN resets bonus (30/30)
+PASS RUN resets diagnostics (0/0)
+PASS RUN resets ability
+PASS Valid combination MultiShot/Concentrazione
+PASS Only PG07 runtime instantiated
+PASS PG07 HP100 (100/100)
+PASS PG07 ATK30 (30/30)
+PASS PG07 DEF neutral (100/100)
+PASS PG07 ATK SPD110 (110/110)
+PASS PG07 MOVE110 (2,2/2,2)
+PASS PG07 RANGE15 (15/15)
+PASS Initial full CD (10/10)
+PASS RUN starts with cooldown
+PASS RUN snapshots passive
+PASS Cadence prevents immediate repeat
+PASS Base HIT30 DEF15 final rounding26 (474/474)
+PASS Failed concentration/default shot not piercing (500/500)
+PASS No friendly fire (100/100)
+PASS Exactly one roll at valid trigger (1/1)
+PASS Probability failure path (0/0)
+PASS Actual cadence1.1/s (0,911/0,909)
+PASS MISS rolls only CONCENTRAZIONE (1/1)
+PASS RANGE15 expires projectile
+PASS MURO/OSTACOLO stops arrows (500/500)
+PASS MURO/OSTACOLO stops arrows (500/500)
+PASS Concentration first HIT100 percent before DEF (474/474)
+PASS Second HIT31/2 rounded16 then DEF gives14 (486/486)
+PASS Third HIT50 percent without further reduction (486/486)
+PASS Fourth MOB untouched (500/500)
+PASS Additional HIT effects propagate to all three MOB (3/3)
+PASS Concentration success path10 percent
+PASS Activate MULTI SHOT
+PASS Nine simultaneous projectiles (9/9)
+PASS CD10 starts at activation with reduction (1/1)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Exact ten degree fan and centered cursor (0/0)
+PASS Projectile speed20 (20/20)
+PASS Multi fixed damage20 (480/480)
+PASS Multi pushes5m (5/5)
+PASS Multi range7 expires remaining shots
+PASS Multi toward push blocker
+PASS MURO interrupts push before5m
+PASS Simultaneous projectiles apply separate HITs (460/460)
+PASS Maximum one push per MOB per volley (1/1)
+PASS Simultaneous directions averaged (5/5)
+PASS Average direction cancels vertical components (50/50)
+PASS Abilities never roll base-attack passives (6/6)
+PASS Activate before AREA transition
+PASS BONUS pauses CD (0,996/0,996)
+PASS BONUS pauses pending arrows (0/0)
+PASS AREA restarts active rain CD, preserves inactive CD (0,996/0,996)
+PASS AREA preserves PG07 selections
+PASS AREA cancels remaining rain
+PASS AREA preserves bonus ATK (31,5/31,5)
+PASS AREA clears old projectiles
+PASS Ready CD preserved (0/0)
+PASS DOWN prevents abilities
+PASS RUN resets bonus (30/30)
+PASS RUN resets diagnostics (0/0)
+PASS RUN resets ability
+PASS Valid combination PioggiaDiFrecce/LuckyShot
+PASS Only PG07 runtime instantiated
+PASS PG07 HP100 (100/100)
+PASS PG07 ATK30 (30/30)
+PASS PG07 DEF neutral (100/100)
+PASS PG07 ATK SPD110 (110/110)
+PASS PG07 MOVE110 (2,2/2,2)
+PASS PG07 RANGE15 (15/15)
+PASS Initial full CD (15/15)
+PASS RUN starts with cooldown
+PASS RUN snapshots passive
+PASS Cadence prevents immediate repeat
+PASS Base HIT30 DEF15 final rounding26 (474/474)
+PASS Failed concentration/default shot not piercing (500/500)
+PASS No friendly fire (100/100)
+PASS Exactly one roll at valid trigger (1/1)
+PASS Probability failure path (0/0)
+PASS Actual cadence1.1/s (0,912/0,909)
+PASS MISS rolls only CONCENTRAZIONE (0/0)
+PASS RANGE15 expires projectile
+PASS MURO/OSTACOLO stops arrows (500/500)
+PASS MURO/OSTACOLO stops arrows (500/500)
+PASS Lucky30 percent ATK30=9 then DEF gives8 (492/492)
+PASS Lucky radius3 excludes outside (500/500)
+PASS Lucky area does not recursively roll (1/1)
+PASS Lucky success5 percent including lethal base HIT (1/1)
+PASS Surviving trigger receives separate base and area HIT (461/461)
+PASS Lucky30 percent ATK30=9 then DEF gives8 (492/492)
+PASS Lucky radius3 excludes outside (500/500)
+PASS Lucky area does not recursively roll (1/1)
+PASS Lucky success5 percent including lethal base HIT (1/1)
+PASS Lucky removes full blocked quadrant even for otherwise clear target (500/500)
+PASS Rain scheduled regular interval (0/0)
+PASS Rain unlimited activation range
+PASS First rain arrow at T0 (1/1)
+PASS CD15 starts at activation (1,5/1,5)
+PASS Pause suspends rain (1/1)
+PASS Rain scheduled regular interval (0,158/0,158)
+PASS Rain scheduled regular interval (0,316/0,316)
+PASS Rain scheduled regular interval (0,474/0,474)
+PASS Rain scheduled regular interval (0,632/0,632)
+PASS Rain scheduled regular interval (0,789/0,789)
+PASS Rain scheduled regular interval (0,947/0,947)
+PASS Rain scheduled regular interval (1,105/1,105)
+PASS Rain scheduled regular interval (1,263/1,263)
+PASS Rain scheduled regular interval (1,421/1,421)
+PASS Rain scheduled regular interval (1,579/1,579)
+PASS Rain scheduled regular interval (1,737/1,737)
+PASS Rain scheduled regular interval (1,895/1,895)
+PASS Rain scheduled regular interval (2,053/2,053)
+PASS Rain scheduled regular interval (2,211/2,211)
+PASS Rain scheduled regular interval (2,368/2,368)
+PASS Rain scheduled regular interval (2,526/2,526)
+PASS Rain scheduled regular interval (2,684/2,684)
+PASS Rain scheduled regular interval (2,842/2,842)
+PASS Rain scheduled regular interval (3/3)
+PASS Exactly20 arrows (20/20)
+PASS Last arrow at3s (3,001/3)
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Positions randomized
+PASS Empty impact is MISS
+PASS Overlapping MOB selection randomized (2/2)
+PASS One HIT10 with DEF per arrow, no area splash (820/820)
+PASS Rain excludes allies (100/100)
+PASS Impact outside body is MISS despite nearby MOB
+PASS Abilities never roll base-attack passives (4/4)
+PASS Activate before AREA transition
+PASS BONUS pauses CD (1,497/1,497)
+PASS BONUS pauses pending arrows (1/1)
+PASS AREA restarts active rain CD, preserves inactive CD (1,5/1,5)
+PASS AREA preserves PG07 selections
+PASS AREA cancels remaining rain
+PASS AREA preserves bonus ATK (31,5/31,5)
+PASS AREA clears old projectiles
+PASS Ready CD preserved (0/0)
+PASS DOWN prevents abilities
+PASS RUN resets bonus (30/30)
+PASS RUN resets diagnostics (0/0)
+PASS RUN resets ability
+PASS Valid combination PioggiaDiFrecce/Concentrazione
+PASS Only PG07 runtime instantiated
+PASS PG07 HP100 (100/100)
+PASS PG07 ATK30 (30/30)
+PASS PG07 DEF neutral (100/100)
+PASS PG07 ATK SPD110 (110/110)
+PASS PG07 MOVE110 (2,2/2,2)
+PASS PG07 RANGE15 (15/15)
+PASS Initial full CD (15/15)
+PASS RUN starts with cooldown
+PASS RUN snapshots passive
+PASS Cadence prevents immediate repeat
+PASS Base HIT30 DEF15 final rounding26 (474/474)
+PASS Failed concentration/default shot not piercing (500/500)
+PASS No friendly fire (100/100)
+PASS Exactly one roll at valid trigger (1/1)
+PASS Probability failure path (0/0)
+PASS Actual cadence1.1/s (0,909/0,909)
+PASS MISS rolls only CONCENTRAZIONE (1/1)
+PASS RANGE15 expires projectile
+PASS MURO/OSTACOLO stops arrows (500/500)
+PASS MURO/OSTACOLO stops arrows (500/500)
+PASS Concentration first HIT100 percent before DEF (474/474)
+PASS Second HIT31/2 rounded16 then DEF gives14 (486/486)
+PASS Third HIT50 percent without further reduction (486/486)
+PASS Fourth MOB untouched (500/500)
+PASS Additional HIT effects propagate to all three MOB (3/3)
+PASS Concentration success path10 percent
+PASS Rain scheduled regular interval (0/0)
+PASS Rain unlimited activation range
+PASS First rain arrow at T0 (1/1)
+PASS CD15 starts at activation (1,5/1,5)
+PASS Pause suspends rain (1/1)
+PASS Rain scheduled regular interval (0,158/0,158)
+PASS Rain scheduled regular interval (0,316/0,316)
+PASS Rain scheduled regular interval (0,474/0,474)
+PASS Rain scheduled regular interval (0,632/0,632)
+PASS Rain scheduled regular interval (0,789/0,789)
+PASS Rain scheduled regular interval (0,947/0,947)
+PASS Rain scheduled regular interval (1,105/1,105)
+PASS Rain scheduled regular interval (1,263/1,263)
+PASS Rain scheduled regular interval (1,421/1,421)
+PASS Rain scheduled regular interval (1,579/1,579)
+PASS Rain scheduled regular interval (1,737/1,737)
+PASS Rain scheduled regular interval (1,895/1,895)
+PASS Rain scheduled regular interval (2,053/2,053)
+PASS Rain scheduled regular interval (2,211/2,211)
+PASS Rain scheduled regular interval (2,368/2,368)
+PASS Rain scheduled regular interval (2,526/2,526)
+PASS Rain scheduled regular interval (2,684/2,684)
+PASS Rain scheduled regular interval (2,842/2,842)
+PASS Rain scheduled regular interval (3/3)
+PASS Exactly20 arrows (20/20)
+PASS Last arrow at3s (3,001/3)
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Every point within radius3.5m
+PASS Positions randomized
+PASS Empty impact is MISS
+PASS Overlapping MOB selection randomized (2/2)
+PASS One HIT10 with DEF per arrow, no area splash (820/820)
+PASS Rain excludes allies (100/100)
+PASS Impact outside body is MISS despite nearby MOB
+PASS Abilities never roll base-attack passives (6/6)
+PASS Activate before AREA transition
+PASS BONUS pauses CD (1,497/1,497)
+PASS BONUS pauses pending arrows (1/1)
+PASS AREA restarts active rain CD, preserves inactive CD (1,5/1,5)
+PASS AREA preserves PG07 selections
+PASS AREA cancels remaining rain
+PASS AREA preserves bonus ATK (31,5/31,5)
+PASS AREA clears old projectiles
+PASS Ready CD preserved (0/0)
+PASS DOWN prevents abilities
+PASS RUN resets bonus (30/30)
+PASS RUN resets diagnostics (0/0)
+PASS RUN resets ability
+PASS Entire suite PG07 only
+Engine Play Mode tests completed. PG07 only, four combinations: actual shots, abilities, passives and AREA transitions. Input feel/balancing are not tested.

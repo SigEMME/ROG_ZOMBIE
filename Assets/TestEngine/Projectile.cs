@@ -16,6 +16,7 @@ namespace RogZombie.TestEngine
         private Vector2 start;
         private float travelled;
         public float Travelled => travelled;
+        public float LastHitSimulationTime { get; private set; }
         public Vector2 Direction => direction;
         public float Speed => speed;
         private Faction sourceFaction;
@@ -55,6 +56,7 @@ namespace RogZombie.TestEngine
                 if (actor == null || actor.State == LifeState.Dead || actor.State == LifeState.Down || hitActors.Contains(actor)) continue;
                 // Normal MOB attacks target PGs; friendly MOB damage is explicitly reserved for ZOMB05.
                 if (actor.Faction == sourceFaction) continue;
+                LastHitSimulationTime = Time.time - Time.deltaTime + (speed > 0 ? hit.distance / speed : 0);
                 hitActors.Add(actor);
                 if (HitEffect != null) HitEffect.ResolveHit(actor, damage, roundFinalDamage, source, hitActors.Count - 1);
                 else actor.Hit(damage, roundFinalDamage, source);

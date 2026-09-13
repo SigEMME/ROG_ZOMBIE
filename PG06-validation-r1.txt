@@ -1,0 +1,384 @@
+PASS | Unity 6000.3.16f1 | checks=382 | warnings=853
+PASS Suite starts with PG06 only
+PASS Valid combination CuraAdArea/Elemosina
+PASS No other PG runtime
+PASS PG06 HP120 (120/120)
+PASS PG06 ATK40 (40/40)
+PASS PG06 DEF neutral (100/100)
+PASS PG06 ATK SPD80 (80/80)
+PASS PG06 MOVE100 (2/2)
+PASS PG06 RANGE10 (10/10)
+PASS Initial full CD (20/20)
+PASS Not ready at RUN start
+PASS RUN snapshot independent of Inspector
+PASS Cadence blocks immediate repeat
+PASS Base HIT40 with DEF15 percent (466/466)
+PASS Non-piercing projectile (500/500)
+PASS Projectile crosses friendly PG06 (120/120)
+PASS Actual base cadence .8 attacks/s (1,251/1,25)
+PASS Projectile expires at range10
+PASS MURO/OSTACOLO blocks base projectile (500/500)
+PASS MURO/OSTACOLO blocks base projectile (500/500)
+PASS Lowest HP fraction first
+PASS Equal fraction lower actual HP first
+PASS Equal fraction and HP nearest first
+PASS Perfect ties use random selection (2/2)
+PASS Injured PG before full HP
+PASS DOWN ignored; full HP remains valid
+PASS DEAD excluded
+PASS MEDI KIT is a nonblocking PG trigger
+PASS Full HP does not consume MEDI KIT
+PASS Pickup selects one PG only (60/60)
+PASS Lowest HP pickup heals ten percent max HP (42/42)
+PASS Pickup consumed once
+PASS MEDI KIT does not trigger vitamin
+PASS No pickup overheal (120/120)
+PASS DOWN cannot consume pickup
+PASS One roll per owned KILL only with ELEMOSINA (1/1)
+PASS Actual random outcome below/above three percent (0/0)
+PASS Duplicate death cannot roll again (1/1)
+PASS One roll per owned KILL only with ELEMOSINA (1/1)
+PASS Actual random outcome below/above three percent (1/1)
+PASS Duplicate death cannot roll again (1/1)
+PASS Unattributed kill does not roll (2/2)
+PASS Activate CURA AD AREA
+PASS Area CD20 starts at activation with reduction (2/2)
+PASS Self heal40 (90/90)
+PASS 5m edge included, no overheal, MURO ignored (120/120)
+PASS Outside5m excluded (10/10)
+PASS Heal does not resurrect
+PASS Full HP valid for VITAMINA C
+PASS Vitamin actual effective speed (80/80)
+PASS Vitamin adds25 percent BASE80 (100/100)
+PASS Persistent bonus acquired during vitamin preserved separately (120/120)
+PASS Refresh duration4 (4/4)
+PASS Reapply does not stack or use current SPD as BASE (120/120)
+PASS Clear preserves acquired bonus (100/100)
+PASS Durations individual
+PASS Vitamin expires normally (80/80)
+PASS Activate before AREA
+PASS BONUS pause stops CD (1,995/1,995)
+PASS BONUS pause stops vitamin (4/4)
+PASS AREA full CD if charged, residual otherwise (1,995/1,995)
+PASS AREA retains PG06 selections
+PASS AREA clears charges (0/0)
+PASS AREA clears vitamin (0/0)
+PASS AREA removes MEDI KIT
+PASS AREA ATK bonus preserved (42/42)
+PASS Ready CD preserved (0/0)
+PASS DOWN blocks ability
+PASS RUN resets bonus (40/40)
+PASS RUN restores HP (120/120)
+PASS RUN resets charges (0/0)
+PASS RUN resets kill rolls (0/0)
+PASS RUN resets vitamin (80/80)
+PASS RUN clears pickups
+PASS Valid combination CuraAdArea/VitaminaC
+PASS No other PG runtime
+PASS PG06 HP120 (120/120)
+PASS PG06 ATK40 (40/40)
+PASS PG06 DEF neutral (100/100)
+PASS PG06 ATK SPD80 (80/80)
+PASS PG06 MOVE100 (2/2)
+PASS PG06 RANGE10 (10/10)
+PASS Initial full CD (20/20)
+PASS Not ready at RUN start
+PASS RUN snapshot independent of Inspector
+PASS Cadence blocks immediate repeat
+PASS Base HIT40 with DEF15 percent (466/466)
+PASS Non-piercing projectile (500/500)
+PASS Projectile crosses friendly PG06 (120/120)
+PASS Actual base cadence .8 attacks/s (1,252/1,25)
+PASS Projectile expires at range10
+PASS MURO/OSTACOLO blocks base projectile (500/500)
+PASS MURO/OSTACOLO blocks base projectile (500/500)
+PASS Lowest HP fraction first
+PASS Equal fraction lower actual HP first
+PASS Equal fraction and HP nearest first
+PASS Perfect ties use random selection (2/2)
+PASS Injured PG before full HP
+PASS DOWN ignored; full HP remains valid
+PASS DEAD excluded
+PASS MEDI KIT is a nonblocking PG trigger
+PASS Full HP does not consume MEDI KIT
+PASS Pickup selects one PG only (60/60)
+PASS Lowest HP pickup heals ten percent max HP (42/42)
+PASS Pickup consumed once
+PASS MEDI KIT does not trigger vitamin
+PASS No pickup overheal (120/120)
+PASS DOWN cannot consume pickup
+PASS One roll per owned KILL only with ELEMOSINA (0/0)
+PASS Actual random outcome below/above three percent (0/0)
+PASS Duplicate death cannot roll again (0/0)
+PASS One roll per owned KILL only with ELEMOSINA (0/0)
+PASS Actual random outcome below/above three percent (0/0)
+PASS Duplicate death cannot roll again (0/0)
+PASS Unattributed kill does not roll (0/0)
+PASS Activate CURA AD AREA
+PASS Area CD20 starts at activation with reduction (2/2)
+PASS Self heal40 (90/90)
+PASS 5m edge included, no overheal, MURO ignored (120/120)
+PASS Outside5m excluded (10/10)
+PASS Heal does not resurrect
+PASS Full HP valid for VITAMINA C
+PASS Vitamin actual effective speed (100/100)
+PASS Vitamin adds25 percent BASE80 (100/100)
+PASS Persistent bonus acquired during vitamin preserved separately (120/120)
+PASS Refresh duration4 (4/4)
+PASS Reapply does not stack or use current SPD as BASE (120/120)
+PASS Clear preserves acquired bonus (100/100)
+PASS Durations individual
+PASS Vitamin expires normally (80/80)
+PASS Activate before AREA
+PASS BONUS pause stops CD (1,997/1,997)
+PASS BONUS pause stops vitamin (4/4)
+PASS AREA full CD if charged, residual otherwise (1,997/1,997)
+PASS AREA retains PG06 selections
+PASS AREA clears charges (0/0)
+PASS AREA clears vitamin (0/0)
+PASS AREA removes MEDI KIT
+PASS AREA ATK bonus preserved (42/42)
+PASS Ready CD preserved (0/0)
+PASS DOWN blocks ability
+PASS RUN resets bonus (40/40)
+PASS RUN restores HP (120/120)
+PASS RUN resets charges (0/0)
+PASS RUN resets kill rolls (0/0)
+PASS RUN resets vitamin (80/80)
+PASS RUN clears pickups
+PASS Valid combination FuocoCurativo/Elemosina
+PASS No other PG runtime
+PASS PG06 HP120 (120/120)
+PASS PG06 ATK40 (40/40)
+PASS PG06 DEF neutral (100/100)
+PASS PG06 ATK SPD80 (80/80)
+PASS PG06 MOVE100 (2/2)
+PASS PG06 RANGE10 (10/10)
+PASS Initial full CD (15/15)
+PASS Not ready at RUN start
+PASS RUN snapshot independent of Inspector
+PASS Cadence blocks immediate repeat
+PASS Base HIT40 with DEF15 percent (466/466)
+PASS Non-piercing projectile (500/500)
+PASS Projectile crosses friendly PG06 (120/120)
+PASS Actual base cadence .8 attacks/s (1,251/1,25)
+PASS Projectile expires at range10
+PASS MURO/OSTACOLO blocks base projectile (500/500)
+PASS MURO/OSTACOLO blocks base projectile (500/500)
+PASS Lowest HP fraction first
+PASS Equal fraction lower actual HP first
+PASS Equal fraction and HP nearest first
+PASS Perfect ties use random selection (2/2)
+PASS Injured PG before full HP
+PASS DOWN ignored; full HP remains valid
+PASS DEAD excluded
+PASS MEDI KIT is a nonblocking PG trigger
+PASS Full HP does not consume MEDI KIT
+PASS Pickup selects one PG only (60/60)
+PASS Lowest HP pickup heals ten percent max HP (42/42)
+PASS Pickup consumed once
+PASS MEDI KIT does not trigger vitamin
+PASS No pickup overheal (120/120)
+PASS DOWN cannot consume pickup
+PASS One roll per owned KILL only with ELEMOSINA (1/1)
+PASS Actual random outcome below/above three percent (0/0)
+PASS Duplicate death cannot roll again (1/1)
+PASS One roll per owned KILL only with ELEMOSINA (1/1)
+PASS Actual random outcome below/above three percent (1/1)
+PASS Duplicate death cannot roll again (1/1)
+PASS Unattributed kill does not roll (2/2)
+PASS Activate FUOCO CURATIVO
+PASS Six charges (6/6)
+PASS CD absent until sixth shot (0/0)
+PASS Charges do not expire (6/6)
+PASS Cannot stack charges
+PASS Shot consumes charge including MISS (5/5)
+PASS Sixth launch starts full CD (0/0)
+PASS Hit heals15; MISS does not heal (25/25)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Healing shot preserves base damage40 (460/460)
+PASS Shot consumes charge including MISS (4/4)
+PASS Sixth launch starts full CD (0/0)
+PASS Hit heals15; MISS does not heal (10/10)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Shot consumes charge including MISS (3/3)
+PASS Sixth launch starts full CD (0/0)
+PASS Hit heals15; MISS does not heal (25/25)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Healing shot preserves base damage40 (460/460)
+PASS Shot consumes charge including MISS (2/2)
+PASS Sixth launch starts full CD (0/0)
+PASS Hit heals15; MISS does not heal (10/10)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Shot consumes charge including MISS (1/1)
+PASS Sixth launch starts full CD (0/0)
+PASS Hit heals15; MISS does not heal (25/25)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Healing shot preserves base damage40 (460/460)
+PASS Shot consumes charge including MISS (0/0)
+PASS Sixth launch starts full CD (1,5/1,5)
+PASS Hit heals15; MISS does not heal (10/10)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Sixth shot ends charged effect
+PASS Inactive cooldown preserves residue (0,796/0,796)
+PASS All full HP chooses nearest, ignoring absolute HP
+PASS Activate again for full-health HIT
+PASS Full-health HIT selects nearest PG06 self
+PASS Zero effective heal at full HP (120/120)
+PASS Zero heal still grants vitamin to selected PG (80/80)
+PASS Unselected full-health PG gets no vitamin
+PASS Vitamin adds25 percent BASE80 (100/100)
+PASS Persistent bonus acquired during vitamin preserved separately (120/120)
+PASS Refresh duration4 (4/4)
+PASS Reapply does not stack or use current SPD as BASE (120/120)
+PASS Clear preserves acquired bonus (100/100)
+PASS Durations individual
+PASS Vitamin expires normally (80/80)
+PASS Activate before AREA
+PASS BONUS pause stops CD (0/0)
+PASS BONUS pause stops vitamin (4/4)
+PASS AREA full CD if charged, residual otherwise (1,5/1,5)
+PASS AREA retains PG06 selections
+PASS AREA clears charges (0/0)
+PASS AREA clears vitamin (0/0)
+PASS AREA removes MEDI KIT
+PASS AREA ATK bonus preserved (42/42)
+PASS Ready CD preserved (0/0)
+PASS DOWN blocks ability
+PASS RUN resets bonus (40/40)
+PASS RUN restores HP (120/120)
+PASS RUN resets charges (0/0)
+PASS RUN resets kill rolls (0/0)
+PASS RUN resets vitamin (80/80)
+PASS RUN clears pickups
+PASS Valid combination FuocoCurativo/VitaminaC
+PASS No other PG runtime
+PASS PG06 HP120 (120/120)
+PASS PG06 ATK40 (40/40)
+PASS PG06 DEF neutral (100/100)
+PASS PG06 ATK SPD80 (80/80)
+PASS PG06 MOVE100 (2/2)
+PASS PG06 RANGE10 (10/10)
+PASS Initial full CD (15/15)
+PASS Not ready at RUN start
+PASS RUN snapshot independent of Inspector
+PASS Cadence blocks immediate repeat
+PASS Base HIT40 with DEF15 percent (466/466)
+PASS Non-piercing projectile (500/500)
+PASS Projectile crosses friendly PG06 (120/120)
+PASS Actual base cadence .8 attacks/s (1,25/1,25)
+PASS Projectile expires at range10
+PASS MURO/OSTACOLO blocks base projectile (500/500)
+PASS MURO/OSTACOLO blocks base projectile (500/500)
+PASS Lowest HP fraction first
+PASS Equal fraction lower actual HP first
+PASS Equal fraction and HP nearest first
+PASS Perfect ties use random selection (2/2)
+PASS Injured PG before full HP
+PASS DOWN ignored; full HP remains valid
+PASS DEAD excluded
+PASS MEDI KIT is a nonblocking PG trigger
+PASS Full HP does not consume MEDI KIT
+PASS Pickup selects one PG only (60/60)
+PASS Lowest HP pickup heals ten percent max HP (42/42)
+PASS Pickup consumed once
+PASS MEDI KIT does not trigger vitamin
+PASS No pickup overheal (120/120)
+PASS DOWN cannot consume pickup
+PASS One roll per owned KILL only with ELEMOSINA (0/0)
+PASS Actual random outcome below/above three percent (0/0)
+PASS Duplicate death cannot roll again (0/0)
+PASS One roll per owned KILL only with ELEMOSINA (0/0)
+PASS Actual random outcome below/above three percent (0/0)
+PASS Duplicate death cannot roll again (0/0)
+PASS Unattributed kill does not roll (0/0)
+PASS Activate FUOCO CURATIVO
+PASS Six charges (6/6)
+PASS CD absent until sixth shot (0/0)
+PASS Charges do not expire (6/6)
+PASS Cannot stack charges
+PASS Shot consumes charge including MISS (5/5)
+PASS Sixth launch starts full CD (0/0)
+PASS Hit heals15; MISS does not heal (25/25)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Healing shot preserves base damage40 (460/460)
+PASS Shot consumes charge including MISS (4/4)
+PASS Sixth launch starts full CD (0/0)
+PASS Hit heals15; MISS does not heal (10/10)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Shot consumes charge including MISS (3/3)
+PASS Sixth launch starts full CD (0/0)
+PASS Hit heals15; MISS does not heal (25/25)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Healing shot preserves base damage40 (460/460)
+PASS Shot consumes charge including MISS (2/2)
+PASS Sixth launch starts full CD (0/0)
+PASS Hit heals15; MISS does not heal (10/10)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Shot consumes charge including MISS (1/1)
+PASS Sixth launch starts full CD (0/0)
+PASS Hit heals15; MISS does not heal (25/25)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Healing shot preserves base damage40 (460/460)
+PASS Shot consumes charge including MISS (0/0)
+PASS Sixth launch starts full CD (1,5/1,5)
+PASS Hit heals15; MISS does not heal (10/10)
+PASS Outside15m cannot receive heal (1/1)
+PASS More injured ally has priority over self (60/60)
+PASS Vitamin only selected target after valid HIT
+PASS Sixth shot ends charged effect
+PASS Inactive cooldown preserves residue (0,797/0,797)
+PASS All full HP chooses nearest, ignoring absolute HP
+PASS Activate again for full-health HIT
+PASS Full-health HIT selects nearest PG06 self
+PASS Zero effective heal at full HP (120/120)
+PASS Zero heal still grants vitamin to selected PG (100/100)
+PASS Unselected full-health PG gets no vitamin
+PASS Vitamin adds25 percent BASE80 (100/100)
+PASS Persistent bonus acquired during vitamin preserved separately (120/120)
+PASS Refresh duration4 (4/4)
+PASS Reapply does not stack or use current SPD as BASE (120/120)
+PASS Clear preserves acquired bonus (100/100)
+PASS Durations individual
+PASS Vitamin expires normally (80/80)
+PASS Activate before AREA
+PASS BONUS pause stops CD (0/0)
+PASS BONUS pause stops vitamin (4/4)
+PASS AREA full CD if charged, residual otherwise (1,5/1,5)
+PASS AREA retains PG06 selections
+PASS AREA clears charges (0/0)
+PASS AREA clears vitamin (0/0)
+PASS AREA removes MEDI KIT
+PASS AREA ATK bonus preserved (42/42)
+PASS Ready CD preserved (0/0)
+PASS DOWN blocks ability
+PASS RUN resets bonus (40/40)
+PASS RUN restores HP (120/120)
+PASS RUN resets charges (0/0)
+PASS RUN resets kill rolls (0/0)
+PASS RUN resets vitamin (80/80)
+PASS RUN clears pickups
+PASS Entire suite PG06 only
+Engine Play Mode tests completed. PG06 only, four combinations: actual shots, abilities, passives and AREA transitions. Input feel/balancing are not tested.

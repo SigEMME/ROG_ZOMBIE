@@ -38,9 +38,10 @@ namespace RogZombie
                 (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f),
                 (keyboard.wKey.isPressed ? 1f : 0f) - (keyboard.sKey.isPressed ? 1f : 0f));
 
-            float metresPerSecond = combatant != null ? combatant.Stats.MetresPerSecond : playerDefinition.BaseStats.MoveSpeedMetresPerSecond;
+            float metresPerSecond = combatant != null ? combatant.EffectiveStats.MetresPerSecond : playerDefinition.BaseStats.MoveSpeedMetresPerSecond;
             if (TestSettings != null)
-                metresPerSecond = (combatant != null ? combatant.Stats.MoveSpeed : playerDefinition.BaseStats.MoveSpeed) / 100f * TestSettings.PlayerMoveSpeedBase;
+                metresPerSecond = (combatant != null ? combatant.EffectiveStats.MoveSpeed : playerDefinition.BaseStats.MoveSpeed) / 100f * TestSettings.PlayerMoveSpeedBase;
+            if (combatant != null) metresPerSecond *= combatant.CurrentMovementMultiplier;
             Vector2 displacement = Vector2.ClampMagnitude(input, 1f) * metresPerSecond * Time.deltaTime;
             // World-space movement stays independent of the mouse-facing rotation.
             if (combatant != null) combatant.Move(displacement);

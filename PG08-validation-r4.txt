@@ -1,0 +1,334 @@
+PASS | Unity 6000.3.16f1 | checks=330 | warnings=841
+PASS Suite starts PG08 only
+PASS Annulus middle inside
+PASS Annulus inner hole excluded
+PASS Annulus outside excluded
+PASS Body overlaps inner rim
+PASS Body overlaps outer rim
+PASS Blocker in hole does not delete ring
+PASS Tiny blocker deletes intersected sector
+PASS Other sector unaffected
+PASS Wire min CD1.6 (1,6/1,6)
+PASS Push CD modifier (9,5/9,5)
+PASS Valid combination FiloSpinato/Tenacia
+PASS Only PG08 runtime instantiated
+PASS HP100 (100/100)
+PASS ATK7 (7/7)
+PASS DEF+10% (110/110)
+PASS ATK SPD200 (200/200)
+PASS MOVE90=1.8m/s (1,8/1,8)
+PASS RANGE8 (8/8)
+PASS Full CD at RUN start (16/16)
+PASS Initial CD prevents activation
+PASS RUN snapshots both selections
+PASS Cadence blocks immediate repeat
+PASS Physical projectile speed20 (20/20)
+PASS ATK7 against DEF15% rounds to6 (494/494)
+PASS Base never pierces (500/500)
+PASS Ally crossed without damage (100/100)
+PASS Only TENACIA counts base HIT (1/1)
+PASS Base actual interval0.5s (0,502/0,5)
+PASS MISS expires at range8
+PASS MISS does not add TENACIA (1/1)
+PASS Obstacle blocks base projectile (500/500)
+PASS First HIT fractional DEF0.2 (110,2/110,2)
+PASS TENACIA150 hits (150/150)
+PASS TENACIA additive cap +30 (140/140)
+PASS No accumulation past cap (140/140)
+PASS DEF bonus acquired on persistent value (115,5/115,5)
+PASS TENACIA preserves acquired bonus (145,5/145,5)
+PASS Zero-damage HIT clears TENACIA (0/0)
+PASS No permanent bonus lost (115,5/115,5)
+PASS Resetting HIT uses DEF40% including TENACIA (6/6)
+PASS Damaging HIT clears TENACIA after mitigation (0/0)
+PASS Incoming HIT removes only TENACIA (110/110)
+PASS Next HIT uses only base DEF10% (9/9)
+PASS Global DEF cap90% (190/190)
+PASS Resetting HIT respects global DEF cap90% (1/1)
+PASS After reset only persistent DEF85% remains (185/185)
+PASS Next HIT uses persistent DEF85% with final rounding (2/2)
+PASS Persistent DEF preserved after cap reset (185/185)
+PASS Wire activation
+PASS All10 valid sections
+PASS Wire has no immediate damage tick (500/500)
+PASS Wire slow immediate (1,5/1,5)
+PASS Hole has no slow (2/2)
+PASS Ring does not follow PG (0/0)
+PASS Overlapping SLOW stays25% (1,5/1,5)
+PASS One shared tick10 DEF15% rounds9 (491/491)
+PASS Hole no damage (500/500)
+PASS Outside no damage (500/500)
+PASS Ally no damage (100/100)
+PASS Wire HIT does not add TENACIA (0/0)
+PASS Exit immediately clears SLOW (2/2)
+PASS Reentry restarts one-second clock (491/491)
+PASS Reentry gets its own tick (482/482)
+PASS Ring removal clears slow (2/2)
+PASS Wire three ticks over3s (470/470)
+PASS Natural expiry clears slow (2/2)
+PASS Partial overlap removes entire36-degree section (9/9)
+PASS Deleted section has no contact away from blocker
+PASS Zero-section cast still used
+PASS Zero-section cast starts full CD (16/16)
+PASS Zero-section ring not active
+PASS Reduced-CD wire cast
+PASS Reduced CD allows overlapping rings
+PASS Zero-section cast while prior rings exist
+PASS Zero-section cast preserves HUD state of prior rings
+PASS Activate before transition
+PASS BONUS pauses CD (15,995/15,995)
+PASS BONUS pauses ability duration (0/0)
+PASS BONUS pauses fire counter (0/0)
+PASS AREA restarts active CD (16/16)
+PASS AREA preserves choices and PG
+PASS AREA clears effects
+PASS AREA resets held-fire progress (0/0)
+PASS AREA resets TENACIA (0/0)
+PASS AREA retains acquired ATK bonus (7,35/7,35)
+PASS AREA removes rings and motions
+PASS AREA removes projectiles
+PASS Inactive CD residue preserved (16/16)
+PASS Ready stays ready (0/0)
+PASS DOWN immediately clears RAGE
+PASS DOWN blocks Q
+PASS RUN resets persistent bonus (7/7)
+PASS RUN resets hits (0/0)
+PASS RUN resets fire progress (0/0)
+PASS RUN resets effects
+PASS Valid combination FiloSpinato/Rage
+PASS Only PG08 runtime instantiated
+PASS HP100 (100/100)
+PASS ATK7 (7/7)
+PASS DEF+10% (110/110)
+PASS ATK SPD200 (200/200)
+PASS MOVE90=1.8m/s (1,8/1,8)
+PASS RANGE8 (8/8)
+PASS Full CD at RUN start (16/16)
+PASS Initial CD prevents activation
+PASS RUN snapshots both selections
+PASS Cadence blocks immediate repeat
+PASS Physical projectile speed20 (19,999/20)
+PASS ATK7 against DEF15% rounds to6 (494/494)
+PASS Base never pierces (500/500)
+PASS Ally crossed without damage (100/100)
+PASS Only TENACIA counts base HIT (0/0)
+PASS Base actual interval0.5s (0,506/0,5)
+PASS MISS expires at range8
+PASS MISS does not add TENACIA (0/0)
+PASS Obstacle blocks base projectile (500/500)
+PASS Holding without an initial shot does not start RAGE
+PASS RAGE below5s inactive
+PASS RAGE at5s active on MISS
+PASS RAGE ATK+30% (9,1/9,1)
+PASS RAGE MOVE-20% (72/72)
+PASS Continuous RAGE does not accumulate (9,1/9,1)
+PASS RAGE actual projectile damage9 after final rounding (491/491)
+PASS RAGE keeps activation snapshot plus new bonus (9,45/9,45)
+PASS RAGE release retains new ATK bonus (7,35/7,35)
+PASS RAGE removes only its modifier (7,35/7,35)
+PASS RAGE release retains MOVE bonus (94,5/94,5)
+PASS RAGE reactivation uses updated current stats (9,555/9,555)
+PASS STUN clears RAGE and counter
+PASS STUN blocks ability
+PASS STUN cannot accumulate fire
+PASS STUN recovery requires new shot
+PASS AREA held LMB requires fresh fire count
+PASS Wire activation
+PASS All10 valid sections
+PASS Wire has no immediate damage tick (500/500)
+PASS Wire slow immediate (1,5/1,5)
+PASS Hole has no slow (2/2)
+PASS Ring does not follow PG (0/0)
+PASS Overlapping SLOW stays25% (1,5/1,5)
+PASS One shared tick10 DEF15% rounds9 (491/491)
+PASS Hole no damage (500/500)
+PASS Outside no damage (500/500)
+PASS Ally no damage (100/100)
+PASS Wire HIT does not add TENACIA (0/0)
+PASS Exit immediately clears SLOW (2/2)
+PASS Reentry restarts one-second clock (491/491)
+PASS Reentry gets its own tick (482/482)
+PASS Ring removal clears slow (2/2)
+PASS Wire three ticks over3s (470/470)
+PASS Natural expiry clears slow (2/2)
+PASS Partial overlap removes entire36-degree section (9/9)
+PASS Deleted section has no contact away from blocker
+PASS Zero-section cast still used
+PASS Zero-section cast starts full CD (16/16)
+PASS Zero-section ring not active
+PASS Reduced-CD wire cast
+PASS Reduced CD allows overlapping rings
+PASS Zero-section cast while prior rings exist
+PASS Zero-section cast preserves HUD state of prior rings
+PASS Activate before transition
+PASS BONUS pauses CD (15,997/15,997)
+PASS BONUS pauses ability duration (0/0)
+PASS BONUS pauses fire counter (5/5)
+PASS AREA restarts active CD (16/16)
+PASS AREA preserves choices and PG
+PASS AREA clears effects
+PASS AREA resets held-fire progress (0/0)
+PASS AREA resets TENACIA (0/0)
+PASS AREA retains acquired ATK bonus (7,35/7,35)
+PASS AREA removes rings and motions
+PASS AREA removes projectiles
+PASS Inactive CD residue preserved (16/16)
+PASS Ready stays ready (0/0)
+PASS DOWN immediately clears RAGE
+PASS DOWN blocks Q
+PASS RUN resets persistent bonus (7/7)
+PASS RUN resets hits (0/0)
+PASS RUN resets fire progress (0/0)
+PASS RUN resets effects
+PASS Valid combination ColpiRespingenti/Tenacia
+PASS Only PG08 runtime instantiated
+PASS HP100 (100/100)
+PASS ATK7 (7/7)
+PASS DEF+10% (110/110)
+PASS ATK SPD200 (200/200)
+PASS MOVE90=1.8m/s (1,8/1,8)
+PASS RANGE8 (8/8)
+PASS Full CD at RUN start (10/10)
+PASS Initial CD prevents activation
+PASS RUN snapshots both selections
+PASS Cadence blocks immediate repeat
+PASS Physical projectile speed20 (20,001/20)
+PASS ATK7 against DEF15% rounds to6 (494/494)
+PASS Base never pierces (500/500)
+PASS Ally crossed without damage (100/100)
+PASS Only TENACIA counts base HIT (1/1)
+PASS Base actual interval0.5s (0,5/0,5)
+PASS MISS expires at range8
+PASS MISS does not add TENACIA (1/1)
+PASS Obstacle blocks base projectile (500/500)
+PASS First HIT fractional DEF0.2 (110,2/110,2)
+PASS TENACIA150 hits (150/150)
+PASS TENACIA additive cap +30 (140/140)
+PASS No accumulation past cap (140/140)
+PASS DEF bonus acquired on persistent value (115,5/115,5)
+PASS TENACIA preserves acquired bonus (145,5/145,5)
+PASS Zero-damage HIT clears TENACIA (0/0)
+PASS No permanent bonus lost (115,5/115,5)
+PASS Resetting HIT uses DEF40% including TENACIA (6/6)
+PASS Damaging HIT clears TENACIA after mitigation (0/0)
+PASS Incoming HIT removes only TENACIA (110/110)
+PASS Next HIT uses only base DEF10% (9/9)
+PASS Global DEF cap90% (190/190)
+PASS Resetting HIT respects global DEF cap90% (1/1)
+PASS After reset only persistent DEF85% remains (185/185)
+PASS Next HIT uses persistent DEF85% with final rounding (2/2)
+PASS Persistent DEF preserved after cap reset (185/185)
+PASS Push ability activates
+PASS Push CD waits until end (0/0)
+PASS Cannot reactivate during3s
+PASS Push not instantaneous
+PASS Push keeps base damage7 (493/493)
+PASS First HIT pushes1.5m (34,5/34,5)
+PASS Second HIT normal damage (486/486)
+PASS Second HIT adds full independent1.5m (36/36)
+PASS Push available after CD
+PASS CD not running before3s (0/0)
+PASS CD begins exactly after3s (10/10)
+PASS Push inactive AREA retains CD (8/8)
+PASS Half-time eased distance1.125 (34,125/34,125)
+PASS Full-time distance1.5 (34,5/34,5)
+PASS Simultaneous HIT motions remain independent (36/36)
+PASS Wall stops push at body boundary (33,553/33,549)
+PASS Activate before transition
+PASS BONUS pauses CD (0/0)
+PASS BONUS pauses ability duration (2,998/2,998)
+PASS BONUS pauses fire counter (0/0)
+PASS AREA restarts active CD (10/10)
+PASS AREA preserves choices and PG
+PASS AREA clears effects
+PASS AREA resets held-fire progress (0/0)
+PASS AREA resets TENACIA (0/0)
+PASS AREA retains acquired ATK bonus (7,35/7,35)
+PASS AREA removes rings and motions
+PASS AREA removes projectiles
+PASS Inactive CD residue preserved (10/10)
+PASS Ready stays ready (0/0)
+PASS DOWN immediately clears RAGE
+PASS DOWN blocks Q
+PASS RUN resets persistent bonus (7/7)
+PASS RUN resets hits (0/0)
+PASS RUN resets fire progress (0/0)
+PASS RUN resets effects
+PASS Valid combination ColpiRespingenti/Rage
+PASS Only PG08 runtime instantiated
+PASS HP100 (100/100)
+PASS ATK7 (7/7)
+PASS DEF+10% (110/110)
+PASS ATK SPD200 (200/200)
+PASS MOVE90=1.8m/s (1,8/1,8)
+PASS RANGE8 (8/8)
+PASS Full CD at RUN start (10/10)
+PASS Initial CD prevents activation
+PASS RUN snapshots both selections
+PASS Cadence blocks immediate repeat
+PASS Physical projectile speed20 (19,994/20)
+PASS ATK7 against DEF15% rounds to6 (494/494)
+PASS Base never pierces (500/500)
+PASS Ally crossed without damage (100/100)
+PASS Only TENACIA counts base HIT (0/0)
+PASS Base actual interval0.5s (0,501/0,5)
+PASS MISS expires at range8
+PASS MISS does not add TENACIA (0/0)
+PASS Obstacle blocks base projectile (500/500)
+PASS Holding without an initial shot does not start RAGE
+PASS RAGE below5s inactive
+PASS RAGE at5s active on MISS
+PASS RAGE ATK+30% (9,1/9,1)
+PASS RAGE MOVE-20% (72/72)
+PASS Continuous RAGE does not accumulate (9,1/9,1)
+PASS RAGE actual projectile damage9 after final rounding (491/491)
+PASS RAGE keeps activation snapshot plus new bonus (9,45/9,45)
+PASS RAGE release retains new ATK bonus (7,35/7,35)
+PASS RAGE removes only its modifier (7,35/7,35)
+PASS RAGE release retains MOVE bonus (94,5/94,5)
+PASS RAGE reactivation uses updated current stats (9,555/9,555)
+PASS STUN clears RAGE and counter
+PASS STUN blocks ability
+PASS STUN cannot accumulate fire
+PASS STUN recovery requires new shot
+PASS AREA held LMB requires fresh fire count
+PASS Push ability activates
+PASS Push CD waits until end (0/0)
+PASS Cannot reactivate during3s
+PASS Push not instantaneous
+PASS Push keeps base damage7 (493/493)
+PASS First HIT pushes1.5m (34,5/34,5)
+PASS Second HIT normal damage (486/486)
+PASS Second HIT adds full independent1.5m (35,999/36)
+PASS Push available after CD
+PASS CD not running before3s (0/0)
+PASS CD begins exactly after3s (10/10)
+PASS Push inactive AREA retains CD (8/8)
+PASS Half-time eased distance1.125 (34,125/34,125)
+PASS Full-time distance1.5 (34,5/34,5)
+PASS Simultaneous HIT motions remain independent (36/36)
+PASS Wall stops push at body boundary (33,553/33,549)
+PASS Activate before transition
+PASS BONUS pauses CD (0/0)
+PASS BONUS pauses ability duration (2,997/2,997)
+PASS BONUS pauses fire counter (5/5)
+PASS AREA restarts active CD (10/10)
+PASS AREA preserves choices and PG
+PASS AREA clears effects
+PASS AREA resets held-fire progress (0/0)
+PASS AREA resets TENACIA (0/0)
+PASS AREA retains acquired ATK bonus (7,35/7,35)
+PASS AREA removes rings and motions
+PASS AREA removes projectiles
+PASS Inactive CD residue preserved (10/10)
+PASS Ready stays ready (0/0)
+PASS DOWN immediately clears RAGE
+PASS DOWN blocks Q
+PASS RUN resets persistent bonus (7/7)
+PASS RUN resets hits (0/0)
+PASS RUN resets fire progress (0/0)
+PASS RUN resets effects
+PASS Entire suite PG08 only
+Engine Play Mode tests completed. PG08 only, four combinations: actual shots, abilities, passives and AREA transitions. Input feel/balancing are not tested.
+Warnings:
+Sprite Tiling might not appear correctly because the Sprite used is not generated with Full Rect. To fix this, change the Mesh Type in the Sprite's import setting to Full Rect

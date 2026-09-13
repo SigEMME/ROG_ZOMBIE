@@ -1,0 +1,320 @@
+PASS | Unity 6000.3.16f1 | checks=318 | warnings=869
+PASS Suite starts with PG05 only
+PASS Valid combination Invisibilita/Ghosting
+PASS No other PG runtime
+PASS PG05 HP (100/100)
+PASS PG05 ATK (30/30)
+PASS PG05 DEF -10 percent (90/90)
+PASS PG05 cadence (150/150)
+PASS PG05 MOVE SPD 130 (2,6/2,6)
+PASS PG05 RANGE 2m (2/2)
+PASS Initial full CD (15/15)
+PASS Not ready on RUN start
+PASS Selection snapshot survives configuration changes
+PASS Base actual damage (470/470)
+PASS Radial edge included (470/470)
+PASS Inside 135deg cone (470/470)
+PASS Outside RANGE excluded (500/500)
+PASS Rear excluded (500/500)
+PASS Outside angle excluded (500/500)
+PASS No friendly fire (500/500)
+PASS Cadence blocks immediate repeat
+PASS Actual attack interval (0,668/0,667)
+PASS MURO/OSTACOLO screens target (500/500)
+PASS MURO/OSTACOLO screens target (500/500)
+PASS HP exactly 30 before HIT does not trigger crossing HIT
+PASS Already below 30 before HIT triggers GHOSTING
+PASS GHOSTING lasts 2s (2/2)
+PASS Ghost MOVE +15 percent (2,99/2,99)
+PASS Further HIT does not refresh GHOSTING (1,748/1,748)
+PASS New permanent MOVE bonus remains independent (3,22/3,22)
+PASS GHOSTING expires
+PASS Expiry preserves permanent MOVE bonus (2,8/2,8)
+PASS No internal cooldown after expiry
+PASS Action cancels GHOSTING and speed
+PASS Poison has no immediate tick (500/500)
+PASS First tick after 1 second and DEF (496/496)
+PASS Poison cap five stacks (5/5)
+PASS Reapply refreshes shared duration even at cap (3/3)
+PASS Reapply resets tick clock (496/496)
+PASS Pause stops poison (2,4/2,4)
+PASS Three five-stack ticks with DEF (436/436)
+PASS Poison expires after shared duration
+PASS Poison lethal tick credits caster once (1/1)
+PASS Activate party invisibility
+PASS CD15 with reduction starts at activation (1,5/1,5)
+PASS Party range unlimited; DOWN excluded
+PASS Invisibility 3.5s (3,5/3,5)
+PASS Movement does not cancel invisibility
+PASS Interruption is individual
+PASS Base attack cancels invisibility
+PASS Last invisibility effect replaces duration (2/2)
+PASS Overlap has one speed bonus (2,99/2,99)
+PASS MOB chooses visible ally over nearest invisible PG05
+PASS MOB reacquires PG05 after invisibility
+PASS Activate before AREA
+PASS BONUS pause stops cooldown (1,486/1,486)
+PASS AREA keeps PG05 runtime and selections
+PASS CICUTA counter persists across AREA (0/0)
+PASS AREA ends invisibility
+PASS AREA preserves ATK bonus (31,5/31,5)
+PASS Old AREA poison removed
+PASS Ready CD preserved (0/0)
+PASS DOWN blocks ability
+PASS RUN resets bonus (30/30)
+PASS RUN resets counter (0/0)
+PASS RUN resets invisibility
+PASS Valid combination Invisibilita/LamaDiCicuta
+PASS No other PG runtime
+PASS PG05 HP (100/100)
+PASS PG05 ATK (30/30)
+PASS PG05 DEF -10 percent (90/90)
+PASS PG05 cadence (150/150)
+PASS PG05 MOVE SPD 130 (2,6/2,6)
+PASS PG05 RANGE 2m (2/2)
+PASS Initial full CD (15/15)
+PASS Not ready on RUN start
+PASS Selection snapshot survives configuration changes
+PASS Base actual damage (470/470)
+PASS Radial edge included (470/470)
+PASS Inside 135deg cone (470/470)
+PASS Outside RANGE excluded (500/500)
+PASS Rear excluded (500/500)
+PASS Outside angle excluded (500/500)
+PASS No friendly fire (500/500)
+PASS Cadence blocks immediate repeat
+PASS Actual attack interval (0,668/0,667)
+PASS MURO/OSTACOLO screens target (500/500)
+PASS MURO/OSTACOLO screens target (500/500)
+PASS Multiple MOB per attack reaches cap, overflow discarded (15/15)
+PASS Threshold attack does not poison
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Empowered attack resets without recounting its hits (0/0)
+PASS New counter cycle (1/1)
+PASS Poison has no immediate tick (500/500)
+PASS First tick after 1 second and DEF (496/496)
+PASS Poison cap five stacks (5/5)
+PASS Reapply refreshes shared duration even at cap (3/3)
+PASS Reapply resets tick clock (496/496)
+PASS Pause stops poison (2,4/2,4)
+PASS Three five-stack ticks with DEF (436/436)
+PASS Poison expires after shared duration
+PASS Poison lethal tick credits caster once (1/1)
+PASS Activate party invisibility
+PASS CD15 with reduction starts at activation (1,5/1,5)
+PASS Party range unlimited; DOWN excluded
+PASS Invisibility 3.5s (3,5/3,5)
+PASS Movement does not cancel invisibility
+PASS Interruption is individual
+PASS Base attack cancels invisibility
+PASS Last invisibility effect replaces duration (2/2)
+PASS Overlap has one speed bonus (2,99/2,99)
+PASS MOB chooses visible ally over nearest invisible PG05
+PASS MOB reacquires PG05 after invisibility
+PASS Activate before AREA
+PASS BONUS pause stops cooldown (1,497/1,497)
+PASS AREA keeps PG05 runtime and selections
+PASS CICUTA counter persists across AREA (1/1)
+PASS AREA ends invisibility
+PASS AREA preserves ATK bonus (31,5/31,5)
+PASS Old AREA poison removed
+PASS Ready CD preserved (0/0)
+PASS DOWN blocks ability
+PASS RUN resets bonus (30/30)
+PASS RUN resets counter (0/0)
+PASS RUN resets invisibility
+PASS Valid combination ColtelliAvvelenati/Ghosting
+PASS No other PG runtime
+PASS PG05 HP (100/100)
+PASS PG05 ATK (30/30)
+PASS PG05 DEF -10 percent (90/90)
+PASS PG05 cadence (150/150)
+PASS PG05 MOVE SPD 130 (2,6/2,6)
+PASS PG05 RANGE 2m (2/2)
+PASS Initial full CD (10/10)
+PASS Not ready on RUN start
+PASS Selection snapshot survives configuration changes
+PASS Base actual damage (470/470)
+PASS Radial edge included (470/470)
+PASS Inside 135deg cone (470/470)
+PASS Outside RANGE excluded (500/500)
+PASS Rear excluded (500/500)
+PASS Outside angle excluded (500/500)
+PASS No friendly fire (500/500)
+PASS Cadence blocks immediate repeat
+PASS Actual attack interval (0,669/0,667)
+PASS MURO/OSTACOLO screens target (500/500)
+PASS MURO/OSTACOLO screens target (500/500)
+PASS HP exactly 30 before HIT does not trigger crossing HIT
+PASS Already below 30 before HIT triggers GHOSTING
+PASS GHOSTING lasts 2s (2/2)
+PASS Ghost MOVE +15 percent (2,99/2,99)
+PASS Further HIT does not refresh GHOSTING (1,749/1,749)
+PASS New permanent MOVE bonus remains independent (3,22/3,22)
+PASS GHOSTING expires
+PASS Expiry preserves permanent MOVE bonus (2,8/2,8)
+PASS No internal cooldown after expiry
+PASS Action cancels GHOSTING and speed
+PASS Poison has no immediate tick (500/500)
+PASS First tick after 1 second and DEF (496/496)
+PASS Poison cap five stacks (5/5)
+PASS Reapply refreshes shared duration even at cap (3/3)
+PASS Reapply resets tick clock (496/496)
+PASS Pause stops poison (2,399/2,399)
+PASS Three five-stack ticks with DEF (436/436)
+PASS Poison expires after shared duration
+PASS Poison lethal tick credits caster once (1/1)
+PASS Activate eight knives
+PASS Eight simultaneous physical knives (8/8)
+PASS Knife CD10 starts at activation (1/1)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife is not piercing (500/500)
+PASS Fire toward MURO
+PASS MURO stops knives (500/500)
+PASS Other knives expire at RANGE10
+PASS Activate before AREA
+PASS BONUS pause stops cooldown (0,995/0,995)
+PASS AREA keeps PG05 runtime and selections
+PASS CICUTA counter persists across AREA (0/0)
+PASS AREA ends invisibility
+PASS AREA preserves ATK bonus (31,5/31,5)
+PASS Old AREA poison removed
+PASS Ready CD preserved (0/0)
+PASS DOWN blocks ability
+PASS RUN resets bonus (30/30)
+PASS RUN resets counter (0/0)
+PASS RUN resets invisibility
+PASS Valid combination ColtelliAvvelenati/LamaDiCicuta
+PASS No other PG runtime
+PASS PG05 HP (100/100)
+PASS PG05 ATK (30/30)
+PASS PG05 DEF -10 percent (90/90)
+PASS PG05 cadence (150/150)
+PASS PG05 MOVE SPD 130 (2,6/2,6)
+PASS PG05 RANGE 2m (2/2)
+PASS Initial full CD (10/10)
+PASS Not ready on RUN start
+PASS Selection snapshot survives configuration changes
+PASS Base actual damage (470/470)
+PASS Radial edge included (470/470)
+PASS Inside 135deg cone (470/470)
+PASS Outside RANGE excluded (500/500)
+PASS Rear excluded (500/500)
+PASS Outside angle excluded (500/500)
+PASS No friendly fire (500/500)
+PASS Cadence blocks immediate repeat
+PASS Actual attack interval (0,668/0,667)
+PASS MURO/OSTACOLO screens target (500/500)
+PASS MURO/OSTACOLO screens target (500/500)
+PASS Multiple MOB per attack reaches cap, overflow discarded (15/15)
+PASS Threshold attack does not poison
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Next attack poisons every target
+PASS Empowered attack resets without recounting its hits (0/0)
+PASS New counter cycle (1/1)
+PASS Poison has no immediate tick (500/500)
+PASS First tick after 1 second and DEF (496/496)
+PASS Poison cap five stacks (5/5)
+PASS Reapply refreshes shared duration even at cap (3/3)
+PASS Reapply resets tick clock (496/496)
+PASS Pause stops poison (2,399/2,399)
+PASS Three five-stack ticks with DEF (436/436)
+PASS Poison expires after shared duration
+PASS Poison lethal tick credits caster once (1/1)
+PASS Activate eight knives
+PASS Eight simultaneous physical knives (8/8)
+PASS Knife CD10 starts at activation (1/1)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS 45 degree distribution and cursor alignment (0/0)
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife fixed damage30 (470/470)
+PASS Knife applies poison
+PASS Knife is not piercing (500/500)
+PASS Fire toward MURO
+PASS MURO stops knives (500/500)
+PASS Other knives expire at RANGE10
+PASS Activate before AREA
+PASS BONUS pause stops cooldown (0,995/0,995)
+PASS AREA keeps PG05 runtime and selections
+PASS CICUTA counter persists across AREA (1/1)
+PASS AREA ends invisibility
+PASS AREA preserves ATK bonus (31,5/31,5)
+PASS Old AREA poison removed
+PASS Ready CD preserved (0/0)
+PASS DOWN blocks ability
+PASS RUN resets bonus (30/30)
+PASS RUN resets counter (0/0)
+PASS RUN resets invisibility
+PASS Entire suite PG05 only
+Engine Play Mode tests completed. PG05 only, four combinations: actual shots, abilities, passives and AREA transitions. Input feel/balancing are not tested.

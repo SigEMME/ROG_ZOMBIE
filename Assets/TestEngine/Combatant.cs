@@ -19,11 +19,20 @@ namespace RogZombie.TestEngine
         private float pestoneSlowPercent;
         private Combatant lethalSource;
 
+        public event Action BeforeHit;
+        public event Action PerformedAction;
+        public Func<bool> InvisibleQuery { get; set; }
+        public Func<float> MovementMultiplier { get; set; }
+        public bool IsInvisible => InvisibleQuery != null && InvisibleQuery();
+        public float CurrentMovementMultiplier => MovementMultiplier != null ? MovementMultiplier() : 1;
+        public void NotifyAction() => PerformedAction?.Invoke();
         public event Action<Combatant> Died;
         public event Action<Combatant> Killed;
         public event Action<Combatant> StateChanged;
         public static event Action<Combatant, float> DamageApplied;
         public CombatStats Stats => stats;
+        public CombatStats InitialStats { get; private set; }
+        public ICombatStatModifier SupportModifier { get; set; }
         // Stats/SetStats are persistent. Combat consumes a separate temporary view.
         public ICombatStatModifier PassiveModifier { get; set; }
         public ICombatStatModifier AbilityModifier { get; set; }
@@ -34,6 +43,7 @@ namespace RogZombie.TestEngine
             {
                 var current = AbilityModifier != null ? AbilityModifier.Apply(stats) : stats;
                 current = PassiveModifier != null ? PassiveModifier.Apply(current) : current;
+                current = SupportModifier != null ? SupportModifier.Apply(current) : current;
                 return HitEffect != null ? HitEffect.Apply(current) : current;
             }
         }
@@ -45,7 +55,7 @@ namespace RogZombie.TestEngine
         public bool IsActive => state == LifeState.Active;
         public float Radius => body != null ? body.radius : 0f;
         public float PestoneSlowRemaining => Mathf.Max(0f, pestoneSlowUntil - Time.time);
-        public float MovementMetresPerSecond => stats.MetresPerSecond *
+        public float MovementMetresPerSecond => EffectiveStats.MetresPerSecond * CurrentMovementMultiplier *
             (PestoneSlowRemaining > 0f ? 1f - pestoneSlowPercent / 100f : 1f);
 
         public void ApplyPestoneSlow(float percent, float seconds)
@@ -69,6 +79,7 @@ namespace RogZombie.TestEngine
             pestoneSlowUntil = 0f;
             pestoneSlowPercent = 0f;
             stats = values;
+            InitialStats = values;
             currentHP = values.HP;
             state = LifeState.Active;
             preExplodes = explodes;
@@ -97,6 +108,7 @@ namespace RogZombie.TestEngine
                 return false;
             }
             if (roundFinalDamage || RoundFinalDamage) damage = Mathf.Floor(damage + .5f);
+            BeforeHit?.Invoke();
             float previousHP = currentHP;
             currentHP = Mathf.Max(0f, currentHP - damage);
             if (currentHP <= 0f) lethalSource = source;

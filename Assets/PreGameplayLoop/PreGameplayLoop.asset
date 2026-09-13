@@ -11,28 +11,42 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e023cddd396747c3b0a88dbfb7fe7794, type: 3}
   m_Name: PreGameplayLoop
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   GeometryTemplate: {fileID: 11400000, guid: 98df8c06ada24fda9bb059ca60e03923, type: 2}
   PG01Weapon: {fileID: 11400000, guid: 80e0fe24276941b8b4c54fa8bbe9a970, type: 2}
+  PG02Weapon: {fileID: 11400000, guid: 27d3803d1527437d9832396adcd52ad6, type: 2}
+  PG03Weapon: {fileID: 11400000, guid: f61a7d5a81bb4f1fa5ba9e1b150d07a6, type: 2}
+  PG04Weapon: {fileID: 11400000, guid: 4d5e276a60a14e0aa4bd4708f7989ad8, type: 2}
+  SelectedPlayer: 7
   ZOMB01: {fileID: 11400000, guid: f46a94a6bfed4325b96f3d2bd548d3a7, type: 2}
-  AreaTotals:
-  - 100
-  - 120
-  ExitPosition: {x: 12, y: 0}
   PG01Abilities: {fileID: 11400000, guid: cc5762ad2fd24c72a3a143040eaa04b2, type: 2}
   SelectedAbility: 0
   SelectedPassive: 0
-  PG02Weapon: {fileID: 11400000, guid: 27d3803d1527437d9832396adcd52ad6, type: 2}
-  SelectedPlayer: 3
   PG02Abilities: {fileID: 11400000, guid: 830cc9073bd442c7b4270cdcc00dfeb1, type: 2}
   SelectedPG02Ability: 0
   SelectedPG02Passive: 0
-  PG03Weapon: {fileID: 11400000, guid: f61a7d5a81bb4f1fa5ba9e1b150d07a6, type: 2}
   PG03Abilities: {fileID: 11400000, guid: 690e96f4c3904258b458b1b2359df91e, type: 2}
   SelectedPG03Ability: 0
   SelectedPG03Passive: 0
-  PG04Weapon: {fileID: 11400000, guid: 4d5e276a60a14e0aa4bd4708f7989ad8, type: 2}
   PG04Abilities: {fileID: 11400000, guid: 8e53dccc04094033b7e3446294ba3a8c, type: 2}
   SelectedPG04Ability: 0
-  SelectedPG04Passive: 0
+  SelectedPG04Passive: 1
   PG04TestItemSlots: 1
+  AreaTotals: 6400000078000000
+  ExitPosition: {x: 12, y: 0}
+  PG05Weapon: {fileID: 11400000, guid: 7d7c98e6bd164e4383a2992fb9e92f8e, type: 2}
+  PG05Abilities: {fileID: 11400000, guid: 10f54d7596044d439ff79e6cc0f3b1c4, type: 2}
+  SelectedPG05Ability: 0
+  SelectedPG05Passive: 0
+  PG06Weapon: {fileID: 11400000, guid: 0610baf1c85d4cbca4795c679be2d06e, type: 2}
+  PG06Abilities: {fileID: 11400000, guid: 83f6f95958c04bfcbcb4e55427fd7f6e, type: 2}
+  SelectedPG06Ability: 0
+  SelectedPG06Passive: 0
+  PG07Weapon: {fileID: 11400000, guid: 2a44260a9b1f421c836df373071ba39e, type: 2}
+  PG07Abilities: {fileID: 11400000, guid: d858564825d14d959233e6ef01529da9, type: 2}
+  SelectedPG07Ability: 0
+  SelectedPG07Passive: 0
+  PG08Weapon: {fileID: 11400000, guid: 7d167aed40454304bd62f190d8d92d5b, type: 2}
+  PG08Abilities: {fileID: 11400000, guid: ab8fe847588a4cdf997179848f79e774, type: 2}
+  SelectedPG08Ability: 0
+  SelectedPG08Passive: 0

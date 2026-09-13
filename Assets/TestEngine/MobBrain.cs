@@ -65,7 +65,8 @@ namespace RogZombie.TestEngine
                 CombatAttacks.Circular(fixedImpact, Definition.ImpactRadius, 8, actor.Stats.ATK, 0f);
                 TestVisuals.FlashCircle(fixedImpact, Definition.ImpactRadius, new Color(0.7f, 0.2f, 0.9f));
             }
-            if (target == null || !target.IsActive) return;
+            if (target != null && target.IsInvisible) ChooseTarget();
+            if (target == null || !target.IsActive || target.IsInvisible) return;
             float distance = Vector2.Distance(transform.position, target.transform.position);
             switch (Definition.Kind)
             {
@@ -179,7 +180,7 @@ namespace RogZombie.TestEngine
             int ties = 0;
             foreach (var candidate in Combatant.All)
             {
-                if (candidate.Faction != Faction.PG || !candidate.IsActive) continue;
+                if (candidate.Faction != Faction.PG || !candidate.IsActive || candidate.IsInvisible) continue;
                 float distance = ((Vector2)candidate.transform.position - (Vector2)transform.position).sqrMagnitude;
                 if (distance < best - 0.000001f) { selected = candidate; best = distance; ties = 1; }
                 else if (Mathf.Abs(distance - best) < 0.000001f && Random.Range(0, ++ties) == 0) selected = candidate;

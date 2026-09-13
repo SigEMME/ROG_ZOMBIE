@@ -427,7 +427,7 @@ I cinque ITEMS usano esclusivamente i layer esistenti AREA_EFFECT_MOB e AREA_EFF
 | ITEM MOLOTOV | 8 SPICCHI da 45°; raggio 5 m | Eliminazione completa dello SPICCHIO intercettato. |
 | ITEM TRAPPOLA | 4 SEZIONI da 1 × 1 m; rettangolo 1 × 4 m | Eliminazione completa della SEZIONE intercettata; orientamento e RANGE secondo la sezione 9.2. |
 | ITEM SMOKE / POZIONE CURATIVA | Nessun taglio dell’AREA da parte di MURI/OSTACOLI | MURI/OSTACOLI non hanno effetto. |
-| PG07 — PIOGGIA DI FRECCE | Nessun taglio dell’AREA da parte di MURI/OSTACOLI | Le FRECCE ignorano MURI/OSTACOLI lungo la caduta e verificano solo il PUNTO D’IMPATTO. |
+| PG07 — PIOGGIA DI FRECCE | Nessun taglio dell’AREA da parte di MURI/OSTACOLI | Le FRECCE ignorano MURI/OSTACOLI lungo la caduta e applicano DANNO nel cerchio di raggio 0,25 m centrato sul PUNTO D’IMPATTO. |
 
 - Se un MURO/OSTACOLO intercetta anche parzialmente uno SPICCHIO, l’intero SPICCHIO viene eliminato e non genera HIT/DANNO. Gli altri SPICCHI restano validi.
 - Gli SPICCHI definiscono esclusivamente la geometria; non generano HIT separate. Un bersaglio sul confine tra SPICCHI non riceve HIT aggiuntive per questo motivo.
@@ -584,7 +584,7 @@ In questa tabella SÌ significa rilevamento/interazione con il destinatario, sen
 | PG05 | Knife | 100 | 30 | −10% | 130 | 150 | 100 | 2 m |
 | PG06 | Revolver | 120 | 40 | 0% | 100 | 80 | 100 | 10 m |
 | PG07 | Bow | 100 | 30 | 0% | 110 | 110 | 100 | 15 m |
-| PG08 | Heavy Machine Gun | 100 | 7 | +10% | 90 | 200 | 100 | 8 m |
+| PG08 | Heavy Machine Gun | 100 | 7 | +10% | 90 | 650 | 100 | 8 m |
 
 Nota: le STATS sopra riportano gli ultimi valori definiti esplicitamente nel progetto, incluse la revisione CD REDUCTION e le correzioni RANGE di PG03 e PG04. CD REDUCTION è una STAT modificatore con VALORE BASE 100 per PG01–PG08; i CD BASE in secondi restano esclusivamente nelle singole ABILITÀ e vengono modificati nel CD FINALE secondo la formula della sezione 10.
 
@@ -679,9 +679,10 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 #### PASSIVA 1 — GHOSTING
 
-- Con HP <30%, una HIT ricevuta attiva INVISIBILITÀ e +15% MOVE SPD per 2 s. Con HP ≥30% non si attiva.
+- Con HP <30% prima della HIT, una HIT ricevuta attiva INVISIBILITÀ e +15% MOVE SPD per 2 s. Con HP ≥30% non si attiva.
 - Applica le stesse REGOLE GENERALI di INVISIBILITÀ.
 - HIT ricevute durante l’effetto non lo riattivano e non rinnovano la DURATA.
+- Sovrapposizione GHOSTING/INVISIBILITÀ su PG05: un solo BONUS +15% MOVE SPD; DURATA rinnovata usando quella dell’ultimo effetto applicato.
 - Terminato l’effetto, la PASSIVA è subito disponibile per una nuova HIT che soddisfi le condizioni; nessun CD interno.
 
 #### PASSIVA 2 — LAMA DI CICUTA
@@ -689,7 +690,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Conta i MOB COLPITI dagli ATTACCHI BASE: +1 per ciascun MOB colpito, anche più incrementi nello stesso ATTACCO.
 - Soglia 15; il contatore si ferma a 15 e l’eccedenza viene ignorata.
 - Raggiunta la soglia, il successivo ATTACCO BASE applica VELENO 5 HP/s per 3 s a tutti i MOB colpiti nell’AREA ATTACCO, secondo la REGOLA GENERALE DANNI DA STATO (sezione 10.8).
-- Dopo l’ATTACCO potenziato il contatore torna a 0 e inizia un nuovo ciclo.
+- Dopo l’ATTACCO potenziato il contatore torna a 0 e inizia un nuovo ciclo. Il contatore si conserva al CAMBIO AREA.
 
 ### PG06 — Revolver
 
@@ -706,7 +707,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Potenzia i successivi 6 ATTACCHI BASE conservando il normale funzionamento e DANNO del REVOLVER.
 - Ogni HIT su un MOB genera in aggiunta una CURA di 15 HP verso un PG ATTIVO entro 15 m da PG06; PG06 è incluso. I PG in DOWN o MORTE sono esclusi. Un MISS non genera CURA.
 - Ogni ATTACCO effettuato consuma una carica, anche in caso di MISS. Nessuna DURATA massima; CD BASE 15 s, avviato al consumo del 6° ATTACCO.
-- La selezione del destinatario viene rivalutata per ciascun ATTACCO. I PG con HP <100% hanno sempre priorità sui PG al 100% HP, che restano validi ma sono ultima scelta. Fra i PG sotto il 100% HP: percentuale HP più bassa → minor numero di HP effettivi → distanza minore da PG06 → scelta CASUALE in perfetta parità.
+- La selezione del destinatario viene rivalutata per ciascun ATTACCO. I PG con HP <100% hanno sempre priorità sui PG al 100% HP, che restano validi ma sono ultima scelta. Fra i PG sotto il 100% HP: percentuale HP più bassa → minor numero di HP effettivi → distanza minore da PG06 → scelta CASUALE in perfetta parità. Se tutti i PG validi sono al 100% HP: distanza minore da PG06 → scelta CASUALE in perfetta parità.
 - MURI/OSTACOLI non impediscono la selezione né la CURA. NO OVERHEAL; un PG al 100% resta selezionabile ma recupera 0 HP. Se tutti i PG validi sono al 100%, la carica viene comunque consumata e nessuno recupera HP.
 - Al CAMBIO AREA perde le cariche residue; se ancora ATTIVA, il CD riparte da capo. Se DISPONIBILE, rimane DISPONIBILE. Se già IN CD ma non più ATTIVA, mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA.
 
@@ -719,7 +720,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 #### PASSIVA 2 — VITAMINA C
 
-- Un PG considerato bersaglio di una CURA delle ABILITÀ di PG06 riceve +25% del proprio ATK SPD BASE per 4 s, anche se a HP pieni e con CURA effettiva pari a 0.
+- Un PG considerato bersaglio di una CURA delle ABILITÀ di PG06 riceve +35% del proprio ATK SPD BASE per 4 s, anche se a HP pieni e con CURA effettiva pari a 0.
 - CURA AD AREA: tutti i PG considerati entro 5 m, incluso PG06. FUOCO CURATIVO: solo il destinatario selezionato dopo una HIT valida; un MISS non applica VITAMINA C.
 - Il BONUS non si cumula; una nuova applicazione rinnova la DURATA a 4 s. Ogni PG gestisce individualmente la propria DURATA.
 - Il MEDI KIT di ELEMOSINA non attiva VITAMINA C. Al CAMBIO AREA gli effetti VITAMINA C ancora attivi terminano.
@@ -730,26 +731,27 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 #### ABILITÀ 1 — MULTI SHOT
 
-- 9 PROIETTILI BALISTICI non PERFORANTI generati simultaneamente; 20 DANNO per PROIETTILE; RANGE 7 m; CONO 80°; RESPINTA 5 m; PROJECTILE SPD 20 m/s; CD BASE 10 s, avviato immediatamente all’attivazione.
+- 9 PROIETTILI BALISTICI non PERFORANTI generati simultaneamente; 20 DANNO per PROIETTILE; RANGE 7 m; CONO 80°; RESPINTA 5 m; PROJECTILE SPD 20 m/s; CD BASE 13 s, avviato immediatamente all’attivazione.
 - Un PROIETTILE segue il CURSORE; gli altri sono distribuiti ogni 10°: −40°, −30°, −20°, −10°, 0°, +10°, +20°, +30°, +40°.
 - Ogni PROIETTILE che colpisce genera una HIT separata e la DEF viene applicata separatamente a ogni HIT, anche se più PROIETTILI della stessa attivazione colpiscono lo stesso MOB.
-- Massimo una RESPINTA per MOB per attivazione. La direzione è quella del primo PROIETTILE che genera HIT; in caso di HIT simultanee si usa la media delle direzioni dei PROIETTILI coinvolti.
+- RESPINTA progressiva in 0,25 s, con partenza rapida e rallentamento finale. Massimo una RESPINTA per MOB per attivazione. La direzione è quella del primo PROIETTILE che genera HIT; in caso di HIT simultanee si usa la media delle direzioni dei PROIETTILI coinvolti.
 - MURI/OSTACOLI bloccano i PROIETTILI e interrompono la RESPINTA prima dei 5 m quando incontrati.
 
 #### ABILITÀ 2 — PIOGGIA DI FRECCE
 
-- AREA BERSAGLIO CIRCOLARE, RAGGIO 6 m; centro sul CURSORE all’attivazione; RANGE di attivazione illimitato.
+- SISTEMA A RILASCIO: tenere premuto Q mostra l’anteprima dell’AREA EFFETTO, che segue il CURSORE; al rilascio di Q l’ABILITÀ si attiva nella posizione selezionata. L’anteprima non genera HIT e non avvia il CD; sequenza delle FRECCE e CD iniziano al rilascio.
+- AREA BERSAGLIO CIRCOLARE, RAGGIO 3,5 m; centro sul CURSORE all’attivazione; RANGE di attivazione illimitato.
 - 20 FRECCE distribuite in posizioni CASUALI nell’AREA durante 3 s. Il tempo è regolare: prima a T = 0, ultima a T = 3 s, intervallo 3/19 s (circa 0,158 s).
-- La caduta delle FRECCE è solo rappresentazione grafica e non usa una velocità fisica di gameplay. La HIT avviene esattamente nel momento programmato per ciascuna FRECCIA. Non serve un’altezza fisica di SPAWN: basta generare graficamente la FRECCIA sopra il PUNTO D’IMPATTO. genera al massimo 1 HIT su 1 MOB, con 10 HP di DANNO prima della DEF.
-- Verifica esclusivamente il PUNTO D’IMPATTO: nessun MOB → MISS; più MOB sovrapposti → scelta CASUALE di un solo MOB.
+- La caduta delle FRECCE è solo rappresentazione grafica e non usa una velocità fisica di gameplay. La HIT avviene esattamente nel momento programmato per ciascuna FRECCIA. Non serve un’altezza fisica di SPAWN: basta generare graficamente la FRECCIA sopra il PUNTO D’IMPATTO. Ogni impatto genera un’AREA di DANNO CIRCOLARE di RAGGIO 0,25 m, con 10 HP di DANNO prima della DEF per ciascun MOB colpito.
+- L’AREA è centrata sul PUNTO D’IMPATTO e colpisce tutti i MOB il cui corpo interseca il cerchio, una sola HIT per MOB per FRECCIA. Nessun MOB nell’AREA → MISS.
 - Lo stesso MOB può ricevere più FRECCE; la DEF viene applicata separatamente a ciascuna HIT.
 - MURI/OSTACOLI non intercettano la caduta e non tagliano l’AREA.
 - CD BASE 15 s, avviato all’attivazione. Al CAMBIO AREA termina immediatamente, annulla le FRECCE non ancora generate e applica la regola generale del CD.
 
 #### PASSIVA 1 — LUCKY SHOT
 
-- Roll del 2% solo quando un ATTACCO BASE genera una HIT effettiva su un MOB; nessun roll in caso di MISS.
-- Un successo genera una HIT AD AREA aggiuntiva pari al 30% dell’ATK di PG07; AREA CIRCOLARE di RAGGIO 3 m centrata sul MOB che ha generato il TRIGGER.
+- Roll del 5% solo quando un ATTACCO BASE genera una HIT effettiva su un MOB; nessun roll in caso di MISS.
+- Un successo genera una HIT AD AREA aggiuntiva pari al 30% dell’ATK di PG07; AREA CIRCOLARE di RAGGIO 2 m centrata sul MOB che ha generato il TRIGGER.
 - Il DANNO risultante di LUCKY SHOT viene arrotondato all’intero più vicino con arrotondamento matematico: parte decimale <0,5 per difetto; ≥0,5 per eccesso. Il DANNO AD AREA è una HIT separata: la DEF si applica indipendentemente dall’ATTACCO BASE e individualmente a ogni MOB.
 - Se l’ATTACCO BASE uccide il MOB, LUCKY SHOT può comunque attivarsi nel punto della sua MORTE e colpire gli altri MOB.
 - MURI/OSTACOLI eliminano interamente gli SPICCHI intercettati secondo la geometria a 4 SPICCHI da 90°. Gli SPICCHI non generano HIT separate.
@@ -757,7 +759,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 #### PASSIVA 2 — CONCENTRAZIONE
 
-- Roll del 5% al lancio di ogni ATTACCO BASE, indipendentemente dalla futura HIT.
+- Roll del 10% al lancio di ogni ATTACCO BASE, indipendentemente dalla futura HIT.
 - Un successo rende la FRECCIA PERFORANTE: massimo 3 MOB sulla stessa traiettoria. Il primo MOB effettivamente colpito riceve il 100% del DANNO effettivo corrente dell’ATTACCO BASE; il secondo e il terzo il 50% dello stesso DANNO, calcolato prima della DEF, senza ulteriori riduzioni. Il DANNO risultante viene arrotondato all’intero più vicino con arrotondamento matematico: parte decimale <0,5 per difetto; ≥0,5 per eccesso.
 - CONCENTRAZIONE propaga l’INTERA HIT dell’ATTACCO BASE: il primo, il secondo e il terzo MOB ricevono tutti gli eventuali effetti aggiuntivi associati alla HIT. La riduzione al 50% riguarda esclusivamente il DANNO, non gli altri effetti.
 - La FRECCIA segue le REGOLE GENERALI DEI PROIETTILI: MURI/OSTACOLI la bloccano e il RANGE resta quello dell’ATTACCO BASE.
@@ -765,13 +767,13 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 ### PG08 — Heavy Machine Gun
 
-- ATTACCO BASE: PROIETTILE FISICO non PERFORANTE; ATK 7; ATK SPD 200 = 2 ATTACCHI/s; RANGE 8 m. Segue le REGOLE GENERALI DEI PROIETTILI.
+- ATTACCO BASE: PROIETTILE FISICO non PERFORANTE; ATK 7; ATK SPD 650 = 6,5 ATTACCHI/s; RANGE 8 m. Segue le REGOLE GENERALI DEI PROIETTILI.
 
 #### ABILITÀ 1 — FILO SPINATO
 
-- ANELLO di RAGGIO 7 m e SPESSORE 1 m, centrato sulla posizione di PG08 all’attivazione. Rimane fisso per 3 s e non segue PG08.
+- ANELLO di RAGGIO ESTERNO 4,5 m e SPESSORE 1 m (fascia da 3,5 a 4,5 m), centrato sulla posizione di PG08 all’attivazione. Rimane fisso per 4 s e non segue PG08.
 - Solo la fascia dell’ANELLO genera effetti: per ciascun MOB il conteggio del DANNO PERIODICO parte nel momento in cui entra in contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA. All’uscita il DANNO PERIODICO termina.
-- SLOW 25% mentre il MOB è nella fascia; all’uscita lo SLOW cessa. Più applicazioni di FILO SPINATO non sommano lo SLOW.
+- SLOW 35% mentre il MOB è nella fascia; all’uscita lo SLOW cessa. Più applicazioni di FILO SPINATO non sommano lo SLOW né il DANNO: ogni MOB riceve un solo DANNO di 10 al secondo anche in sovrapposizione.
 - Per un MOB già nella fascia di una SEZIONE valida all’attivazione, il conteggio del DANNO PERIODICO parte in quel momento e lo SLOW si applica immediatamente.
 - Non è una barriera fisica: i MOB attraversano liberamente; i PG attraversano senza effetti; i PROIETTILI attraversano normalmente.
 - 10 SEZIONI indipendenti da 36°. Alla generazione, se anche una sola parte di una SEZIONE interseca un MURO/OSTACOLO, l’intera SEZIONE viene eliminata.
@@ -781,15 +783,17 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 #### ABILITÀ 2 — COLPI RESPINGENTI
 
-- Per 3 s ogni HIT di ATTACCO BASE applica il normale DANNO e RESPINTA di 1,5 m nella direzione del PROIETTILE che genera quella HIT. Nessuna HIT → nessuna RESPINTA.
+- Per 4 s ogni HIT di ATTACCO BASE applica il normale DANNO e RESPINTA di 1,5 m nella direzione del PROIETTILE che genera quella HIT. Nessuna HIT → nessuna RESPINTA.
+- Ogni RESPINTA è progressiva in 0,25 s, con partenza rapida e rallentamento finale, come MULTI SHOT.
 - Ogni nuova HIT applica una nuova RESPINTA completa e indipendente, anche allo stesso MOB; MURI/OSTACOLI interrompono lo spostamento.
-- CD BASE 10 s, avviato al termine dei 3 s di DURATA.
-- Se il CAMBIO AREA avviene durante i 3 s di COLPI RESPINGENTI, l’effetto termina immediatamente e da quel momento riparte l’intero CD.
+- CD BASE 10 s, avviato al termine dei 4 s di DURATA.
+- Se il CAMBIO AREA avviene durante i 4 s di COLPI RESPINGENTI, l’effetto termina immediatamente e da quel momento riparte l’intero CD.
 
 #### PASSIVA 1 — TENACIA
 
 - Esclusivamente ogni HIT effettiva generata dall’ATTACCO BASE di PG08 fornisce +0,2% DEF; BONUS massimo +30% (150 HIT). Ulteriori HIT al CAP non aumentano il BONUS. Altre fonti di DANNO/HIT attribuite a PG08 non incrementano TENACIA.
 - QUALSIASI HIT ricevuta da PG08 azzera immediatamente tutto il BONUS TENACIA, indipendentemente dal DANNO/HP effettivamente persi, anche con DANNO finale 0. Le successive HIT effettive dell’ATTACCO BASE possono ricominciare l’accumulo; a BONUS 0% non c’è nulla da perdere.
+- La HIT che azzera TENACIA viene mitigata dalla DEF comprensiva del BONUS TENACIA accumulato, rispettando il CAP DEF del 90%; il BONUS viene rimosso dopo il calcolo di quella HIT. Le HIT successive usano la DEF senza TENACIA, salvo nuovo accumulo.
 - Al CAMBIO AREA il BONUS torna a 0%.
 - La DEF BASE +10% rimane separata e non viene persa; al CAP, BASE + TENACIA = +40% prima di altri modificatori.
 
@@ -821,7 +825,7 @@ Tutte le 16 ABILITÀ usano i LAYER esistenti o verifiche logiche, senza nuovi TA
 | PG06 | CURA AD AREA | Effetto logico istantaneo sui PG entro 5 m, tramite AREA_EFFECT_PG o query logica; nessuna collisione fisica persistente. Ignora MURO/OSTACOLO. |
 | PG06 | FUOCO CURATIVO | Stato logico a 6 cariche; i colpi restano PROJECTILE_PG. CURA logica dopo HIT valida, senza proiettile/collider/layer aggiuntivo; ricerca entro 15 m secondo le priorità definite. |
 | PG07 | MULTI SHOT | I 9 proiettili sono PROJECTILE_PG con collisioni standard; RESPINTA applicata logicamente alla HIT. |
-| PG07 | PIOGGIA DI FRECCE | Nessun proiettile fisico di gameplay; ogni punto d’impatto verifica logicamente i MOB. Ignora MURO/OSTACOLO. |
+| PG07 | PIOGGIA DI FRECCE | Nessun proiettile fisico di gameplay; ogni impatto verifica i MOB nell’AREA CIRCOLARE di raggio 0,25 m. Ignora MURO/OSTACOLO. |
 | PG08 | FILO SPINATO | AREA_EFFECT_MOB persistente nelle 10 SEZIONI definite; nessuna barriera fisica, attraversabile da PG, MOB e proiettili. MURO/OSTACOLO servono alla validazione iniziale delle SEZIONI. |
 | PG08 | COLPI RESPINGENTI | Stato logico temporaneo; proiettili PROJECTILE_PG e collisioni invariate. RESPINTA applicata alla HIT e soggetta alle normali collisioni. |
 
@@ -1644,7 +1648,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - CD REDUCTION minimo 10; CD FINALE arrotondato al decimo con arrotondamento matematico.
 - STAT CD REDUCTION arrotondata matematicamente all’intero più vicino: frazione <0,5 per difetto; ≥0,5 per eccesso.
 - DEF interna 100 = 0%; ogni ±1 punto interno = ±1 punto percentuale. BONUS PROF aggiunti alla DEF BASE; BONUS CHEST e BONUS STATS DI FINE AREA calcolati sul VALORE ATTUALE della STAT al momento dell’acquisizione, comprensivo degli UPGRADE permanenti del PROF e di tutti i precedenti BONUS STATS acquisiti durante la RUN, sia da CHEST sia da FINE AREA; PASSIVE sulle STATS CORRENTI.
-- Avvio CD PG01–PG08 completamente definito nelle schede della sezione 12: all’attivazione, salvo FUOCO RAPIDO al termine dei suoi 4 s e COLPI RESPINGENTI al termine dei suoi 3 s, COLPO GROSSO al consumo del 4° ATTACCO e FUOCO CURATIVO al consumo del 6° ATTACCO. Restano valide le regole di INIZIO RUN e CAMBIO AREA.
+- Avvio CD PG01–PG08 completamente definito nelle schede della sezione 12: all’attivazione, salvo FUOCO RAPIDO al termine dei suoi 4 s e COLPI RESPINGENTI al termine dei suoi 4 s, COLPO GROSSO al consumo del 4° ATTACCO e FUOCO CURATIVO al consumo del 6° ATTACCO. Restano valide le regole di INIZIO RUN e CAMBIO AREA.
 - DEF massima 90%, inclusa la DEF propria dello SCUDO; SCUDO mitiga prima del PLAYER, poi il residuo è mitigato dalla DEF del PLAYER. DANNO FINALE arrotondato all’intero più vicino.
 - EFFETTI PERSISTENTI: di default non si cumulano e rinnovano la DURATA; prevalgono le regole specifiche (sezione 10.6).
 - REGOLA GENERALE DANNI DA STATO — BRUCIATURA e VELENO: primo tick 1 s dopo applicazione/rinnovo, poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE; massimo 5 ISTANZE dello stesso STATO sullo stesso bersaglio. Ogni applicazione rinnova la DURATA completa, anche al CAP; oltre 5 ISTANZE il DANNO non aumenta. Le ISTANZE non hanno DURATE indipendenti (sezione 10.8).
@@ -1704,7 +1708,7 @@ Le voci seguenti sono note editoriali di verifica. Evidenziano ciò che la fonte
 | Passaggio AREA | TRIGGER USCITA CIRCOLARE con RAGGIO 4 m; tutti i PG VIVI devono trovarsi contemporaneamente al suo interno. Resurrezione automatica dei PG in MORTE al 50%, senza +15%; cura di ingresso del 15% ai VIVI; DOWN da resuscitare prima (sezione 6). | Nessun punto residuo relativo alla forma e alle dimensioni del TRIGGER USCITA. |
 | Fine RUN | Dopo il BOSS decide l’HOST tra PROSEGUIRE e TORNARE ALL’HUB; solo nella sua schermata compare il tasto TORNA ALL’HUB. Ritorno volontario e sconfitta hanno effetti distinti. In caso di abbandono/disconnessione il PLAYER perde i progressi della RUN e mantiene il 50% del solo G guadagnato nella RUN, arrotondato per difetto, secondo la SCONFITTA. Il PG controllato diventa PG IA; questo PG e gli eventuali PG IA già di sua responsabilità vengono riassegnati agli altri PLAYER secondo le regole stabilite (sezioni 8.5 e 29). | Gestione tecnica dell’HOST uscente, già segnalata nelle note di consolidamento; nessuna modalità tecnica viene introdotta. |
 | DANNI PERIODICI | FILO SPINATO: per ciascun MOB il conteggio parte al contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA e termina all’uscita. Per MOB già nella fascia valida all’attivazione, il conteggio parte in quel momento. MOLOTOV, TRAPPOLA e POZIONE CURATIVA: sezione 9.3. BRUCIATURA e VELENO: REGOLA GENERALE DANNI DA STATO (sezione 10.8), primo tick 1 s dopo applicazione/rinnovo e poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE, massimo 5 dello stesso STATO sullo stesso bersaglio; ogni applicazione rinnova la DURATA completa anche al CAP, senza DURATE indipendenti e senza ulteriore aumento del DANNO oltre il CAP. | Restano DA DEFINIRE soltanto le regole dei DANNI PERIODICI non esplicitate per eventuali altri effetti; la definizione di FILO SPINATO non viene estesa ad altre fonti. |
-| CD al CAMBIO AREA | ABILITÀ DISPONIBILE resta disponibile; ABILITÀ ATTIVA termina e il suo CD riparte. ABILITÀ già IN CD ma non più ATTIVA mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA. Eccezione — SCUDO: il CAMBIO AREA non lo disattiva (sezione 22.6). Per COLPI RESPINGENTI, se il CAMBIO AREA avviene durante i 3 s, l’effetto termina immediatamente e da quel momento riparte l’intero CD. | Nessun punto residuo relativo al CD già in corso al CAMBIO AREA. |
+| CD al CAMBIO AREA | ABILITÀ DISPONIBILE resta disponibile; ABILITÀ ATTIVA termina e il suo CD riparte. ABILITÀ già IN CD ma non più ATTIVA mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA. Eccezione — SCUDO: il CAMBIO AREA non lo disattiva (sezione 22.6). Per COLPI RESPINGENTI, se il CAMBIO AREA avviene durante i 4 s, l’effetto termina immediatamente e da quel momento riparte l’intero CD. | Nessun punto residuo relativo al CD già in corso al CAMBIO AREA. |
 | LAYER e matrice delle collisioni | Coppie confermate nella sezione 10.9, inclusa PROJECTILE_MOB ↔ PROJECTILE_MOB NO; MOB ↔ MOB SÌ anche per ZOMB05 in PRE-ESPLOSIONE, senza la precedente eccezione. Classificazione tecnica di ABILITÀ/PASSIVE PG, ABILITÀ BONUS, ITEMS e attacchi/effetti MOB confermata. RIANIMAZIONE usa TRIGGER_PG; NPC HUB usano OSTACOLO + TRIGGER_PG. Nessun TAG tecnico dedicato per ora; stati logici secondo la sezione 10.9. | Dimensioni numeriche del collider ridotto dei MOB. |
 | Dettagli tecnici delle AREE | Numero/ampiezza SPICCHI, eliminazione completa e assenza di HIT separate sono confermati. AREA_EFFECT_PG e AREA_EFFECT_MOB separati; MURO/OSTACOLO fuori dalla Layer Collision Matrix delle AREA_EFFECT, con verifica geometrica affidata alla logica dell’ABILITÀ/AREA. | Orientamento iniziale degli SPICCHI e modalità tecnica di implementazione delle verifiche geometriche non sono specificati. |
 

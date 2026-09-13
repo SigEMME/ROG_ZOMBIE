@@ -45,6 +45,43 @@ namespace RogZombie.PreGameplayLoop
                 GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
                     $"{loop.PG03Passive.Label} | AUTOMATICA | ATK {loop.Player.Actor.EffectiveStats.ATK:0.##} | MOVE SPD {loop.Player.Actor.Stats.MoveSpeed:0.##}");
             }
+            if (loop.PG08Ability != null)
+            {
+                var ability = loop.PG08Ability; var passive = loop.PG08Passive; var stats = loop.Player.Actor.EffectiveStats;
+                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
+                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | DURATA {ability.DurationRemaining:0.0} s");
+                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
+                    $"{passive.Label} | {(passive.EffectActive ? "ATTIVA" : "INATTIVA")} | " +
+                    (passive.Selected == PG08Passive.Tenacia ? $"HIT {passive.Hits}/150 | BONUS DEF +{passive.TenacityBonus:0.0}%" : $"FUOCO {passive.ContinuousFire:0.0}/5 s") +
+                    $" | ATK {stats.ATK:0.##} | DEF {stats.DEF - 100:0.##}% | MOVE SPD {stats.MoveSpeed:0.##}");
+            }
+            if (loop.PG07Ability != null)
+            {
+                var ability = loop.PG07Ability;
+                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
+                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | FRECCE {ability.RainEmitted}/20" +
+                    (ability.Selected == PG07Ability.PioggiaDiFrecce ? " | Tieni Q: anteprima; rilascia: attiva" : ""));
+                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
+                    $"{ability.PassiveLabel} | ATTIVAZIONI {ability.PassiveTriggers} / ROLL {ability.PassiveRolls}");
+            }
+            if (loop.PG06Ability != null)
+            {
+                var ability = loop.PG06Ability;
+                var vitamin = loop.Player.GetComponent<PG06Vitamin>();
+                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
+                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | CARICHE {ability.Charges}");
+                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
+                    $"{ability.PassiveLabel} | VITAMINA C {(vitamin != null ? vitamin.Remaining : 0):0.0} s | ATK SPD {loop.Player.Actor.EffectiveStats.AttackSpeed:0.##} | DROP {ability.Drops}");
+            }
+            if (loop.PG05Ability != null)
+            {
+                var ability = loop.PG05Ability;
+                var hidden = loop.Player.GetComponent<PG05Invisibility>();
+                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
+                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | INVISIBILITA {(hidden != null ? hidden.Remaining : 0):0.0} s");
+                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
+                    $"{ability.PassiveLabel} | CICUTA {ability.CicutaHits}/15 | MOVE {loop.Player.Actor.MovementMetresPerSecond:0.##} m/s");
+            }
             if (loop.PG04Ability != null)
             {
                 var ability = loop.PG04Ability;
@@ -64,7 +101,7 @@ namespace RogZombie.PreGameplayLoop
                 }
                 GUI.enabled = true;
             }
-            GUI.Label(new Rect(20, Screen.height - 34, Screen.width - 40, 28), "Slice: PG01/PG02/PG03/PG04 + ZOMB01; EXP/LVL esclusi; geometria provvisoria.");
+            GUI.Label(new Rect(20, Screen.height - 34, Screen.width - 40, 28), "Slice: PG01/PG02/PG03/PG04/PG05/PG06/PG07/PG08 + ZOMB01; EXP/LVL esclusi; geometria provvisoria.");
             if (loop.State == LoopState.AreaComplete)
             {
                 Vector3 view = loop.GameCamera.WorldToViewportPoint(loop.Exit.transform.position);

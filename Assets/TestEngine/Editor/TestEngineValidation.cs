@@ -61,7 +61,7 @@ namespace RogZombie.EditorTests
             Near(settings.Mobs[3].ProjectileSpeed, 8, "Approved ZOMB04 speed.");
             Near(settings.Mobs[3].BaseStats.RangeMetres, 20, "ZOMB04 tuned range.");
             Near(settings.Weapons[1].PG.BaseStats.AttackSpeed, 400, "PG02 tuned ATK SPD.");
-            Near(settings.Weapons[7].PG.BaseStats.AttackSpeed, 600, "PG08 tuned ATK SPD.");
+            Near(settings.Weapons[7].PG.BaseStats.AttackSpeed, 200, "PG08 GDD ATK SPD.");
             Near(settings.Weapons[3].PG.BaseStats.AttackSpeed, 75, "PG04 validated ATK SPD.");
             Near(settings.Weapons[4].PG.BaseStats.AttackSpeed, 150, "PG05 validated ATK SPD.");
             Near(settings.Mobs[1].BaseStats.MoveSpeed, 120, "ZOMB02 tuned MOVE SPD.");
