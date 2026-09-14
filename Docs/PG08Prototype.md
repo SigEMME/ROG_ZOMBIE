@@ -9,8 +9,8 @@ WASD muove, mouse orienta, LMB mantenuto spara, Q attiva l'ABILITÀ. L'HUD mostr
 ## Implementazione
 
 - ATTACCO BASE: HP100, ATK7, DEF+10%, MOVE90, ATK SPD650 (6,5/s), RANGE8m; proiettile fisico20m/s, non perforante, attraversa PG e si arresta su MOB/MURO/OSTACOLO. ATK SPD aggiornata a 650 su richiesta del proprietario.
-- FILO SPINATO: fascia 3,5–4,5 m fissa per4s; dieci sezioni36°, ciascuna interamente scartata se interseca anche parzialmente un MURO/OSTACOLO. Un ostacolo nel foro non scarta sezioni. Geometria logica contro i box allineati agli assi del prototipo; cerchio del corpo MOB contro la fascia. Nessun collider fisico aggiunto all'anello.
-- Contatto: SLOW35% immediato, primo tick10 prima della DEF dopo1s, poi ogni secondo intero di permanenza. Uscita interrompe e rientro avvia un nuovo conteggio. A permanenza completa, tick1/2/3/4s. Le sovrapposizioni condividono danno e SLOW, senza cumulo. CD16s all'attivazione anche con zero sezioni valide. Con CD ridotto possono coesistere più anelli.
+- FILO SPINATO: fascia 3,5–4,5 m fissa per5s; dieci sezioni36°, ciascuna interamente scartata se interseca anche parzialmente un MURO/OSTACOLO. Un ostacolo nel foro non scarta sezioni. Geometria logica contro i box allineati agli assi del prototipo; cerchio del corpo MOB contro la fascia. Nessun collider fisico aggiunto all'anello.
+- Contatto: SLOW40% immediato, primo tick10 prima della DEF dopo1s, poi ogni secondo intero di permanenza. Uscita interrompe e rientro avvia un nuovo conteggio. A permanenza completa, tick1/2/3/4/5s. Le sovrapposizioni condividono danno e SLOW, senza cumulo. CD16s all'attivazione anche con zero sezioni valide. Con CD ridotto possono coesistere più anelli.
 - COLPI RESPINGENTI: per4s ogni HIT base mantiene il danno normale e avvia una propria respinta1,5m in0,25s con curva quadratica, partenza rapida e rallentamento finale. HIT ripetute/simultanee non eliminano le altre respinte. MURO/OSTACOLO interrompe lo spostamento; restano le collisioni del prototipo. CD10s alla fine dei4s.
 - TENACIA: +0,2 punti DEF per HIT base, cap150HIT/+30punti, DEF totale limitata a190 (+90%). Le HIT ricevute, comprese quelle da0danni, azzerano il contatore. Il bonus resta separato dai dati persistenti.
 - RAGE: conteggio5s dal primo colpo con LMB mantenuto; i normali intervalli ATK SPD non lo interrompono e le HIT non sono necessarie. +30% ATK e -20% MOVE SPD sono importi calcolati sulle STATS CORRENTI all'attivazione, poi rimossi senza perdere BONUS acquisiti. Rilascio, DOWN, STUN e CAMBIO AREA azzerano effetto e conteggio.
@@ -60,3 +60,7 @@ SLOW aumentato al 35% nel catalogo, nell’asset e nel GDD. Resta unico in sovra
 ## Aggiornamento raggio FILO SPINATO a 4,5 m
 
 Raggio esterno aggiornato a 4,5 m nel catalogo, nell’asset e nel GDD; spessore invariato di 1 m, fascia da 3,5 a 4,5 m. Nessun test eseguito. I report precedenti non validano questo raggio; aggiornare le posizioni delle prove prima della prossima esecuzione.
+
+## Aggiornamento FILO SPINATO: durata 5 s e SLOW 40%
+
+Aggiornati durata e SLOW in catalogo, asset e descrizioni GDD/HUB. Raggio esterno 4,5 m, spessore 1 m, danno 10/s e CD 16 s invariati. Nessun test o build eseguito, come richiesto. I risultati precedenti restano storici e le aspettative dei validatori richiedono aggiornamento prima della prossima esecuzione.

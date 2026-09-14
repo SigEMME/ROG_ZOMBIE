@@ -30,14 +30,15 @@ namespace RogZombie.PreGameplayLoop
             session = owner; Selected = choice; Passive = passive; data = Instantiate(catalog);
             actor = GetComponent<Combatant>(); weapon = GetComponent<PlayerWeapon>();
             weapon.BaseAttackOverride = FireBase;
-            actor.BeforeHit += BeforeHit; actor.PerformedAction += CancelGhost;
+            Combatant.DamageApplied += AfterDamage; actor.PerformedAction += CancelGhost;
             cooldown.Restart(data.BaseCooldown(Selected), session.CdReduction);
         }
         private void CancelGhost() => ghostRemaining = 0;
-        private void BeforeHit()
+        private void AfterDamage(Combatant target, float damage)
         {
-            // Owner confirmation: threshold is evaluated before this HIT changes HP.
-            if (Passive != PG05Passive.Ghosting || actor.HealthFraction >= .3f || ghostRemaining > 0) return;
+            // Evaluate this PG after damage, including the HIT that crosses the threshold.
+            if (target != actor || !isActiveAndEnabled || !actor.IsActive || actor.CurrentHP <= 0) return;
+            if (Passive != PG05Passive.Ghosting || actor.CurrentHP * 100d >= actor.Stats.HP * 35d || ghostRemaining > 0) return;
             ghostRemaining = data.GhostDuration;
             (GetComponent<PG05Invisibility>() ?? gameObject.AddComponent<PG05Invisibility>())
                 .Apply(session, data.GhostDuration, data.MoveBonusPercent);
@@ -92,7 +93,7 @@ namespace RogZombie.PreGameplayLoop
                 Vector2 offset = (Vector2)target.transform.position - origin;
                 if (offset.sqrMagnitude > stats.RangeMetres * stats.RangeMetres || Vector2.Angle(direction, offset) > 67.5f ||
                     !AttackGeometry.ClearLine(origin, target.transform.position)) continue;
-                if (!target.Hit(stats.ATK, true, actor)) continue;
+                if (!target.Hit(stats.ATK, true, actor, true)) continue;
                 hits++;
                 if (poison && target.IsActive)
                     (target.GetComponent<PG05Poison>() ?? target.gameObject.AddComponent<PG05Poison>())
@@ -113,7 +114,8 @@ namespace RogZombie.PreGameplayLoop
         }
         private void OnDestroy()
         {
-            if (actor != null) { actor.BeforeHit -= BeforeHit; actor.PerformedAction -= CancelGhost; }
+            Combatant.DamageApplied -= AfterDamage;
+            if (actor != null) actor.PerformedAction -= CancelGhost;
             if (data != null) Destroy(data);
         }
     }

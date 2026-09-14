@@ -351,18 +351,18 @@ namespace RogZombie.PreGameplayLoop.Editor
                     {
                         CreditPersonalKills(14); Check(!passive.RageActive, "14 KILLs do not trigger RAGE");
                         CreditPersonalKills(1); Near(passive.Kills, 15, "15 personal KILL threshold");
-                        Near(passive.RageRemaining, 2, "RAGE starts at 2 seconds"); Near(actor.EffectiveStats.ATK, 13, "RAGE +30 percent ATK");
+                        Near(passive.RageRemaining, 4, "RAGE starts at 4 seconds"); Near(actor.EffectiveStats.ATK, 13, "RAGE +30 percent ATK");
                         float cd = 100; AreaStatBonus.Apply(actor, AreaStat.ATK, ref cd);
                         Near(actor.Stats.ATK, 10.5f, "RAGE does not contaminate persistent ATK bonus");
                         Near(actor.EffectiveStats.ATK, 13.65f, "RAGE applies to current ATK after bonus");
                         float wait = Time.time + .4f; while (Time.time < wait) yield return null;
                         CreditPersonalKills(15); Near(passive.Kills, 30, "30 KILL threshold");
-                        Near(passive.RageRemaining, 2, "New RAGE refreshes full duration"); Near(actor.EffectiveStats.ATK, 13.65f, "RAGE refresh never stacks");
+                        Near(passive.RageRemaining, 4, "New RAGE refreshes full duration"); Near(actor.EffectiveStats.ATK, 13.65f, "RAGE refresh never stacks");
                         Time.timeScale = 0; double paused = EditorApplication.timeSinceStartup;
                         while (EditorApplication.timeSinceStartup - paused < .15) yield return null;
-                        Near(passive.RageRemaining, 2, "Pause freezes RAGE"); Time.timeScale = 1;
-                        wait = Time.time + 2.05f; while (Time.time < wait) yield return null;
-                        Near(passive.RageRemaining, 0, "RAGE expires after two seconds"); Near(actor.EffectiveStats.ATK, 10.5f, "RAGE expiry preserves acquired bonus");
+                        Near(passive.RageRemaining, 4, "Pause freezes RAGE"); Time.timeScale = 1;
+                        wait = Time.time + 4.05f; while (Time.time < wait) yield return null;
+                        Near(passive.RageRemaining, 0, "RAGE expires after four seconds"); Near(actor.EffectiveStats.ATK, 10.5f, "RAGE expiry preserves acquired bonus");
                         actor.SetStats(baseline);
                     }
                     yield return null;
@@ -425,23 +425,23 @@ namespace RogZombie.PreGameplayLoop.Editor
                         Check(ability.TryActivate(Origin), "FUOCO RAPIDO activation");
                         float rapidStarted = Time.time;
                         Near(ability.ActiveRemaining, 4, "Rapid duration starts at 4s"); Near(ability.CooldownRemaining, 0, "Rapid CD does not start at activation");
-                        Near(actor.EffectiveStats.AttackSpeed, 560, "400 x 1.40 = 560");
+                        Near(actor.EffectiveStats.AttackSpeed, 600, "400 x 1.50 = 600");
                         Check(!ability.TryActivate(Origin), "Rapid cannot stack/retrigger while active");
                         if (passiveChoice == PG02Passive.Passiva2)
                         {
                             CreditPersonalKills(15 - passive.KillsTowardRage);
                             Near(actor.EffectiveStats.ATK, 13, "RAGE and Rapid coexist: ATK 13");
-                            Near(actor.EffectiveStats.AttackSpeed, 560, "RAGE and Rapid coexist: ATK SPD 560");
+                            Near(actor.EffectiveStats.AttackSpeed, 600, "RAGE and Rapid coexist: ATK SPD 600");
                             var rageTarget = Probe(Origin + Vector2.right * 3);
                             while (!weapon.TryFireAt(Origin + Vector2.right * 20)) yield return null;
                             until = Time.time + .2f; while (Time.time < until) yield return null;
                             Near(rageTarget.CurrentHP, 87, "RAGE changes actual projectile damage to 13");
                             UnityEngine.Object.Destroy(rageTarget.gameObject); yield return null;
                         }
-                        cadence = Cadence(5.6f); while (cadence.MoveNext()) yield return null;
+                        cadence = Cadence(6f); while (cadence.MoveNext()) yield return null;
                         float cd = 100; AreaStatBonus.Apply(actor, AreaStat.AttackSpeed, ref cd);
                         Near(actor.Stats.AttackSpeed, 420, "ATK SPD bonus uses persistent 400");
-                        Near(actor.EffectiveStats.AttackSpeed, 588, "Rapid retains 40 percent on modified current speed");
+                        Near(actor.EffectiveStats.AttackSpeed, 630, "Rapid retains 50 percent on modified current speed");
                         float remaining = ability.ActiveRemaining;
                         Time.timeScale = 0; double paused = EditorApplication.timeSinceStartup;
                         while (EditorApplication.timeSinceStartup - paused < .15) yield return null;

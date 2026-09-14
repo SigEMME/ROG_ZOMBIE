@@ -6,7 +6,7 @@ namespace RogZombie.PreGameplayLoop
     {
         private LoopSession session;
         private Combatant source;
-        private bool[] valid;
+        private PG04AreaVisual visual;
         private float radius, duration, damage, elapsed;
         private int nextTick = 1;
         public int Ticks { get; private set; }
@@ -15,14 +15,14 @@ namespace RogZombie.PreGameplayLoop
         public void Initialize(LoopSession owner, Combatant actor, float areaRadius, float seconds, float tickDamage, bool[] sectors)
         {
             session = owner; source = actor; radius = areaRadius; duration = seconds; damage = tickDamage;
-            valid = (bool[])sectors.Clone();
-            gameObject.AddComponent<PG04AreaVisual>().Initialize(radius, valid, new Color(1, .22f, .02f, .4f));
+            visual = gameObject.AddComponent<PG04AreaVisual>();
             Tick(); // Owner confirmation: area clock, first tick immediately at activation.
         }
         private void Tick()
         {
             Ticks++;
-            PG04ExplosionEffect.Hit(source, transform.position, radius, valid, damage);
+            PG04ExplosionEffect.Hit(source, transform.position, radius, null, damage);
+            visual.InitializeOccluded(transform.position, radius, new Color(1, .22f, .02f, .4f));
         }
         private void Update()
         {

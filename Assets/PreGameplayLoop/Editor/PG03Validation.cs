@@ -49,7 +49,7 @@ namespace RogZombie.PreGameplayLoop.Editor
         {
             if (state == PlayModeStateChange.EnteredPlayMode && SessionState.GetBool(Key + "Running", false))
             {
-                results.Clear(); warnings = 0; loop = null;
+                Application.runInBackground = true; results.Clear(); warnings = 0; loop = null;
                 started = EditorApplication.timeSinceStartup;
                 routine = Checks();
             }
@@ -80,6 +80,13 @@ namespace RogZombie.PreGameplayLoop.Editor
         {
             if (!EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling && File.Exists(Request))
             {
+                if (!SessionState.GetBool(Key + "Refreshed", false))
+                {
+                    SessionState.SetBool(Key + "Refreshed", true);
+                    AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+                    return;
+                }
+                SessionState.EraseBool(Key + "Refreshed");
                 SessionState.SetString(Key + "Report", File.ReadAllText(Request).Trim());
                 File.Delete(Request);
                 Run();
@@ -89,6 +96,11 @@ namespace RogZombie.PreGameplayLoop.Editor
             {
                 if (EditorApplication.timeSinceStartup - started > 300) throw new TimeoutException("Ability test timeout.");
                 foreach (var brain in UnityEngine.Object.FindObjectsByType<MobBrain>(FindObjectsSortMode.None)) brain.enabled = false;
+                if (loop != null && loop.BonusAbilities != null)
+                {
+                    loop.BonusAbilities.enabled = false;
+                    if (loop.Experience.Choices != null) { loop.Experience.Choose(0); return; }
+                }
                 if (loop != null && loop.Player != null)
                 {
                     var input = loop.Player.GetComponent<PG03AbilityInput>();
@@ -189,6 +201,9 @@ namespace RogZombie.PreGameplayLoop.Editor
                     var passive = loop.PG03Passive;
                     var weapon = loop.Player.GetComponent<PlayerWeapon>();
                     var baseline = actor.Stats;
+                    // These tests provide their own blockers; CITY buildings must not overlap the fixture.
+                    foreach(var obstacle in TestObstacle.All.ToArray()) obstacle.gameObject.SetActive(false);
+                    loop.RefreshNavigation();
                     loop.Player.transform.SetPositionAndRotation(Origin, Quaternion.identity);
                     Check(loop.Ability == null && loop.PG02Ability == null && loop.Passive == null && loop.PG02Passive == null,
                         "PG03 runtime only, no PG01/PG02 runtime");

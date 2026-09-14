@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e023cddd396747c3b0a88dbfb7fe7794, type: 3}
   m_Name: PreGameplayLoop
   m_EditorClassIdentifier: 
-  SelectedPlayer: 7
+  SelectedPlayer: 4
   PG01Weapon: {fileID: 11400000, guid: 80e0fe24276941b8b4c54fa8bbe9a970, type: 2}
   PG01Abilities: {fileID: 11400000, guid: cc5762ad2fd24c72a3a143040eaa04b2, type: 2}
   SelectedAbility: 0
@@ -27,7 +27,7 @@ MonoBehaviour:
   SelectedPG03Passive: 0
   PG04Weapon: {fileID: 11400000, guid: 4d5e276a60a14e0aa4bd4708f7989ad8, type: 2}
   PG04Abilities: {fileID: 11400000, guid: 8e53dccc04094033b7e3446294ba3a8c, type: 2}
-  SelectedPG04Ability: 0
+  SelectedPG04Ability: 1
   SelectedPG04Passive: 1
   PG04TestItemSlots: 1
   PG05Weapon: {fileID: 11400000, guid: 7d7c98e6bd164e4383a2992fb9e92f8e, type: 2}
@@ -46,7 +46,8 @@ MonoBehaviour:
   PG08Abilities: {fileID: 11400000, guid: ab8fe847588a4cdf997179848f79e774, type: 2}
   SelectedPG08Ability: 0
   SelectedPG08Passive: 1
-  GeometryTemplate: {fileID: 11400000, guid: 98df8c06ada24fda9bb059ca60e03923, type: 2}
+  BonusCatalog: {fileID: 11400000, guid: 15a57b20334c4d81a225d3ef7db1be60, type: 2}
+  GeometryTemplate: {fileID: 11400000, guid: 496b5d3b9635460cba4e2455a16aa84c, type: 2}
   ZOMB01: {fileID: 11400000, guid: f46a94a6bfed4325b96f3d2bd548d3a7, type: 2}
   AreaTotals: 6400000078000000
-  ExitPosition: {x: 12, y: 0}
+  ExitPosition: {x: -1.6, y: 45.5}

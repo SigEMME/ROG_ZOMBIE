@@ -7,7 +7,7 @@ namespace RogZombie.PreGameplayLoop
     public sealed class PG04AbilityCatalog : ScriptableObject
     {
         [Min(1)] public int RainCount = 10;
-        [Min(0)] public float RainRadius = 5;
+        [Min(0)] public float RainRadius = 4;
         [Min(0)] public float RainDuration = 3;
         [Min(0)] public float RainBaseCooldown = 12;
         [Min(1)] public int BigShotCharges = 4;

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c4c524e30a194ae2a18abcb36970b931, type: 3}
   m_Name: PG02Abilities
   m_EditorClassIdentifier:
-  RapidAttackSpeedPercent: 40
+  RapidAttackSpeedPercent: 50
   RapidDuration: 4
   RapidBaseCooldown: 10
   SuppressionDamage: 3

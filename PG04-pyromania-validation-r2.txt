@@ -1,0 +1,38 @@
+PASS | Unity 6000.3.16f1 | checks=36 | warnings=0
+PASS PG04 and PYROMANIA selected in actual RUN
+PASS Actual base shot launched
+PASS No damage before delayed explosion (500/500)
+PASS Base HIT 25 plus immediate PYROMANIA tick 5 (470/470)
+PASS Immediate tick counted once (1/1)
+PASS Outside radius untouched (500/500)
+PASS Persistent fire has mesh and renderer
+PASS Fire material has texture and opacity
+PASS Explicit vertex colors supplied
+PASS Second tick at one second (465/465)
+PASS Mesh survives first visual rebuild
+PASS Third tick at two seconds (460/460)
+PASS Material survives repeated rebuild
+PASS Expires at three seconds without extra tick (460/460)
+PASS No damage after expiry (460/460)
+PASS Wall shields immediate fire tick (500/500)
+PASS MOB before wall receives immediate fire tick (495/495)
+PASS Removing cover exposes MOB on following tick (495/495)
+PASS Overlapping area contributes independent immediate tick (485/485)
+PASS COLPO GROSSO activated
+PASS Charged explosion 45 plus immediate fire 5 (395/395)
+PASS Charged PYROMANIA radius retained (1,875/1,875)
+PASS RUN restart removes burning areas
+PASS PIOGGIA DI GRANATE activated
+PASS Rain explosion 1 creates immediate burning area
+PASS Rain explosion 2 creates immediate burning area
+PASS Rain explosion 3 creates immediate burning area
+PASS Rain explosion 4 creates immediate burning area
+PASS Rain explosion 5 creates immediate burning area
+PASS Rain explosion 6 creates immediate burning area
+PASS Rain explosion 7 creates immediate burning area
+PASS Rain explosion 8 creates immediate burning area
+PASS Rain explosion 9 creates immediate burning area
+PASS Rain explosion 10 creates immediate burning area
+PASS All ten rain explosions generate PYROMANIA (10/10)
+PASS All rain burning areas expire
+PG04 PYROMANIA: actual base/charged/rain explosions, timed damage, cover, rendering, overlap and RUN reset.

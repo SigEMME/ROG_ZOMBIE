@@ -8,7 +8,7 @@ namespace RogZombie.PreGameplayLoop
     [CreateAssetMenu(menuName = "ROG ZOMBIE/PG02 Abilities")]
     public sealed class PG02AbilityCatalog : ScriptableObject
     {
-        [Min(0)] public float RapidAttackSpeedPercent = 40;
+        [Min(0)] public float RapidAttackSpeedPercent = 50;
         [Min(0)] public float RapidDuration = 4;
         [Min(0)] public float RapidBaseCooldown = 10;
         [Min(0)] public float SuppressionDamage = 3;

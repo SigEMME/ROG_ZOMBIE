@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   WireOuterRadius: 4.5
   WireThickness: 1
-  WireDuration: 4
+  WireDuration: 5
   WireDamage: 10
-  WireSlow: 35
+  WireSlow: 40
   WireCooldown: 16
   WireSections: 10
   PushDistance: 1.5

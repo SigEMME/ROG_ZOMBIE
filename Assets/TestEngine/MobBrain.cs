@@ -51,7 +51,7 @@ namespace RogZombie.TestEngine
                 {
                     CombatAttacks.Circular(transform.position, Definition.ExplosionRadius, 8,
                         Definition.ExplosionDamagePG, Definition.ExplosionDamageMOB, actor);
-                    TestVisuals.FlashCircle(transform.position, Definition.ExplosionRadius, Color.red);
+                    TestVisuals.FlashOccludedArea(transform.position, Definition.ExplosionRadius, Color.red);
                     actor.Die();
                 }
                 return;
@@ -63,7 +63,7 @@ namespace RogZombie.TestEngine
                 if (Time.time < pendingImpact) return;
                 pendingImpact = -1f;
                 CombatAttacks.Circular(fixedImpact, Definition.ImpactRadius, 8, actor.Stats.ATK, 0f);
-                TestVisuals.FlashCircle(fixedImpact, Definition.ImpactRadius, new Color(0.7f, 0.2f, 0.9f));
+                TestVisuals.FlashOccludedArea(fixedImpact, Definition.ImpactRadius, new Color(0.7f, 0.2f, 0.9f));
             }
             if (target != null && target.IsInvisible) ChooseTarget();
             if (target == null || !target.IsActive || target.IsInvisible) return;

@@ -15,6 +15,7 @@ namespace RogZombie.TestEngine
         private Vector2 direction;
         private Vector2 start;
         private float travelled;
+        public bool IsBaseAttack { get; set; }
         public float Travelled => travelled;
         public float LastHitSimulationTime { get; private set; }
         public Vector2 Direction => direction;
@@ -34,6 +35,8 @@ namespace RogZombie.TestEngine
             speed = velocity; range = maxRange; damage = attack; radius = colliderRadius;
             penetrations = piercing; showDebug = debug; start = transform.position;
         }
+
+        public void ConfigureBaseAttack(IProjectileHitEffect effect = null) { IsBaseAttack = true; HitEffect = effect; }
 
         private void Update()
         {
@@ -59,7 +62,7 @@ namespace RogZombie.TestEngine
                 LastHitSimulationTime = Time.time - Time.deltaTime + (speed > 0 ? hit.distance / speed : 0);
                 hitActors.Add(actor);
                 if (HitEffect != null) HitEffect.ResolveHit(actor, damage, roundFinalDamage, source, hitActors.Count - 1);
-                else actor.Hit(damage, roundFinalDamage, source);
+                else actor.Hit(damage, roundFinalDamage, source, IsBaseAttack);
                 if (penetrations-- <= 0) { Destroy(gameObject); return; }
             }
             transform.position += (Vector3)(direction * step);

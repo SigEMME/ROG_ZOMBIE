@@ -6,7 +6,7 @@ namespace RogZombie.PreGameplayLoop
     [CreateAssetMenu(menuName = "ROG ZOMBIE/PG08 Abilities")]
     public sealed class PG08AbilityCatalog : ScriptableObject
     {
-        public float WireOuterRadius = 4.5f, WireThickness = 1, WireDuration = 4, WireDamage = 10, WireSlow = 35, WireCooldown = 16;
+        public float WireOuterRadius = 4.5f, WireThickness = 1, WireDuration = 5, WireDamage = 10, WireSlow = 40, WireCooldown = 16;
         public int WireSections = 10;
         public float PushDistance = 1.5f, PushDuration = .25f, PushActiveDuration = 4, PushCooldown = 10;
         public float TenacityPerHit = .2f, TenacityCap = 30, RageThreshold = 5, RageAttackPercent = 30, RageMovePercent = 20;

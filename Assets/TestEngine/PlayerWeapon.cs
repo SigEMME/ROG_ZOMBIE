@@ -35,7 +35,7 @@ namespace RogZombie.TestEngine
                 if (Time.time < shot.At) continue;
                 explosions.RemoveAt(i);
                 CombatAttacks.Circular(shot.Point, shot.Radius, 4, 0f, shot.Damage);
-                TestVisuals.FlashCircle(shot.Point, shot.Radius, new Color(1f, 0.7f, 0.1f));
+                TestVisuals.FlashOccludedArea(shot.Point, shot.Radius, new Color(1f, 0.7f, 0.1f));
             }
         }
 
@@ -66,7 +66,7 @@ namespace RogZombie.TestEngine
             {
                 case BaseAttackKind.PhysicalProjectile:
                     TestVisuals.SpawnProjectile(actor, origin, direction, Definition.ProjectileSpeed, range,
-                        stats.ATK, Definition.ProjectileRadius, BasePenetrationsOverride ?? Definition.Penetrations, ShowDebug).HitEffect = BaseProjectileEffect;
+                        stats.ATK, Definition.ProjectileRadius, BasePenetrationsOverride ?? Definition.Penetrations, ShowDebug).ConfigureBaseAttack(BaseProjectileEffect);
                     break;
                 case BaseAttackKind.HitscanArea:
                     lastImpact = AttackGeometry.WallImpact(origin, origin + direction * Mathf.Min(offset.magnitude, range));

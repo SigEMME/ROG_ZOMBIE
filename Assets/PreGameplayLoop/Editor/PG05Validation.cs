@@ -179,7 +179,7 @@ namespace RogZombie.PreGameplayLoop.Editor
                     Check(loop.Ability == null && loop.PG02Ability == null && loop.PG03Ability == null && loop.PG04Ability == null, "No other PG runtime");
                     Near(actor.Stats.HP, 100, "PG05 HP"); Near(actor.Stats.ATK, 30, "PG05 ATK"); Near(actor.Stats.DEF, 90, "PG05 DEF -10 percent");
                     Near(actor.Stats.AttackSpeed, 150, "PG05 cadence"); Near(actor.MovementMetresPerSecond, 2.6f, "PG05 MOVE SPD 130");
-                    Near(actor.Stats.RangeMetres, 2, "PG05 RANGE 2m");
+                    Near(actor.Stats.RangeMetres, 2.5f, "PG05 RANGE 2.5m");
                     Near(ability.CooldownRemaining, choice == PG05Ability.Invisibilita ? 15 : 10, "Initial full CD", .15f);
                     Check(!ability.TryActivate(Origin), "Not ready on RUN start");
                     config.SelectedPG05Passive = passive == PG05Passive.Ghosting ? PG05Passive.LamaDiCicuta : PG05Passive.Ghosting;
@@ -225,8 +225,8 @@ namespace RogZombie.PreGameplayLoop.Editor
         private static IEnumerator BaseChecks()
         {
             var actor = loop.Player.Actor;
-            var a = Probe(Origin + Vector2.right); var edge = Probe(Origin + Vector2.right * 2);
-            var outside = Probe(Origin + Vector2.right * 2.01f); var behind = Probe(Origin + Vector2.left);
+            var a = Probe(Origin + Vector2.right); var edge = Probe(Origin + Vector2.right * 2.5f);
+            var outside = Probe(Origin + Vector2.right * 2.51f); var behind = Probe(Origin + Vector2.left);
             var angle = Probe(Origin + AttackGeometry.Direction(67)); var beyondAngle = Probe(Origin + AttackGeometry.Direction(68));
             var ally = Probe(Origin + Vector2.right, Faction.PG);
             var firing = Fire(Origin + Vector2.right * 10); while (firing.MoveNext()) yield return null;
@@ -247,8 +247,8 @@ namespace RogZombie.PreGameplayLoop.Editor
         private static IEnumerator GhostChecks()
         {
             var a = loop.Player.Actor;
-            HP(a, 30); a.Hit(1, true); Check(!a.IsInvisible, "HP exactly 30 before HIT does not trigger crossing HIT");
-            a.Hit(1, true); Check(a.IsInvisible, "Already below 30 before HIT triggers GHOSTING");
+            HP(a, 36); a.Hit(1, true); Check(!a.IsInvisible, "HP exactly 35 after HIT does not trigger GHOSTING");
+            HP(a, 36); a.Hit(2, true); Check(a.IsInvisible, "HIT crossing from above to below 35 triggers GHOSTING");
             var effect = a.GetComponent<PG05Invisibility>(); Near(effect.Remaining, 2, "GHOSTING lasts 2s");
             Near(a.MovementMetresPerSecond, 2.99f, "Ghost MOVE +15 percent");
             var wait = Wait(.25f); while (wait.MoveNext()) yield return null;

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace RogZombie.TestEngine
@@ -5,6 +6,13 @@ namespace RogZombie.TestEngine
     // Temporary code-generated presentation. No art assets or gameplay data are modified.
     public static class TestVisuals
     {
+        public static void FlashOccludedArea(Vector2 center, float radius, Color color)
+        {
+            var go = new GameObject("Visible damage area");
+            go.transform.SetParent(Root, false); go.transform.position = center; color.a = .4f;
+            go.AddComponent<RogZombie.PreGameplayLoop.PG04AreaVisual>().InitializeOccluded(center, radius, color);
+            Object.Destroy(go, .15f);
+        }
         public static Transform Root;
         private static Sprite square;
         private static Material lineMaterial;
@@ -12,9 +20,46 @@ namespace RogZombie.TestEngine
         {
             get
             {
-                if (square == null) square = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 1, 1), Vector2.one * 0.5f, 1f);
+                if (square == null) square = Sprite.Create(Texture2D.whiteTexture, new Rect(0, 0, 1, 1), Vector2.one * 0.5f, 1f, 0, SpriteMeshType.FullRect);
                 return square;
             }
+        }
+
+        private static Texture2D circleTexture;
+        private static readonly Dictionary<float, Sprite> circleSprites = new Dictionary<float, Sprite>();
+
+        public static GameObject Circle(string name, Vector2 position, float radius, Color color, int order = 0)
+        {
+            const int resolution = 128;
+            if (circleTexture == null)
+            {
+                circleTexture = new Texture2D(resolution, resolution, TextureFormat.RGBA32, false)
+                { name = "Temporary circular MOB", filterMode = FilterMode.Bilinear, wrapMode = TextureWrapMode.Clamp };
+                var pixels = new Color[resolution * resolution];
+                for (int y = 0; y < resolution; y++)
+                    for (int x = 0; x < resolution; x++)
+                    {
+                        float distance = new Vector2(x + .5f - resolution * .5f, y + .5f - resolution * .5f).magnitude;
+                        pixels[y * resolution + x] = new Color(1, 1, 1, Mathf.Clamp01(resolution * .5f - distance));
+                    }
+                circleTexture.SetPixels(pixels);
+                circleTexture.Apply(false, true);
+            }
+            if (!circleSprites.TryGetValue(radius, out var sprite) || sprite == null)
+            {
+                // Size the sprite in world metres; keep the actor transform at unit scale for its collider.
+                sprite = Sprite.Create(circleTexture, new Rect(0, 0, resolution, resolution), Vector2.one * .5f,
+                    resolution / (radius * 2), 0, SpriteMeshType.FullRect);
+                circleSprites[radius] = sprite;
+            }
+            var go = new GameObject(name);
+            if (Root != null) go.transform.SetParent(Root, false);
+            go.transform.position = position;
+            var renderer = go.AddComponent<SpriteRenderer>();
+            renderer.sprite = sprite;
+            renderer.color = color;
+            renderer.sortingOrder = order;
+            return go;
         }
 
         public static GameObject Box(string name, Vector2 position, Vector2 size, Color color, int order = 0)
@@ -29,6 +74,31 @@ namespace RogZombie.TestEngine
             renderer.color = color;
             renderer.sortingOrder = order;
             return go;
+        }
+
+        // One Unity world unit is one metre in the prototype. No collision components.
+        public static void FloorGrid(Vector2 size)
+        {
+            var grid = new GameObject("Griglia pavimento 1 m x 1 m");
+            if (Root != null) grid.transform.SetParent(Root, false);
+            const float thickness = .025f;
+            var color = new Color(.32f, .35f, .36f, .45f);
+            for (int x = Mathf.CeilToInt(-size.x * .5f); x <= Mathf.FloorToInt(size.x * .5f); x++)
+                Line(new Vector2(x, 0), new Vector2(thickness, size.y));
+            for (int y = Mathf.CeilToInt(-size.y * .5f); y <= Mathf.FloorToInt(size.y * .5f); y++)
+                Line(new Vector2(0, y), new Vector2(size.x, thickness));
+
+            void Line(Vector2 position, Vector2 dimensions)
+            {
+                var go = new GameObject("Linea 1 m");
+                go.transform.SetParent(grid.transform, false);
+                go.transform.position = position;
+                go.transform.localScale = new Vector3(dimensions.x, dimensions.y, 1);
+                var renderer = go.AddComponent<SpriteRenderer>();
+                renderer.sprite = Square;
+                renderer.color = color;
+                renderer.sortingOrder = -9;
+            }
         }
 
         public static Projectile SpawnProjectile(Combatant owner, Vector2 position, Vector2 direction, float speed,

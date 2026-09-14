@@ -20,4 +20,4 @@ MonoBehaviour:
     moveSpeed: 130
     attackSpeed: 150
     cdReduction: 100
-    range: 200
+    range: 250

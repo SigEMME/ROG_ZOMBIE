@@ -56,6 +56,7 @@ namespace RogZombie.PreGameplayLoop
             if (healing && --Charges == 0) cooldown.Restart(data.FireCooldown, session.CdReduction);
             var shot = TestVisuals.SpawnProjectile(actor, origin, (cursor - origin).normalized, weapon.Definition.ProjectileSpeed,
                 stats.RangeMetres, stats.ATK, weapon.Definition.ProjectileRadius, 0, false);
+            shot.IsBaseAttack = true;
             if (healing) shot.HitEffect = new HealingHit(this);
             ShotFired?.Invoke(shot, healing);
         }
@@ -65,7 +66,7 @@ namespace RogZombie.PreGameplayLoop
             public HealingHit(PG06AbilityRuntime value) { owner = value; }
             public void ResolveHit(Combatant target, float damage, bool round, Combatant source, int index)
             {
-                if (target.Hit(damage, true, source) && owner != null) owner.HealAfterHit();
+                if (target.Hit(damage, true, source, true) && owner != null) owner.HealAfterHit();
             }
         }
         private void HealAfterHit()

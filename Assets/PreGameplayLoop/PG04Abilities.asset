@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PG04Abilities
   m_EditorClassIdentifier:
   RainCount: 10
-  RainRadius: 5
+  RainRadius: 4
   RainDuration: 3
   RainBaseCooldown: 12
   BigShotCharges: 4

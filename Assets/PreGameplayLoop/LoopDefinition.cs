@@ -63,6 +63,7 @@ namespace RogZombie.PreGameplayLoop
         public PG08Passive SelectedPG08Passive;
 
         [Header("AREA e MOB")]
+        public BonusCatalog BonusCatalog;
         public TestAreaSettings GeometryTemplate;
         public MobDefinition ZOMB01;
         [Tooltip("GDD section 14: C1 A1 and A2 totals. ZOMB01-only test composition.")]
@@ -78,6 +79,8 @@ namespace RogZombie.PreGameplayLoop
             if (!System.Enum.IsDefined(typeof(LoopPlayer), SelectedPlayer)) return "Selezionare PG01, PG02, PG03, PG04, PG05, PG06, PG07 o PG08.";
             if (GeometryTemplate == null || SelectedWeapon == null || SelectedWeapon.PG == null || ZOMB01 == null)
                 return "Assegnare geometria, arma del PG selezionato e ZOMB01.";
+            if ((BonusCatalog == null && GeometryTemplate.BonusCatalog == null) || GeometryTemplate.ExperienceThresholds == null || GeometryTemplate.ExperienceThresholds.Length == 0)
+                return "Assegnare il catalogo ABILITA BONUS e la tabella EXP.";
             if (SelectedWeapon.PG.PlayerId != SelectedPlayer.ToString() || ZOMB01.Kind != MobKind.ZOMB01)
                 return "Arma non corrispondente al PG selezionato o MOB diverso da ZOMB01.";
             if (SelectedPlayer == LoopPlayer.PG01 && (PG01Abilities == null || !PG01Abilities.IsValid || !System.Enum.IsDefined(typeof(PG01Ability), SelectedAbility)))

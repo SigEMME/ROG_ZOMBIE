@@ -32,6 +32,43 @@ namespace RogZombie.TestEngine
             return (offset - closest).sqrMagnitude <= targetRadius * targetRadius;
         }
 
+        // Clip a ray against the interior of each oriented blocker. A ray leaving a wall
+        // impact point remains valid; a ray entering that wall is immediately stopped.
+        public static float VisibleDistance(Vector2 center, Vector2 direction, float distance)
+        {
+            float visible = distance;
+            foreach (var obstacle in TestObstacle.All)
+            {
+                if (!obstacle.isActiveAndEnabled || !obstacle.GetComponent<BoxCollider2D>().enabled) continue;
+                if (obstacle.Bounds.SqrDistance(center) > visible * visible) continue;
+                Vector2 origin = obstacle.UnrotatePoint(center);
+                Vector2 ray = Quaternion.Euler(0, 0, -obstacle.transform.eulerAngles.z) * direction;
+                Bounds bounds = obstacle.UnrotatedBounds;
+                float enter = float.NegativeInfinity, leave = float.PositiveInfinity;
+                if (!ClipAxis(origin.x, ray.x, bounds.min.x, bounds.max.x, ref enter, ref leave) ||
+                    !ClipAxis(origin.y, ray.y, bounds.min.y, bounds.max.y, ref enter, ref leave)) continue;
+                if (leave > Mathf.Max(0, enter) + .000001f && enter < visible)
+                    visible = Mathf.Max(0, enter);
+            }
+            return visible;
+        }
+        private static bool ClipAxis(float origin, float direction, float min, float max, ref float enter, ref float leave)
+        {
+            if (Mathf.Abs(direction) < .0000001f) return origin > min && origin < max;
+            float a = (min - origin) / direction, b = (max - origin) / direction;
+            enter = Mathf.Max(enter, Mathf.Min(a, b)); leave = Mathf.Min(leave, Mathf.Max(a, b));
+            return enter < leave;
+        }
+        public static Vector2 TargetCenter(Combatant target)
+            => target.GetComponent<CircleCollider2D>().bounds.center;
+        public static bool InVisibleArea(Vector2 center, float radius, Combatant target)
+        {
+            if (target == null || !target.isActiveAndEnabled || !target.IsActive) return false;
+            Vector2 offset = TargetCenter(target) - center;
+            float distance = offset.magnitude;
+            return distance <= radius && VisibleDistance(center,
+                distance > 0 ? offset / distance : Vector2.right, distance) >= distance;
+        }
         public static bool ClearLine(Vector2 from, Vector2 to)
         {
             foreach (var hit in Physics2D.LinecastAll(from, to))
@@ -63,7 +100,7 @@ namespace RogZombie.TestEngine
                 foreach (var obstacle in TestObstacle.All)
                 {
                     if (!obstacle.isActiveAndEnabled) continue;
-                    if (!SectorIntersectsBox(origin, radius, start, 360f / count, obstacle.Bounds)) continue;
+                    if (!SectorIntersectsBox(obstacle.UnrotatePoint(origin), radius, start - obstacle.transform.eulerAngles.z, 360f / count, obstacle.UnrotatedBounds)) continue;
                     valid[i] = false;
                     break;
                 }

@@ -56,6 +56,8 @@ MonoBehaviour:
       BaseValue: 50
     - Key: RANGE
       BaseValue: 2
+    - Key: MOVE_SPD
+      BaseValue: 150
     - Key: RICERCA
       BaseValue: 5
     - Key: N_PET
@@ -155,13 +157,13 @@ MonoBehaviour:
     Name: SCUDO
     Weight: 16
     Parameters:
-    - Key: RIDUZIONE
+    - Key: DEF
       BaseValue: 40
     - Key: CD
       BaseValue: 6
     Upgrades:
-    - Key: RIDUZIONE
-      Label: RIDUZIONE DANNO +5 punti
+    - Key: DEF
+      Label: DEF SCUDO +5 punti
       Weight: 50
       BasePercent: 0
       FlatAmount: 5
@@ -185,8 +187,8 @@ MonoBehaviour:
     - Key: CD
       BaseValue: 12
     Upgrades:
-    - Key: DANNO
-      Label: DANNO +10% (base da definire)
+    - Key: BRUCIATURA
+      Label: DANNO +10%
       Weight: 40
       BasePercent: 10
       FlatAmount: 0

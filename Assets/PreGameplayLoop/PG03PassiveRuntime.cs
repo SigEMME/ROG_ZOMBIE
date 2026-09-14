@@ -19,12 +19,12 @@ namespace RogZombie.PreGameplayLoop
             {
                 // Index belongs to this projectile. Scale its original damage, before target DEF.
                 float multiplier = hitIndex == 0 ? 1f : hitIndex == 1 ? .7f : .4f;
-                target.Hit(damage * multiplier, roundDamage, source);
+                target.Hit(damage * multiplier, roundDamage, source, true);
                 return;
             }
             var mark = target.GetComponent<WeakPointMark>();
             bool alreadyMarked = mark != null && mark.Active;
-            if (!target.Hit(damage, roundDamage, source) || alreadyMarked || !target.IsActive || target.Faction != Faction.MOB) return;
+            if (!target.Hit(damage, roundDamage, source, true) || alreadyMarked || !target.IsActive || target.Faction != Faction.MOB) return;
             if (mark == null) mark = target.gameObject.AddComponent<WeakPointMark>();
             mark.ApplyTo(target);
         }

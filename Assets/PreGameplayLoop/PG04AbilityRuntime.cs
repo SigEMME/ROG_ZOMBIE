@@ -15,6 +15,9 @@ namespace RogZombie.PreGameplayLoop
         private float[] rainTimes;
         private float rainElapsed;
         private bool raining;
+        private GameObject preview;
+        private GameObject activeAreaMarker;
+        public bool IsAiming => preview != null;
         private sealed class PendingBaseHit
         {
             public Vector2 Center;
@@ -41,14 +44,14 @@ namespace RogZombie.PreGameplayLoop
         }
         private void Update()
         {
-            if (!CanUse) return;
+            if (!CanUse) { CancelAim(); if (session != null && session.Player != null && !session.Player.Actor.IsActive) ClearAreaMarker(); return; }
             for (int i = 0; i < pendingBaseHits.Count;)
             {
                 var hit = pendingBaseHits[i];
                 hit.Remaining -= Time.deltaTime;
                 if (hit.Remaining > 0) { i++; continue; }
                 pendingBaseHits.RemoveAt(i);
-                EmitExplosion(hit.Center, hit.Radius, hit.Damage);
+                EmitExplosion(hit.Center, hit.Radius, hit.Damage, true);
             }
             if (Selected != PG04Ability.ColpoGrosso || Charges == 0) cooldown.Tick(Time.deltaTime);
             if (!raining) return;
@@ -58,13 +61,48 @@ namespace RogZombie.PreGameplayLoop
                 EmitExplosion(rainPositions[ExplosionsEmitted], weapon.Definition.ExplosionRadius, session.Player.Actor.EffectiveStats.ATK);
                 ExplosionsEmitted++;
             }
-            if (rainElapsed >= data.RainDuration) raining = false;
+            if (rainElapsed >= data.RainDuration) { raining = false; ClearAreaMarker(); }
+        }
+        private void ClearAreaMarker()
+        {
+            if (activeAreaMarker != null) { activeAreaMarker.SetActive(false); Destroy(activeAreaMarker); }
+            activeAreaMarker = null;
+        }
+        public bool BeginAim(Vector2 cursor)
+        {
+            if (Selected != PG04Ability.PioggiaDiGranate || !CanUse || !cooldown.Ready || EffectActive || IsAiming) return false;
+            preview = new GameObject("Anteprima PIOGGIA DI GRANATE");
+            preview.transform.SetParent(TestVisuals.Root, false);
+            preview.AddComponent<PG04AreaVisual>().Initialize(data.RainRadius, new[] { true, true, true, true }, new Color(0, 1, 1, .25f));
+            preview.GetComponent<MeshRenderer>().sortingOrder = 5;
+            AimAt(cursor);
+            return true;
+        }
+        public void AimAt(Vector2 cursor)
+        {
+            if (!IsAiming) return;
+            if (!CanUse) { CancelAim(); return; }
+            preview.transform.position = cursor;
+        }
+        public bool ReleaseAim(Vector2 cursor)
+        {
+            if (!IsAiming) return false;
+            CancelAim();
+            return TryActivate(cursor);
+        }
+        public void CancelAim()
+        {
+            if (preview != null) { preview.SetActive(false); Destroy(preview); }
+            preview = null;
         }
         public bool TryActivate(Vector2 cursor)
         {
             if (!CanUse || !cooldown.Ready || EffectActive) return false;
+            CancelAim();
             if (Selected == PG04Ability.ColpoGrosso) { Charges = data.BigShotCharges; return true; }
             cooldown.Restart(data.RainBaseCooldown, session.CdReduction);
+            ClearAreaMarker();
+            activeAreaMarker = PG04AreaVisual.CreateAreaMarker("Area attiva PIOGGIA DI GRANATE", cursor, data.RainRadius, new Color(1, .55f, .1f, .18f));
             rainCenter = cursor; rainElapsed = 0; ExplosionsEmitted = 0; raining = true;
             rainTimes = new float[data.RainCount]; rainPositions = new Vector2[data.RainCount];
             for (int i = 0; i < data.RainCount; i++)
@@ -92,17 +130,17 @@ namespace RogZombie.PreGameplayLoop
                 Charges--;
                 if (Charges == 0) cooldown.Restart(data.BigShotBaseCooldown, session.CdReduction);
             }
-            // Snapshot the launched attack; targets and blocked sectors are evaluated at impact.
+            // Snapshot the launched attack; targets and cover are evaluated at impact.
             pendingBaseHits.Add(new PendingBaseHit
             {
                 Center = destination, Radius = radius, Damage = attack,
                 Remaining = weapon.Definition.GrenadeHitDelay
             });
         }
-        private void EmitExplosion(Vector2 center, float radius, float damage)
+        private void EmitExplosion(Vector2 center, float radius, float damage, bool baseAttack = false)
         {
             var valid = PG04ExplosionEffect.Sectors(center, radius);
-            PG04ExplosionEffect.Hit(session.Player.Actor, center, radius, valid, damage);
+            PG04ExplosionEffect.Hit(session.Player.Actor, center, radius, valid, damage, baseAttack);
             PG04ExplosionEffect.Flash(center, radius, valid);
             if (Passive == PG04Passive.Pyromania)
             {
@@ -114,10 +152,12 @@ namespace RogZombie.PreGameplayLoop
         }
         public void ChangeArea()
         {
+            CancelAim(); ClearAreaMarker();
             cooldown.ChangeArea(EffectActive, data.BaseCooldown(Selected), session.CdReduction);
             Charges = 0; raining = false; rainTimes = null; rainPositions = null;
             pendingBaseHits.Clear();
         }
-        private void OnDestroy() { if (data != null) Destroy(data); }
+        private void OnDisable() { CancelAim(); ClearAreaMarker(); }
+        private void OnDestroy() { CancelAim(); ClearAreaMarker(); if (data != null) Destroy(data); }
     }
 }

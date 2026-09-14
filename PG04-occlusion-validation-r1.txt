@@ -1,0 +1,27 @@
+PASS | Unity 6000.3.16f1 | checks=25 | warnings=0
+PASS Only PG04 instantiated
+PASS Actual PG04 base shot launched
+PASS No immediate HIT (500/500)
+PASS HIT retains 0.3 second delay (frame tolerance)
+PASS MOB before obstacle takes full damage in intercepted quadrant (475/475)
+PASS Exposed MOB beside obstacle takes full damage in same quadrant (475/475)
+PASS MOB behind obstacle takes no damage (500/500)
+PASS MOB beyond 1.25m takes no damage (500/500)
+PASS Radius boundary included and DEF applied (487/487)
+PASS Collider center determines range and visibility (475/475)
+PASS One base HIT event per valid MOB (4/4)
+PASS Occluded visual emitted at actual impact
+PASS Visual preserves exposed area and clips shadow
+PASS Rotated blocker accepts only exposed MOB: wall=False (4/4)
+PASS Rotated blocker still protects behind MOB (500/500)
+PASS Rotated blocker accepts only exposed MOB: wall=True (4/4)
+PASS Rotated blocker still protects behind MOB (500/500)
+PASS Wall impact leaves outward half unobstructed (1,25/1,25)
+PASS Wall impact blocks inward half (0/0)
+PASS Other PG04 effects retain entire intercepted sector exclusion
+PASS Legacy sector explosion still excludes front MOB (425/425)
+PASS COLPO GROSSO activated
+PASS Actual COLPO GROSSO preserves sector rule (425/425)
+PASS COLPO GROSSO consumes one charge (3/3)
+PASS COLPO GROSSO keeps sector visual
+PG04 only: base attack occlusion, delay, damage, visual mesh and preserved sector effects. Input feel/balancing are not tested.

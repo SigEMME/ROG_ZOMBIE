@@ -29,7 +29,7 @@ namespace RogZombie.PreGameplayLoop
             {
                 valid[i] = true;
                 foreach (var obstacle in TestObstacle.All)
-                    if (obstacle.isActiveAndEnabled && PG08WireGeometry.BoxIntersects(transform.position, inner, outer, i * 360f / valid.Length, 360f / valid.Length, obstacle.Bounds))
+                    if (obstacle.isActiveAndEnabled && PG08WireGeometry.BoxIntersects(obstacle.UnrotatePoint(transform.position), inner, outer, i * 360f / valid.Length - obstacle.transform.eulerAngles.z, 360f / valid.Length, obstacle.UnrotatedBounds))
                     { valid[i] = false; break; }
                 if (valid[i]) ValidSections++;
             }
@@ -81,9 +81,21 @@ namespace RogZombie.PreGameplayLoop
                     triangles.Add(n); triangles.Add(n + 1); triangles.Add(n + 2); triangles.Add(n); triangles.Add(n + 2); triangles.Add(n + 3);
                 }
             }
-            mesh = new Mesh { name = "FILO SPINATO annulus" }; mesh.SetVertices(vertices); mesh.SetTriangles(triangles, 0); mesh.RecalculateBounds();
+            // Sprites/Default needs explicit vertex colors and UVs for this procedural ring,
+            // just like the shared area renderer. Keep the material tint as the only opacity.
+            var colors = new Color32[vertices.Count];
+            var uv = new Vector2[vertices.Count];
+            for (int i = 0; i < vertices.Count; i++)
+            {
+                colors[i] = new Color32(255, 255, 255, 255);
+                uv[i] = new Vector2(.5f, .5f);
+            }
+            mesh = new Mesh { name = "FILO SPINATO annulus" };
+            mesh.SetVertices(vertices); mesh.colors32 = colors; mesh.uv = uv;
+            mesh.SetTriangles(triangles, 0); mesh.RecalculateNormals(); mesh.RecalculateBounds();
             gameObject.AddComponent<MeshFilter>().sharedMesh = mesh;
-            material = new Material(Shader.Find("Sprites/Default")) { color = new Color(.8f, .65f, .25f, .55f) };
+            material = new Material(Shader.Find("Sprites/Default"))
+            { mainTexture = Texture2D.whiteTexture, color = new Color(.8f, .65f, .25f, .55f) };
             var renderer = gameObject.AddComponent<MeshRenderer>(); renderer.sharedMaterial = material; renderer.sortingOrder = 1;
         }
         private void OnDestroy() { if (mesh != null) Destroy(mesh); if (material != null) Destroy(material); }

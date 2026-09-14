@@ -298,13 +298,13 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 | ITEM | GEOMETRIA E SUDDIVISIONE | MURI / OSTACOLI |
 | --- | --- | --- |
-| GRANATA | Circolare, raggio 2,5 m; 4 SPICCHI da 90°. | Influenzano l’AREA. |
-| MOLOTOV | Circolare, raggio 5 m; 8 SPICCHI da 45°. | Influenzano l’AREA. |
+| GRANATA | Circolare, raggio 2,5 m; schermatura per bersaglio. | Influenzano l’AREA. |
+| MOLOTOV | Circolare, raggio 5 m; schermatura per bersaglio. | Influenzano l’AREA. |
 | TRAPPOLA | Rettangolare 1 × 4 m; 4 SEZIONI da 1 × 1 m. | Influenzano l’AREA. |
 | SMOKE | Circolare, raggio 5 m. | Nessun effetto sull’AREA. |
 | POZIONE CURATIVA | Circolare, raggio 4 m. | Nessun effetto sull’AREA. |
 
-- Per GRANATA, MOLOTOV e TRAPPOLA vale la stessa regola delle altre AREE: se un MURO/OSTACOLO intercetta anche parzialmente uno SPICCHIO/SEZIONE, quello SPICCHIO/SEZIONE viene eliminato integralmente e non genera alcun effetto. Gli altri SPICCHI/SEZIONI restano validi.
+- GRANATA e MOLOTOV applicano la schermatura per bersaglio (sezione 10.3). TRAPPOLA conserva l’eliminazione integrale delle SEZIONI intercettate da MURO/OSTACOLO.
 - La suddivisione è soltanto geometrica e non genera HIT aggiuntive.
 - MURI/OSTACOLI non hanno effetto su SMOKE e POZIONE CURATIVA.
 - Non è previsto alcun comportamento specifico aggiuntivo di lancio/posizionamento rispetto a MURI/OSTACOLI, oltre alle regole delle AREE sopra definite.
@@ -320,8 +320,8 @@ I cinque ITEMS usano esclusivamente i layer esistenti AREA_EFFECT_MOB e AREA_EFF
 
 | ITEM | GESTIONE TECNICA |
 | --- | --- |
-| GRANATA | Nessun proiettile fisico; effetto istantaneo AREA_EFFECT_MOB nel punto scelto. I 4 SPICCHI da 90° sono validati logicamente contro MURO/OSTACOLO. |
-| MOLOTOV | AREA_EFFECT_MOB persistente per 5 s, attraversabile da PG, MOB, PET e proiettili. Gli 8 SPICCHI da 45° sono validati logicamente contro MURO/OSTACOLO. |
+| GRANATA | Nessun proiettile fisico; effetto istantaneo AREA_EFFECT_MOB nel punto scelto. Schermatura per bersaglio contro MURO/OSTACOLO. |
+| MOLOTOV | AREA_EFFECT_MOB persistente per 5 s, attraversabile da PG, MOB, PET e proiettili. Schermatura per bersaglio contro MURO/OSTACOLO. |
 | SMOKE | AREA_EFFECT_PG persistente per 4 s, senza collisione fisica; rileva solo PG e applica logicamente INVISIBILITÀ. Ignora MURO/OSTACOLO. |
 | POZIONE CURATIVA | AREA_EFFECT_PG persistente per 4 s, senza collisione fisica; rileva solo PG e applica logicamente la CURA secondo i tick definiti. Ignora MURO/OSTACOLO. |
 | TRAPPOLA | AREA_EFFECT_MOB persistente per 5 s, attraversabile; le 4 SEZIONI da 1 × 1 m sono validate logicamente contro MURO/OSTACOLO. Applica DANNO e SLOW ai MOB nelle sezioni valide. |
@@ -347,6 +347,7 @@ I cinque ITEMS usano esclusivamente i layer esistenti AREA_EFFECT_MOB e AREA_EFF
 - CD REDUCTION: STAT modificatore del PG, senza unità in secondi; VALORE BASE neutro = 100. CD REDUCTION 100 = 100% del CD BASE della singola ABILITÀ selezionata.
 - Ogni ABILITÀ mantiene il proprio CD BASE in secondi, definito nella relativa scheda PG.
 - Formula: CD FINALE = CD BASE ABILITÀ × (CD REDUCTION / 100).
+- Questa STAT CD REDUCTION del PG non modifica i CD delle ABILITÀ BONUS: questi dipendono esclusivamente dai propri CD e UPGRADE (sezioni 22 e 24).
 - CD REDUCTION non può scendere sotto 10.
 - La STAT CD REDUCTION usa un valore intero: applicare il valore pieno risultante dal calcolo con arrotondamento matematico all’intero più vicino; frazione <0,5 per difetto, frazione ≥0,5 per eccesso (94,4 → 94; 94,5 → 95). Questa regola è distinta dall’arrotondamento del CD FINALE al decimo di secondo.
 - Il CD FINALE viene arrotondato al decimo di secondo con arrotondamento matematico: cifra successiva inferiore a 5 per difetto, da 5 in su per eccesso (6,51 s → 6,5 s; 6,58 s → 6,6 s).
@@ -407,34 +408,28 @@ I cinque ITEMS usano esclusivamente i layer esistenti AREA_EFFECT_MOB e AREA_EFF
 - Le eccezioni al blocco degli ATTACCHI sono definite nelle singole schede.
 - La BARRIERA di PG01 eredita le collisioni del layer OSTACOLO (sezione 10.9), conservando durata e proprietà della propria ABILITÀ.
 
-### 10.3 AREE CIRCOLARI E AREE ITEMS — MURI E OSTACOLI
+### 10.3 AREE DI EFFETTO — SCHERMATURA DA MURI E OSTACOLI
 
-- AREA_EFFECT_PG e AREA_EFFECT_MOB non hanno collisione fisica con MURO o OSTACOLO: queste coppie restano escluse dalla Layer Collision Matrix. Le verifiche geometriche di SPICCHI/SEZIONI contro MURI/OSTACOLI sono gestite dalla logica dell’ABILITÀ/AREA, conservando le regole ed eccezioni seguenti.
+- AREA_EFFECT_PG e AREA_EFFECT_MOB non hanno collisione fisica con MURO/OSTACOLO: la Layer Collision Matrix resta invariata. La schermatura è verificata dalla logica dell’AREA.
+- La precedente eliminazione integrale degli SPICCHI è sostituita dalla verifica per bersaglio: centro del collider entro forma e RAGGIO dell’AREA, linea libera dal centro dell’AREA al centro del collider. Se un MURO/OSTACOLO interrompe la linea, quel bersaglio non riceve HIT né effetti associati; altrimenti riceve il DANNO completo prima della DEF. Nessuna attenuazione aggiuntiva e nessuna propagazione attorno agli angoli.
+- Il controllo avviene alla HIT; per le AREE persistenti viene ripetuto a ogni tick, usando bersagli e coperture presenti in quel momento. Ogni esplosione/tick conserva il proprio limite di HIT per bersaglio, destinatari, danni, durata, frequenza ed effetti associati.
+- Il riferimento grafico dell’AREA viene ritagliato dalle coperture; le anteprime di distribuzione delle esplosioni conservano la propria funzione di mira.
 
-| ATTACCO / EFFETTO | SUDDIVISIONE | REGOLA |
-| --- | --- | --- |
-| PG04 — ATTACCO BASE | 4 SPICCHI da 90° | Eliminazione completa dello SPICCHIO intercettato. |
-| PG04 — PIOGGIA DI GRANATE | 4 SPICCHI da 90° per singola esplosione | Stesse regole dell’ATTACCO BASE. |
-| PG04 — COLPO GROSSO | 4 SPICCHI da 90° per singola esplosione | Stesse regole dell’ATTACCO BASE. |
-| PG04 — PYROMANIA | 4 SPICCHI da 90° per AREA INCENDIATA | Stesse regole dell’ATTACCO BASE. |
-| PG07 — LUCKY SHOT | 4 SPICCHI da 90° | Eliminazione completa dello SPICCHIO intercettato. |
-| AURA TOSSICA | 8 SPICCHI | Regole delle AREE DI EFFETTO con MURI/OSTACOLI; eliminazione completa dello SPICCHIO intercettato. |
-| MINE | 4 SPICCHI | Regole delle AREE DI EFFETTO con MURI/OSTACOLI; eliminazione completa dello SPICCHIO intercettato. |
-| TASER | 6 SPICCHI | Regole delle AREE DI EFFETTO con MURI/OSTACOLI; eliminazione completa dello SPICCHIO intercettato. |
-| REPULSE | 8 SPICCHI | Regole delle AREE DI EFFETTO con MURI/OSTACOLI; eliminazione completa dello SPICCHIO intercettato. |
-| SCIABOLATA | 4 SPICCHI nell’AREA a SEMICERCHIO | Regole delle AREE DI EFFETTO con MURI/OSTACOLI; eliminazione completa dello SPICCHIO intercettato. |
-| ZOMB03 — AREA DI DANNO | 8 SPICCHI da 45° | Eliminazione completa dello SPICCHIO intercettato. |
-| ZOMB05 — ESPLOSIONE | 8 SPICCHI da 45° | Eliminazione completa dello SPICCHIO intercettato. |
-| ITEM GRANATA | 4 SPICCHI da 90°; raggio 2,5 m | Eliminazione completa dello SPICCHIO intercettato. |
-| ITEM MOLOTOV | 8 SPICCHI da 45°; raggio 5 m | Eliminazione completa dello SPICCHIO intercettato. |
-| ITEM TRAPPOLA | 4 SEZIONI da 1 × 1 m; rettangolo 1 × 4 m | Eliminazione completa della SEZIONE intercettata; orientamento e RANGE secondo la sezione 9.2. |
-| ITEM SMOKE / POZIONE CURATIVA | Nessun taglio dell’AREA da parte di MURI/OSTACOLI | MURI/OSTACOLI non hanno effetto. |
-| PG07 — PIOGGIA DI FRECCE | Nessun taglio dell’AREA da parte di MURI/OSTACOLI | Le FRECCE ignorano MURI/OSTACOLI lungo la caduta e applicano DANNO nel cerchio di raggio 0,25 m centrato sul PUNTO D’IMPATTO. |
+| ATTACCO / EFFETTO | FORMA / REGOLA |
+| --- | --- |
+| PG04 — ATTACCO BASE, PIOGGIA DI GRANATE, COLPO GROSSO | Cerchio; schermatura per bersaglio, indipendente per ciascuna esplosione. |
+| PG04 — PYROMANIA | Cerchio; schermatura per bersaglio a ogni tick. |
+| PG07 — LUCKY SHOT | Cerchio; schermatura per bersaglio. |
+| AURA TOSSICA, MINE, TASER, REPULSE | Cerchio; schermatura per bersaglio anche per gli effetti associati. |
+| SCIABOLATA | SEMICERCHIO frontale; schermatura per bersaglio entro il SEMICERCHIO. |
+| ZOMB03 — AREA DI DANNO / ZOMB05 — ESPLOSIONE | Cerchio; schermatura per bersaglio; destinatari e massimo 1 HIT invariati. |
+| ITEM GRANATA | Cerchio, raggio 2,5 m; schermatura per bersaglio. |
+| ITEM MOLOTOV | Cerchio, raggio 5 m; schermatura per bersaglio a ogni tick. |
+| ITEM TRAPPOLA | Conserva 4 SEZIONI da 1 × 1 m, rettangolo 1 × 4 m; eliminazione completa della SEZIONE intercettata. |
+| ITEM SMOKE / POZIONE CURATIVA | Ignorano MURI/OSTACOLI. |
+| PG07 — PIOGGIA DI FRECCE | Conserva l’eccezione: caduta e cerchio di danno di raggio 0,25 m ignorano MURI/OSTACOLI. |
 
-- Se un MURO/OSTACOLO intercetta anche parzialmente uno SPICCHIO, l’intero SPICCHIO viene eliminato e non genera HIT/DANNO. Gli altri SPICCHI restano validi.
-- Gli SPICCHI definiscono esclusivamente la geometria; non generano HIT separate. Un bersaglio sul confine tra SPICCHI non riceve HIT aggiuntive per questo motivo.
-- La regola a 4 SPICCHI di PIOGGIA DI GRANATE sostituisce la precedente eccezione che consentiva alle sue esplosioni di ignorare MURI/OSTACOLI.
-- Questa suddivisione riguarda esclusivamente i casi elencati. FILO SPINATO usa le proprie 10 SEZIONI da 36° (sezione 12).
+- FILO SPINATO conserva le proprie 10 SEZIONI da 36°. Gli SPICCHI di FUOCO DI SOPPRESSIONE descrivono la sequenza dei PROIETTILI e non sono modificati. Le altre eccezioni specifiche restano valide.
 
 ### 10.4 CD — INIZIO RUN E CAMBIO AREA
 
@@ -583,7 +578,7 @@ In questa tabella SÌ significa rilevamento/interazione con il destinatario, sen
 | PG02 | Assault Rifle | 100 | 10 | 0% | 100 | 400 | 100 | 10 m |
 | PG03 | Sniper Rifle | 80 | 50 | −10% | 110 | 60 | 100 | 20 m |
 | PG04 | Grenade Launcher | 100 | 25 | 0% | 100 | 65 | 100 | 7 m |
-| PG05 | Knife | 100 | 30 | −10% | 130 | 150 | 100 | 2 m |
+| PG05 | Knife | 100 | 30 | −10% | 130 | 150 | 100 | 2,5 m |
 | PG06 | Revolver | 120 | 40 | 0% | 100 | 80 | 100 | 10 m |
 | PG07 | Bow | 100 | 30 | 0% | 110 | 110 | 100 | 15 m |
 | PG08 | Heavy Machine Gun | 100 | 7 | +10% | 90 | 650 | 100 | 8 m |
@@ -609,10 +604,10 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 - ATTACCO BASE: PROIETTILE BALISTICO non PERFORANTE, verso il CURSORE; ATK 10, RANGE 10 m, ATK SPD BASE 400 = 4 ATTACCHI/s. Segue le REGOLE GENERALI DEI PROIETTILI.
 
-- ABILITÀ 1 — FUOCO RAPIDO: BONUS temporaneo +40% ATK SPD corrente; durata 4 s; CD 10 s, avviato al termine dei 4 s di DURATA. Senza altri modificatori, ATK SPD passa da 400 a 560 = 5,6 ATTACCHI/s. Alla scadenza viene rimosso soltanto il BONUS temporaneo, preservando gli altri modificatori e BONUS acquisiti.
+- ABILITÀ 1 — FUOCO RAPIDO: BONUS temporaneo +50% ATK SPD corrente; durata 4 s; CD 10 s, avviato al termine dei 4 s di DURATA. Senza altri modificatori, ATK SPD passa da 400 a 600 = 6 ATTACCHI/s. Alla scadenza viene rimosso soltanto il BONUS temporaneo, preservando gli altri modificatori e BONUS acquisiti.
 - ABILITÀ 2 — FUOCO DI SOPPRESSIONE: raffica di 50 PROIETTILI FISICI in 3 s; 3 DANNO per PROIETTILE prima della DEF; RANGE 10 m. CONO frontale di ampiezza totale 50°, diviso in 5 SPICCHI da 10°, numerati da destra a sinistra. Ogni PROIETTILE è diretto lungo il CENTRO dello SPICCHIO corrente: −20°, −10°, 0°, +10°, +20° rispetto all’asse del CONO, nell’ordine da destra a sinistra. I PROIETTILI vengono sparati in successione, uno per lo SPICCHIO corrente, con sequenza 1-2-3-4-5-4-3-2-1-2-3-ecc., senza ripetere gli estremi e fino al 50° PROIETTILE. CD BASE 12 s, avviato all’attivazione. Sostituisce il precedente HITSCAN istantaneo a CONO da 30 DANNO.
 - PASSIVA 1: con HP <30%, ogni KILL cura 1% degli HP MASSIMI correnti di PG02; non ha effetto a HP ≥30%.
-- PASSIVA 2: ogni 15 KILL entra in RAGE per 2 s con +30% ATK. Al CAMBIO AREA il conteggio delle KILL resta; RAGE termina se attiva, rimuovendo soltanto il BONUS ATK temporaneo.
+- PASSIVA 2: ogni 15 KILL entra in RAGE per 4 s con +30% ATK. Al CAMBIO AREA il conteggio delle KILL resta; RAGE termina se attiva, rimuovendo soltanto il BONUS ATK temporaneo.
 
 ### PG03 — Sniper Rifle
 
@@ -631,21 +626,23 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Si applica l’AREA CIRCOLARE nel punto d’impatto. Resta la regola specifica di determinazione della destinazione: solo un MURO può anticipare l’impatto; OSTACOLI e MOB non lo anticipano. Il precedente volo PARABOLICO dell’ATTACCO BASE è sostituito dall’HITSCAN; le ABILITÀ conservano le proprie regole.
 - La HIT dell’ATTACCO BASE avviene 0,3 s dopo il lancio, nel punto d’impatto determinato al lancio. Il ritardo si applica anche agli ATTACCHI BASE potenziati da COLPO GROSSO; PIOGGIA DI GRANATE conserva la propria sequenza. PYROMANIA si attiva all’esplosione, con primo tick immediato all’attivazione dell’AREA INCENDIATA.
 - AREA ESPLOSIONE CIRCOLARE, RAGGIO 1,25 m: 25 DANNO a ciascun MOB valido prima della DEF.
-- MURI/OSTACOLI interrompono l’AREA secondo la regola dei 4 SPICCHI da 90° (sezione 10.3).
+- MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. Il riferimento grafico mostra l’AREA schermata (sezione 10.3).
 
 #### ABILITÀ 1 — PIOGGIA DI GRANATE
 
-- Genera direttamente 10 ESPLOSIONI, senza PROIETTILI, in posizioni RANDOM nell’AREA EFFETTO CIRCOLARE di RAGGIO 5 m.
+- SISTEMA A RILASCIO: tenere premuto Q mostra l’anteprima dell’AREA EFFETTO di RAGGIO 4 m, che segue il CURSORE; al rilascio di Q l’ABILITÀ si attiva nella posizione selezionata. L’anteprima non genera HIT e non avvia il CD; sequenza delle esplosioni e CD iniziano al rilascio.
+
+- Genera direttamente 10 ESPLOSIONI, senza PROIETTILI, in posizioni RANDOM nell’AREA EFFETTO CIRCOLARE di RAGGIO 4 m.
 - Centro: posizione del CURSORE all’attivazione; nessun limite di distanza da PG04.
 - Sequenza CASUALE nell’arco complessivo di 3 s; CD BASE 12 s, avviato all’attivazione.
 - Eredita esclusivamente ATK e AREA ESPLOSIONE dell’ATTACCO BASE: ATK 25 e RAGGIO 1,25 m per esplosione. Non eredita traiettoria, RANGE o IMPATTO del PROIETTILE.
 - Le esplosioni possono sovrapporsi. Ogni esplosione applica indipendentemente il proprio DANNO; lo stesso MOB può ricevere HIT da più esplosioni.
-- Ogni AREA di esplosione segue la regola dei 4 SPICCHI da 90°, con eliminazione completa degli SPICCHI intercettati da MURI/OSTACOLI.
+- MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli.
 
 #### ABILITÀ 2 — COLPO GROSSO
 
 - Potenzia i successivi 4 ATTACCHI BASE: +80% ATK (25 → 45) e +50% RAGGIO ESPLOSIONE (1,25 → 1,875 m).
-- Modifica esclusivamente ATK e RAGGIO ESPLOSIONE. Le altre STATS e regole restano invariate, inclusa la geometria a 4 SPICCHI.
+- Modifica esclusivamente ATK e RAGGIO ESPLOSIONE. Le altre STATS e regole restano invariate, inclusa la schermatura per bersaglio dell’ATTACCO BASE.
 - Nessuna DURATA massima: le cariche restano disponibili fino al consumo. Ogni ATTACCO effettuato consuma una carica, anche in caso di MISS.
 - CD BASE 10 s, avviato al consumo del 4° ATTACCO.
 - Al CAMBIO AREA le cariche residue vengono perse e, se l’ABILITÀ era ATTIVA, il CD riparte da capo. Se era DISPONIBILE, rimane DISPONIBILE. Se era già IN CD ma non più ATTIVA, mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA.
@@ -661,11 +658,11 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Si applica ad ATTACCO BASE, PIOGGIA DI GRANATE e COLPO GROSSO.
 - L’AREA INCENDIATA corrisponde all’AREA ESPLOSIONE: RAGGIO 1,25 m per ATTACCO BASE/PIOGGIA DI GRANATE; 1,875 m per COLPO GROSSO.
 - Le AREE INCENDIATE possono sovrapporsi e i loro DANNI si sommano.
-- MURI/OSTACOLI bloccano il DANNO secondo la regola dei 4 SPICCHI da 90°.
+- MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli.
 
 ### PG05 — Knife
 
-- ATTACCO BASE: AREA HITSCAN istantanea, senza PROIETTILI FISICI;  AREA a CONO orientata verso il CURSORE, portata 2 m / 135°; ATK 30 per ogni MOB valido nell’AREA, senza suddivisione; ATK SPD 150 = 1,5 ATTACCHI/s. MURI/OSTACOLI bloccano il DANNO verso i MOB schermati.
+- ATTACCO BASE: AREA HITSCAN istantanea, senza PROIETTILI FISICI;  AREA a CONO orientata verso il CURSORE, portata 2,5 m / 135°; ATK 30 per ogni MOB valido nell’AREA, senza suddivisione; ATK SPD 150 = 1,5 ATTACCHI/s. MURI/OSTACOLI bloccano il DANNO verso i MOB schermati.
 
 #### ABILITÀ 1 — INVISIBILITÀ
 
@@ -681,7 +678,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 #### PASSIVA 1 — GHOSTING
 
-- Con HP <30% prima della HIT, una HIT ricevuta attiva INVISIBILITÀ e +15% MOVE SPD per 2 s. Con HP ≥30% non si attiva.
+- Con HP <35% dopo il danno della HIT, una HIT ricevuta attiva INVISIBILITÀ e +15% MOVE SPD per 2 s. Anche la HIT che porta da sopra a sotto soglia attiva l’effetto. Con HP ≥35% dopo la HIT non si attiva.
 - Applica le stesse REGOLE GENERALI di INVISIBILITÀ.
 - HIT ricevute durante l’effetto non lo riattivano e non rinnovano la DURATA.
 - Sovrapposizione GHOSTING/INVISIBILITÀ su PG05: un solo BONUS +15% MOVE SPD; DURATA rinnovata usando quella dell’ultimo effetto applicato.
@@ -756,7 +753,7 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 - Un successo genera una HIT AD AREA aggiuntiva pari al 30% dell’ATK di PG07; AREA CIRCOLARE di RAGGIO 2 m centrata sul MOB che ha generato il TRIGGER.
 - Il DANNO risultante di LUCKY SHOT viene arrotondato all’intero più vicino con arrotondamento matematico: parte decimale <0,5 per difetto; ≥0,5 per eccesso. Il DANNO AD AREA è una HIT separata: la DEF si applica indipendentemente dall’ATTACCO BASE e individualmente a ogni MOB.
 - Se l’ATTACCO BASE uccide il MOB, LUCKY SHOT può comunque attivarsi nel punto della sua MORTE e colpire gli altri MOB.
-- MURI/OSTACOLI eliminano interamente gli SPICCHI intercettati secondo la geometria a 4 SPICCHI da 90°. Gli SPICCHI non generano HIT separate.
+- MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. Nessuna HIT aggiuntiva per suddivisioni geometriche.
 - La HIT di LUCKY SHOT non è un ATTACCO BASE e non genera ulteriori roll di LUCKY SHOT.
 
 #### PASSIVA 2 — CONCENTRAZIONE
@@ -773,9 +770,9 @@ I valori CD in secondi riportati nelle schede seguenti sono i CD BASE delle sing
 
 #### ABILITÀ 1 — FILO SPINATO
 
-- ANELLO di RAGGIO ESTERNO 4,5 m e SPESSORE 1 m (fascia da 3,5 a 4,5 m), centrato sulla posizione di PG08 all’attivazione. Rimane fisso per 4 s e non segue PG08.
+- ANELLO di RAGGIO ESTERNO 4,5 m e SPESSORE 1 m (fascia da 3,5 a 4,5 m), centrato sulla posizione di PG08 all’attivazione. Rimane fisso per 5 s e non segue PG08.
 - Solo la fascia dell’ANELLO genera effetti: per ciascun MOB il conteggio del DANNO PERIODICO parte nel momento in cui entra in contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA. All’uscita il DANNO PERIODICO termina.
-- SLOW 35% mentre il MOB è nella fascia; all’uscita lo SLOW cessa. Più applicazioni di FILO SPINATO non sommano lo SLOW né il DANNO: ogni MOB riceve un solo DANNO di 10 al secondo anche in sovrapposizione.
+- SLOW 40% mentre il MOB è nella fascia; all’uscita lo SLOW cessa. Più applicazioni di FILO SPINATO non sommano lo SLOW né il DANNO: ogni MOB riceve un solo DANNO di 10 al secondo anche in sovrapposizione.
 - Per un MOB già nella fascia di una SEZIONE valida all’attivazione, il conteggio del DANNO PERIODICO parte in quel momento e lo SLOW si applica immediatamente.
 - Non è una barriera fisica: i MOB attraversano liberamente; i PG attraversano senza effetti; i PROIETTILI attraversano normalmente.
 - 10 SEZIONI indipendenti da 36°. Alla generazione, se anche una sola parte di una SEZIONE interseca un MURO/OSTACOLO, l’intera SEZIONE viene eliminata.
@@ -816,12 +813,12 @@ Tutte le 16 ABILITÀ usano i LAYER esistenti o verifiche logiche, senza nuovi TA
 | --- | --- | --- |
 | PG01 | PESTONE | AREA_EFFECT_MOB oppure verifica HITSCAN istantanea su AREA RETTANGOLARE frontale 3 m × 7 m (larghezza frontale 3 m, profondità 7 m) sui MOB; nessuna collisione fisica persistente. MURO/OSTACOLO bloccano secondo le regole dell’AREA. |
 | PG01 | BARRIERA | Layer OSTACOLO: blocca PG, MOB, PET, PROJECTILE_PG e PROJECTILE_MOB. |
-| PG02 | FUOCO RAPIDO | Modificatore logico temporaneo +40% ATK SPD corrente; proiettili PROJECTILE_PG e collisioni invariate. |
+| PG02 | FUOCO RAPIDO | Modificatore logico temporaneo +50% ATK SPD corrente; proiettili PROJECTILE_PG e collisioni invariate. |
 | PG02 | FUOCO DI SOPPRESSIONE | Raffica di 50 PROIETTILI FISICI su PROJECTILE_PG in 3 s, 3 DANNO per PROIETTILE, RANGE 10 m. Distribuzione sequenziale sui CENTRI dei 5 SPICCHI da 10° del CONO di 50°, da destra a sinistra e ritorno, senza ripetere gli estremi. I PROIETTILI seguono le regole generali applicabili dei proiettili fisici; non usa una query HITSCAN a CONO né un collider AREA_EFFECT_MOB. |
 | PG03 | COLPO LASER | Verifica HITSCAN/AREA rettangolare 20 × 2 m sui MOB, tramite query logica o AREA_EFFECT_MOB; ignora MURO/OSTACOLO e non usa PROJECTILE_PG. |
 | PG03 | TRIPLO SPARO | I 3 colpi sono PROJECTILE_PG con le collisioni standard. |
-| PG04 | PIOGGIA DI GRANATE | Le 10 esplosioni sono AREA_EFFECT_MOB, senza proiettili fisici; validazione logica dei 4 SPICCHI contro MURO/OSTACOLO. |
-| PG04 | COLPO GROSSO | Stato logico a 4 cariche; conserva la gestione dell’ATTACCO BASE. Esplosione AREA_EFFECT_MOB con logica degli SPICCHI; nessun cambio delle collisioni. |
+| PG04 | PIOGGIA DI GRANATE | Le 10 esplosioni sono AREA_EFFECT_MOB, senza proiettili fisici; Schermatura per bersaglio contro MURO/OSTACOLO. |
+| PG04 | COLPO GROSSO | Stato logico a 4 cariche; conserva la gestione dell’ATTACCO BASE. Esplosione AREA_EFFECT_MOB con schermatura per bersaglio; nessun cambio delle collisioni. |
 | PG05 | INVISIBILITÀ | Stato logico del PG; layer e collisioni normali invariati. |
 | PG05 | COLTELLI AVVELENATI | Gli 8 coltelli sono PROJECTILE_PG con collisioni standard; VELENO applicato logicamente alla HIT. |
 | PG06 | CURA AD AREA | Effetto logico istantaneo sui PG entro 5 m, tramite AREA_EFFECT_PG o query logica; nessuna collisione fisica persistente. Ignora MURO/OSTACOLO. |
@@ -844,12 +841,12 @@ Nessuna PASSIVA richiede nuovi TAG o LAYER. Le modifiche logiche mantengono laye
 | PG03 | CALIBRO PERFORANTE | Modifica logica dei PROJECTILE_PG dell’ATTACCO BASE: 2 PERFORAZIONI e DANNO 100% / 70% / 40% sulle tre HIT; layer e collisioni standard invariati. |
 | PG03 | PUNTO DEBOLE | MARCHIO logico sul MOB; nessuna modifica di layer/collisioni. |
 | PG04 | SCORTA ESPLOSIVA | Modifica della capacità degli SLOT ITEM; nessuna conseguenza su layer/collisioni. |
-| PG04 | PYROMANIA | AREE INCENDIATE AREA_EFFECT_MOB generate dalle esplosioni; verifica logica degli SPICCHI contro MURO/OSTACOLO, senza collisione fisica dell’AREA. |
+| PG04 | PYROMANIA | AREE INCENDIATE AREA_EFFECT_MOB generate dalle esplosioni; Schermatura per bersaglio contro MURO/OSTACOLO, senza collisione fisica dell’AREA. |
 | PG05 | GHOSTING | Combinazione logica di INVISIBILITÀ e modificatore MOVE SPD; layer/collisioni invariati. |
 | PG05 | LAMA DI CICUTA | Contatore logico che applica VELENO ai MOB colpiti dall’ATTACCO BASE al raggiungimento della soglia. |
 | PG06 | ELEMOSINA | Il MEDI KIT generato è attraversabile e usa TRIGGER_PG secondo le regole esistenti. |
 | PG06 | VITAMINA C | Modificatore logico temporaneo ATK SPD; il rinnovo della DURATA non modifica le collisioni. |
-| PG07 | LUCKY SHOT | HIT AD AREA tramite AREA_EFFECT_MOB o verifica logica; validazione dei 4 SPICCHI contro MURO/OSTACOLO. |
+| PG07 | LUCKY SHOT | HIT AD AREA tramite AREA_EFFECT_MOB o verifica logica; Schermatura per bersaglio contro MURO/OSTACOLO. |
 | PG07 | CONCENTRAZIONE | Modifica logica della FRECCIA PROJECTILE_PG, PERFORANTE quando il roll ha successo; nessun cambio layer. |
 | PG08 | TENACIA | Contatore e modificatore logico DEF; nessuna modifica fisica, anche all’azzeramento del BONUS. |
 | PG08 | RAGE | Stato logico temporaneo del PG; collisioni normali. |
@@ -942,9 +939,9 @@ Nessuna PASSIVA richiede nuovi TAG o LAYER. Le modifiche logiche mantengono laye
 
 #### AREA, MURI E OSTACOLI
 
-- AREA divisa in 8 SPICCHI da 45°; un MURO/OSTACOLO che intercetta anche parzialmente uno SPICCHIO elimina l’intero SPICCHIO e le sue HIT.
-- Anche con il centro vicino a MURI/OSTACOLI l’AREA viene generata a T = 0,5 s e ogni SPICCHIO viene valutato indipendentemente.
-- Gli SPICCHI servono solo alla geometria. Se il PG appartiene ad almeno uno SPICCHIO valido, riceve 1 HIT; dopo quella HIT la valutazione per quel PG è conclusa, anche sul confine fra SPICCHI.
+- MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli.
+- Anche vicino a MURI/OSTACOLI l’AREA viene generata a T = 0,5 s; la schermatura viene verificata per ogni PG.
+- Ogni PG valido e non schermato riceve al massimo 1 HIT per AREA.
 
 #### INTERRUZIONI ED EFFETTI
 
@@ -1017,8 +1014,8 @@ Nessuna PASSIVA richiede nuovi TAG o LAYER. Le modifiche logiche mantengono laye
 
 #### ESPLOSIONE — T = 2 s
 
-- AREA CIRCOLARE centrata sulla posizione attuale di ZOMB05; RAGGIO 4 m; 8 SPICCHI da 45°, secondo le regole geometriche dell’AREA di ZOMB03.
-- Un MURO/OSTACOLO che intercetta anche parzialmente uno SPICCHIO elimina l’intero SPICCHIO. Gli SPICCHI definiscono la geometria, non HIT separate.
+- AREA CIRCOLARE centrata sulla posizione attuale di ZOMB05; RAGGIO 4 m; schermatura per bersaglio secondo la sezione 10.3.
+- MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. Massimo 1 HIT per bersaglio.
 - Massimo 1 HIT per bersaglio valido nell’AREA: 50 DANNO ai PG ATTIVI; 25 DANNO ai MOB, ossia il 50% in meno, prima dell’applicazione della rispettiva DEF.
 - I PG in DOWN non ricevono HIT. Il DANNO ai MOB è un’eccezione specifica per questa ESPLOSIONE.
 
@@ -1035,10 +1032,10 @@ Nessuna PASSIVA richiede nuovi TAG o LAYER. Le modifiche logiche mantengono laye
 | MOB / EFFETTO | GESTIONE TECNICA |
 | --- | --- |
 | ZOMB01 / ZOMB02 / ZOMB05 — ATTACCO MELEE | HIT logica istantanea sul PG entro RANGE; nessun proiettile o AREA persistente e nessun nuovo layer. |
-| ZOMB03 — AREA DI DANNO | AREA_EFFECT_PG istantanea nel punto fissato a T = 0, generata al momento previsto dal ciclo dell’ATTACCO; HIT sui PG validi. Gli 8 SPICCHI da 45° sono validati logicamente contro MURO/OSTACOLO; nessuna collisione fisica persistente. |
+| ZOMB03 — AREA DI DANNO | AREA_EFFECT_PG istantanea nel punto fissato a T = 0, generata al momento previsto dal ciclo dell’ATTACCO; HIT sui PG validi. Schermatura per bersaglio contro MURO/OSTACOLO; nessuna collisione fisica persistente. |
 | ZOMB04 — PROIETTILE BALISTICO | PROJECTILE_MOB: collide con PG, MURO e OSTACOLO; attraversa MOB, PET, PROJECTILE_PG e PROJECTILE_MOB, secondo la matrice generale. |
 | ZOMB05 — PRE-ESPLOSIONE | Stato logico sul layer MOB; mantiene tutte le collisioni normali, inclusa MOB ↔ MOB SÌ. |
-| ZOMB05 — ESPLOSIONE | Verifica logica unica dell’AREA che interroga sia PG sia MOB validi, senza forzare l’effetto in un solo AREA_EFFECT_PG o AREA_EFFECT_MOB. Gli 8 SPICCHI da 45° sono validati logicamente contro MURO/OSTACOLO; restano invariati danni, destinatari e massimo di 1 HIT per bersaglio. |
+| ZOMB05 — ESPLOSIONE | Verifica logica unica dell’AREA che interroga sia PG sia MOB validi, senza forzare l’effetto in un solo AREA_EFFECT_PG o AREA_EFFECT_MOB. Schermatura per bersaglio contro MURO/OSTACOLO; restano invariati danni, destinatari e massimo di 1 HIT per bersaglio. |
 
 Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole specifiche delle sezioni 13.1–13.9.
 
@@ -1266,7 +1263,7 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 - Raggiunta una soglia EXP, il GAMEPLAY va automaticamente e completamente in PAUSA. Durante la pausa non avvengono combattimenti, KILL o nuova assegnazione EXP.
 - Per ogni PG interessato si generano sempre 3 BANNER; il PLAYER ne sceglie 1 e il BONUS è applicato immediatamente al relativo PG.
 - Per ciascun PG IA, la scelta del BONUS di LEVEL UP spetta al PLAYER responsabile.
-- I BANNER contengono NUOVE ABILITÀ BONUS oppure UPGRADE specifici di ABILITÀ BONUS già possedute. Non c’è una scelta intermedia di ABILITÀ o UPGRADE dopo il click sul BANNER.
+- I BANNER contengono NUOVE ABILITÀ BONUS oppure UPGRADE specifici di ABILITÀ BONUS già possedute, salvo la sostituzione con UPGRADE STATS prevista nella sezione 20.1 quando mancano UPGRADE ABILITÀ BONUS validi. Non c’è una scelta intermedia di ABILITÀ o UPGRADE dopo il click sul BANNER.
 
 ### 20.1 GENERAZIONE BANNER
 
@@ -1281,8 +1278,8 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 - UPGRADE: scegliere prima una delle ABILITÀ possedute, pesandola con il RATE DI APPARIZIONE originale normalizzato sulle sole possedute; poi sorteggiare lo specifico UPGRADE con i RATE della sezione 25.
 - Il BANNER mostra il risultato completo, per esempio «LANCIO COLTELLI — RANGE +15%».
 - I 3 BANNER sono differenti: niente duplicati della stessa NUOVA ABILITÀ o dello stesso specifico UPGRADE. Sono ammessi più UPGRADE della stessa ABILITÀ se diversi (es. DANNO e RANGE).
-- Scartare e rigenerare i duplicati fino a ottenere 3 scelte distinte. Non sono previsti POOL con meno di 3 scelte valide e non si mostrano meno di 3 BANNER.
-- Lo stesso UPGRADE può essere acquisito nuovamente in scelte successive, senza CAP per ora, anche per gli UPGRADE SPECIALI. Ogni incremento usa il VALORE BASE originale.
+- Scartare e rigenerare i duplicati fino a ottenere 3 scelte distinte; non si mostrano meno di 3 BANNER. Se non restano UPGRADE ABILITÀ BONUS validi per un BANNER, anche dopo le esclusioni al CAP e dei duplicati, sostituire quel BANNER con un UPGRADE STATS, seguendo le regole di sorteggio STATS già stabilite nelle sezioni 19 e 21. Non sostituirlo con una NUOVA ABILITÀ BONUS.
+- Lo stesso UPGRADE può essere acquisito nuovamente in scelte successive, anche per gli UPGRADE SPECIALI. Ogni incremento usa il VALORE BASE originale. Eccezioni: riduzione CD ABILITÀ BONUS massima 90% e DEF SCUDO massima 90%; raggiunto il rispettivo CAP, quello specifico UPGRADE è escluso dai sorteggi successivi (sezione 24). Gli altri UPGRADE restano senza CAP di acquisizioni.
 
 ### 20.2 MULTI LVL UP E RIPRESA
 
@@ -1297,7 +1294,8 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 
 - A fine AREA ogni PLAYER sceglie 1 BONUS tra 5 proposte.
 - Per ciascun PG IA assegnato, il PLAYER responsabile sceglie il relativo BONUS DI FINE AREA tra le 5 proposte.
-- La composizione dei 5 BONUS è fissa: 3 BONUS STATS BASE + 2 BONUS relativi alle ABILITÀ BONUS.
+- La composizione ordinaria dei 5 BONUS è 3 BONUS STATS BASE + 2 BONUS relativi alle ABILITÀ BONUS. Se mancano UPGRADE ABILITÀ BONUS validi, i relativi BANNER sono sostituiti da UPGRADE STATS secondo la sezione 20.1; il totale resta 5 BANNER.
+- I 2 BANNER ABILITÀ BONUS seguono integralmente le regole della sezione 20.1: probabilità NUOVA ABILITÀ/UPGRADE in base agli SLOT occupati, esclusione delle ABILITÀ già possedute dalle nuove acquisizioni, UPGRADE solo di ABILITÀ possedute, esclusione degli UPGRADE al CAP e divieto di duplicati tra le due proposte. Si applica anche la sostituzione degli UPGRADE ABILITÀ BONUS non disponibili con UPGRADE STATS; altrimenti restano 2 BANNER ABILITÀ BONUS e 3 BANNER STATS.
 - I BONUS STATS DI FINE AREA seguono gli stessi RATE delle CHEST: HP 25%, ATK 8%, DEF 22%, MOVE SPD 22%, ATK SPD 8%, CD REDUCTION 15%.
 - Ogni BONUS STATS DI FINE AREA applica lo stesso +5% delle CHEST sul VALORE ATTUALE della STAT al momento dell’acquisizione, comprensivo degli UPGRADE permanenti del PROF e di tutti i precedenti BONUS STATS acquisiti durante la RUN, sia da CHEST sia da FINE AREA.
 - Per CD REDUCTION si applica una riduzione del 5% sul VALORE ATTUALE della STAT, con arrotondamento matematico del risultato all’intero più vicino e minimo 10; resta distinto l’arrotondamento del CD FINALE al decimo di secondo, secondo le sezioni 10 e 19.
@@ -1309,33 +1307,36 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 
 ## 22. ABILITÀ BONUS — STATS
 
+- Le ABILITÀ BONUS dotate di CD sono IN CD alla prima acquisizione; non si attivano immediatamente. PET (sempre attivo) e RICOCHET (su HIT valida) conservano le proprie modalità specifiche, senza introdurre un CD non previsto.
+- I CD delle ABILITÀ BONUS sono indipendenti dalla STAT CD REDUCTION del PG e vengono modificati esclusivamente dagli UPGRADE CD della relativa ABILITÀ BONUS.
+
 | # | ABILITÀ BONUS | STATS BASE |
 | --- | --- | --- |
-| 1 | LANCIO COLTELLI | DANNO 10; RANGE 10 m; CD 6 s; N° COLTELLI 1; PROJECTILE SPD 20 m/s; suddivisione COLTELLI 45°. |
-| 2 | PET | DANNO 10; ATK SPD 50; RANGE 2 m; ricerca MOB entro 5 m; N° PET 1; sempre attivo. |
+| 1 | LANCIO COLTELLI | DANNO 10; RANGE 10 m; CD 6 s; N° COLTELLI 1; PROJECTILE SPD 20 m/s; COLTELLI separati di 5°, simmetrici rispetto al CURSORE. |
+| 2 | PET | DANNO 10; ATK SPD 50; MOVE SPD 150; RANGE 2 m; ricerca MOB entro 5 m dal PET; inseguimento interrotto oltre 5 m dal PG; N° PET 1; sempre attivo. |
 | 3 | AURA TOSSICA | DANNO 10; RAGGIO 4 m; CD 7 s. |
-| 4 | RICOCHET | DANNO rimbalzo 40% del danno originale; RANGE rimbalzo 5 m; N° RIMBALZI 1; probabilità di attivazione 40% per ogni HIT valida. |
-| 5 | MINE | DANNO 10; RAGGIO 3 m; CD 7 s; esplode se calpestata o dopo 5 s; TRIGGER circolare, raggio 1 m. |
+| 4 | RICOCHET | DANNO rimbalzo 40% del danno originale; RANGE rimbalzo 5 m; N° RIMBALZI 1; probabilità di attivazione 40% per ogni HIT valida dell’ATTACCO BASE, solo per il primo RIMBALZO; RIMBALZI successivi automatici. |
+| 5 | MINE | DANNO 10; RAGGIO 3 m; CD 7 s dal lancio; esplode se calpestata o dopo 5 s; TRIGGER circolare, raggio 1 m. |
 | 6 | SCUDO | Elemento separato con propria DEF 40%, massimo 90%; mitiga prima del PLAYER, poi il residuo viene mitigato dalla DEF del PLAYER (sezione 10). Dura fino alla prima HIT; CD 6 s dopo la scomparsa. |
-| 7 | FIRE BULLET | ATK +15%; durata 3 s; BRUCIATURA 2 HP/s per 2 s; CD 12 s. |
+| 7 | FIRE BULLET | ATK +15%; durata 3 s; BRUCIATURA 2 HP/s per 2 s; CD 12 s dalla fine dell’ABILITÀ. |
 | 8 | TASER | DANNO 5; RAGGIO 4 m; BLOCK 2 s (STUN); CD 12 s. |
-| 9 | REPULSE | DANNO 5; RAGGIO 4 m; RESPINTA 3 m; CD 10 s. |
+| 9 | REPULSE | DANNO 5; RAGGIO 4 m; RESPINTA 3 m fluida in 0,25 s; CD 10 s. |
 | 10 | SCIABOLATA | DANNO 15; semicerchio frontale; RANGE 4 m; CD 15 s. |
 
 ### 22.1 LANCIO COLTELLI — DEFINIZIONI CONFERMATE
 
 - **1.1:** attivazione automatica secondo il proprio CD.
-- **1.2:** un COLTELLO segue il CURSORE; gli altri seguono la suddivisione in gradi. I COLTELLI aggiuntivi sono distribuiti ogni 45° rispetto a quello orientato verso il CURSORE.
+- **1.2:** i COLTELLI sono disposti frontalmente a ventaglio, con 5° tra COLTELLI consecutivi e simmetria rispetto alla direzione del CURSORE. Con 1 COLTELLO: 0°; con 2: −2,5° / +2,5°; con 3: −5° / 0° / +5°; con 4: −7,5° / −2,5° / +2,5° / +7,5°. Con N COLTELLI, l’angolo relativo del COLTELLO i (da 0 a N−1) è (i − (N−1)/2) × 5°. Questa regola sostituisce la precedente suddivisione di 45°.
 - **1.3:** PROIETTILI FISICI, velocità 20 m/s; seguono le regole dei PROIETTILI FISICI (sezione 10.1).
 
 ### 22.2 PET — DEFINIZIONI CONFERMATE
 
-- **2.1:** il PET segue il PG e attacca automaticamente secondo le regole del suo RANGE e ATK SPD.
-- **2.2:** segue i movimenti del PG; se il PG è fermo si posiziona in maniera CASUALE all'interno di una AREA di 3 m attorno al PG.
+- **2.1:** il PET segue il PG e attacca automaticamente secondo le regole del suo RANGE e ATK SPD. MOVE SPD 150, equivalente a 3 m/s secondo la conversione generale.
+- **2.2:** segue i movimenti del PG; se il PG è fermo si posiziona in maniera CASUALE all'interno di una AREA di RAGGIO 3 m attorno al PG.
 - **2.3:** il PET attacca il MOB più vicino in un RANGE di 5 m da lui; quando si trova a 2 m dal BERSAGLIO lo attacca.
 - **2.4:** l'ATTACCO è una HIT istantanea sul BERSAGLIO selezionato.
 - **2.5:** quando il PET è a 2 m dal BERSAGLIO lo attacca.
-- **2.6:** evita MURI/OSTACOLI, sceglie e segue i BERSAGLI validi secondo RANGE e NAV MESH.
+- **2.6:** evita MURI/OSTACOLI, sceglie e segue i BERSAGLI validi secondo RANGE e NAV MESH. Interrompe l’INSEGUIMENTO quando la sua distanza dal PG supera 5 m; questo limite è distinto dal RANGE di ricerca di 5 m misurato dal PET. Se il percorso calcolato tramite NAV MESH porta il PET oltre il RANGE di allontanamento dal PG, il MOB non viene attaccato.
 - **2.7:** i PET seguono tutti le stesse regole, collidono tra di loro.
 - LAYER PET: PET ↔ PG NO; PET ↔ MOB SÌ; PET ↔ PET SÌ; PET ↔ MURO SÌ; PET ↔ OSTACOLO SÌ; PET ↔ PROJECTILE_PG NO; PET ↔ PROJECTILE_MOB NO.
 - I PET non bloccano né vengono bloccati dai PG; non attraversano MOB, MURI o OSTACOLI e mantengono il movimento tramite NAV MESH già definito.
@@ -1347,29 +1348,31 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 - **3.2:** il centro dell'AREA è posizionato sul PG.
 - **3.3:** il DANNO è ISTANTANEO.
 - **3.4:** l'effetto è ISTANTANEO.
-- **3.5:** l'AREA DI EFFETTO è divisa in 8 SPICCHI e segue le regole delle AREE DI EFFETTO su MURI/OSTACOLI (sezione 10.3).
+- **3.5:** MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. Si applica la sezione 10.3.
 
 ### 22.4 RICOCHET — DEFINIZIONI CONFERMATE
 
-- **4.1:** probabilità di attivazione 40% per ogni HIT valida.
+- **4.1:** probabilità di attivazione 40% per ogni HIT valida degli ATTACCHI BASE. Le HIT di ABILITÀ, ABILITÀ BONUS, PET e danni periodici non costituiscono il TRIGGER iniziale di RICOCHET.
 - **4.2:** il BERSAGLIO è il MOB più vicino nel RANGE di attivazione.
 - **4.3:** il RANGE RIMBALZO è il RANGE entro il quale il RIMBALZO può verificarsi.
 - **4.4:** il RIMBALZO non ha traiettoria; è un DANNO ISTANTANEO sul BERSAGLIO selezionato.
 - **4.5:** MURI/OSTACOLI non interferiscono sul RIMBALZO.
-- **4.6:** ogni RIMBALZO segue il comportamento del precedente.
+- **4.6:** ogni RIMBALZO successivo acquisisce il MOB più vicino entro il RANGE RIMBALZO di 5 m dall’ultimo BERSAGLIO colpito, usando lo stesso RANGE del primo RIMBALZO. Può colpire un MOB già colpito nella stessa catena, ma non lo stesso MOB due volte consecutive.
+- **4.7:** il DANNO di ogni RIMBALZO, inclusi quelli successivi, è calcolato sul DANNO della HIT originale prima della DEF, non sul DANNO del RIMBALZO precedente. Il DANNO così calcolato viene mitigato dalla DEF del MOB destinatario secondo le regole generali.
+- **4.8:** la probabilità del 40% riguarda esclusivamente il primo RIMBALZO. Dopo l’attivazione iniziale, i RIMBALZI successivi sono automatici, senza ulteriori sorteggi, fino al N° RIMBALZI disponibile e nel rispetto delle regole di acquisizione dei BERSAGLI.
 
 ### 22.5 MINE — DEFINIZIONI CONFERMATE
 
-- **5.1:** ogni MINA viene generata a 1 m dal PG nella direzione opposta al CURSORE.
+- **5.1:** ogni MINA viene generata a 1 m dal PG nella direzione opposta al CURSORE. Se il punto di generazione è occupato da un MURO/OSTACOLO, scegliere il punto libero valido più vicino al punto originale. Se non esiste un punto valido, il lancio viene rinviato. Il CD parte al momento del lancio effettivo della MINA, quindi non riparte mentre il lancio è rinviato.
 - **5.2:** le MINE restano sul terreno fino all'ATTIVAZIONE o alla scomparsa.
 - **5.3:** le MINE hanno un TRIGGER circolare di raggio 1 m che si attiva quando un MOB ci entra in contatto. Il TRIGGER usa TRIGGER_MOB; le MINE sono attraversabili fisicamente da PG e MOB, senza collisione fisica.
 - **5.4:** dopo 5 s, se la MINA non viene attivata, esplode automaticamente infliggendo DANNO nella sua AREA DI EFFETTO.
 - **5.5:** i BERSAGLI validi sono tutti i MOB.
-- **5.6:** l'AREA DI EFFETTO è divisa in 4 SPICCHI e segue le regole delle altre AREE DI EFFETTO con MURI/OSTACOLI (sezione 10.3).
+- **5.6:** MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. Si applica la sezione 10.3.
 
 ### 22.6 SCUDO — DEFINIZIONI CONFERMATE
 
-- **6.1:** allo scadere del CD lo SCUDO viene generato automaticamente.
+- **6.1:** allo scadere del CD lo SCUDO viene generato automaticamente. Raggiunto il CAP DEF SCUDO 90%, il BANNER dell’UPGRADE DEF SCUDO non viene più sorteggiato.
 - **6.2:** tutti i DANNI dei MOB sono HIT valide.
 - **6.3:** la HIT che distrugge lo SCUDO viene mitigata dalla DEF dello SCUDO, poi infligge DANNO al PG secondo le regole generali.
 - **6.4:** gli effetti che non infliggono DANNO non interagiscono con lo SCUDO.
@@ -1377,7 +1380,7 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 
 ### 22.7 FIRE BULLET — DEFINIZIONI CONFERMATE
 
-- **7.1:** FIRE BULLET si attiva automaticamente allo scadere del CD.
+- **7.1:** FIRE BULLET si attiva automaticamente allo scadere del CD. Il CD BASE di 12 s inizia quando termina l’ABILITÀ, dopo i 3 s di DURATA; non decorre durante l’effetto.
 - **7.2:** FIRE BULLET ha effetto solo sugli ATTACCHI BASE.
 - **7.3:** ogni HIT affetta da FIRE BULLET applica BRUCIATURA al BERSAGLIO.
 - **7.4:** ogni nuova HIT applica un’ISTANZA di BRUCIATURA secondo la REGOLA GENERALE DANNI DA STATO (sezione 10.8). DANNO base 2 HP/s e DURATA base 2 s invariati; DANNO per tick = DANNO base della BRUCIATURA × numero ISTANZE, fino a 5 ISTANZE. Ogni applicazione rinnova la DURATA completa, anche al CAP; primo tick 1 s dopo l’applicazione/rinnovo, poi ogni 1 s. Le ISTANZE non hanno DURATE indipendenti.
@@ -1390,7 +1393,7 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 - **8.2:** il centro dell'AREA è posizionato sul PG.
 - **8.3:** tutti i MOB ATTIVI all'interno dell'AREA DI EFFETTO sono BERSAGLI validi.
 - **8.4:** il DANNO e lo STUN si applicano istantaneamente.
-- **8.5:** l'AREA DI EFFETTO è divisa in 6 SPICCHI e segue le regole delle AREE DI EFFETTO con MURI/OSTACOLI (sezione 10.3).
+- **8.5:** MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. Si applica la sezione 10.3.
 - **8.6:** se un MOB riceve lo STUN quando è già sotto effetto di STUN, la DURATA si rinnova.
 
 ### 22.9 REPULSE — DEFINIZIONI CONFERMATE
@@ -1399,8 +1402,8 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 - **9.2:** il centro dell'AREA è sul PG.
 - **9.3:** tutti i MOB ATTIVI all'interno dell'AREA DI EFFETTO sono BERSAGLI validi.
 - **9.4:** la direzione è calcolata dal PG verso il MOB colpito.
-- **9.5:** l'AREA DI EFFETTO è divisa in 8 SPICCHI e segue le regole generali delle AREE DI EFFETTO con MURI/OSTACOLI (sezione 10.3).
-- **9.6:** se durante la RESPINTA il MOB incontra un MURO/OSTACOLO si ferma.
+- **9.5:** MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. Si applica la sezione 10.3.
+- **9.6:** RESPINTA fluida e progressiva in 0,25 s, con partenza rapida e rallentamento finale, come MULTI SHOT e COLPI RESPINGENTI. Se durante la RESPINTA il MOB incontra un MURO/OSTACOLO si ferma.
 
 ### 22.10 SCIABOLATA — DEFINIZIONI CONFERMATE
 
@@ -1408,7 +1411,7 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 - **10.2:** l'orientamento segue la posizione del CURSORE.
 - **10.3:** semicerchio.
 - **10.4:** tutti i MOB ATTIVI all'interno dell'AREA DI EFFETTO sono BERSAGLI validi.
-- **10.5:** l’AREA a SEMICERCHIO è divisa in 4 SPICCHI e segue le regole generali delle AREE DI EFFETTO con MURI/OSTACOLI (sezione 10.3). Se un MURO/OSTACOLO intercetta anche parzialmente uno SPICCHIO, l’intero SPICCHIO viene eliminato e non genera HIT. Gli SPICCHI sono una suddivisione geometrica e non generano HIT aggiuntive.
+- **10.5:** L’AREA resta a SEMICERCHIO frontale. MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. Si applica la sezione 10.3.
 - **10.6:** HIT istantanea.
 
 ### 22.11 CLASSIFICAZIONE TECNICA ABILITÀ BONUS — CONFERMATO
@@ -1417,14 +1420,14 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 | --- | --- |
 | LANCIO COLTELLI | PROJECTILE_PG con collisioni standard. |
 | PET | Layer PET e collisioni definite nella sezione 22.2; nessun HP e nessuna collisione con i proiettili. |
-| AURA TOSSICA | Effetto istantaneo tramite AREA_EFFECT_MOB o verifica logica; MURO/OSTACOLO gestiti tramite gli 8 SPICCHI. |
+| AURA TOSSICA | Effetto istantaneo tramite AREA_EFFECT_MOB o verifica logica; schermatura per bersaglio. |
 | RICOCHET | DANNO istantaneo logico sul MOB selezionato; nessun proiettile fisico aggiuntivo. |
 | MINE | Oggetto attraversabile; rilevamento TRIGGER_MOB ed esplosione AREA_EFFECT_MOB. |
 | SCUDO | Protezione logica associata al PG, senza collider o layer dedicato; mitigazione e consumo della HIT secondo la sezione 22.6. |
 | FIRE BULLET | Stato logico temporaneo applicato agli ATTACCHI BASE; i proiettili fisici restano PROJECTILE_PG e BRUCIATURA è applicata logicamente alla HIT. Gli ATTACCHI BASE ad AREA/multipli conservano la propria classificazione e le regole della sezione 22.7. |
-| TASER | AREA_EFFECT_MOB istantanea; DANNO e STUN sui MOB validi; 6 SPICCHI per MURO/OSTACOLO. |
-| REPULSE | AREA_EFFECT_MOB istantanea; DANNO e RESPINTA; 8 SPICCHI. |
-| SCIABOLATA | AREA_EFFECT_MOB o verifica HITSCAN a semicerchio; 4 SPICCHI e nessuna collisione fisica persistente. |
+| TASER | AREA_EFFECT_MOB istantanea; DANNO e STUN solo sui MOB non schermati. |
+| REPULSE | AREA_EFFECT_MOB istantanea; DANNO e RESPINTA solo sui MOB non schermati. |
+| SCIABOLATA | AREA_EFFECT_MOB o verifica HITSCAN a SEMICERCHIO; schermatura per bersaglio, nessuna collisione fisica persistente. |
 
 Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle sezioni 22.1–22.10 restano invariati.
 
@@ -1451,13 +1454,13 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 
 - Gli UPGRADE percentuali vengono calcolati solo dove la STAT possiede un VALORE BASE numerico.
 - Gli incrementi sono sempre calcolati sul VALORE BASE originale e non sul valore già potenziato.
-- Gli UPGRADE, inclusi gli SPECIALI, sono acquisibili più volte nella stessa RUN; per ora nessun CAP massimo al numero di acquisizioni (sezione 20).
+- Gli UPGRADE, inclusi gli SPECIALI, sono acquisibili più volte nella stessa RUN. Fanno eccezione gli UPGRADE CD e DEF SCUDO: al raggiungimento dei rispettivi CAP vengono esclusi dal sorteggio. Gli altri UPGRADE non hanno un CAP massimo al numero di acquisizioni (sezione 20).
 - DANNO: +10% del VALORE BASE.
 - FIRE BULLET: UPGRADE DANNO ha effetto solo sul DANNO dell'effetto BRUCIATURA; il BONUS ATK di FIRE BULLET si somma all'ATK corrente del PG (sezione 22.7).
 - RAGGIO: +10% del VALORE BASE.
 - RANGE: +15% del VALORE BASE.
 - ATK SPD: +10% del VALORE BASE.
-- CD: −10% del VALORE BASE.
+- CD: −10% del CD BASE originale per acquisizione, con riduzione massima complessiva del 90%. Dopo 9 UPGRADE CD rimane il 10% del CD originale e quel BANNER non viene più sorteggiato. Formula prima degli arrotondamenti applicabili: CD = CD originale × (1 − 0,10 × N), con N da 0 a 9. Esempio LANCIO COLTELLI: 6 s → minimo 0,6 s. La STAT CD REDUCTION del PG non interviene.
 
 ### 24.1 UPGRADE speciali
 
@@ -1466,7 +1469,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 | LANCIO COLTELLI | N° COLTELLI | +1 |
 | PET | N° PET | +1 |
 | RICOCHET | N° RIMBALZI | +1 |
-| SCUDO | DEF DELLO SCUDO | +5 punti percentuali, fino al cap 90% |
+| SCUDO | DEF DELLO SCUDO | +5 punti percentuali, fino al cap 90%; al CAP escludere il BANNER dal sorteggio |
 | FIRE BULLET | DANNO BRUCIATURA | +50% del VALORE BASE |
 | TASER | TEMPO BLOCK | +25% del VALORE BASE |
 | REPULSE | RESPINTA | +20% del VALORE BASE |
@@ -1632,7 +1635,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - NPC HUB: collisione fisica OSTACOLO + interazione con F tramite TRIGGER_PG. EXIT HUB: TRIGGER_PG + F, senza blocco fisico.
 - PG ↔ PG/MOB/MURO/OSTACOLO/PROJECTILE_MOB SÌ; PG ↔ PROJECTILE_PG NO. MOB ↔ MOB SÌ con collider ridotto come nel TEST in engine; MOB ↔ PROJECTILE_MOB NO.
 - PROJECTILE_PG e PROJECTILE_MOB collidono con MURO/OSTACOLO; PROJECTILE_PG ↔ PROJECTILE_PG NO, PROJECTILE_PG ↔ PROJECTILE_MOB NO e PROJECTILE_MOB ↔ PROJECTILE_MOB NO. Restano valide le eccezioni specifiche già definite.
-- TRIGGER_PG rileva PG; TRIGGER_MOB rileva MOB; combinazioni incrociate NO, sempre senza blocco fisico. AREA_EFFECT_PG/AREA_EFFECT_MOB separati per destinatario; verifiche di SPICCHI/SEZIONI contro MURO/OSTACOLO nella logica dell’AREA.
+- TRIGGER_PG rileva PG; TRIGGER_MOB rileva MOB; combinazioni incrociate NO, sempre senza blocco fisico. AREA_EFFECT_PG/AREA_EFFECT_MOB separati per destinatario; verifiche di schermatura/SEZIONI contro MURO/OSTACOLO nella logica dell’AREA.
 - CHEST e MEDI KIT completamente attraversabili, tramite TRIGGER_PG; MINE senza collisione fisica con PG/MOB, tramite TRIGGER_MOB. BARRIERA PG01 eredita le collisioni di OSTACOLO.
 - PET ↔ PG NO; PET ↔ MOB/PET/MURO/OSTACOLO SÌ; PET ↔ PROJECTILE_PG/PROJECTILE_MOB NO. Nessuna meccanica HP/DANNO per i PET: i proiettili li attraversano senza HIT, DANNO, distruzione o deviazione e i PET non fungono da scudi.
 
@@ -1657,10 +1660,10 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - Al CAMBIO AREA un’ABILITÀ già IN CD ma non più ATTIVA mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA. Restano invariate le regole per DISPONIBILE, ATTIVA e le eccezioni già definite (sezione 10.4).
 - Prima CHEST garantita al 100%; PROF CHEST RATE aggiunge +1 punto percentuale per acquisto alla probabilità della seconda CHEST, con CAP 100%. CHEST RATE è legato al PLAYER; all’inizio di una RUN CO-OP si applica il BONUS più alto tra i PLAYER presenti. Posizioni raggiungibili NAVMESH, almeno 80 m dalla ZONA DI INIZIO e 10 m da MEDI KIT e altre CHEST.
 - Ogni PG: 3 SLOT BONUS.
-- ABILITÀ BONUS: definizioni confermate 1.1–10.6 nelle sezioni 22.1–22.10. LANCIO COLTELLI: suddivisione 45°; MINE: TRIGGER circolare raggio 1 m; RICOCHET: probabilità di attivazione 40% per ogni HIT valida.
+- ABILITÀ BONUS: definizioni nelle sezioni 22.1–22.10. LANCIO COLTELLI: separazione 5° simmetrica rispetto al CURSORE; MINE: TRIGGER circolare raggio 1 m, CD dal lancio e posizione ricalcolata se occupata da MURO/OSTACOLO; RICOCHET: probabilità 40% sulle HIT degli ATTACCHI BASE, acquisizione successiva entro 5 m dall’ultimo BERSAGLIO. CD BONUS indipendenti dal PG, IN CD all’acquisizione, riduzione massima 90%; esclusione dei BANNER CD/DEF SCUDO al CAP. FIRE BULLET: CD dalla fine; PET MOVE SPD 150 e fine inseguimento oltre 5 m dal PG; REPULSE fluida in 0,25 s.
 - SCUDO: DOWN e MORTE lo disattivano e fanno ripartire il CD; riattivazione solo con PG ATTIVO. Il CAMBIO AREA non lo disattiva.
 - FIRE BULLET: ogni nuova HIT applica un’ISTANZA di BRUCIATURA secondo la REGOLA GENERALE DANNI DA STATO, aumentando il DANNO fino al CAP di 5 ISTANZE e rinnovando la DURATA completa anche al CAP; UPGRADE DANNO agisce solo sulla BRUCIATURA, BONUS ATK sommato all'ATK corrente del PG. La BRUCIATURA si applica a tutti i MOB colpiti dall’ATTACCO BASE, inclusi ATTACCHI BASE ad AREA/multipli.
-- SCIABOLATA: AREA a SEMICERCHIO divisa in 4 SPICCHI, secondo le regole generali delle AREE DI EFFETTO con MURI/OSTACOLI; SPICCHIO anche parzialmente intercettato eliminato integralmente, senza HIT aggiuntive.
+- SCIABOLATA: SEMICERCHIO frontale con schermatura per bersaglio (sezione 10.3).
 - PASSIVA 1 PG02: con HP <30%, ogni KILL cura 1% degli HP MASSIMI correnti di PG02; nessun effetto a HP ≥30%.
 - EXP/LVL: +15% rispetto al precedente, arrotondato alla decina più vicina con criterio matematico (quoziente EXP/10 all’intero più vicino: frazione <0,5 per difetto; ≥0,5 per eccesso, poi ×10). Valori della tabella LVL 1 → 11 invariati; nessun CAP di LVL.
 - MINI BOSS e BOSS esclusi dal totale/massimo MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti; punto di SPAWN specifico stabilito in fase di LEVEL DESIGN.
@@ -1668,7 +1671,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - ITEMS definitivamente CONFERMATI: tasti 1 / 2 / 3 / 4 per i rispettivi SLOT; pressione mantenuta per anteprima AREA e mira/posizionamento, rilascio per utilizzo/lancio. Consumo di 1 ITEM per uso; SLOT vuoto all’esaurimento, conservando l’eccezione SCORTA ESPLOSIVA.
 - Centro ITEMS sul CURSORE; nessun RANGE massimo salvo TRAPPOLA, limitata a 7 m lungo PG→CURSORE. TRAPPOLA orientata lungo PG→CURSORE con lato da 4 m come FRONTALE.
 - ITEMS senza FRIENDLY FIRE: MOLOTOV, GRANATA e TRAPPOLA colpiscono solo i MOB; SMOKE rende INVISIBILI tutti i PG nell’AREA secondo le regole già definite; POZIONE CURATIVA cura i PG e ignora i MOB.
-- AREE ITEMS: GRANATA raggio 2,5 m / 4 × 90°; MOLOTOV raggio 5 m / 8 × 45°; TRAPPOLA 1 × 4 m / 4 SEZIONI. SPICCHIO/SEZIONE anche parzialmente intercettato da MURI/OSTACOLI eliminato integralmente, senza HIT aggiuntive. SMOKE e POZIONE CURATIVA ignorano MURI/OSTACOLI. Nessun comportamento aggiuntivo di lancio/posizionamento.
+- AREE ITEMS: GRANATA raggio 2,5 m e MOLOTOV raggio 5 m con schermatura per bersaglio; TRAPPOLA 1 × 4 m conserva 4 SEZIONI e relativa eliminazione integrale. SMOKE e POZIONE CURATIVA ignorano MURI/OSTACOLI. Nessun cambiamento al lancio/posizionamento.
 - Promemoria MERCHANT: alcuni ITEMS devono essere sbloccati tramite QUEST; quali ITEMS e quali QUEST restano DA DEFINIRE.
 - Ingresso nuova AREA: PG VIVI +15% HP MASSIMI; PG in MORTE resuscitati al 50% degli HP MASSIMI correnti, senza +15%; DOWN da resuscitare prima del passaggio.
 - DOWN: a 0 HP; timer 20 s, poi MORTE. SCONFITTA quando non rimane nessun PG ATTIVO, quindi solo DOWN e/o MORTE.
@@ -1684,7 +1687,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - MORTE MOB: DROP G/EXP automatico immediato; SPRITE DI MORTE per 3 s senza COLLISIONI con PG/MOB.
 - EXP integrale a ogni PG non in MORTE, inclusi DOWN; G integrali nel saldo personale di ogni PLAYER con almeno un PG non in MORTE. Nessuna suddivisione. Acquisti e UPGRADE personali; G DROP modifica solo il G ricevuto dal PLAYER che lo ha acquistato.
 - PROF: HP, ATK, DEF, MOVE SPD, ATK SPD e CD REDUCTION legati al singolo PG; CHEST RATE, G DROP, ITEM SLOT e MEDI KIT legati al PLAYER.
-- AREE CIRCOLARI: PG04 e LUCKY SHOT 4 × 90°; ZOMB03 e ESPLOSIONE ZOMB05 8 × 45°; SPICCHIO intercettato eliminato integralmente, senza HIT separate.
+- AREE CIRCOLARI: schermatura per bersaglio al posto degli SPICCHI, secondo la sezione 10.3; nessuna HIT aggiuntiva.
 - ZOMB03: punto d’impatto fissato sulla posizione del BERSAGLIO a T = 0; AREA generata a T = 0,5 s; nuovo ATTACCO disponibile a T = 2 s.
 
 - ZOMB04: ATTACCO da fermo con PROIETTILE BALISTICO; posizione iniziale 15 m; arretramento sotto 9 m; ripresa dell’inseguimento oltre 30 m; PROJECTILE SPD = 8 m/s.
@@ -1712,7 +1715,7 @@ Le voci seguenti sono note editoriali di verifica. Evidenziano ciò che la fonte
 | DANNI PERIODICI | FILO SPINATO: per ciascun MOB il conteggio parte al contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA e termina all’uscita. Per MOB già nella fascia valida all’attivazione, il conteggio parte in quel momento. MOLOTOV, TRAPPOLA e POZIONE CURATIVA: sezione 9.3. BRUCIATURA e VELENO: REGOLA GENERALE DANNI DA STATO (sezione 10.8), primo tick 1 s dopo applicazione/rinnovo e poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE, massimo 5 dello stesso STATO sullo stesso bersaglio; ogni applicazione rinnova la DURATA completa anche al CAP, senza DURATE indipendenti e senza ulteriore aumento del DANNO oltre il CAP. | Restano DA DEFINIRE soltanto le regole dei DANNI PERIODICI non esplicitate per eventuali altri effetti; la definizione di FILO SPINATO non viene estesa ad altre fonti. |
 | CD al CAMBIO AREA | ABILITÀ DISPONIBILE resta disponibile; ABILITÀ ATTIVA termina e il suo CD riparte. ABILITÀ già IN CD ma non più ATTIVA mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA. Eccezione — SCUDO: il CAMBIO AREA non lo disattiva (sezione 22.6). Per COLPI RESPINGENTI, se il CAMBIO AREA avviene durante i 4 s, l’effetto termina immediatamente e da quel momento riparte l’intero CD. | Nessun punto residuo relativo al CD già in corso al CAMBIO AREA. |
 | LAYER e matrice delle collisioni | Coppie confermate nella sezione 10.9, inclusa PROJECTILE_MOB ↔ PROJECTILE_MOB NO; MOB ↔ MOB SÌ anche per ZOMB05 in PRE-ESPLOSIONE, senza la precedente eccezione. Classificazione tecnica di ABILITÀ/PASSIVE PG, ABILITÀ BONUS, ITEMS e attacchi/effetti MOB confermata. RIANIMAZIONE usa TRIGGER_PG; NPC HUB usano OSTACOLO + TRIGGER_PG. Nessun TAG tecnico dedicato per ora; stati logici secondo la sezione 10.9. | Dimensioni numeriche del collider ridotto dei MOB. |
-| Dettagli tecnici delle AREE | Numero/ampiezza SPICCHI, eliminazione completa e assenza di HIT separate sono confermati. AREA_EFFECT_PG e AREA_EFFECT_MOB separati; MURO/OSTACOLO fuori dalla Layer Collision Matrix delle AREA_EFFECT, con verifica geometrica affidata alla logica dell’ABILITÀ/AREA. | Orientamento iniziale degli SPICCHI e modalità tecnica di implementazione delle verifiche geometriche non sono specificati. |
+| Dettagli tecnici delle AREE | Schermatura dal centro AREA al centro collider bersaglio; DANNO completo prima della DEF o nessuna HIT. AREA_EFFECT_PG/MOB conservano i propri layer e destinatari. | Nessun punto aperto sulla sostituzione degli SPICCHI; le SEZIONI restano regole distinte. |
 
 I punti di bilanciamento, produzione artistica, prototipazione, multiplayer, salvataggio, testing e build restano quelli elencati nella sezione 30. Nessun valore aggiuntivo è stabilito da queste note.
 
@@ -1766,7 +1769,7 @@ I punti di bilanciamento, produzione artistica, prototipazione, multiplayer, sal
 
 - Base ufficiale: contenuto integrale di ROG_ZOMBIE_GDD.md comprendente la REVISIONE — 12/09/2026 — 01:15 — PG IA / EQUIPAGGIAMENTO, PROGRESSIONE, DOWN E CAMBIO CONTROLLO.
 - Integrate esclusivamente le decisioni ITEMS nelle sezioni 9, 10/10.3, 31 e 32: comandi SLOT 1–4, anteprima durante la pressione e utilizzo al rilascio, consumo, centro sul CURSORE, RANGE e orientamento TRAPPOLA, bersagli, assenza di FRIENDLY FIRE, effetti e regole geometriche rispetto a MURI/OSTACOLI.
-- Nessun comportamento specifico aggiuntivo di lancio/posizionamento rispetto a MURI/OSTACOLI. SMOKE e POZIONE CURATIVA ignorano MURI/OSTACOLI; per GRANATA, MOLOTOV e TRAPPOLA eliminazione integrale dello SPICCHIO/SEZIONE intercettato anche parzialmente.
+- Nessun comportamento aggiuntivo di lancio/posizionamento: GRANATA/MOLOTOV applicano schermatura per bersaglio; TRAPPOLA conserva le SEZIONI; SMOKE/POZIONE CURATIVA ignorano MURI/OSTACOLI.
 - ITEMS definitivamente CONFERMATO. Mantenuto il promemoria: alcuni ITEMS del MERCHANT devono essere sbloccati tramite QUEST; quali ITEMS e quali QUEST restano DA DEFINIRE.
 - Conservate le regole PG IA e SCORTA ESPLOSIVA, i costi e i valori già definiti. Verificato mediante confronto con la base ufficiale che tutte le parti estranee all’aggiornamento ITEMS sono invariate.
 
@@ -1922,3 +1925,33 @@ I punti di bilanciamento, produzione artistica, prototipazione, multiplayer, sal
 ### REVISIONE — 13/09/2026 — PG04 DELAY ATTACCO BASE
 
 - Inserito delay di 0,3 s tra lancio dell’ATTACCO BASE e HIT, su richiesta del proprietario. Nessun proiettile fisico introdotto; cadenza e consumo delle cariche restano legati al lancio.
+
+### REVISIONE — PG02 FUOCO RAPIDO +50% E RAGE 4 s
+
+- FUOCO RAPIDO: BONUS temporaneo +50% ATK SPD corrente; senza altri modificatori, 400 → 600 = 6 ATTACCHI/s. DURATA 4 s e CD BASE 10 s dalla fine dell’effetto invariati.
+- PASSIVA 2: ogni 15 KILL, RAGE dura 4 s con +30% ATK. Restano conservazione delle KILL e termine RAGE al CAMBIO AREA.
+
+### REVISIONE — 14/09/2026 — ABILITÀ BONUS: CD, CAP, BANNER E COMPORTAMENTI
+
+- Consolidate esclusivamente le conferme del proprietario: CD BONUS indipendenti dalla STAT CD REDUCTION del PG, prima acquisizione IN CD, riduzione massima 90% ed esclusione del relativo UPGRADE al CAP; DEF SCUDO massimo 90% con esclusione del relativo UPGRADE al CAP.
+- FIRE BULLET avvia il CD al termine dell’ABILITÀ. RICOCHET parte da HIT degli ATTACCHI BASE; ogni ulteriore rimbalzo acquisisce entro 5 m dall’ultimo bersaglio.
+- PET: MOVE SPD 150, interruzione inseguimento quando supera 5 m dal PG. MINE: CD dal lancio e ricalcolo del punto occupato da MURO/OSTACOLO. REPULSE: respinta fluida in 0,25 s.
+- I due BANNER ABILITÀ BONUS di FINE AREA seguono le regole di probabilità ed esclusione dei duplicati del LEVEL UP, mantenendo la composizione complessiva 3 STATS + 2 ABILITÀ BONUS.
+- LANCIO COLTELLI: ventaglio simmetrico rispetto al CURSORE con 5° fra coltelli consecutivi, per qualsiasi numero di COLTELLI. Superata la vecchia suddivisione di 45° presente nelle revisioni storiche.
+- Nessuna implementazione engine attestata da questa revisione documentale; nessuna modifica ai RATE originali.
+
+#### CHIARIMENTI SUCCESSIVI — 14/09/2026
+
+- RICOCHET può tornare su MOB già colpiti, ma non colpire lo stesso MOB due volte consecutive. Acquisisce il MOB più vicino usando lo stesso RANGE del primo RIMBALZO, misurato dall’ultimo BERSAGLIO; ogni RIMBALZO usa il DANNO della HIT originale prima della DEF.
+- PET: AREA di posizionamento a PG fermo di RAGGIO 3 m; nessun attacco al MOB se il percorso NAV MESH porta oltre il limite di allontanamento dal PG.
+- MINE: punto alternativo libero valido più vicino all’originale; senza punto valido il lancio è rinviato e il CD resta legato al lancio effettivo.
+- BANNER: quando mancano UPGRADE ABILITÀ BONUS validi, sostituire i relativi BANNER con UPGRADE STATS secondo le regole STATS esistenti. Questa eccezione vale anche a FINE AREA e supera il precedente vincolo di composizione fissa 3 STATS + 2 ABILITÀ BONUS.
+
+#### CONFERMA FINALE — RICOCHET
+
+- La probabilità del 40% riguarda solo il primo RIMBALZO; quelli successivi sono automatici, senza nuovi sorteggi. Chiuso anche l’ultimo punto residuo dell’audit elencato sopra. Le regole complete sono nella sezione 22.4.
+
+### REVISIONE — 14/09/2026 — SCHERMATURA DELLE AREE
+
+- La verifica per bersaglio già introdotta sull’ATTACCO BASE PG04 sostituisce tutte le precedenti regole di eliminazione degli SPICCHI delle AREE elencate in 10.3. Le precedenti revisioni storiche che citano tali SPICCHI sono superate. SEZIONI, sequenze di proiettili ed eccezioni esplicite restano invariate.
+- Nessun test né build eseguito per questa revisione, su richiesta.

@@ -1,0 +1,341 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 056c6e8ca9844d5cb42519e5be2a86dd, type: 3}
+  m_Name: CityTestLayout
+  m_EditorClassIdentifier:
+  Weapons:
+  - {fileID: 11400000, guid: 80e0fe24276941b8b4c54fa8bbe9a970, type: 2}
+  - {fileID: 11400000, guid: 27d3803d1527437d9832396adcd52ad6, type: 2}
+  - {fileID: 11400000, guid: f61a7d5a81bb4f1fa5ba9e1b150d07a6, type: 2}
+  - {fileID: 11400000, guid: 4d5e276a60a14e0aa4bd4708f7989ad8, type: 2}
+  - {fileID: 11400000, guid: 7d7c98e6bd164e4383a2992fb9e92f8e, type: 2}
+  - {fileID: 11400000, guid: 0610baf1c85d4cbca4795c679be2d06e, type: 2}
+  - {fileID: 11400000, guid: 2a44260a9b1f421c836df373071ba39e, type: 2}
+  - {fileID: 11400000, guid: 7d167aed40454304bd62f190d8d92d5b, type: 2}
+  Mobs:
+  - {fileID: 11400000, guid: f46a94a6bfed4325b96f3d2bd548d3a7, type: 2}
+  - {fileID: 11400000, guid: 7d1cab14572444ecb3c563cf423f174c, type: 2}
+  - {fileID: 11400000, guid: e49d8e24416643e990c6ad622baef317, type: 2}
+  - {fileID: 11400000, guid: ee3064dc33ea499c8399ee94db3e4504, type: 2}
+  - {fileID: 11400000, guid: 69ac63acad204e6091b02dfd18b21faa, type: 2}
+  BonusCatalog: {fileID: 11400000, guid: 15a57b20334c4d81a225d3ef7db1be60, type: 2}
+  PlayerSprite: {fileID: 21300000, guid: d0b175e65a9b4b61ae7fc2736fa3168a, type: 3}
+  TotalMobs: 330
+  PlayerMoveSpeedBase: 3
+  ForceTestChestNearPlayer: 1
+  TestChestOffset: {x: 3, y: 2}
+  ShowDamageNumbers: 1
+  ShowSpawnCounters: 1
+  DamageNumberSeconds: 0.8
+  EnableMobSeparation: 1
+  MobSpacing: 0.05
+  MobSeparationSpeed: 2
+  FirstSpawnPercent: 30
+  MobPercentages:
+  - 32
+  - 33
+  - 21
+  - 10
+  - 4
+  OffscreenExtraRange: 5
+  ExperienceThresholds:
+  - 100
+  - 120
+  - 130
+  - 150
+  - 170
+  - 200
+  - 230
+  - 270
+  - 310
+  - 350
+  ChestRate: 5
+  ChestStatWeights:
+  - 25
+  - 8
+  - 22
+  - 22
+  - 8
+  - 15
+  PickupMinStartDistance: 50
+  MediKitHealPercent: 10
+  AreaSize: {x: 100, y: 100}
+  StartPosition: {x: -0.3, y: -46.4}
+  ActorRadius: 0.35
+  PickupTriggerRadius: 0.6
+  CameraSize: 9
+  Obstacles:
+  - Position: {x: -38.1148, y: 36.2295}
+    Size: {x: 9.3443, y: 16.7213}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: -24.8361, y: 36.0656}
+    Size: {x: 9.3443, y: 16.7213}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: -12.3770, y: 36.0656}
+    Size: {x: 9.3443, y: 16.7213}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: -35.0820, y: 6.9672}
+    Size: {x: 15.4098, y: 29.6721}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: -15.0820, y: 6.9672}
+    Size: {x: 15.4098, y: 29.6721}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 10.1639, y: 31.3934}
+    Size: {x: 15.4098, y: 4.0984}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 4.3443, y: 25.2459}
+    Size: {x: 3.7705, y: 8.1967}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 15.9836, y: 25.2459}
+    Size: {x: 3.7705, y: 8.1967}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 8.2787, y: 1.9672}
+    Size: {x: 8.0328, y: 20.0000}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 36.3934, y: 39.6721}
+    Size: {x: 14.4262, y: 5.9016}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 36.5574, y: 31.1475}
+    Size: {x: 14.4262, y: 5.9016}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 36.7213, y: 22.2951}
+    Size: {x: 14.4262, y: 5.9016}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 36.7213, y: 13.4426}
+    Size: {x: 14.4262, y: 5.9016}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 36.7213, y: -1.0656}
+    Size: {x: 12.4590, y: 11.3115}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: -36.8852, y: -29.0164}
+    Size: {x: 10.4918, y: 25.9016}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: -27.3770, y: -28.5246}
+    Size: {x: 8.5246, y: 9.8361}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: -10.5738, y: -18.9344}
+    Size: {x: 6.0656, y: 5.4098}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: -10.5738, y: -25.9836}
+    Size: {x: 6.0656, y: 5.4098}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: -10.5738, y: -33.3607}
+    Size: {x: 6.0656, y: 5.4098}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: -10.5738, y: -40.4098}
+    Size: {x: 6.0656, y: 5.4098}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 8.6066, y: -26.1475}
+    Size: {x: 8.0328, y: 18.5246}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 19.4262, y: -25.9836}
+    Size: {x: 8.0328, y: 18.5246}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 31.0656, y: -25.9836}
+    Size: {x: 8.0328, y: 18.5246}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 25.9016, y: -41.0656}
+    Size: {x: 19.6721, y: 5.0820}
+    Rotation: 0
+    Wall: 1
+  - Position: {x: 5.0000, y: 43.2787}
+    Size: {x: 5.4098, y: 2.2951}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 5.0000, y: 40.0000}
+    Size: {x: 5.4098, y: 2.2951}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 5.0000, y: 36.5574}
+    Size: {x: 5.4098, y: 2.2951}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 15.0000, y: 43.4426}
+    Size: {x: 5.4098, y: 2.2951}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 15.1639, y: 36.3934}
+    Size: {x: 5.4098, y: 2.2951}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 18.7705, y: 32.8689}
+    Size: {x: 0.8197, y: 23.7705}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 26.6393, y: 35.6557}
+    Size: {x: 0.8197, y: 13.9344}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 26.6393, y: 16.8852}
+    Size: {x: 0.8197, y: 15.4098}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 26.9672, y: -1.5574}
+    Size: {x: 0.8197, y: 12.2951}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 18.7705, y: 0.7377}
+    Size: {x: 0.8197, y: 21.4754}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 11.5574, y: -9.5902}
+    Size: {x: 15.2459, y: 0.8197}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: -24.5902, y: 23.1967}
+    Size: {x: 10.4918, y: 0.8197}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: -34.6721, y: -14.0164}
+    Size: {x: 16.8852, y: 0.4918}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: -14.2623, y: -14.0164}
+    Size: {x: 16.7213, y: 0.4918}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: -6.1475, y: -18.0328}
+    Size: {x: 0.4918, y: 8.1967}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: -6.1475, y: -29.0164}
+    Size: {x: 0.4918, y: 7.5410}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: -6.1475, y: -39.7541}
+    Size: {x: 0.4918, y: 7.7049}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 13.1967, y: -14.8361}
+    Size: {x: 18.8525, y: 0.8197}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 31.9672, y: -14.8361}
+    Size: {x: 10.1639, y: 0.8197}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 36.6393, y: -22.7869}
+    Size: {x: 0.8197, y: 15.7377}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 37.1311, y: -40.6557}
+    Size: {x: 0.4918, y: 9.8361}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 3.3607, y: -41.6393}
+    Size: {x: 0.4918, y: 7.2131}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 7.8689, y: -45.1639}
+    Size: {x: 9.1803, y: 0.4918}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 26.6393, y: -45.3279}
+    Size: {x: 21.4754, y: 0.4918}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 40.5738, y: -15.9836}
+    Size: {x: 4.4262, y: 1.8033}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 40.5738, y: -19.2623}
+    Size: {x: 4.4262, y: 1.8033}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: 40.5738, y: -22.7049}
+    Size: {x: 4.4262, y: 1.8033}
+    Rotation: 0
+    Wall: 0
+  - Position: {x: -44.7541, y: 25.5738}
+    Size: {x: 3.2787, y: 1.4754}
+    Rotation: 25
+    Wall: 0
+  - Position: {x: -39.0164, y: 23.6066}
+    Size: {x: 3.4426, y: 1.4754}
+    Rotation: -22
+    Wall: 0
+  - Position: {x: -1.4754, y: 29.8361}
+    Size: {x: 3.6066, y: 1.6393}
+    Rotation: 65
+    Wall: 0
+  - Position: {x: -2.6230, y: 11.1475}
+    Size: {x: 3.7705, y: 1.6393}
+    Rotation: 60
+    Wall: 0
+  - Position: {x: 5.4098, y: 15.0820}
+    Size: {x: 3.7705, y: 1.6393}
+    Rotation: 90
+    Wall: 0
+  - Position: {x: 8.3607, y: 14.9180}
+    Size: {x: 3.7705, y: 1.6393}
+    Rotation: 87
+    Wall: 0
+  - Position: {x: 11.1475, y: 14.9180}
+    Size: {x: 3.7705, y: 1.6393}
+    Rotation: 87
+    Wall: 0
+  - Position: {x: 16.7213, y: 15.5738}
+    Size: {x: 3.7705, y: 1.8033}
+    Rotation: 58
+    Wall: 0
+  - Position: {x: -25.4098, y: -18.6885}
+    Size: {x: 5.4098, y: 2.4590}
+    Rotation: 30
+    Wall: 0
+  - Position: {x: 0.3279, y: -22.7869}
+    Size: {x: 3.7705, y: 1.8033}
+    Rotation: 63
+    Wall: 0
+  - Position: {x: -0.4918, y: -27.2131}
+    Size: {x: 3.9344, y: 1.8033}
+    Rotation: -45
+    Wall: 0
+  - Position: {x: -26.2295, y: -38.8525}
+    Size: {x: 5.4098, y: 2.6230}
+    Rotation: 30
+    Wall: 0
+  - Position: {x: -20.6557, y: -39.3443}
+    Size: {x: 5.2459, y: 2.4590}
+    Rotation: 62
+    Wall: 0
+  - Position: {x: -2.6230, y: -41.8033}
+    Size: {x: 3.9344, y: 1.8033}
+    Rotation: -45
+    Wall: 0
+  - Position: {x: 40.8197, y: -26.5574}
+    Size: {x: 4.5902, y: 1.9672}
+    Rotation: 20
+    Wall: 0
+  SearchAttemptsPerFrame: 16

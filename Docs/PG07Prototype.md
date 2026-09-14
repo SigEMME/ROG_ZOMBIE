@@ -1,5 +1,11 @@
 # PG07 nel gameplay loop prototype
 
+## Aggiornamento schermatura AREE — 14/09/2026
+
+MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. La regola sostituisce gli SPICCHI anche per COLPO GROSSO, PIOGGIA DI GRANATE, PYROMANIA, LUCKY SHOT, ABILITÀ BONUS ad area e attacchi ad area dei MOB. SCIABOLATA resta un SEMICERCHIO. Le SEZIONI di FILO SPINATO/TRAPPOLA e le eccezioni esplicite restano invariate. Visuali ritagliate; PYROMANIA rivaluta coperture e visuale a ogni tick.
+
+Nessun test, compilazione o build eseguito per questo aggiornamento. I report e le descrizioni storiche sotto precedono questa regola; le suite con aspettative sugli spicchi richiedono adeguamento prima di rieseguirle. GRANATA/MOLOTOV sono aggiornate nel GDD: il prototipo attuale offre gestione SLOT/consumo, non ancora i relativi effetti di combattimento.
+
 ## Avvio
 
 Aprire Assets/Scenes/PreGameplayLoopPrototype.unity. In Assets/PreGameplayLoop/PreGameplayLoop.asset selezionare PG07, Selected PG07 Ability (MultiShot / PioggiaDiFrecce), Selected PG07 Passive (LuckyShot / Concentrazione). WASD movimento, mouse mira, LMB attacco base, Q abilità; per PIOGGIA DI FRECCE tenere Q per l’anteprima e rilasciare per attivare. Nuova RUN acquisisce selezioni, conservate al CAMBIO AREA. HUD temporaneo con CD, frecce pioggia e contatori diagnostici di roll/attivazioni.
@@ -45,3 +51,7 @@ MULTI SHOT: CD BASE aggiornato a13 s, sempre avviato all’attivazione. Nessun t
 ## PIOGGIA DI FRECCE a rilascio
 
 Tenere Q mostra un cerchio ciano di raggio3,5 m sul cursore, senza collider o danno; il rilascio attiva la pioggia nella posizione corrente e avvia il CD. MULTI SHOT resta a pressione singola. Anteprima disponibile solo con abilità pronta; pausa, DOWN, cambio AREA, reset, perdita di focus o disabilitazione del controllo la annullano senza attivare l’abilità. Nessun test eseguito su questa modifica.
+
+## Riferimento grafico AREA dopo il lancio
+
+PIOGGIA DI FRECCE mostra un disco trasparente di raggio 3,5 m nel punto scelto all’attivazione, per tutta la sequenza di 3 s. Il riferimento resta fisso, non segue il cursore, e mostra l’area di distribuzione degli impatti. È solo grafico, senza collider o danno; termina con la sequenza e viene rimosso su DOWN, CAMBIO AREA, disabilitazione o distruzione. In pausa resta visibile con la sequenza sospesa. Nessun test Unity o build eseguito; verifica visiva ancora da effettuare.

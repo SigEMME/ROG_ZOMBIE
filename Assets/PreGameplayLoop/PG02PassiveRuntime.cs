@@ -37,7 +37,7 @@ namespace RogZombie.PreGameplayLoop
                 // Reevaluate per KILL: one multi-target HIT can cross the healing threshold.
                 if (BelowHealThreshold) actor.Heal(.01f);
             }
-            else if (KillsTowardRage == 0) RageRemaining = 2f;
+            else if (KillsTowardRage == 0) RageRemaining = 4f;
         }
 
         public CombatStats Apply(CombatStats current)

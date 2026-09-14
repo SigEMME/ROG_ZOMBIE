@@ -1,0 +1,494 @@
+PASS | Unity 6000.3.16f1 | checks=491 | warnings=0
+PASS RUN has BONUS inventory and EXP
+PASS Empty slots: three distinct acquisitions 0
+PASS Empty slots: three distinct acquisitions 1
+PASS Empty slots: three distinct acquisitions 2
+PASS Empty slots: three distinct acquisitions 3
+PASS Empty slots: three distinct acquisitions 4
+PASS Empty slots: three distinct acquisitions 5
+PASS Empty slots: three distinct acquisitions 6
+PASS Empty slots: three distinct acquisitions 7
+PASS Empty slots: three distinct acquisitions 8
+PASS Empty slots: three distinct acquisitions 9
+PASS Empty slots: three distinct acquisitions 10
+PASS Empty slots: three distinct acquisitions 11
+PASS Empty slots: three distinct acquisitions 12
+PASS Empty slots: three distinct acquisitions 13
+PASS Empty slots: three distinct acquisitions 14
+PASS Empty slots: three distinct acquisitions 15
+PASS Empty slots: three distinct acquisitions 16
+PASS Empty slots: three distinct acquisitions 17
+PASS Empty slots: three distinct acquisitions 18
+PASS Empty slots: three distinct acquisitions 19
+PASS Empty slots: three distinct acquisitions 20
+PASS Empty slots: three distinct acquisitions 21
+PASS Empty slots: three distinct acquisitions 22
+PASS Empty slots: three distinct acquisitions 23
+PASS Empty slots: three distinct acquisitions 24
+PASS Empty slots: three distinct acquisitions 25
+PASS Empty slots: three distinct acquisitions 26
+PASS Empty slots: three distinct acquisitions 27
+PASS Empty slots: three distinct acquisitions 28
+PASS Empty slots: three distinct acquisitions 29
+PASS Empty slots: three distinct acquisitions 30
+PASS Empty slots: three distinct acquisitions 31
+PASS Empty slots: three distinct acquisitions 32
+PASS Empty slots: three distinct acquisitions 33
+PASS Empty slots: three distinct acquisitions 34
+PASS Empty slots: three distinct acquisitions 35
+PASS Empty slots: three distinct acquisitions 36
+PASS Empty slots: three distinct acquisitions 37
+PASS Empty slots: three distinct acquisitions 38
+PASS Empty slots: three distinct acquisitions 39
+PASS Empty slots: three distinct acquisitions 40
+PASS Empty slots: three distinct acquisitions 41
+PASS Empty slots: three distinct acquisitions 42
+PASS Empty slots: three distinct acquisitions 43
+PASS Empty slots: three distinct acquisitions 44
+PASS Empty slots: three distinct acquisitions 45
+PASS Empty slots: three distinct acquisitions 46
+PASS Empty slots: three distinct acquisitions 47
+PASS Empty slots: three distinct acquisitions 48
+PASS Empty slots: three distinct acquisitions 49
+PASS Empty slots: three distinct acquisitions 50
+PASS Empty slots: three distinct acquisitions 51
+PASS Empty slots: three distinct acquisitions 52
+PASS Empty slots: three distinct acquisitions 53
+PASS Empty slots: three distinct acquisitions 54
+PASS Empty slots: three distinct acquisitions 55
+PASS Empty slots: three distinct acquisitions 56
+PASS Empty slots: three distinct acquisitions 57
+PASS Empty slots: three distinct acquisitions 58
+PASS Empty slots: three distinct acquisitions 59
+PASS Empty slots: three distinct acquisitions 60
+PASS Empty slots: three distinct acquisitions 61
+PASS Empty slots: three distinct acquisitions 62
+PASS Empty slots: three distinct acquisitions 63
+PASS Empty slots: three distinct acquisitions 64
+PASS Empty slots: three distinct acquisitions 65
+PASS Empty slots: three distinct acquisitions 66
+PASS Empty slots: three distinct acquisitions 67
+PASS Empty slots: three distinct acquisitions 68
+PASS Empty slots: three distinct acquisitions 69
+PASS Empty slots: three distinct acquisitions 70
+PASS Empty slots: three distinct acquisitions 71
+PASS Empty slots: three distinct acquisitions 72
+PASS Empty slots: three distinct acquisitions 73
+PASS Empty slots: three distinct acquisitions 74
+PASS Empty slots: three distinct acquisitions 75
+PASS Empty slots: three distinct acquisitions 76
+PASS Empty slots: three distinct acquisitions 77
+PASS Empty slots: three distinct acquisitions 78
+PASS Empty slots: three distinct acquisitions 79
+PASS Empty slots: three distinct acquisitions 80
+PASS Empty slots: three distinct acquisitions 81
+PASS Empty slots: three distinct acquisitions 82
+PASS Empty slots: three distinct acquisitions 83
+PASS Empty slots: three distinct acquisitions 84
+PASS Empty slots: three distinct acquisitions 85
+PASS Empty slots: three distinct acquisitions 86
+PASS Empty slots: three distinct acquisitions 87
+PASS Empty slots: three distinct acquisitions 88
+PASS Empty slots: three distinct acquisitions 89
+PASS Empty slots: three distinct acquisitions 90
+PASS Empty slots: three distinct acquisitions 91
+PASS Empty slots: three distinct acquisitions 92
+PASS Empty slots: three distinct acquisitions 93
+PASS Empty slots: three distinct acquisitions 94
+PASS Empty slots: three distinct acquisitions 95
+PASS Empty slots: three distinct acquisitions 96
+PASS Empty slots: three distinct acquisitions 97
+PASS Empty slots: three distinct acquisitions 98
+PASS Empty slots: three distinct acquisitions 99
+PASS SCUDO acquired in CD (6/6)
+PASS SCUDO DEF cap90 (90/90)
+PASS SCUDO CD cap90 percent (0,6/0,6)
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Capped upgrades excluded; STAT fallback or acquisition
+PASS Fallback excludes existing endAREA stats
+PASS SCUDO activates
+PASS SCUDO90 then DEF50 round only final damage (1.25 to1) (999/999)
+PASS SCUDO consumes one HIT
+PASS SCUDO survives AREA
+PASS SCUDO cleared on DOWN
+PASS FIRE starts in CD (12/12)
+PASS FIRE active after initial CD
+PASS FIRE BASE HIT20 to23 (477/477)
+PASS FIRE does not mutate persistent ATK (20/20)
+PASS Fixed ability damage remains35 (442/442)
+PASS Only BASE HIT applies burn
+PASS Burn cap5 and refresh
+PASS Burn tick after1 second at5 stacks (425/425)
+PASS Normal DANNO upgrade adds0.2 to burn (2,2/2,2)
+PASS Special burn upgrade adds1 from original base (3,2/3,2)
+PASS Persistent upgrade retained after FIRE ends (21/21)
+PASS FIRE CD starts at end (12/12)
+PASS FIRE ends on AREA
+PASS FIRE AREA restarts CD (12/12)
+PASS RICOCHET can return to prior MOB (480/480)
+PASS RICOCHET three bounces use original50 before DEF each time (480/480)
+PASS RICOCHET range5 from last target (500/500)
+PASS Additional bounces automatic without rerolls/recursion
+PASS Ability HIT cannot trigger RICOCHET
+PASS BASE HIT performs exactly one initial roll
+PASS aura actual area damage
+PASS taser actual area damage
+PASS TASER applies actual STUN2 seconds (2/2)
+PASS TASER actual damage5 (55/55)
+PASS repulse actual area damage
+PASS REPULSE smooth3m (3/3)
+PASS slash actual area damage
+PASS Two knives symmetric left (-2,5/-2,5)
+PASS Two knives symmetric right (2,5/2,5)
+PASS Two actual knife projectiles emitted
+PASS MINE recalculates occupied position
+PASS MINE chooses closest free edge (1,001/1)
+PASS MINE no valid point detected
+PASS MINE postponed without restarting CD (0/0)
+PASS MINE not emitted in blocked AREA
+PASS MINE launched after CD
+PASS MINE CD starts on launch (7/7)
+PASS MINE trigger actual damage10 (490/490)
+PASS PET always active on acquisition
+PASS PET actual attack damage10 (490/490)
+PASS Multi-level EXP retains remainder
+PASS LEVEL UP pauses gameplay
+PASS Multi-level remains paused until last choice
+PASS Last LEVEL UP resumes gameplay
+PASS EndAREA has five working banners
+PASS AREA transition preserves BONUS inventory
+PASS AREA retains LVL (3/3)
+PASS AREA EXP DROP105 percent (105/105)
+PASS New RUN clears BONUS and EXP
+PASS PG01 actual base attack launched
+PASS PG01 BASE HIT triggers exactly one RICOCHET roll
+PASS PG01 FIRE modifies actual base damage before secondary passive effects (477/477)
+PASS PG01 actual base HIT applies BRUCIATURA
+PASS PG02 actual base attack launched
+PASS PG02 BASE HIT triggers exactly one RICOCHET roll
+PASS PG02 FIRE modifies actual base damage before secondary passive effects (488/488)
+PASS PG02 actual base HIT applies BRUCIATURA
+PASS PG03 actual base attack launched
+PASS PG03 BASE HIT triggers exactly one RICOCHET roll
+PASS PG03 FIRE modifies actual base damage before secondary passive effects (442/442)
+PASS PG03 actual base HIT applies BRUCIATURA
+PASS PG04 actual base attack launched
+PASS PG04 BASE HIT triggers exactly one RICOCHET roll
+PASS PG04 FIRE modifies actual base damage before secondary passive effects (471/471)
+PASS PG04 actual base HIT applies BRUCIATURA
+PASS PG05 actual base attack launched
+PASS PG05 BASE HIT triggers exactly one RICOCHET roll
+PASS PG05 FIRE modifies actual base damage before secondary passive effects (465/465)
+PASS PG05 actual base HIT applies BRUCIATURA
+PASS PG06 actual base attack launched
+PASS PG06 BASE HIT triggers exactly one RICOCHET roll
+PASS PG06 FIRE modifies actual base damage before secondary passive effects (454/454)
+PASS PG06 actual base HIT applies BRUCIATURA
+PASS PG07 actual base attack launched
+PASS PG07 BASE HIT triggers exactly one RICOCHET roll
+PASS PG07 FIRE modifies actual base damage before secondary passive effects (465/465)
+PASS PG07 actual base HIT applies BRUCIATURA
+PASS PG08 actual base attack launched
+PASS PG08 BASE HIT triggers exactly one RICOCHET roll
+PASS PG08 FIRE modifies actual base damage before secondary passive effects (492/492)
+PASS PG08 actual base HIT applies BRUCIATURA
+BONUS abilities, acquisition/caps, combat hooks, EXP and AREA/RUN lifecycle verified in Play Mode.
+Warnings:

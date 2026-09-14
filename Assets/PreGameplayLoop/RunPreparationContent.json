@@ -28,7 +28,7 @@
       "Options": [
         {
           "Name": "FUOCO RAPIDO",
-          "Description": "BONUS temporaneo +40% ATK SPD corrente; durata 4 s; CD 10 s, avviato al termine dei 4 s di DURATA. Senza altri modificatori, ATK SPD passa da 400 a 560 = 5,6 ATTACCHI/s. Alla scadenza viene rimosso soltanto il BONUS temporaneo, preservando gli altri modificatori e BONUS acquisiti."
+          "Description": "BONUS temporaneo +50% ATK SPD corrente; durata 4 s; CD 10 s, avviato al termine dei 4 s di DURATA. Senza altri modificatori, ATK SPD passa da 400 a 600 = 6 ATTACCHI/s. Alla scadenza viene rimosso soltanto il BONUS temporaneo, preservando gli altri modificatori e BONUS acquisiti."
         },
         {
           "Name": "FUOCO DI SOPPRESSIONE",
@@ -40,7 +40,7 @@
         },
         {
           "Name": "PASSIVA 2",
-          "Description": "ogni 15 KILL entra in RAGE per 2 s con +30% ATK. Al CAMBIO AREA il conteggio delle KILL resta; RAGE termina se attiva, rimuovendo soltanto il BONUS ATK temporaneo."
+          "Description": "ogni 15 KILL entra in RAGE per 4 s con +30% ATK. Al CAMBIO AREA il conteggio delle KILL resta; RAGE termina se attiva, rimuovendo soltanto il BONUS ATK temporaneo."
         }
       ]
     },
@@ -72,11 +72,11 @@
       "Options": [
         {
           "Name": "PIOGGIA DI GRANATE",
-          "Description": "Genera direttamente 10 ESPLOSIONI, senza PROIETTILI, in posizioni RANDOM nell’AREA EFFETTO CIRCOLARE di RAGGIO 5 m.\nCentro: posizione del CURSORE all’attivazione; nessun limite di distanza da PG04.\nSequenza CASUALE nell’arco complessivo di 3 s; CD BASE 12 s, avviato all’attivazione.\nEredita esclusivamente ATK e AREA ESPLOSIONE dell’ATTACCO BASE: ATK 25 e RAGGIO 1,25 m per esplosione. Non eredita traiettoria, RANGE o IMPATTO del PROIETTILE.\nLe esplosioni possono sovrapporsi. Ogni esplosione applica indipendentemente il proprio DANNO; lo stesso MOB può ricevere HIT da più esplosioni.\nOgni AREA di esplosione segue la regola dei 4 SPICCHI da 90°, con eliminazione completa degli SPICCHI intercettati da MURI/OSTACOLI."
+          "Description": "SISTEMA A RILASCIO: tenere premuto Q mostra l’anteprima dell’AREA EFFETTO di RAGGIO 4 m, che segue il CURSORE; al rilascio di Q l’ABILITÀ si attiva nella posizione selezionata. L’anteprima non genera HIT e non avvia il CD; sequenza delle esplosioni e CD iniziano al rilascio.\nGenera direttamente 10 ESPLOSIONI, senza PROIETTILI, in posizioni RANDOM nell’AREA EFFETTO CIRCOLARE di RAGGIO 4 m.\nCentro: posizione del CURSORE all’attivazione; nessun limite di distanza da PG04.\nSequenza CASUALE nell’arco complessivo di 3 s; CD BASE 12 s, avviato all’attivazione.\nEredita esclusivamente ATK e AREA ESPLOSIONE dell’ATTACCO BASE: ATK 25 e RAGGIO 1,25 m per esplosione. Non eredita traiettoria, RANGE o IMPATTO del PROIETTILE.\nLe esplosioni possono sovrapporsi. Ogni esplosione applica indipendentemente il proprio DANNO; lo stesso MOB può ricevere HIT da più esplosioni.\nMURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli."
         },
         {
           "Name": "COLPO GROSSO",
-          "Description": "Potenzia i successivi 4 ATTACCHI BASE: +80% ATK (25 → 45) e +50% RAGGIO ESPLOSIONE (1,25 → 1,875 m).\nModifica esclusivamente ATK e RAGGIO ESPLOSIONE. Le altre STATS e regole restano invariate, inclusa la geometria a 4 SPICCHI.\nNessuna DURATA massima: le cariche restano disponibili fino al consumo. Ogni ATTACCO effettuato consuma una carica, anche in caso di MISS.\nCD BASE 10 s, avviato al consumo del 4° ATTACCO.\nAl CAMBIO AREA le cariche residue vengono perse e, se l’ABILITÀ era ATTIVA, il CD riparte da capo. Se era DISPONIBILE, rimane DISPONIBILE. Se era già IN CD ma non più ATTIVA, mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA."
+          "Description": "Potenzia i successivi 4 ATTACCHI BASE: +80% ATK (25 → 45) e +50% RAGGIO ESPLOSIONE (1,25 → 1,875 m).\nModifica esclusivamente ATK e RAGGIO ESPLOSIONE. Le altre STATS e regole restano invariate, inclusa la schermatura per bersaglio dell’ATTACCO BASE.\nNessuna DURATA massima: le cariche restano disponibili fino al consumo. Ogni ATTACCO effettuato consuma una carica, anche in caso di MISS.\nCD BASE 10 s, avviato al consumo del 4° ATTACCO.\nAl CAMBIO AREA le cariche residue vengono perse e, se l’ABILITÀ era ATTIVA, il CD riparte da capo. Se era DISPONIBILE, rimane DISPONIBILE. Se era già IN CD ma non più ATTIVA, mantiene esattamente il CD residuo e continua il conteggio nella nuova AREA."
         },
         {
           "Name": "SCORTA ESPLOSIVA",
@@ -84,7 +84,7 @@
         },
         {
           "Name": "PYROMANIA",
-          "Description": "Le AREE ESPLOSIONE diventano AREE INCENDIATE per 3 s, con 5 HP/s per AREA.\nSi applica ad ATTACCO BASE, PIOGGIA DI GRANATE e COLPO GROSSO.\nL’AREA INCENDIATA corrisponde all’AREA ESPLOSIONE: RAGGIO 1,25 m per ATTACCO BASE/PIOGGIA DI GRANATE; 1,875 m per COLPO GROSSO.\nLe AREE INCENDIATE possono sovrapporsi e i loro DANNI si sommano.\nMURI/OSTACOLI bloccano il DANNO secondo la regola dei 4 SPICCHI da 90°."
+          "Description": "Le AREE ESPLOSIONE diventano AREE INCENDIATE per 3 s, con 5 HP/s per AREA.\nSi applica ad ATTACCO BASE, PIOGGIA DI GRANATE e COLPO GROSSO.\nL’AREA INCENDIATA corrisponde all’AREA ESPLOSIONE: RAGGIO 1,25 m per ATTACCO BASE/PIOGGIA DI GRANATE; 1,875 m per COLPO GROSSO.\nLe AREE INCENDIATE possono sovrapporsi e i loro DANNI si sommano.\nMURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli."
         }
       ]
     },
@@ -102,7 +102,7 @@
         },
         {
           "Name": "GHOSTING",
-          "Description": "Con HP <30% prima della HIT, una HIT ricevuta attiva INVISIBILITÀ e +15% MOVE SPD per 2 s. Con HP ≥30% non si attiva.\nApplica le stesse REGOLE GENERALI di INVISIBILITÀ.\nHIT ricevute durante l’effetto non lo riattivano e non rinnovano la DURATA.\nSovrapposizione GHOSTING/INVISIBILITÀ su PG05: un solo BONUS +15% MOVE SPD; DURATA rinnovata usando quella dell’ultimo effetto applicato.\nTerminato l’effetto, la PASSIVA è subito disponibile per una nuova HIT che soddisfi le condizioni; nessun CD interno."
+          "Description": "Con HP <35% dopo il danno della HIT, una HIT ricevuta attiva INVISIBILITÀ e +15% MOVE SPD per 2 s. Anche la HIT che porta da sopra a sotto soglia attiva l’effetto. Con HP ≥35% dopo la HIT non si attiva.\nApplica le stesse REGOLE GENERALI di INVISIBILITÀ.\nHIT ricevute durante l’effetto non lo riattivano e non rinnovano la DURATA.\nSovrapposizione GHOSTING/INVISIBILITÀ su PG05: un solo BONUS +15% MOVE SPD; DURATA rinnovata usando quella dell’ultimo effetto applicato.\nTerminato l’effetto, la PASSIVA è subito disponibile per una nuova HIT che soddisfi le condizioni; nessun CD interno."
         },
         {
           "Name": "LAMA DI CICUTA",
@@ -146,7 +146,7 @@
         },
         {
           "Name": "LUCKY SHOT",
-          "Description": "Roll del 5% solo quando un ATTACCO BASE genera una HIT effettiva su un MOB; nessun roll in caso di MISS.\nUn successo genera una HIT AD AREA aggiuntiva pari al 30% dell’ATK di PG07; AREA CIRCOLARE di RAGGIO 2 m centrata sul MOB che ha generato il TRIGGER.\nIl DANNO risultante di LUCKY SHOT viene arrotondato all’intero più vicino con arrotondamento matematico: parte decimale <0,5 per difetto; ≥0,5 per eccesso. Il DANNO AD AREA è una HIT separata: la DEF si applica indipendentemente dall’ATTACCO BASE e individualmente a ogni MOB.\nSe l’ATTACCO BASE uccide il MOB, LUCKY SHOT può comunque attivarsi nel punto della sua MORTE e colpire gli altri MOB.\nMURI/OSTACOLI eliminano interamente gli SPICCHI intercettati secondo la geometria a 4 SPICCHI da 90°. Gli SPICCHI non generano HIT separate.\nLa HIT di LUCKY SHOT non è un ATTACCO BASE e non genera ulteriori roll di LUCKY SHOT."
+          "Description": "Roll del 5% solo quando un ATTACCO BASE genera una HIT effettiva su un MOB; nessun roll in caso di MISS.\nUn successo genera una HIT AD AREA aggiuntiva pari al 30% dell’ATK di PG07; AREA CIRCOLARE di RAGGIO 2 m centrata sul MOB che ha generato il TRIGGER.\nIl DANNO risultante di LUCKY SHOT viene arrotondato all’intero più vicino con arrotondamento matematico: parte decimale <0,5 per difetto; ≥0,5 per eccesso. Il DANNO AD AREA è una HIT separata: la DEF si applica indipendentemente dall’ATTACCO BASE e individualmente a ogni MOB.\nSe l’ATTACCO BASE uccide il MOB, LUCKY SHOT può comunque attivarsi nel punto della sua MORTE e colpire gli altri MOB.\nMURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. Nessuna HIT aggiuntiva per suddivisioni geometriche.\nLa HIT di LUCKY SHOT non è un ATTACCO BASE e non genera ulteriori roll di LUCKY SHOT."
         },
         {
           "Name": "CONCENTRAZIONE",
@@ -160,7 +160,7 @@
       "Options": [
         {
           "Name": "FILO SPINATO",
-          "Description": "ANELLO di RAGGIO ESTERNO 4,5 m e SPESSORE 1 m (fascia da 3,5 a 4,5 m), centrato sulla posizione di PG08 all’attivazione. Rimane fisso per 4 s e non segue PG08.\nSolo la fascia dell’ANELLO genera effetti: per ciascun MOB il conteggio del DANNO PERIODICO parte nel momento in cui entra in contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA. All’uscita il DANNO PERIODICO termina.\nSLOW 35% mentre il MOB è nella fascia; all’uscita lo SLOW cessa. Più applicazioni di FILO SPINATO non sommano lo SLOW né il DANNO: ogni MOB riceve un solo DANNO di 10 al secondo anche in sovrapposizione.\nPer un MOB già nella fascia di una SEZIONE valida all’attivazione, il conteggio del DANNO PERIODICO parte in quel momento e lo SLOW si applica immediatamente.\nNon è una barriera fisica: i MOB attraversano liberamente; i PG attraversano senza effetti; i PROIETTILI attraversano normalmente.\n10 SEZIONI indipendenti da 36°. Alla generazione, se anche una sola parte di una SEZIONE interseca un MURO/OSTACOLO, l’intera SEZIONE viene eliminata.\nNessun minimo di SEZIONI valide. Con 0/10 non viene generato FILO SPINATO, ma l’ABILITÀ è comunque UTILIZZATA.\nCD BASE 16 s, avviato all’attivazione anche con 0/10 SEZIONI.\nAl CAMBIO AREA tutte le SEZIONI scompaiono; DANNO e SLOW terminano e il CD segue la regola generale."
+          "Description": "ANELLO di RAGGIO ESTERNO 4,5 m e SPESSORE 1 m (fascia da 3,5 a 4,5 m), centrato sulla posizione di PG08 all’attivazione. Rimane fisso per 5 s e non segue PG08.\nSolo la fascia dell’ANELLO genera effetti: per ciascun MOB il conteggio del DANNO PERIODICO parte nel momento in cui entra in contatto con una SEZIONE/AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA. All’uscita il DANNO PERIODICO termina.\nSLOW 40% mentre il MOB è nella fascia; all’uscita lo SLOW cessa. Più applicazioni di FILO SPINATO non sommano lo SLOW né il DANNO: ogni MOB riceve un solo DANNO di 10 al secondo anche in sovrapposizione.\nPer un MOB già nella fascia di una SEZIONE valida all’attivazione, il conteggio del DANNO PERIODICO parte in quel momento e lo SLOW si applica immediatamente.\nNon è una barriera fisica: i MOB attraversano liberamente; i PG attraversano senza effetti; i PROIETTILI attraversano normalmente.\n10 SEZIONI indipendenti da 36°. Alla generazione, se anche una sola parte di una SEZIONE interseca un MURO/OSTACOLO, l’intera SEZIONE viene eliminata.\nNessun minimo di SEZIONI valide. Con 0/10 non viene generato FILO SPINATO, ma l’ABILITÀ è comunque UTILIZZATA.\nCD BASE 16 s, avviato all’attivazione anche con 0/10 SEZIONI.\nAl CAMBIO AREA tutte le SEZIONI scompaiono; DANNO e SLOW terminano e il CD segue la regola generale."
         },
         {
           "Name": "COLPI RESPINGENTI",

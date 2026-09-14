@@ -86,7 +86,8 @@ namespace RogZombie.PreGameplayLoop
             {
                 var ability = loop.PG04Ability;
                 GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
-                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | DURATA {ability.ActiveRemaining:0.0} s | CARICHE {ability.Charges}");
+                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | DURATA {ability.ActiveRemaining:0.0} s | CARICHE {ability.Charges}" +
+                    (ability.Selected == PG04Ability.PioggiaDiGranate ? " | Tieni Q: anteprima; rilascia: attiva" : ""));
                 GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26), $"{ability.PassiveLabel} | AUTOMATICA");
                 GUI.Label(new Rect(20, Screen.height - 185, 600, 22), "TEST SLOT ITEM — carica/consuma senza lanciare ITEMS");
                 GUI.enabled = loop.GameplayRunning;
@@ -101,18 +102,18 @@ namespace RogZombie.PreGameplayLoop
                 }
                 GUI.enabled = true;
             }
-            GUI.Label(new Rect(20, Screen.height - 34, Screen.width - 40, 28), "Slice: PG01/PG02/PG03/PG04/PG05/PG06/PG07/PG08 + ZOMB01; EXP/LVL esclusi; geometria provvisoria.");
+            GUI.Label(new Rect(20, Screen.height - 34, Screen.width - 40, 28), "Prototype: roster PG01–PG08 + ZOMB01; ABILITÀ BONUS e LEVEL UP attivi.");
             if (loop.State == LoopState.AreaComplete)
             {
                 Vector3 view = loop.GameCamera.WorldToViewportPoint(loop.Exit.transform.position);
                 bool visible = view.z > 0 && view.x >= 0 && view.x <= 1 && view.y >= 0 && view.y <= 1;
-                GUI.Label(new Rect(20, 140, Screen.width - 40, 30), "AREA COMPLETATA — raggiungi l'USCITA verde (raggio 4 m)");
+                GUI.Label(new Rect(20, 190, Screen.width - 40, 30), "AREA COMPLETATA — raggiungi l'USCITA verde (raggio 4 m)");
                 if (!visible)
                 {
                     Vector2 delta = loop.Exit.transform.position - loop.Player.transform.position;
                     float angle = Mathf.Atan2(-delta.y, delta.x) * Mathf.Rad2Deg;
                     var matrix = GUI.matrix;
-                    var pivot = new Vector2(Screen.width / 2f, 190);
+                    var pivot = new Vector2(Screen.width / 2f, 230);
                     GUIUtility.RotateAroundPivot(angle, pivot);
                     GUI.Label(new Rect(pivot.x - 12, pivot.y - 12, 50, 30), "-->");
                     GUI.matrix = matrix;
@@ -122,15 +123,31 @@ namespace RogZombie.PreGameplayLoop
             if (loop.State == LoopState.Error) GUI.Box(new Rect(30, 180, Screen.width - 60, 80), loop.Failure);
             if (loop.State == LoopState.Defeat) GUI.Box(new Rect(30, 180, Screen.width - 60, 60), "SCONFITTA: PG DOWN, nessun PG attivo. Riprova test.");
             if (loop.State == LoopState.Finished) GUI.Box(new Rect(30, 180, Screen.width - 60, 60), "Due cicli completati. Fine del test tecnico; Riprova test per una nuova prova.");
+            if (loop.BonusAbilities != null)
+                GUI.Label(new Rect(20, 136, Screen.width - 40, 25), loop.BonusAbilities.Status());
+            if (loop.Experience != null)
+            {
+                var exp = loop.Experience;
+                GUI.Label(new Rect(20, 162, Screen.width - 40, 24), $"LVL {exp.Level} | EXP {exp.Experience}/{exp.NextThreshold} | Scelte pendenti {exp.PendingChoices}");
+                if (exp.Choices != null)
+                {
+                    GUI.Box(new Rect(10, 205, Screen.width - 20, 140), "LEVEL UP — scegli un BONUS");
+                    float bannerWidth = (Screen.width - 60) / 3f;
+                    for (int i = 0; i < exp.Choices.Length; i++)
+                        if (GUI.Button(new Rect(20 + i * (bannerWidth + 10), 245, bannerWidth, 80), loop.Bonuses.Label(exp.Choices[i])))
+                        { exp.Choose(i); break; }
+                    return;
+                }
+            }
             if (loop.State != LoopState.Bonus) return;
-            GUI.Box(new Rect(10, 140, Screen.width - 20, 320), "BONUS FINE AREA — scegli una STAT, poi conferma");
+            GUI.Box(new Rect(10, 140, Screen.width - 20, 320), "BONUS FINE AREA — scegli un BONUS, poi conferma");
             float width = (Screen.width - 60) / 3f;
             for (int i = 0; i < 3; i++)
                 if (GUI.Button(new Rect(20 + i * (width + 10), 185, width, 65),
                     (loop.Selected == i ? "[X] " : "") + AreaStatBonus.Labels[(int)loop.Choices[i]])) loop.SelectBonus(i);
-            GUI.enabled = false;
-            GUI.Button(new Rect(20, 265, (Screen.width - 50) / 2f, 60), "ABILITA BONUS — fuori scope");
-            GUI.Button(new Rect(30 + (Screen.width - 50) / 2f, 265, (Screen.width - 50) / 2f, 60), "ABILITA BONUS — fuori scope");
+            for (int i = 0; i < loop.AbilityChoices.Length; i++)
+                if (GUI.Button(new Rect(20 + i * ((Screen.width - 50) / 2f + 10), 265, (Screen.width - 50) / 2f, 65),
+                    (loop.Selected == i + 3 ? "[X] " : "") + loop.Bonuses.Label(loop.AbilityChoices[i]))) loop.SelectBonus(i + 3);
             GUI.enabled = loop.Selected >= 0;
             if (GUI.Button(new Rect(20, 350, Screen.width - 40, 60), "Conferma")) loop.ConfirmBonus();
             GUI.enabled = true;

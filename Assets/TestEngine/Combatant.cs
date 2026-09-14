@@ -19,6 +19,9 @@ namespace RogZombie.TestEngine
         private float pestoneSlowPercent;
         private Combatant lethalSource;
 
+        public event Action<Combatant, float> BaseHitLanded;
+        public Func<float, float> BaseHitDamage { get; set; }
+        public Func<float, float> IncomingHitDamage { get; set; }
         public event Action BeforeHit;
         public event Action PerformedAction;
         public Func<bool> InvisibleQuery { get; set; }
@@ -30,6 +33,7 @@ namespace RogZombie.TestEngine
         public event Action<Combatant> Killed;
         public event Action<Combatant> StateChanged;
         public static event Action<Combatant, float> DamageApplied;
+        public static event Action<Combatant, float> HealingApplied;
         public CombatStats Stats => stats;
         public CombatStats InitialStats { get; private set; }
         public ICombatStatModifier SupportModifier { get; set; }
@@ -67,7 +71,7 @@ namespace RogZombie.TestEngine
         }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
-        private static void ResetRegistry() { All.Clear(); DamageApplied = null; }
+        private static void ResetRegistry() { All.Clear(); DamageApplied = null; HealingApplied = null; }
         private void OnEnable() { if (!All.Contains(this)) All.Add(this); }
         private void OnDisable() => All.Remove(this);
 
@@ -97,10 +101,12 @@ namespace RogZombie.TestEngine
 
         // New GDD-compliant effects can round the final mitigated HIT without changing
         // the already validated legacy attacks in this prototype.
-        public bool Hit(float attack, bool roundFinalDamage, Combatant source = null)
+        public bool Hit(float attack, bool roundFinalDamage, Combatant source = null, bool baseAttack = false)
         {
             if (!IsActive) return false;
-            float damage = DamageMath.Calculate(attack, EffectiveStats.DEF);
+            if (baseAttack && source != null && source.BaseHitDamage != null) attack = source.BaseHitDamage(attack);
+            float incoming = IncomingHitDamage != null ? IncomingHitDamage(attack) : attack;
+            float damage = DamageMath.Calculate(incoming, EffectiveStats.DEF);
             // Invalid tuning must never turn an incoming HIT into healing.
             if (damage < 0f || float.IsNaN(damage) || float.IsInfinity(damage))
             {
@@ -114,17 +120,23 @@ namespace RogZombie.TestEngine
             if (currentHP <= 0f) lethalSource = source;
             HitEffect?.AfterHit();
             DamageApplied?.Invoke(this, previousHP - currentHP);
-            if (currentHP > 0f) return true;
-            if (faction == Faction.PG) ChangeState(LifeState.Down);
-            else if (preExplodes) ChangeState(LifeState.PreExplosion);
-            else Die();
+            if (currentHP <= 0f)
+            {
+                if (faction == Faction.PG) ChangeState(LifeState.Down);
+                else if (preExplodes) ChangeState(LifeState.PreExplosion);
+                else Die();
+            }
+            if (baseAttack && source != null) source.BaseHitLanded?.Invoke(this, attack);
             return true;
         }
 
         public bool Heal(float fraction)
         {
             if (!IsActive || currentHP >= stats.HP) return false;
+            float previousHP = currentHP;
             currentHP = Mathf.Min(stats.HP, currentHP + stats.HP * fraction);
+            float recovered = currentHP - previousHP;
+            if (recovered > 0) HealingApplied?.Invoke(this, recovered);
             return true;
         }
 
@@ -179,6 +191,7 @@ namespace RogZombie.TestEngine
                     if (hit.collider == body) continue;
                     var other = hit.collider.GetComponent<Combatant>();
                     bool blocks = hit.collider.GetComponent<TestObstacle>() != null ||
+                        (faction == Faction.MOB && hit.collider.GetComponent<RogZombie.PreGameplayLoop.BonusPet>() != null) ||
                         (other != null && other.state != LifeState.Dead &&
                          (faction == Faction.PG || other.faction == Faction.PG));
                     if (!blocks || Vector2.Dot(direction, hit.normal) >= -0.001f) continue;

@@ -24,46 +24,87 @@ namespace RogZombie.TestEngine
         [SerializeField] private List<OwnedBonus> owned = new List<OwnedBonus>();
         public IReadOnlyList<OwnedBonus> Owned => owned;
 
+        private void Awake()
+        {
+            if (ApplyStatFallback != null) return;
+            ApplyStatFallback = index =>
+            {
+                var pg = GetComponent<PlayerRuntime>();
+                if (pg == null) throw new InvalidOperationException("STAT fallback requires a player.");
+                pg.ApplyRunStat(index);
+            };
+        }
+
         public bool Owns(int index) => owned.Exists(item => item.DefinitionIndex == index);
 
-        public BonusChoice[] Generate()
+        public event Action<BonusChoice> Changed;
+        public Action<int> ApplyStatFallback;
+        public OwnedBonus Find(string id) => owned.Find(item => Catalog.Bonuses[item.DefinitionIndex].Id == id);
+
+        public bool CanUpgrade(int bonus, int upgrade)
+        {
+            var item = owned.Find(value => value.DefinitionIndex == bonus);
+            if (item == null || upgrade < 0 || upgrade >= item.UpgradeCounts.Length) return false;
+            string key = Catalog.Bonuses[bonus].Upgrades[upgrade].Key;
+            if (key == "CD") return item.UpgradeCounts[upgrade] < 9;
+            return !(Catalog.Bonuses[bonus].Id == "shield" && key == "DEF" && Value(item, "DEF") >= 90);
+        }
+
+        public float Value(OwnedBonus item, string key)
+        {
+            if (!TryGetValue(item, key, out float value)) throw new InvalidOperationException("Missing bonus parameter: " + key);
+            return value;
+        }
+
+        public BonusChoice[] Generate(int count = 3, IEnumerable<int> excludedStats = null)
         {
             var result = new List<BonusChoice>();
-            // Reject duplicates without an unbounded reroll: condition the weights on unselected results.
-            var newChoices = new List<BonusChoice>();
-            var upgrades = new List<BonusChoice>();
-            for (int i = 0; i < Catalog.Bonuses.Length; i++)
-            {
-                if (!Owns(i)) newChoices.Add(new BonusChoice(i, -1));
-                else for (int j = 0; j < Catalog.Bonuses[i].Upgrades.Length; j++) upgrades.Add(new BonusChoice(i, j));
-            }
+            var stats = new HashSet<int>(excludedStats ?? Array.Empty<int>());
             float newChance = owned.Count == 0 ? Catalog.NewAtZeroSlots :
                 owned.Count >= Catalog.Slots ? Catalog.NewAtFullSlots : Catalog.NewAtOneOrTwoSlots;
-            for (int slot = 0; slot < 3; slot++)
+            for (int slot = 0; slot < count; slot++)
             {
+                bool acquire = newChance >= 100 || newChance > 0 && UnityEngine.Random.value * 100 < newChance;
                 var candidates = new List<BonusChoice>();
                 var weights = new List<float>();
-                float sumNew = 0f, sumOwned = 0f;
-                foreach (var choice in newChoices) sumNew += Catalog.Bonuses[choice.Bonus].Weight;
-                foreach (var item in owned) sumOwned += Catalog.Bonuses[item.DefinitionIndex].Weight;
-                foreach (var choice in newChoices)
+                if (acquire)
                 {
-                    if (Contains(result, choice) || owned.Count >= Catalog.Slots) continue;
-                    candidates.Add(choice);
-                    weights.Add(newChance * Catalog.Bonuses[choice.Bonus].Weight / sumNew);
+                    for (int i = 0; i < Catalog.Bonuses.Length; i++)
+                    {
+                        var choice = new BonusChoice(i, -1);
+                        if (Owns(i) || Contains(result, choice)) continue;
+                        candidates.Add(choice); weights.Add(Catalog.Bonuses[i].Weight);
+                    }
                 }
-                foreach (var choice in upgrades)
+                else
                 {
-                    if (Contains(result, choice)) continue;
-                    var bonus = Catalog.Bonuses[choice.Bonus];
-                    float upgradeSum = 0f;
-                    foreach (var upgrade in bonus.Upgrades) upgradeSum += upgrade.Weight;
-                    candidates.Add(choice);
-                    weights.Add((100f - newChance) * bonus.Weight / sumOwned * bonus.Upgrades[choice.Upgrade].Weight / upgradeSum);
+                    // Two-stage draw: ability rate, then its remaining specific upgrade rates.
+                    foreach (var item in owned)
+                    {
+                        var def = Catalog.Bonuses[item.DefinitionIndex];
+                        float sum = 0;
+                        for (int j = 0; j < def.Upgrades.Length; j++)
+                            if (CanUpgrade(item.DefinitionIndex, j) && !Contains(result, new BonusChoice(item.DefinitionIndex, j))) sum += def.Upgrades[j].Weight;
+                        if (sum <= 0) continue;
+                        for (int j = 0; j < def.Upgrades.Length; j++)
+                        {
+                            var choice = new BonusChoice(item.DefinitionIndex, j);
+                            if (!CanUpgrade(choice.Bonus, j) || Contains(result, choice)) continue;
+                            candidates.Add(choice); weights.Add(def.Weight * def.Upgrades[j].Weight / sum);
+                        }
+                    }
                 }
                 int selected = WeightedSelection.Draw(weights, UnityEngine.Random.value);
-                if (selected < 0) throw new InvalidOperationException("Bonus catalog cannot produce three distinct banners.");
-                result.Add(candidates[selected]);
+                if (selected >= 0) result.Add(candidates[selected]);
+                else
+                {
+                    if (acquire) throw new InvalidOperationException("No distinct new bonus ability available.");
+                    float[] statWeights = { 25, 8, 22, 22, 8, 15 };
+                    foreach (int stat in stats) statWeights[stat] = 0;
+                    int statIndex = WeightedSelection.Draw(statWeights, UnityEngine.Random.value);
+                    if (statIndex < 0) throw new InvalidOperationException("No distinct STAT banner available.");
+                    stats.Add(statIndex); result.Add(new BonusChoice(-1, statIndex));
+                }
             }
             return result.ToArray();
         }
@@ -73,6 +114,11 @@ namespace RogZombie.TestEngine
 
         public void Apply(BonusChoice choice)
         {
+            if (choice.Bonus < 0)
+            {
+                if (ApplyStatFallback == null) throw new InvalidOperationException("STAT fallback handler missing.");
+                ApplyStatFallback(choice.Upgrade); Changed?.Invoke(choice); return;
+            }
             if (choice.Upgrade < 0)
             {
                 if (Owns(choice.Bonus) || owned.Count >= Catalog.Slots) throw new InvalidOperationException("Invalid bonus acquisition.");
@@ -81,13 +127,15 @@ namespace RogZombie.TestEngine
             else
             {
                 var item = owned.Find(value => value.DefinitionIndex == choice.Bonus);
-                if (item == null) throw new InvalidOperationException("Cannot upgrade an unowned bonus.");
+                if (item == null || !CanUpgrade(choice.Bonus, choice.Upgrade)) throw new InvalidOperationException("Invalid or capped bonus upgrade.");
                 item.UpgradeCounts[choice.Upgrade]++;
             }
+            Changed?.Invoke(choice);
         }
 
         public string Label(BonusChoice choice)
         {
+            if (choice.Bonus < 0) return RogZombie.PreGameplayLoop.AreaStatBonus.Labels[choice.Upgrade];
             var bonus = Catalog.Bonuses[choice.Bonus];
             if (choice.Upgrade < 0) return bonus.Name + "\nNUOVA ABILITÀ BONUS";
             var upgrade = bonus.Upgrades[choice.Upgrade];
@@ -108,6 +156,8 @@ namespace RogZombie.TestEngine
                 if (upgrade.Key == parameter)
                     value += item.UpgradeCounts[i] * (original.BaseValue * upgrade.BasePercent / 100f + upgrade.FlatAmount);
             }
+            if (parameter == "CD") value = Mathf.Max(original.BaseValue * .1f, value);
+            if (definition.Id == "shield" && parameter == "DEF") value = Mathf.Min(90, value);
             return true;
         }
     }

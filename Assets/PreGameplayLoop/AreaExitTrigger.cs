@@ -53,7 +53,8 @@ namespace RogZombie.PreGameplayLoop
         {
             // Existing actors move using swept queries, without dynamic Rigidbodies.
             // Explicit logical detection also handles already standing inside when opened.
-            if (!Available || consumed || Time.timeScale <= 0 || !ContainsActivePlayer()) return;
+            if (!Available || consumed || Time.timeScale <= 0 || !ContainsActivePlayer() ||
+                player.GetComponent<ExperienceProgression>()?.PendingChoices > 0) return;
             consumed = true;
             Entered?.Invoke();
         }

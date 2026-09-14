@@ -36,6 +36,10 @@ namespace RogZombie.PreGameplayLoop
         public PG04ItemSlots PG04Items { get; private set; }
         public bool GameplayRunning => Time.timeScale > 0 && (State == LoopState.Combat || State == LoopState.AreaComplete);
         public string Failure { get; private set; }
+        public BonusInventory Bonuses { get; private set; }
+        public BonusAbilityRuntime BonusAbilities { get; private set; }
+        public ExperienceProgression Experience { get; private set; }
+        public BonusChoice[] AbilityChoices { get; private set; }
         public AreaStat[] Choices { get; private set; }
         public int Selected { get; private set; } = -1;
         private float cdReduction;
@@ -49,10 +53,11 @@ namespace RogZombie.PreGameplayLoop
             GameCamera = Camera.main;
             gameObject.AddComponent<LoopHUD>();
             string issue = Definition == null ? "LoopDefinition mancante." : Definition.Validate();
-            foreach (string layer in new[] { "PG", "MOB", "MURO", "OSTACOLO", "TRIGGER_PG" })
+            foreach (string layer in new[] { "PG", "MOB", "MURO", "OSTACOLO", "TRIGGER_PG", "TRIGGER_MOB", "PET" })
                 if (LayerMask.NameToLayer(layer) < 0) issue = "Layer mancante: " + layer;
             if (GameCamera == null) issue = "Main Camera mancante.";
             if (issue != null) { Fail(issue); return; }
+            gameObject.AddComponent<HealingNumbers>().ViewCamera = GameCamera;
             StartCoroutine(BuildArea());
         }
 
@@ -117,18 +122,22 @@ namespace RogZombie.PreGameplayLoop
             Vector2 size = Settings.AreaSize;
             TestVisuals.Box("Pavimento test", Vector2.zero, size,
                 AreaIndex == 0 ? new Color(.09f, .12f, .13f) : new Color(.13f, .10f, .09f), -10);
+            TestVisuals.FloorGrid(size);
+            TestVisuals.Box("SPAWN PG", Settings.StartPosition, Vector2.one, Color.green, -8);
+            TestVisuals.Box("Riferimento USCITA", Definition.ExitPosition, Vector2.one * 1.5f, Color.yellow, -8);
             MakeObstacle(new Vector2(-size.x / 2, 0), new Vector2(1, size.y), true);
             MakeObstacle(new Vector2(size.x / 2, 0), new Vector2(1, size.y), true);
             MakeObstacle(new Vector2(0, -size.y / 2), new Vector2(size.x, 1), true);
             MakeObstacle(new Vector2(0, size.y / 2), new Vector2(size.x, 1), true);
             if (Settings.Obstacles != null)
-                foreach (var obstacle in Settings.Obstacles) MakeObstacle(obstacle.Position, obstacle.Size, obstacle.Wall);
+                foreach (var obstacle in Settings.Obstacles) MakeObstacle(obstacle.Position, obstacle.Size, obstacle.Wall, obstacle.Rotation);
         }
 
-        private void MakeObstacle(Vector2 position, Vector2 size, bool wall)
+        private void MakeObstacle(Vector2 position, Vector2 size, bool wall, float rotation = 0)
         {
             string layer = wall ? "MURO" : "OSTACOLO";
-            var go = TestVisuals.Box(layer, position, size, new Color(.35f, .4f, .43f), 1);
+            var go = TestVisuals.Box(layer, position, size, wall ? new Color(.25f, .28f, .8f) : new Color(.65f, .05f, .12f), 1);
+            go.transform.rotation = Quaternion.Euler(0, 0, rotation);
             go.layer = LayerMask.NameToLayer(layer);
             go.AddComponent<BoxCollider2D>().size = size;
             go.AddComponent<TestObstacle>().IsWall = wall;
@@ -224,12 +233,19 @@ namespace RogZombie.PreGameplayLoop
                 PG08Ability.Initialize(this, Definition.SelectedPG08Ability, Definition.PG08Abilities);
                 go.AddComponent<PG08AbilityInput>();
             }
+            Bonuses = go.AddComponent<BonusInventory>();
+            Bonuses.Catalog = Definition.BonusCatalog != null ? Definition.BonusCatalog : Settings.BonusCatalog;
+            Bonuses.ApplyStatFallback = index => ApplyStat((AreaStat)index);
+            BonusAbilities = go.AddComponent<BonusAbilityRuntime>();
+            BonusAbilities.Initialize(this, Bonuses);
+            Experience = go.AddComponent<ExperienceProgression>();
+            Experience.Thresholds = (int[])Settings.ExperienceThresholds.Clone();
             go.SetActive(true);
         }
 
         public Combatant CreateMob(int index, Vector2 position)
         {
-            var go = TestVisuals.Box("ZOMB01", position, Vector2.one, new Color(.4f, .7f, .4f), 2);
+            var go = TestVisuals.Circle("ZOMB01", position, Settings.ActorRadius, new Color(.4f, .7f, .4f), 2);
             go.layer = LayerMask.NameToLayer("MOB");
             go.AddComponent<CircleCollider2D>().radius = Settings.ActorRadius;
             var actor = go.AddComponent<Combatant>();
@@ -261,18 +277,21 @@ namespace RogZombie.PreGameplayLoop
             State = LoopState.Bonus;
             Time.timeScale = 0;
             Choices = AreaStatBonus.Draw();
+            AbilityChoices = Bonuses.Generate(2, System.Array.ConvertAll(Choices, stat => (int)stat));
             Selected = -1;
         }
 
         public void SelectBonus(int index)
         {
-            if (State == LoopState.Bonus && Choices != null && index >= 0 && index < Choices.Length) Selected = index;
+            if (State == LoopState.Bonus && Choices != null && index >= 0 && index < Choices.Length + AbilityChoices.Length) Selected = index;
         }
 
         public void ConfirmBonus()
         {
             if (State != LoopState.Bonus || Selected < 0) return;
-            AreaStatBonus.Apply(Player.Actor, Choices[Selected], ref cdReduction);
+            if (Selected < Choices.Length) ApplyStat(Choices[Selected]);
+            else Bonuses.Apply(AbilityChoices[Selected - Choices.Length]);
+            AbilityChoices = null;
             Choices = null;
             Selected = -1;
             if (AreaIndex == Definition.AreaTotals.Length - 1)
@@ -283,6 +302,7 @@ namespace RogZombie.PreGameplayLoop
 
         private IEnumerator NextArea()
         {
+            BonusAbilities?.ChangeArea();
             if (Ability != null) Ability.ChangeArea();
             if (PG02Ability != null) PG02Ability.ChangeArea();
             if (PG03Ability != null) PG03Ability.ChangeArea();
@@ -299,9 +319,12 @@ namespace RogZombie.PreGameplayLoop
             Destroy(Settings);
             yield return null; // Dispose corpse timers, effects, NavMesh and spawn subscriptions.
             Player.Actor.Heal(.15f);
+            Experience.DropPercent = Experience.DropPercent * 105 / 100;
             AreaIndex++;
             yield return BuildArea();
         }
+
+        private void ApplyStat(AreaStat stat) => AreaStatBonus.Apply(Player.Actor, stat, ref cdReduction);
 
         public void AddGold(int value) => Gold += value;
         public void RefreshNavigation()
@@ -313,6 +336,7 @@ namespace RogZombie.PreGameplayLoop
             if (Loading) return;
             string issue = Definition == null ? "LoopDefinition mancante." : Definition.Validate();
             if (issue != null) { Fail(issue); return; }
+            Experience?.CancelChoices();
             StopAllCoroutines();
             State = LoopState.Transition;
             Time.timeScale = 0;
@@ -325,7 +349,7 @@ namespace RogZombie.PreGameplayLoop
             if (Player != null) { Player.gameObject.SetActive(false); Destroy(Player.gameObject); }
             if (Settings != null) Destroy(Settings);
             yield return null;
-            Player = null;
+            Player = null; Bonuses = null; BonusAbilities = null; Experience = null; AbilityChoices = null;
             AreaIndex = 0;
             Gold = 0;
             Choices = null;

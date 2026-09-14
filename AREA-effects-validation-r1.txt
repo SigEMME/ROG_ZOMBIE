@@ -1,0 +1,152 @@
+PASS | Unity 6000.3.16f1 | checks=150 | warnings=0
+PASS RUN fixture PG01
+PASS PG01 actual cone attack
+PASS PG01 cone full damage (480/480)
+PASS PG01 cone wall shield (500/500)
+PASS PG01 cone excludes rear (500/500)
+PASS Actual PESTONE activation
+PASS PESTONE damage (440/440)
+PASS PESTONE 30 percent SLOW (1,4/1,4)
+PASS PESTONE covered MOB untouched (500/500)
+PASS PESTONE no SLOW through cover
+PASS PESTONE SLOW expires (2/2)
+PASS RUN fixture PG01
+PASS BARRIERA preview
+PASS BARRIERA preview has no collider
+PASS BARRIERA release activation
+PASS BARRIERA exists
+PASS BARRIERA collider and visual
+PASS BARRIERA blocks circular area line (2,5/2,5)
+PASS BARRIERA expires
+PASS RUN fixture PG03
+PASS LASER 35 damage (465/465)
+PASS LASER retains cover exception (465/465)
+PASS LASER excludes rear (500/500)
+PASS LASER visible rectangle
+PASS RUN fixture PG05
+PASS PG05 actual area attack
+PASS PG05 cone damage (470/470)
+PASS PG05 cone cover (500/500)
+PASS PG05 excludes rear (500/500)
+PASS RUN fixture PG06
+PASS CURA AD AREA activation
+PASS CURA heals ally through wall (440/440)
+PASS CURA excludes outside (400/400)
+PASS CURA excludes MOB (500/500)
+PASS CURA includes source (110/110)
+PASS CURA applies VITAMINA C
+PASS RUN fixture PG07
+PASS LUCKY SHOT exposed MOB damage (491/491)
+PASS LUCKY SHOT covered MOB (500/500)
+PASS LUCKY SHOT outside radius (500/500)
+PASS LUCKY SHOT visual created
+PASS LUCKY SHOT visual components valid
+PASS LUCKY SHOT visual mesh colors/UV/triangles supplied
+PASS LUCKY SHOT visual visible material
+PASS Arrow impact retains wall/obstacle exception (490/490)
+PASS Arrow rain preview
+PASS Arrow rain preview visual created
+PASS Arrow rain preview visual components valid
+PASS Arrow rain preview visual mesh colors/UV/triangles supplied
+PASS Arrow rain preview visual visible material
+PASS Arrow rain release
+PASS Arrow rain distribution visual created
+PASS Arrow rain distribution visual components valid
+PASS Arrow rain distribution visual mesh colors/UV/triangles supplied
+PASS Arrow rain distribution visual visible material
+PASS Arrow distribution marker expires
+PASS RUN fixture PG08
+PASS FILO SPINATO activation
+PASS FILO SPINATO visual created
+PASS FILO SPINATO visual components valid
+PASS FILO SPINATO visual mesh colors/UV/triangles supplied
+PASS FILO SPINATO visual visible material
+PASS Wire all sections valid in open space (10/10)
+PASS Wire no immediate damage (500/500)
+PASS Wire 40 percent SLOW (1,2/1,2)
+PASS Wire central hole excluded (2/2)
+PASS Second overlapping wire
+PASS Wire overlaps do not duplicate damage (490/490)
+PASS Wire overlaps do not stack SLOW (1,2/1,2)
+PASS Wire duration pauses (3,897/3,897)
+PASS Wire ticks pause (490/490)
+PASS Wire exit removes SLOW (2/2)
+PASS Wire exit stops ticks (490/490)
+PASS Wire area change removes rings
+PASS RUN fixture PG01
+PASS Acquired aura
+PASS aura damage before blocker (490/490)
+PASS aura exposed side damage (490/490)
+PASS aura cover prevents HIT (500/500)
+PASS aura range/shape excludes outside (500/500)
+PASS aura visual created
+PASS aura visual components valid
+PASS aura visual mesh colors/UV/triangles supplied
+PASS aura visual visible material
+PASS aura visual expires
+PASS RUN fixture PG01
+PASS Acquired taser
+PASS taser damage before blocker (495/495)
+PASS taser exposed side damage (495/495)
+PASS taser cover prevents HIT (500/500)
+PASS taser range/shape excludes outside (500/500)
+PASS taser visual created
+PASS taser visual components valid
+PASS taser visual mesh colors/UV/triangles supplied
+PASS taser visual visible material
+PASS TASER STUN applied
+PASS taser visual expires
+PASS RUN fixture PG01
+PASS Acquired repulse
+PASS repulse damage before blocker (495/495)
+PASS repulse exposed side damage (495/495)
+PASS repulse cover prevents HIT (500/500)
+PASS repulse range/shape excludes outside (500/500)
+PASS repulse visual created
+PASS repulse visual components valid
+PASS repulse visual mesh colors/UV/triangles supplied
+PASS repulse visual visible material
+PASS REPULSE moves exposed MOB smoothly
+PASS REPULSE does not move covered MOB (0/0)
+PASS repulse visual expires
+PASS RUN fixture PG01
+PASS Acquired slash
+PASS slash damage before blocker (485/485)
+PASS slash exposed side damage (485/485)
+PASS slash cover prevents HIT (500/500)
+PASS slash range/shape excludes outside (500/500)
+PASS slash visual created
+PASS slash visual components valid
+PASS slash visual mesh colors/UV/triangles supplied
+PASS slash visual visible material
+PASS SCIABOLATA excludes rear semicircle (500/500)
+PASS slash visual expires
+PASS RUN fixture PG01
+PASS Acquired mines
+PASS mines damage before blocker (490/490)
+PASS mines exposed side damage (490/490)
+PASS mines cover prevents HIT (500/500)
+PASS mines range/shape excludes outside (500/500)
+PASS mines visual created
+PASS mines visual components valid
+PASS mines visual mesh colors/UV/triangles supplied
+PASS mines visual visible material
+PASS mines visual expires
+PASS RUN fixture PG01
+PASS ZOMB03 actual delayed area damage (480/480)
+PASS ZOMB03 excludes MOB (500/500)
+PASS ZOMB03 protects covered PG (500/500)
+PASS ZOMB03 clipped visual created
+PASS ZOMB03 clipped visual components valid
+PASS ZOMB03 clipped visual mesh colors/UV/triangles supplied
+PASS ZOMB03 clipped visual visible material
+PASS RUN fixture PG01
+PASS ZOMB05 PG damage (450/450)
+PASS ZOMB05 MOB damage (475/475)
+PASS ZOMB05 dies after explosion
+PASS ZOMB05 protects covered PG (500/500)
+PASS ZOMB05 clipped visual created
+PASS ZOMB05 clipped visual components valid
+PASS ZOMB05 clipped visual mesh colors/UV/triangles supplied
+PASS ZOMB05 clipped visual visible material
+AREA effects: PG01/03/05/06/07/08, circular BONUS effects, MINE, ZOMB03/05 and renderer regression. PG04 PYROMANIA has its dedicated regression suite.

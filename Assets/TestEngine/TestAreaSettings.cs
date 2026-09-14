@@ -8,6 +8,7 @@ namespace RogZombie.TestEngine
     {
         public Vector2 Position;
         public Vector2 Size;
+        public float Rotation;
         public bool Wall = true;
     }
 

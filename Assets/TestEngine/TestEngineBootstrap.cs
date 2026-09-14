@@ -60,6 +60,7 @@ namespace RogZombie.TestEngine
             var damageDebug = runtimeRoot.gameObject.AddComponent<DamageNumbersDebug>();
             damageDebug.Settings = Settings;
             damageDebug.ViewCamera = GameCamera;
+            runtimeRoot.gameObject.AddComponent<HealingNumbers>().ViewCamera = GameCamera;
             BuildGeometry();
             Navigation = runtimeRoot.gameObject.AddComponent<TestNavigation>();
             Navigation.AgentRadius = Settings.ActorRadius;
@@ -103,22 +104,20 @@ namespace RogZombie.TestEngine
         {
             Vector2 size = Settings.AreaSize;
             TestVisuals.Box("Test floor", Vector2.zero, size, new Color(0.09f, 0.12f, 0.13f), -10);
-            for (float x = -size.x * 0.5f; x <= size.x * 0.5f; x += 5f)
-                TestVisuals.Box("Grid", new Vector2(x, 0), new Vector2(0.05f, size.y), new Color(0.15f, 0.18f, 0.19f), -9);
-            for (float y = -size.y * 0.5f; y <= size.y * 0.5f; y += 5f)
-                TestVisuals.Box("Grid", new Vector2(0, y), new Vector2(size.x, 0.05f), new Color(0.15f, 0.18f, 0.19f), -9);
+            TestVisuals.FloorGrid(size);
             MakeObstacle(new Vector2(-size.x * 0.5f, 0), new Vector2(1f, size.y), true);
             MakeObstacle(new Vector2(size.x * 0.5f, 0), new Vector2(1f, size.y), true);
             MakeObstacle(new Vector2(0, -size.y * 0.5f), new Vector2(size.x, 1f), true);
             MakeObstacle(new Vector2(0, size.y * 0.5f), new Vector2(size.x, 1f), true);
             if (Settings.Obstacles != null)
-                foreach (var item in Settings.Obstacles) MakeObstacle(item.Position, item.Size, item.Wall);
+                foreach (var item in Settings.Obstacles) MakeObstacle(item.Position, item.Size, item.Wall, item.Rotation);
         }
 
-        private void MakeObstacle(Vector2 position, Vector2 size, bool wall)
+        private void MakeObstacle(Vector2 position, Vector2 size, bool wall, float rotation = 0)
         {
             var go = TestVisuals.Box(wall ? "MURO" : "OSTACOLO", position, size,
                 wall ? new Color(0.35f, 0.4f, 0.43f) : new Color(0.45f, 0.3f, 0.18f), 1);
+            go.transform.rotation = Quaternion.Euler(0, 0, rotation);
             go.AddComponent<BoxCollider2D>().size = size;
             go.AddComponent<TestObstacle>().IsWall = wall;
         }
@@ -156,7 +155,7 @@ namespace RogZombie.TestEngine
         {
             Color[] colors = { new Color(0.4f, 0.7f, 0.4f), new Color(0.6f, 0.8f, 0.25f),
                 new Color(0.65f, 0.35f, 0.8f), new Color(1f, 0.45f, 0.55f), new Color(1f, 0.5f, 0.15f) };
-            var go = TestVisuals.Box(Settings.Mobs[index].Kind.ToString(), position, Vector2.one * Settings.ActorRadius * 2f, colors[index], 2);
+            var go = TestVisuals.Circle(Settings.Mobs[index].Kind.ToString(), position, Settings.ActorRadius, colors[index], 2);
             go.AddComponent<CircleCollider2D>().radius = Settings.ActorRadius;
             var actor = go.AddComponent<Combatant>();
             var brain = go.AddComponent<MobBrain>();

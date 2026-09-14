@@ -55,7 +55,7 @@ namespace RogZombie.PreGameplayLoop
             {
                 bool valid = target.IsActive;
                 if (extra != null) extra.ResolveHit(target, damage, true, source, index);
-                else valid = target.Hit(damage, true, source);
+                else valid = target.Hit(damage, true, source, true);
                 if (!valid || owner == null) return;
                 owner.passive.BaseHit();
                 if (owner.Selected == PG08Ability.ColpiRespingenti && owner.ActiveRemaining > 0 && target.IsActive)

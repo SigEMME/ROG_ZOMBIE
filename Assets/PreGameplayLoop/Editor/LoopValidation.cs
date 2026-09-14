@@ -53,7 +53,7 @@ namespace RogZombie.PreGameplayLoop.Editor
         private static void OnPlayState(PlayModeStateChange state)
         {
             if (state == PlayModeStateChange.EnteredPlayMode && SessionState.GetBool(Key + "Running", false))
-            { step = 0; assertions = 0; started = EditorApplication.timeSinceStartup; loop = null; configured = false; }
+            { Application.runInBackground = true; step = 0; assertions = 0; started = EditorApplication.timeSinceStartup; loop = null; configured = false; }
             if (state == PlayModeStateChange.EnteredEditMode)
             {
                 if (SessionState.GetBool(Key + "Running", false)) Finish(false, "Test interrotto prima del completamento.");
@@ -83,6 +83,13 @@ namespace RogZombie.PreGameplayLoop.Editor
         {
             if (!EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling && File.Exists(Request))
             {
+                if (!SessionState.GetBool(Key + "Refreshed", false))
+                {
+                    SessionState.SetBool(Key + "Refreshed", true);
+                    AssetDatabase.Refresh(ImportAssetOptions.ForceSynchronousImport);
+                    return;
+                }
+                SessionState.EraseBool(Key + "Refreshed");
                 SessionState.SetString(Key + "Report", File.ReadAllText(Request).Trim());
                 File.Delete(Request);
                 Run();
@@ -103,6 +110,11 @@ namespace RogZombie.PreGameplayLoop.Editor
                     return;
                 }
                 foreach (var brain in UnityEngine.Object.FindObjectsByType<MobBrain>(FindObjectsSortMode.None)) brain.enabled = false;
+                if (loop != null && loop.BonusAbilities != null)
+                {
+                    loop.BonusAbilities.enabled = false;
+                    if (loop.Experience.Choices != null) { loop.Experience.Choose(0); return; }
+                }
                 if (loop.State == LoopState.Error) throw new InvalidOperationException(loop.Failure);
                 switch (step)
                 {
@@ -111,7 +123,7 @@ namespace RogZombie.PreGameplayLoop.Editor
                         Check(loop.Spawns.TotalSpawned == 30 && loop.Spawns.Alive == 30, "FIRST SPAWN A1 = 30");
                         Check(Combatant.All.FindAll(a => a.Faction == Faction.PG).Count == 1, "Exactly one PG");
                         Check(UnityEngine.Object.FindObjectsByType<AreaPickup>(FindObjectsSortMode.None).Length == 0, "No CHEST/MEDI KIT");
-                        Check(loop.Player.GetComponent<ExperienceProgression>() == null, "No out-of-scope level-up pauses");
+                        Check(loop.Player.GetComponent<ExperienceProgression>() != null, "RUN includes EXP and LEVEL UP choices");
                         foreach (var actor in Combatant.All)
                         {
                             if (actor.Faction != Faction.MOB) continue;
@@ -119,6 +131,8 @@ namespace RogZombie.PreGameplayLoop.Editor
                             Check(view.x < 0 || view.x > 1 || view.y < 0 || view.y > 1, "FIRST SPAWN off-screen");
                             Check(loop.Navigation.Reachable(actor.transform.position, loop.Player.transform.position), "Reachable spawn");
                         }
+                        // Clear street fixture for cone checks, independent of the CITY reference layout.
+                        loop.Player.transform.position = new Vector2(-6,-10);
                         var mob = Combatant.All.Find(a => a.Faction == Faction.MOB && a.IsActive);
                         mob.transform.position = loop.Player.transform.position + Vector3.right * 2;
                         var weapon = loop.Player.GetComponent<PlayerWeapon>();

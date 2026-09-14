@@ -13,6 +13,7 @@ namespace RogZombie.PreGameplayLoop
         private Vector2[] rainPoints;
         private float elapsed;
         private GameObject preview;
+        private GameObject activeAreaMarker;
         public bool IsAiming => preview != null;
         public PG07Ability Selected { get; private set; }
         public PG07Passive Passive { get; private set; }
@@ -55,27 +56,33 @@ namespace RogZombie.PreGameplayLoop
                 float hitDamage = piercing && index > 0 ? Mathf.Floor(damage * .5f + .5f) : damage;
                 bool valid = target.IsActive;
                 if (extra != null) extra.ResolveHit(target, hitDamage, true, source, index);
-                else valid = target.Hit(hitDamage, true, source);
+                else valid = target.Hit(hitDamage, true, source, true);
                 if (valid && owner != null && owner.Passive == PG07Passive.LuckyShot && owner.Roll(owner.data.LuckyChance)) owner.Lucky(point);
             }
         }
         private void Lucky(Vector2 center)
         {
             float damage = Mathf.Floor(actor.EffectiveStats.ATK * data.LuckyPercent / 100f + .5f);
-            Physics2D.SyncTransforms(); var sectors = AttackGeometry.ValidSectors(center, data.LuckyRadius, 4);
+            Physics2D.SyncTransforms();
             foreach (var target in Combatant.All.ToArray())
                 if (target != null && target.IsActive && target.Faction == Faction.MOB &&
-                    AttackGeometry.InValidSector((Vector2)target.transform.position - center, data.LuckyRadius, sectors)) target.Hit(damage, true, actor);
+                    AttackGeometry.InVisibleArea(center, data.LuckyRadius, target)) target.Hit(damage, true, actor);
             var go = new GameObject("LUCKY SHOT"); go.transform.SetParent(TestVisuals.Root, false); go.transform.position = center;
-            go.AddComponent<PG04AreaVisual>().Initialize(data.LuckyRadius, sectors, new Color(1, .9f, .1f, .4f)); Destroy(go, .15f);
+            go.AddComponent<PG04AreaVisual>().InitializeOccluded(center, data.LuckyRadius, new Color(1, .9f, .1f, .4f)); Destroy(go, .15f);
         }
         private void Update()
         {
-            if (!CanUse) { CancelAim(); return; }
+            if (!CanUse) { CancelAim(); if (session != null && session.Player != null && !session.Player.Actor.IsActive) ClearAreaMarker(); return; }
             cooldown.Tick(Time.deltaTime);
             if (!EffectActive) return;
             elapsed += Time.deltaTime;
             while (RainEmitted < rainPoints.Length && elapsed >= RainEmitted * data.RainDuration / (data.RainCount - 1)) EmitRain();
+            if (!EffectActive) ClearAreaMarker();
+        }
+        private void ClearAreaMarker()
+        {
+            if (activeAreaMarker != null) { activeAreaMarker.SetActive(false); Destroy(activeAreaMarker); }
+            activeAreaMarker = null;
         }
         public bool BeginAim(Vector2 cursor)
         {
@@ -126,6 +133,8 @@ namespace RogZombie.PreGameplayLoop
             }
             else
             {
+                ClearAreaMarker();
+                activeAreaMarker = PG04AreaVisual.CreateAreaMarker("Area attiva PIOGGIA DI FRECCE", cursor, data.RainRadius, new Color(1, .85f, .1f, .18f));
                 rainPoints = new Vector2[data.RainCount];
                 for (int i = 0; i < rainPoints.Length; i++) rainPoints[i] = cursor + UnityEngine.Random.insideUnitCircle * data.RainRadius;
                 elapsed = 0; RainEmitted = 0; EmitRain();
@@ -155,8 +164,8 @@ namespace RogZombie.PreGameplayLoop
             return chosen;
         }
         public void ChangeArea()
-        { CancelAim(); cooldown.ChangeArea(EffectActive, data.BaseCooldown(Selected), session.CdReduction); rainPoints = null; RainEmitted = 0; }
-        private void OnDisable() => CancelAim();
-        private void OnDestroy() { CancelAim(); if (data != null) Destroy(data); }
+        { CancelAim(); ClearAreaMarker(); cooldown.ChangeArea(EffectActive, data.BaseCooldown(Selected), session.CdReduction); rainPoints = null; RainEmitted = 0; }
+        private void OnDisable() { CancelAim(); ClearAreaMarker(); }
+        private void OnDestroy() { CancelAim(); ClearAreaMarker(); if (data != null) Destroy(data); }
     }
 }

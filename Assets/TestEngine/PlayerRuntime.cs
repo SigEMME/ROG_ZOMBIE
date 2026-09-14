@@ -22,6 +22,11 @@ namespace RogZombie.TestEngine
             GetComponent<PlayerMovement>().Configure(value);
         }
 
+        public void ApplyRunStat(int statIndex)
+        {
+            RogZombie.PreGameplayLoop.AreaStatBonus.Apply(Actor, (RogZombie.PreGameplayLoop.AreaStat)statIndex, ref cdReduction);
+        }
+
         public void ApplyChest(int statIndex)
         {
             if (Actor.State == LifeState.Dead) return;
