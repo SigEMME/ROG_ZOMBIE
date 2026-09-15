@@ -18,19 +18,25 @@ namespace RogZombie.PreGameplayLoop
         }
         private Mesh mesh;
         private Material material;
-        public void InitializeOccluded(Vector2 center, float radius, Color color, float rotation = 0, float sweep = 360)
+        private MeshFilter filter;
+        private MeshRenderer meshRenderer;
+        private readonly List<float> angles = new List<float>();
+        private readonly List<Vector3> vertices = new List<Vector3>();
+        private readonly List<int> triangles = new List<int>();
+        private readonly List<Color32> colors = new List<Color32>();
+        private readonly List<Vector2> uv = new List<Vector2>();
+        private readonly List<AttackGeometry.OcclusionBox> occluders = new List<AttackGeometry.OcclusionBox>();
+        public void InitializeOccluded(Vector2 center, float radius, Color color, float rotation = 0, float sweep = 360, float innerRadius = 0)
         {
-            var angles = new List<float>();
+            angles.Clear(); occluders.Clear();
             for (int i = 0; i <= Mathf.CeilToInt(sweep); i++) angles.Add(Mathf.Min(i, sweep));
             // Extra rays on both sides of blocker corners keep narrow shadows visible.
             foreach (var obstacle in TestObstacle.All)
             {
                 if (!obstacle.isActiveAndEnabled || obstacle.Bounds.SqrDistance(center) > radius * radius) continue;
-                var box = obstacle.GetComponent<BoxCollider2D>();
-                for (int x = -1; x <= 1; x += 2)
-                for (int y = -1; y <= 1; y += 2)
+                if (obstacle.Body.enabled) occluders.Add(new AttackGeometry.OcclusionBox(obstacle, center));
+                foreach (Vector2 corner in obstacle.WorldOutline())
                 {
-                    Vector2 corner = obstacle.transform.TransformPoint(box.offset + Vector2.Scale(box.size * .5f, new Vector2(x, y)));
                     Vector2 offset = corner - center;
                     float angle = Mathf.Atan2(offset.y, offset.x) * Mathf.Rad2Deg;
                     for (int side = -1; side <= 1; side++)
@@ -41,19 +47,25 @@ namespace RogZombie.PreGameplayLoop
                 }
             }
             angles.Sort();
-            var vertices = new List<Vector3> { Vector3.zero }; var triangles = new List<int>();
+            vertices.Clear(); triangles.Clear();
             foreach (float angle in angles)
             {
                 Vector2 direction = AttackGeometry.Direction(angle + rotation);
-                vertices.Add(direction * AttackGeometry.VisibleDistance(center, direction, radius));
+                float visible = AttackGeometry.VisibleDistance(direction, radius, occluders);
+                vertices.Add(direction * Mathf.Min(innerRadius, visible));
+                vertices.Add(direction * visible);
             }
             for (int i = 0; i < angles.Count - 1; i++)
-            { triangles.Add(0); triangles.Add(i + 1); triangles.Add(i + 2); }
+            {
+                int n = i * 2;
+                triangles.Add(n); triangles.Add(n + 1); triangles.Add(n + 3);
+                triangles.Add(n); triangles.Add(n + 3); triangles.Add(n + 2);
+            }
             RenderMesh(vertices, triangles, color);
         }
         public void Initialize(float radius, bool[] valid, Color color)
         {
-            var vertices = new List<Vector3>(); var triangles = new List<int>();
+            vertices.Clear(); triangles.Clear();
             for (int sector = 0; sector < valid.Length; sector++)
             {
                 if (!valid[sector]) continue;
@@ -69,32 +81,38 @@ namespace RogZombie.PreGameplayLoop
             }
             RenderMesh(vertices, triangles, color);
         }
+        public void InitializePolygon(IList<Vector2> outline, Color color, int order)
+        {
+            vertices.Clear(); triangles.Clear(); vertices.Add(Vector3.zero);
+            foreach (var point in outline) vertices.Add(point);
+            for (int i = 0; i < outline.Count; i++)
+            { triangles.Add(0); triangles.Add(i + 1); triangles.Add((i + 1) % outline.Count + 1); }
+            RenderMesh(vertices, triangles, color); meshRenderer.sortingOrder = order;
+        }
         private void RenderMesh(List<Vector3> vertices, List<int> triangles, Color color)
         {
-            if (mesh != null) Destroy(mesh);
-            if (material != null) Destroy(material);
-            mesh = new Mesh { name = "PG04 temporary area" };
+            if (mesh == null) { mesh = new Mesh { name = "PG04 temporary area" }; mesh.MarkDynamic(); }
+            else mesh.Clear();
             // Sprites/Default multiplies its tint by vertex COLOR and samples TEXCOORD0.
             // Supply both explicitly for procedural meshes, including each burning-area rebuild.
-            var colors = new Color32[vertices.Count];
-            var uv = new Vector2[vertices.Count];
+            colors.Clear(); uv.Clear();
             for (int i = 0; i < vertices.Count; i++)
             {
-                colors[i] = new Color32(255, 255, 255, 255);
-                uv[i] = new Vector2(.5f, .5f);
+                colors.Add(new Color32(255, 255, 255, 255));
+                uv.Add(new Vector2(.5f, .5f));
             }
-            mesh.SetVertices(vertices); mesh.colors32 = colors; mesh.uv = uv;
+            mesh.SetVertices(vertices); mesh.SetColors(colors); mesh.SetUVs(0, uv);
             mesh.SetTriangles(triangles, 0); mesh.RecalculateNormals(); mesh.RecalculateBounds();
             // Unity's missing-component wrappers use its overloaded null comparison.
             // ?? can retain that wrapper and throw before the burning area is created.
-            var filter = GetComponent<MeshFilter>();
+            if (filter == null) filter = GetComponent<MeshFilter>();
             if (filter == null) filter = gameObject.AddComponent<MeshFilter>();
             filter.sharedMesh = mesh;
-            var renderer = GetComponent<MeshRenderer>();
-            if (renderer == null) renderer = gameObject.AddComponent<MeshRenderer>();
-            material = new Material(Shader.Find("Sprites/Default"));
+            if (meshRenderer == null) meshRenderer = GetComponent<MeshRenderer>();
+            if (meshRenderer == null) meshRenderer = gameObject.AddComponent<MeshRenderer>();
+            if (material == null) material = new Material(Shader.Find("Sprites/Default"));
             material.mainTexture = Texture2D.whiteTexture; material.color = color;
-            renderer.sharedMaterial = material; renderer.sortingOrder = 1;
+            meshRenderer.sharedMaterial = material; meshRenderer.sortingOrder = 1;
         }
         private void OnDestroy() { if (mesh != null) Destroy(mesh); if (material != null) Destroy(material); }
     }

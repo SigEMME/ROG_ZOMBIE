@@ -1,0 +1,84 @@
+FAIL | Unity 6000.3.16f1 | checks=77 | warnings=0
+PASS RUN fixture PG01
+PASS PG01 actual cone attack
+PASS PG01 cone full damage (480/480)
+PASS PG01 cone wall shield (500/500)
+PASS PG01 cone excludes rear (500/500)
+PASS Actual PESTONE activation
+PASS PESTONE damage (440/440)
+PASS PESTONE 30 percent SLOW (1,4/1,4)
+PASS PESTONE covered MOB untouched (500/500)
+PASS PESTONE no SLOW through cover
+PASS PESTONE SLOW expires (2/2)
+PASS RUN fixture PG01
+PASS BARRIERA preview
+PASS BARRIERA preview has no collider
+PASS BARRIERA release activation
+PASS BARRIERA exists
+PASS BARRIERA collider and visual
+PASS BARRIERA blocks circular area line (2,5/2,5)
+PASS BARRIERA expires
+PASS RUN fixture PG03
+PASS LASER 35 damage (465/465)
+PASS LASER retains cover exception (465/465)
+PASS LASER excludes rear (500/500)
+PASS LASER visible rectangle
+PASS RUN fixture PG05
+PASS PG05 actual area attack
+PASS PG05 cone damage (470/470)
+PASS PG05 cone cover (500/500)
+PASS PG05 excludes rear (500/500)
+PASS RUN fixture PG06
+PASS CURA AD AREA activation
+PASS CURA heals ally through wall (440/440)
+PASS CURA excludes outside (400/400)
+PASS CURA excludes MOB (500/500)
+PASS CURA includes source (110/110)
+PASS CURA applies VITAMINA C
+PASS RUN fixture PG07
+PASS LUCKY SHOT exposed MOB damage (491/491)
+PASS LUCKY SHOT covered MOB (500/500)
+PASS LUCKY SHOT outside radius (500/500)
+PASS LUCKY SHOT visual created
+PASS LUCKY SHOT visual components valid
+PASS LUCKY SHOT visual mesh colors/UV/triangles supplied
+PASS LUCKY SHOT visual visible material
+PASS Arrow impact retains wall/obstacle exception (490/490)
+PASS Arrow rain preview
+PASS Arrow rain preview visual created
+PASS Arrow rain preview visual components valid
+PASS Arrow rain preview visual mesh colors/UV/triangles supplied
+PASS Arrow rain preview visual visible material
+PASS Arrow rain release
+PASS Arrow rain distribution visual created
+PASS Arrow rain distribution visual components valid
+PASS Arrow rain distribution visual mesh colors/UV/triangles supplied
+PASS Arrow rain distribution visual visible material
+PASS Arrow distribution marker expires
+PASS RUN fixture PG08
+PASS FILO SPINATO activation
+PASS FILO SPINATO visual created
+PASS FILO SPINATO visual components valid
+PASS FILO SPINATO visual mesh colors/UV/triangles supplied
+PASS FILO SPINATO visual visible material
+PASS Wire all sections valid in open space (10/10)
+PASS Wire no immediate damage (500/500)
+PASS Wire 40 percent SLOW (1,2/1,2)
+PASS Wire central hole excluded (2/2)
+PASS Wire wall between center and ring shields target
+PASS Wire cover removes SLOW immediately (2/2)
+PASS Wire visible target in same old sector remains affected
+PASS Wire covered target receives no tick damage (500/500)
+PASS Wire adjacent visible target receives damage (490/490)
+PASS Wire removal of cover restores coverage
+PASS Second overlapping wire
+PASS Wire overlaps do not duplicate damage (490/490)
+PASS Wire overlaps do not stack SLOW (1,2/1,2)
+PASS Wire duration pauses (2,798/2,798)
+PASS Wire ticks pause (490/490)
+System.InvalidOperationException: Wire exit removes SLOW (1,2/2)
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation.Check (System.Boolean condition, System.String message) [0x0002a] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:118
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation.Near (System.Single actual, System.Single expected, System.String message, System.Single tolerance) [0x00000] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:121
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation+<WireChecks>d__28.MoveNext () [0x003f1] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:295
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation+<Flatten>d__22.MoveNext () [0x00044] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:170
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation.Tick () [0x00168] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:108

@@ -18,6 +18,8 @@ namespace RogZombie.TestEngine
         private float pestoneSlowUntil;
         private float pestoneSlowPercent;
         private Combatant lethalSource;
+        private float resurrectionProtectionUntil;
+        public float ResurrectionProtectionRemaining => Mathf.Max(0, resurrectionProtectionUntil - Time.time);
 
         public event Action<Combatant, float> BaseHitLanded;
         public Func<float, float> BaseHitDamage { get; set; }
@@ -79,6 +81,7 @@ namespace RogZombie.TestEngine
         {
             faction = side;
             lethalSource = null;
+            resurrectionProtectionUntil = 0;
             HitEffect?.AfterHit();
             pestoneSlowUntil = 0f;
             pestoneSlowPercent = 0f;
@@ -103,7 +106,7 @@ namespace RogZombie.TestEngine
         // the already validated legacy attacks in this prototype.
         public bool Hit(float attack, bool roundFinalDamage, Combatant source = null, bool baseAttack = false)
         {
-            if (!IsActive) return false;
+            if (!IsActive || ResurrectionProtectionRemaining > 0) return false;
             if (baseAttack && source != null && source.BaseHitDamage != null) attack = source.BaseHitDamage(attack);
             float incoming = IncomingHitDamage != null ? IncomingHitDamage(attack) : attack;
             float damage = DamageMath.Calculate(incoming, EffectiveStats.DEF);
@@ -137,6 +140,17 @@ namespace RogZombie.TestEngine
             currentHP = Mathf.Min(stats.HP, currentHP + stats.HP * fraction);
             float recovered = currentHP - previousHP;
             if (recovered > 0) HealingApplied?.Invoke(this, recovered);
+            return true;
+        }
+
+        public bool Resurrect()
+        {
+            if (faction != Faction.PG || (state != LifeState.Down && state != LifeState.Dead)) return false;
+            lethalSource = null;
+            currentHP = EffectiveStats.HP * .5f;
+            resurrectionProtectionUntil = Time.time + 2f;
+            if (body != null) body.enabled = true;
+            ChangeState(LifeState.Active);
             return true;
         }
 
@@ -176,6 +190,7 @@ namespace RogZombie.TestEngine
             MoveBody(displacement);
         }
 
+        private readonly System.Collections.Generic.List<RaycastHit2D> movementHits = new System.Collections.Generic.List<RaycastHit2D>();
         private void MoveBody(Vector2 displacement)
         {
             // Hard sweeps handle walls and PG contact; MobSeparation steers around MOB neighbours.
@@ -186,12 +201,14 @@ namespace RogZombie.TestEngine
                 float distance = displacement.magnitude;
                 Vector2 direction = displacement / distance;
                 RaycastHit2D? closest = null;
-                foreach (var hit in Physics2D.CircleCastAll(position, Radius, direction, distance))
+                var filter = ContactFilter2D.noFilter;
+                filter.SetLayerMask(Physics2D.DefaultRaycastLayers); filter.useTriggers = Physics2D.queriesHitTriggers;
+                Physics2D.CircleCast(position, Radius, direction, filter, movementHits, distance);
+                foreach (var hit in movementHits)
                 {
                     if (hit.collider == body) continue;
                     var other = hit.collider.GetComponent<Combatant>();
                     bool blocks = hit.collider.GetComponent<TestObstacle>() != null ||
-                        (faction == Faction.MOB && hit.collider.GetComponent<RogZombie.PreGameplayLoop.BonusPet>() != null) ||
                         (other != null && other.state != LifeState.Dead &&
                          (faction == Faction.PG || other.faction == Faction.PG));
                     if (!blocks || Vector2.Dot(direction, hit.normal) >= -0.001f) continue;

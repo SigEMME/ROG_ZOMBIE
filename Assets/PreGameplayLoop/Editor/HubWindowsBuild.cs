@@ -15,6 +15,12 @@ namespace RogZombie.PreGameplayLoop.Editor
         private static void CheckRequest()
         {
             if (EditorApplication.isCompiling || EditorApplication.isUpdating || EditorApplication.isPlayingOrWillChangePlaymode || !File.Exists(Request)) return;
+            string requestedVersion = File.ReadAllText(Request).Trim();
+            if (Version.TryParse(requestedVersion, out _))
+            {
+                PlayerSettings.bundleVersion = requestedVersion;
+                AssetDatabase.SaveAssets();
+            }
             File.Delete(Request);
             Build();
         }
@@ -23,7 +29,7 @@ namespace RogZombie.PreGameplayLoop.Editor
         public static void Build()
         {
             if (EditorApplication.isPlayingOrWillChangePlaymode || BuildPipeline.isBuildingPlayer) return;
-            string output = Path.GetFullPath("Builds/Windows-HUB-" + DateTime.Now.ToString("yyyyMMdd-HHmmss"));
+            string output = Path.GetFullPath("Builds/ROG_ZOMBIE-v" + PlayerSettings.bundleVersion + "-" + DateTime.Now.ToString("yyyyMMdd-HHmmss"));
             Directory.CreateDirectory(output);
             string reportPath = Path.Combine(output, "Build-report.txt");
             try
@@ -37,7 +43,7 @@ namespace RogZombie.PreGameplayLoop.Editor
                 });
                 var summary = report.summary;
                 var text = new StringBuilder();
-                text.AppendLine($"Result: {summary.result} | Unity {Application.unityVersion}");
+                text.AppendLine($"Result: {summary.result} | Unity {Application.unityVersion} | Version: {PlayerSettings.bundleVersion}");
                 text.AppendLine($"Errors: {summary.totalErrors} | Warnings: {summary.totalWarnings} | Size: {summary.totalSize} bytes | Time: {summary.totalTime}");
                 text.AppendLine("Windows x64 Development | Initial scene: Assets/Scenes/HubPrototype.unity");
                 foreach (var step in report.steps)

@@ -1,0 +1,158 @@
+PASS | Unity 6000.3.16f1 | checks=156 | warnings=0
+PASS RUN fixture PG01
+PASS ZOMB01 ignores invisible PG
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 moves at 30 percent speed (0,27/0,27)
+PASS ZOMB01 preserves persistent MOVE SPD (90/90)
+PASS ZOMB01 direction retained before interval expires (1,5/1,5)
+PASS ZOMB01 SLOW combines with wandering (0,189/0,189)
+PASS ZOMB01 wall blocks movement (y=0,554, radius=0,35)
+PASS ZOMB01 pause stops wandering (0/0)
+PASS ZOMB01 STUN stops wandering (0/0)
+PASS ZOMB01 visible PG reacquired
+PASS ZOMB01 reacquisition clears wandering timer (0/0)
+PASS ZOMB01 losing PG returns to wandering
+PASS ZOMB02 ignores invisible PG
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 random duration in 1-3 s
+PASS ZOMB02 moves at 30 percent speed (0,27/0,27)
+PASS ZOMB02 preserves persistent MOVE SPD (90/90)
+PASS ZOMB02 direction retained before interval expires (1,5/1,5)
+PASS ZOMB02 SLOW combines with wandering (0,189/0,189)
+PASS ZOMB02 wall blocks movement (y=0,554, radius=0,35)
+PASS ZOMB02 pause stops wandering (0/0)
+PASS ZOMB02 STUN stops wandering (0/0)
+PASS ZOMB02 visible PG reacquired
+PASS ZOMB02 reacquisition clears wandering timer (0/0)
+PASS ZOMB02 losing PG returns to wandering
+PASS ZOMB03 ignores invisible PG
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 random duration in 1-3 s
+PASS ZOMB03 moves at 30 percent speed (0,27/0,27)
+PASS ZOMB03 preserves persistent MOVE SPD (90/90)
+PASS ZOMB03 direction retained before interval expires (1,5/1,5)
+PASS ZOMB03 SLOW combines with wandering (0,189/0,189)
+PASS ZOMB03 wall blocks movement (y=0,554, radius=0,35)
+PASS ZOMB03 pause stops wandering (0/0)
+PASS ZOMB03 STUN stops wandering (0/0)
+PASS ZOMB03 visible PG reacquired
+PASS ZOMB03 reacquisition clears wandering timer (0/0)
+PASS ZOMB03 losing PG returns to wandering
+PASS ZOMB04 ignores invisible PG
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 random duration in 1-3 s
+PASS ZOMB04 moves at 30 percent speed (0,27/0,27)
+PASS ZOMB04 preserves persistent MOVE SPD (90/90)
+PASS ZOMB04 direction retained before interval expires (1,5/1,5)
+PASS ZOMB04 SLOW combines with wandering (0,189/0,189)
+PASS ZOMB04 wall blocks movement (y=0,554, radius=0,35)
+PASS ZOMB04 pause stops wandering (0/0)
+PASS ZOMB04 STUN stops wandering (0/0)
+PASS ZOMB04 visible PG reacquired
+PASS ZOMB04 reacquisition clears wandering timer (0/0)
+PASS ZOMB04 losing PG returns to wandering
+PASS ZOMB05 ignores invisible PG
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 random duration in 1-3 s
+PASS ZOMB05 moves at 30 percent speed (0,27/0,27)
+PASS ZOMB05 preserves persistent MOVE SPD (90/90)
+PASS ZOMB05 direction retained before interval expires (1,5/1,5)
+PASS ZOMB05 SLOW combines with wandering (0,189/0,189)
+PASS ZOMB05 wall blocks movement (y=0,554, radius=0,35)
+PASS ZOMB05 pause stops wandering (0/0)
+PASS ZOMB05 STUN stops wandering (0/0)
+PASS ZOMB05 visible PG reacquired
+PASS ZOMB05 reacquisition clears wandering timer (0/0)
+PASS ZOMB05 losing PG returns to wandering
+MOB ZOMB01-05: wandering without target, random 1-3 s direction, 30 percent speed, SLOW, collision, pause, STUN and target reacquisition.

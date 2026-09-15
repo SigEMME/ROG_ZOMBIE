@@ -79,7 +79,7 @@ namespace RogZombie.PreGameplayLoop
             GUI.Label(new Rect(exit.x - 60, exit.y - 60, 120, 120), "EXIT\n[F]", centre);
             Vector2 position = origin + new Vector2(hub.HubPosition.x * 60, -hub.HubPosition.y * 60);
             Fill(new Rect(position.x - 18, position.y - 18, 36, 36), blue);
-            GUI.Label(new Rect(240, 760, 1040, 50), hub.AtExit ? "Premi F per PREPARAZIONE RUN" : "Un solo PG nella RUN · ROSTER interamente sbloccato", centre);
+            GUI.Label(new Rect(240, 760, 1040, 50), hub.AtExit ? "Premi F per PREPARAZIONE RUN" : "PLAYER + 1 PG IA opzionale · ROSTER interamente sbloccato", centre);
         }
         private string PGLabel => hub.Selection.Player < 0 ? "SELEZIONA PG" : "PG" + (hub.Selection.Player + 1).ToString("00");
         private string OptionLabel(bool passive)
@@ -93,15 +93,20 @@ namespace RogZombie.PreGameplayLoop
             for (int i = 0; i < 4; i++)
             {
                 float x = 126 + i * 360;
-                Outline(new Rect(x, 98, 190, 36), blue); GUI.Label(new Rect(x, 98, 190, 36), i == 0 ? "PLAYER 1" : "POSTO " + (i + 1), centre);
-                string label = i == 0 ? PGLabel + (hub.Selection.Player >= 0 ? "\n" + hub.Text.Characters[hub.Selection.Player].Name : "") : "BLOCCATO";
-                if (BoxButton(new Rect(x, 143, 190, 315), label, red, i == 0)) hub.Selection.OpenBanner(i);
-                if (i != 0) continue;
-                Outline(new Rect(x, 477, 40, 42), green); GUI.Label(new Rect(x + 45, 477, 160, 45), "ITEM VUOTO", text);
-                DrawOptionCircle(new Rect(x, 537, 82, 82), "Q", yellow, false);
+                bool available = i < 2;
+                var member = available ? hub.Selection.GetMember(i) : null;
+                string pg = member == null || member.Player < 0 ? "SELEZIONA PG" : "PG" + (member.Player + 1).ToString("00");
+                Outline(new Rect(x, 98, 190, 36), blue); GUI.Label(new Rect(x, 98, 190, 36), i == 0 ? "PLAYER 1" : i == 1 ? "PG IA 1" : "POSTO " + (i + 1), centre);
+                string label = available ? pg + (member.Player >= 0 ? "\n" + hub.Text.Characters[member.Player].Name : "") : "BLOCCATO";
+                if (i == 1 && !hub.Selection.CompanionEnabled) label = "AGGIUNGI PG IA";
+                if (BoxButton(new Rect(x, 143, 190, 315), label, red, available)) hub.Selection.OpenBanner(i);
+                if (!available) continue;
+                if (i == 0) { Outline(new Rect(x, 477, 40, 42), green); GUI.Label(new Rect(x + 45, 477, 160, 45), "ITEM VUOTO", text); }
+                else if (hub.Selection.CompanionEnabled && BoxButton(new Rect(x, 477, 190, 42), "RIMUOVI IA", purple)) hub.Selection.RemoveCompanion();
+                DrawOptionCircle(new Rect(x, 537, 82, 82), i == 0 ? "Q" : "SPACE\n+1", yellow, false);
                 DrawOptionCircle(new Rect(x + 108, 537, 82, 82), "P", pink, false);
-                GUI.Label(new Rect(x - 50, 622, 295, 72), OptionLabel(false) + "\n" + OptionLabel(true), centre);
-                GUI.Label(new Rect(x - 55, 690, 305, 40), hub.Selection.Confirmed ? "CONFERMATO" : "DA CONFERMARE", centre);
+                if (member.Complete && (i == 0 || hub.Selection.CompanionEnabled)) GUI.Label(new Rect(x - 50, 622, 295, 72), hub.Text.Characters[member.Player].Options[member.Ability].Name + "\n" + hub.Text.Characters[member.Player].Options[2 + member.Passive].Name, centre);
+                GUI.Label(new Rect(x - 55, 690, 305, 40), i == 1 && !hub.Selection.CompanionEnabled ? "OPZIONALE" : member.Confirmed ? "CONFERMATO" : "DA CONFERMARE", centre);
             }
             if (BoxButton(new Rect(506, 735, 398, 85), "CONFERMA PREPARAZIONE\nAVVIA RUN", Color.gray, hub.Selection.CanStart)) hub.BeginRun();
             if (BoxButton(new Rect(40, 800, 170, 44), "INDIETRO", purple)) hub.Selection.Back();
@@ -110,7 +115,7 @@ namespace RogZombie.PreGameplayLoop
         {
             if (selected) Fill(new Rect(rect.x + 20, rect.y + 20, rect.width - 40, rect.height - 40), new Color(1, .96f, .75f));
             var previous = GUI.color; GUI.color = color; GUI.DrawTexture(rect, circle); GUI.color = previous;
-            GUI.Label(new Rect(rect.x + 13, rect.y + 15, rect.width - 26, rect.height - 30), label, new GUIStyle(centre) { fontSize = 14 });
+            GUI.Label(new Rect(rect.x + 13, rect.y + 15, rect.width - 26, rect.height - 30), label, new GUIStyle(centre) { fontSize = label.StartsWith("SPACE") ? 11 : 14, padding = label.StartsWith("SPACE") ? new RectOffset(2, 2, 2, 2) : centre.padding });
             return enabled && GUI.Button(rect, GUIContent.none, GUIStyle.none);
         }
         private void DrawSelection()
@@ -135,7 +140,7 @@ namespace RogZombie.PreGameplayLoop
             for (int i = 0; i < 8; i++)
             {
                 Rect rect = new Rect(35 + (i % 4) * 154, 492 + (i / 4) * 152, 100, 120);
-                if (BoxButton(rect, "PG" + (i + 1).ToString("00"), model.Player == i ? green : red))
+                if (BoxButton(rect, "PG" + (i + 1).ToString("00"), model.Player == i ? green : red, model.IsAvailable(i)))
                 { model.SelectPlayer(i); descriptionScroll = Vector2.zero; }
             }
             for (int i = 0; i < 4; i++)

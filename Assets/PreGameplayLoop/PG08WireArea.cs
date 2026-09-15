@@ -7,43 +7,31 @@ namespace RogZombie.PreGameplayLoop
     public sealed class PG08WireArea : MonoBehaviour
     {
         private LoopSession session;
-        private bool[] valid;
         private float inner, outer;
-        private Mesh mesh;
-        private Material material;
         private bool ended;
+        private float nextVisualRefresh;
         private readonly HashSet<PG08WireContact> contacts = new HashSet<PG08WireContact>();
         public Combatant Source { get; private set; }
         public float ExpiresAt { get; private set; }
         public float Damage { get; private set; }
         public float Slow { get; private set; }
-        public int ValidSections { get; private set; }
         public float Remaining => ended ? 0 : Mathf.Max(0, ExpiresAt - Time.time);
         public bool Running => !ended && session != null && session.GameplayRunning;
         public void Initialize(LoopSession owner, Combatant source, PG08AbilityCatalog data)
         {
             session = owner; Source = source; outer = data.WireOuterRadius; inner = outer - data.WireThickness;
             Damage = data.WireDamage; Slow = data.WireSlow; ExpiresAt = Time.time + data.WireDuration;
-            valid = new bool[data.WireSections]; Physics2D.SyncTransforms();
-            for (int i = 0; i < valid.Length; i++)
-            {
-                valid[i] = true;
-                foreach (var obstacle in TestObstacle.All)
-                    if (obstacle.isActiveAndEnabled && PG08WireGeometry.BoxIntersects(obstacle.UnrotatePoint(transform.position), inner, outer, i * 360f / valid.Length - obstacle.transform.eulerAngles.z, 360f / valid.Length, obstacle.UnrotatedBounds))
-                    { valid[i] = false; break; }
-                if (valid[i]) ValidSections++;
-            }
-            if (ValidSections == 0) { End(); return; }
+            Physics2D.SyncTransforms();
             BuildVisual(); DetectContacts();
         }
         public bool Contains(Combatant actor)
         {
             if (ended || actor == null || !actor.IsActive || actor.Faction != Faction.MOB) return false;
-            Vector2 offset = actor.transform.position - transform.position;
-            for (int i = 0; i < valid.Length; i++)
-                if (valid[i] && PG08WireGeometry.CircleIntersects(offset, actor.Radius, inner, outer, i * 360f / valid.Length, 360f / valid.Length)) return true;
-            return false;
+            Vector2 center = transform.position;
+            return PG08WireGeometry.Contains(AttackGeometry.TargetCenter(actor) - center, inner, outer) &&
+                AttackGeometry.InVisibleArea(center, outer, actor);
         }
+
         private void DetectContacts()
         {
             foreach (var actor in Combatant.All.ToArray())
@@ -54,7 +42,15 @@ namespace RogZombie.PreGameplayLoop
                 contact.Enter(this); contacts.Add(contact);
             }
         }
-        private void Update() { if (Running && Remaining > 0) DetectContacts(); }
+        private void Update()
+        {
+            if (!Running || Remaining <= 0) return;
+            if (Time.time >= nextVisualRefresh)
+            {
+                BuildVisual(); nextVisualRefresh = Time.time + .1f;
+            }
+            DetectContacts();
+        }
         // Contact components process the final whole second before this ring disappears.
         private void LateUpdate() { if (Running && Remaining <= 0) End(); }
         public void End()
@@ -68,36 +64,9 @@ namespace RogZombie.PreGameplayLoop
         { foreach (var contact in contacts) if (contact != null) contact.Exit(this); contacts.Clear(); }
         private void BuildVisual()
         {
-            var vertices = new List<Vector3>(); var triangles = new List<int>();
-            for (int sector = 0; sector < valid.Length; sector++)
-            {
-                if (!valid[sector]) continue;
-                for (int part = 0; part < 18; part++)
-                {
-                    Vector2 a = AttackGeometry.Direction((sector + part / 18f) * 360f / valid.Length);
-                    Vector2 b = AttackGeometry.Direction((sector + (part + 1) / 18f) * 360f / valid.Length);
-                    int n = vertices.Count;
-                    vertices.Add(a * inner); vertices.Add(a * outer); vertices.Add(b * outer); vertices.Add(b * inner);
-                    triangles.Add(n); triangles.Add(n + 1); triangles.Add(n + 2); triangles.Add(n); triangles.Add(n + 2); triangles.Add(n + 3);
-                }
-            }
-            // Sprites/Default needs explicit vertex colors and UVs for this procedural ring,
-            // just like the shared area renderer. Keep the material tint as the only opacity.
-            var colors = new Color32[vertices.Count];
-            var uv = new Vector2[vertices.Count];
-            for (int i = 0; i < vertices.Count; i++)
-            {
-                colors[i] = new Color32(255, 255, 255, 255);
-                uv[i] = new Vector2(.5f, .5f);
-            }
-            mesh = new Mesh { name = "FILO SPINATO annulus" };
-            mesh.SetVertices(vertices); mesh.colors32 = colors; mesh.uv = uv;
-            mesh.SetTriangles(triangles, 0); mesh.RecalculateNormals(); mesh.RecalculateBounds();
-            gameObject.AddComponent<MeshFilter>().sharedMesh = mesh;
-            material = new Material(Shader.Find("Sprites/Default"))
-            { mainTexture = Texture2D.whiteTexture, color = new Color(.8f, .65f, .25f, .55f) };
-            var renderer = gameObject.AddComponent<MeshRenderer>(); renderer.sharedMaterial = material; renderer.sortingOrder = 1;
+            var visual = GetComponent<PG04AreaVisual>();
+            if (visual == null) visual = gameObject.AddComponent<PG04AreaVisual>();
+            visual.InitializeOccluded(transform.position, outer, new Color(.8f, .65f, .25f, .55f), innerRadius: inner);
         }
-        private void OnDestroy() { if (mesh != null) Destroy(mesh); if (material != null) Destroy(material); }
     }
 }

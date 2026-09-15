@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 namespace RogZombie.TestEngine
 {
@@ -9,6 +10,28 @@ namespace RogZombie.TestEngine
         public TestAreaSettings Settings;
         private Combatant actor;
         private int movingFrame = -1;
+        private struct NeighbourInfo
+        {
+            public Vector2 Normal;
+            public float Gap, Spacing, Radius;
+        }
+        private readonly List<NeighbourInfo> neighbours = new List<NeighbourInfo>();
+        private void ReadNeighbours(float displacement)
+        {
+            neighbours.Clear();
+            Vector2 position = transform.position;
+            float radius = actor.Radius;
+            foreach (var other in Combatant.All)
+            {
+                if (!Neighbour(other)) continue;
+                Vector2 away = position - (Vector2)other.transform.position;
+                float gap = away.magnitude;
+                float spacing = radius + other.Radius + Settings.MobSpacing;
+                // The later projections cannot increase the initial displacement length.
+                if (gap > Mathf.Max(spacing * 1.5f, spacing + displacement) + .000001f) continue;
+                neighbours.Add(new NeighbourInfo { Normal = Normal(away, other), Gap = gap, Spacing = spacing, Radius = other.Radius });
+            }
+        }
         private void Awake() => actor = GetComponent<Combatant>();
 
         public Vector2 Steer(Vector2 desired)
@@ -18,14 +41,13 @@ namespace RogZombie.TestEngine
             float distance = desired.magnitude;
             Vector2 direction = desired / distance;
             Vector2 avoidance = Vector2.zero;
-            foreach (var other in Combatant.All)
+            ReadNeighbours(distance);
+            foreach (var other in neighbours)
             {
-                if (!Neighbour(other)) continue;
-                Vector2 away = (Vector2)transform.position - (Vector2)other.transform.position;
-                float gap = away.magnitude;
-                float spacing = actor.Radius + other.Radius + Settings.MobSpacing;
+                float gap = other.Gap;
+                float spacing = other.Spacing;
                 if (gap > spacing * 1.5f) continue;
-                Vector2 normal = Normal(away, other);
+                Vector2 normal = other.Normal;
                 float approaching = Mathf.Max(0f, -Vector2.Dot(direction, normal));
                 float weight = Mathf.Clamp01((spacing * 1.5f - gap) / spacing);
                 // A lateral component lets followers flow around congestion instead of making a rigid wall.
@@ -37,13 +59,11 @@ namespace RogZombie.TestEngine
             // Keep the tangential motion, but prevent a fast step from crossing another centre.
             // Separation alone is insufficient when movement is faster than its correction budget.
             for (int pass = 0; pass < 2; pass++)
-                foreach (var other in Combatant.All)
+                foreach (var other in neighbours)
                 {
-                    if (!Neighbour(other)) continue;
-                    Vector2 away = (Vector2)transform.position - (Vector2)other.transform.position;
-                    float clearance = Mathf.Max(0f, away.magnitude - actor.Radius - other.Radius - Settings.MobSpacing);
+                    float clearance = Mathf.Max(0f, other.Gap - actor.Radius - other.Radius - Settings.MobSpacing);
                     if (clearance >= result.magnitude) continue;
-                    Vector2 normal = Normal(away, other);
+                    Vector2 normal = other.Normal;
                     float approach = -Vector2.Dot(result, normal);
                     if (approach > clearance) result += normal * (approach - clearance);
                 }

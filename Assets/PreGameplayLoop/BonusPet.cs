@@ -75,9 +75,7 @@ namespace RogZombie.PreGameplayLoop
                 foreach (var hit in Physics2D.CircleCastAll(position, body.radius, step.normalized, travel))
                 {
                     if (hit.collider == body) continue;
-                    var actor = hit.collider.GetComponent<Combatant>();
-                    bool blocks = hit.collider.GetComponent<TestObstacle>() != null || hit.collider.GetComponent<BonusPet>() != null ||
-                        actor != null && actor.Faction == Faction.MOB && actor.State != LifeState.Dead;
+                    bool blocks = hit.collider.GetComponent<TestObstacle>() != null || hit.collider.GetComponent<BonusPet>() != null;
                     if (blocks && Vector2.Dot(step.normalized, hit.normal) < 0) travel = Mathf.Min(travel, Mathf.Max(0, hit.distance - .001f));
                 }
                 transform.position = position + step.normalized * travel;

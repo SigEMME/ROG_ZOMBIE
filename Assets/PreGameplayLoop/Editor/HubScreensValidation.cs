@@ -71,7 +71,7 @@ namespace RogZombie.PreGameplayLoop.Editor
             var model = hub.Selection;
             Check(model.Page == PreparationPage.Hub, "Initial HUB page");
             model.OpenPreparation(); Check(!model.CanStart, "No start with empty selection");
-            for (int i = 1; i < 4; i++) Check(!model.OpenBanner(i), "Banner blocked " + (i + 1));
+            for (int i = 2; i < 4; i++) Check(!model.OpenBanner(i), "Banner blocked " + (i + 1));
             Check(model.OpenBanner(0), "First banner opens selection");
             Check(!model.ConfirmSelection(), "Cannot confirm empty selection");
             for (int pg = 0; pg < 8; pg++)
@@ -94,6 +94,14 @@ namespace RogZombie.PreGameplayLoop.Editor
                 model.OpenBanner(0); Check(!model.Confirmed && model.Ability == 1 && model.Passive == 1, "Reopening clears confirmation only " + pg);
             }
             model.SelectOption(false, 0); model.SelectOption(true, 0);
+            model.ConfirmSelection(); model.OpenBanner(1);
+            Check(!model.IsAvailable(7), "PLAYER PG excluded from IA roster");
+            model.SelectPlayer(0); model.SelectOption(false, 0); model.SelectOption(true, 1); model.ConfirmSelection();
+            Check(model.CanStart && model.CompanionEnabled, "IA banner confirms independent selection");
+            var party = model.CreateRunDefinition(hub.Definition);
+            Check(party.EnableCompanion && party.SelectedPlayer == LoopPlayer.PG08 && party.CompanionPlayer == LoopPlayer.PG01 && party.CompanionPassive == 1, "Party snapshot contains both PG selections");
+            UnityEngine.Object.Destroy(party);
+            model.RemoveCompanion(); Check(model.CanStart && !model.CompanionEnabled, "Optional companion removable without losing PLAYER confirmation");
             Check(hub.Run == null && UnityEngine.Object.FindFirstObjectByType<LoopSession>() == null, "Screen tests did not launch RUN");
         }
     }

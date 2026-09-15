@@ -111,7 +111,7 @@ namespace RogZombie.PreGameplayLoop
                     var mine = TestVisuals.Circle("MINE", point, .22f, Color.yellow, 2);
                     mine.layer = LayerMask.NameToLayer("TRIGGER_MOB");
                     mine.AddComponent<CircleCollider2D>().isTrigger = true;
-                    mine.GetComponent<CircleCollider2D>().radius = 1;
+                    mine.GetComponent<CircleCollider2D>().radius = BonusMine.TriggerRadius;
                     var placed = mine.AddComponent<BonusMine>();
                     placed.Initialize(session, actor, Value(id, "DANNO"), Value(id, "RAGGIO"), Value(id, "DURATA"));
                     mines.Add(placed);
@@ -173,7 +173,7 @@ namespace RogZombie.PreGameplayLoop
                     .Apply(session, actor, Value("fire", "BRUCIATURA"), Value("fire", "DURATA_BRUCIATURA"));
             if (inventory.Find("ricochet") == null) return;
             RicochetRolls++;
-            if (UnityEngine.Random.value < .4f) Bounce(target, damage);
+            if (UnityEngine.Random.value < .3f) Bounce(target, damage);
         }
         public void Bounce(Combatant first, float originalDamage)
         {

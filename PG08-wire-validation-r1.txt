@@ -1,0 +1,39 @@
+PASS | Unity 6000.3.16f1 | checks=37 | warnings=0
+PASS RUN fixture PG08
+PASS FILO SPINATO activation
+PASS FILO SPINATO visual created
+PASS FILO SPINATO visual components valid
+PASS FILO SPINATO visual mesh colors/UV/triangles supplied
+PASS FILO SPINATO visual visible material
+PASS Wire continuous annulus includes exposed target
+PASS Wire no immediate damage (500/500)
+PASS Wire 40 percent SLOW (1,2/1,2)
+PASS Wire central hole excluded (2/2)
+PASS Wire wall between center and ring shields target
+PASS Wire cover removes SLOW immediately (2/2)
+PASS Wire adjacent visible target remains affected
+PASS Wire covered target receives no tick damage (500/500)
+PASS Wire adjacent visible target receives damage (490/490)
+PASS Wire removal of cover restores coverage
+PASS Second overlapping wire
+PASS Wire overlaps do not duplicate damage (490/490)
+PASS Wire overlaps do not stack SLOW (1,2/1,2)
+PASS Wire duration pauses (2,797/2,797)
+PASS Wire ticks pause (490/490)
+PASS Wire exit removes SLOW (2/2)
+PASS Wire exit stops ticks (490/490)
+PASS Wire area change removes rings
+PASS RUN fixture PG08
+PASS Wire obstacle fixture activation
+PASS OSTACOLO shields target from fixed center
+PASS Wire excludes both radial boundaries beyond annulus
+PASS OSTACOLO prevents tick damage (500/500)
+PASS OSTACOLO prevents SLOW (2/2)
+PASS Wire SLOW returns after obstacle removal (1,2/1,2)
+PASS Wire expires after five seconds
+PASS Wire three complete contact seconds after late entry (470/470)
+PASS Wire natural expiry removes SLOW (2/2)
+PASS Wire active before RUN reset
+PASS RUN fixture PG08
+PASS RUN reset removes wire
+PG08 FILO SPINATO only: continuous annulus, cover, damage, SLOW, lifetime and cleanup.

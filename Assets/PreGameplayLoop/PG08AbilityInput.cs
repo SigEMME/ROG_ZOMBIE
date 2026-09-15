@@ -16,7 +16,7 @@ namespace RogZombie.PreGameplayLoop
             if (!held) passive.SetFireHeld(false);
             if (!ability.CanUse) return;
             passive.SetFireHeld(held && aim.TryGetCursorWorldPosition(out _));
-            if (Application.isFocused && !TestHUD.PointerOverControls && Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame)
+            if (Application.isFocused && !TestHUD.PointerOverControls && Keyboard.current != null && PartyCommands.Pressed(this))
                 ability.TryActivate();
         }
         private void OnApplicationFocus(bool focus) { if (!focus && passive != null) passive.SetFireHeld(false); }

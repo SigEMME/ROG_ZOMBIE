@@ -12,7 +12,7 @@ namespace RogZombie.PreGameplayLoop
         private void LateUpdate()
         {
             if (Application.isFocused && !TestHUD.PointerOverControls && Keyboard.current != null &&
-                Keyboard.current.qKey.wasPressedThisFrame && ability.CanUse && aim.TryGetCursorWorldPosition(out var cursor))
+                PartyCommands.Pressed(this) && ability.CanUse && aim.TryGetCursorWorldPosition(out var cursor))
                 ability.TryActivate(cursor);
         }
     }

@@ -1,0 +1,32 @@
+FAIL | Unity 6000.3.16f1 | checks=26 | warnings=0
+PASS RUN fixture PG01
+PASS ZOMB01 ignores invisible PG
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 random duration in 1-3 s
+PASS ZOMB01 moves at 30 percent speed (0,27/0,27)
+PASS ZOMB01 preserves persistent MOVE SPD (90/90)
+PASS ZOMB01 direction retained before interval expires (1,5/1,5)
+PASS ZOMB01 SLOW combines with wandering (0,189/0,189)
+System.InvalidOperationException: ZOMB01 wall blocks movement
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation.Check (System.Boolean condition, System.String message) [0x0002a] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:138 
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation+<WanderChecks>d__39.MoveNext () [0x0041d] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:331 
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation+<Flatten>d__33.MoveNext () [0x00044] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:193 
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation.Tick () [0x0021b] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:128 

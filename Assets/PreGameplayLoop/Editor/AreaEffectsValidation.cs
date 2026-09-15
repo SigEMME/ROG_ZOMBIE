@@ -15,17 +15,35 @@ namespace RogZombie.PreGameplayLoop.Editor
     {
         private const string Key = "ROG.Areas.";
         private static readonly string Request = Path.GetFullPath(".area-effects-test.request");
+        private static readonly string WireRequest = Path.GetFullPath(".pg08-wire-test.request");
+        private static readonly string CompanionRequest = Path.GetFullPath(".companion-test.request");
+        private static readonly string WanderRequest = Path.GetFullPath(".mob-wander-test.request");
+        private static readonly string CompositionRequest = Path.GetFullPath(".mob-composition-test.request");
+        private static bool CompositionOnly => SessionState.GetBool(Key + "CompositionOnly", false);
+        private static bool WanderOnly => SessionState.GetBool(Key + "WanderOnly", false);
+        private static bool CompanionOnly => SessionState.GetBool(Key + "CompanionOnly", false);
+        private static bool WireOnly => SessionState.GetBool(Key + "WireOnly", false);
         private static readonly List<string> results = new List<string>();
         private static IEnumerator routine;
         private static double started;
         private static LoopSession loop;
         private static int warnings;
+        private static bool companionInputPhase;
 
         static AreaEffectsValidation()
         {
             EditorApplication.update += Tick;
             EditorApplication.playModeStateChanged += PlayState;
             Application.logMessageReceived += Log;
+        }
+
+        [MenuItem("ROG ZOMBIE/Pre gameplay loop/Run companion prototype tests")]
+        public static void RunCompanion()
+        {
+            if (EditorApplication.isPlayingOrWillChangePlaymode || EditorApplication.isCompiling) return;
+            SessionState.SetBool(Key + "CompanionOnly", true);
+            SessionState.SetString(Key + "Report", Path.GetFullPath("COMPANION-validation.txt"));
+            Run();
         }
 
         [MenuItem("ROG ZOMBIE/Pre gameplay loop/Run AREA effects regression tests")]
@@ -40,7 +58,7 @@ namespace RogZombie.PreGameplayLoop.Editor
             var config = AssetDatabase.LoadAssetAtPath<LoopDefinition>("Assets/PreGameplayLoop/PreGameplayLoop.asset");
             SessionState.SetInt(Key + "PreviousPlayer", (int)config.SelectedPlayer);
             SessionState.SetBool(Key + "RestoreSelection", true);
-            config.SelectedPlayer = LoopPlayer.PG04;
+            config.SelectedPlayer = WireOnly ? LoopPlayer.PG08 : LoopPlayer.PG04;
             SessionState.SetBool(Key + "Running", true);
             EditorApplication.isPlaying = true;
         }
@@ -79,7 +97,7 @@ namespace RogZombie.PreGameplayLoop.Editor
 
         private static void Tick()
         {
-            if (!EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling && File.Exists(Request))
+            if (!EditorApplication.isPlayingOrWillChangePlaymode && !EditorApplication.isCompiling && (File.Exists(Request) || File.Exists(WireRequest) || File.Exists(CompanionRequest) || File.Exists(WanderRequest) || File.Exists(CompositionRequest)))
             {
                 if (!SessionState.GetBool(Key + "Refreshed", false))
                 {
@@ -88,8 +106,13 @@ namespace RogZombie.PreGameplayLoop.Editor
                     return;
                 }
                 SessionState.EraseBool(Key + "Refreshed");
-                SessionState.SetString(Key + "Report", File.ReadAllText(Request).Trim());
-                File.Delete(Request);
+                string request = File.Exists(CompositionRequest) ? CompositionRequest : File.Exists(WanderRequest) ? WanderRequest : File.Exists(CompanionRequest) ? CompanionRequest : File.Exists(WireRequest) ? WireRequest : Request;
+                SessionState.SetBool(Key + "CompanionOnly", request == CompanionRequest);
+                SessionState.SetBool(Key + "WireOnly", request == WireRequest);
+                SessionState.SetBool(Key + "WanderOnly", request == WanderRequest);
+                SessionState.SetBool(Key + "CompositionOnly", request == CompositionRequest);
+                SessionState.SetString(Key + "Report", File.ReadAllText(request).Trim());
+                File.Delete(request);
                 Run();
             }
             if (!SessionState.GetBool(Key + "Running", false) || !EditorApplication.isPlaying || routine == null) return;
@@ -97,7 +120,7 @@ namespace RogZombie.PreGameplayLoop.Editor
             {
                 if (EditorApplication.timeSinceStartup - started > 300) throw new TimeoutException("Ability test timeout.");
                 foreach (var brain in UnityEngine.Object.FindObjectsByType<MobBrain>(FindObjectsSortMode.None)) brain.enabled = false;
-                if (loop != null && loop.Player != null)
+                if (loop != null && loop.Player != null && !companionInputPhase)
                 {
                     foreach (var component in loop.Player.GetComponents<MonoBehaviour>())
                         if (component.GetType().Name.EndsWith("AbilityInput")) component.enabled = false;
@@ -105,7 +128,7 @@ namespace RogZombie.PreGameplayLoop.Editor
                     loop.Player.GetComponent<PlayerMovement>().enabled = false;
                     loop.Player.GetComponent<PlayerAim>().enabled = false;
                 }
-                if (!routine.MoveNext()) Finish(true, "AREA effects: PG01/03/05/06/07/08, circular BONUS effects, MINE, ZOMB03/05 and renderer regression. PG04 PYROMANIA has its dedicated regression suite.");
+                if (!routine.MoveNext()) Finish(true, CompositionOnly ? "Three actual AREA cycles, mixed MOB quotas/first spawn, shared circle/collider, colors, stats, drops, transition and third layout NavMesh. MOB brains disabled while draining populations; combat feel not tested." : WanderOnly ? "MOB ZOMB01-05: wandering without target, random 1-3 s direction, 30 percent speed, SLOW, collision, pause, STUN and target reacquisition." : CompanionOnly ? "Companion prototype: selection, formation, individual attacks, abilities, progression, AREA and RUN lifecycle." : WireOnly ? "PG08 FILO SPINATO only: continuous annulus, cover, damage, SLOW, lifetime and cleanup." : "AREA effects: PG01/03/05/06/07/08, circular BONUS effects, MINE, ZOMB03/05 and renderer regression. PG04 PYROMANIA has its dedicated regression suite.");
             }
             catch (Exception error) { Finish(false, error.ToString()); }
         }
@@ -129,6 +152,10 @@ namespace RogZombie.PreGameplayLoop.Editor
             File.WriteAllText(report, (passed ? "PASS" : "FAIL") + $" | Unity {Application.unityVersion} | checks={results.Count} | warnings={warnings}\n" +
                 string.Join("\n", results) + "\n" + detail);
             SessionState.EraseString(Key + "Report");
+            SessionState.EraseBool(Key + "WireOnly");
+            SessionState.EraseBool(Key + "WanderOnly");
+            SessionState.EraseBool(Key + "CompositionOnly");
+            SessionState.EraseBool(Key + "CompanionOnly");
             if (EditorApplication.isPlaying) EditorApplication.isPlaying = false;
         }
 
@@ -203,8 +230,13 @@ namespace RogZombie.PreGameplayLoop.Editor
             var original = loop.Definition; config = UnityEngine.Object.Instantiate(original); loop.Definition = config;
             try
             {
+                if (CompositionOnly) { yield return CompositionChecks(); yield break; }
+                if (WanderOnly) { yield return WanderChecks(); yield break; }
+                if (CompanionOnly) { yield return ResurrectionChecks(); yield return CompanionChecks(); yield break; }
+                if (WireOnly) { yield return WireChecks(); yield break; }
                 config.SelectedAbility = PG01Ability.Pestone;
                 yield return Start(LoopPlayer.PG01);
+                OptimizationChecks.Run(loop, Check); yield return null;
                 var near = Probe(new Vector2(1, 0)); var covered = Probe(new Vector2(3, 0)); var rear = Probe(new Vector2(-1, 0));
                 var block = Obstacle(new Vector2(2, 0), new Vector2(.2f, 1), true);
                 Check(loop.Player.GetComponent<PlayerWeapon>().TryFireAt(new Vector2(4, 0)), "PG01 actual cone attack");
@@ -220,7 +252,7 @@ namespace RogZombie.PreGameplayLoop.Editor
                 Check(loop.Ability.ReleaseAim(new Vector2(3, 0)), "BARRIERA release activation");
                 Check(loop.Ability.Barriers.Count == 1, "BARRIERA exists");
                 var barrier = loop.Ability.Barriers[0];
-                Check(barrier.GetComponent<BoxCollider2D>().enabled && barrier.GetComponent<SpriteRenderer>() != null, "BARRIERA collider and visual");
+                Check(barrier.Solid.enabled && barrier.GetComponent<MeshRenderer>() != null, "BARRIERA collider and visual");
                 Near(AttackGeometry.VisibleDistance(Vector2.zero, Vector2.right, 6), 2.5f, "BARRIERA blocks circular area line");
                 yield return Wait(5.1f); Check(!loop.Ability.EffectActive, "BARRIERA expires");
                 config.SelectedPG03Ability = PG03Ability.ColpoLaser;
@@ -234,7 +266,7 @@ namespace RogZombie.PreGameplayLoop.Editor
                 near = Probe(new Vector2(1, 0)); covered = Probe(new Vector2(2, 0)); rear = Probe(new Vector2(-1, 0));
                 block = Obstacle(new Vector2(1.5f, 0), new Vector2(.2f, 1), false);
                 Check(loop.Player.GetComponent<PlayerWeapon>().TryFireAt(new Vector2(2.5f, 0)), "PG05 actual area attack");
-                Near(near.CurrentHP, 470, "PG05 cone damage"); Near(covered.CurrentHP, 500, "PG05 cone cover"); Near(rear.CurrentHP, 500, "PG05 excludes rear");
+                Near(near.CurrentHP, 475, "PG05 cone damage (ATK 25)"); Near(covered.CurrentHP, 500, "PG05 cone cover"); Near(rear.CurrentHP, 500, "PG05 excludes rear");
                 config.SelectedPG06Ability = PG06Ability.CuraAdArea; config.SelectedPG06Passive = PG06Passive.VitaminaC;
                 yield return Start(LoopPlayer.PG06);
                 var ally = Probe(new Vector2(3, 0), Faction.PG); var outside = Probe(new Vector2(6, 0), Faction.PG); near = Probe(new Vector2(1, 0));
@@ -266,6 +298,305 @@ namespace RogZombie.PreGameplayLoop.Editor
             }
             finally { Time.timeScale = 1; loop.Definition = original; UnityEngine.Object.Destroy(config); }
         }
+        private static IEnumerator CompositionChecks()
+        {
+            config.EnableCompanion = false; config.SelectedPlayer = LoopPlayer.PG01;
+            Check(config.Validate() == null, "Mixed MOB configuration valid");
+            loop.RestartTest(); while (loop.State != LoopState.Combat) yield return null;
+            int expectedGold = 0;
+            for (int area = 0; area < 3; area++)
+            {
+                loop.BonusAbilities.enabled = false;
+                Check(loop.AreaIndex == area, "Correct AREA index " + area);
+                Near(loop.Settings.AreaSize.x, area == 2 ? 130 : 100, "AREA width");
+                Near(loop.Settings.AreaSize.y, area == 2 ? 130 : 100, "AREA height");
+                Check(loop.Navigation.Ready && loop.Navigation.Reachable(loop.Settings.StartPosition,config.ExitForArea(area)), "Spawn and exit connected on actual NavMesh");
+                var initial = new int[5]; foreach (var mob in Combatant.All) if (mob.Faction == Faction.MOB && mob.IsActive) initial[(int)mob.GetComponent<MobBrain>().Definition.Kind]++;
+                var expectedFirst = SpawnManager.Allocate(loop.Spawns.MaxSimultaneous,config.AreaMobDistributions[area].Percentages);
+                for (int type = 0; type < 5; type++) Near(initial[type],expectedFirst[type], "FIRST SPAWN type " + type);
+                var counts = new int[5]; var seen = new HashSet<Combatant>();
+                while (loop.State != LoopState.AreaComplete)
+                {
+                    if (loop.Experience.Choices != null) { loop.Experience.Choose(0); yield return null; continue; }
+                    foreach (var mob in Combatant.All.ToArray())
+                    {
+                        if (mob.Faction != Faction.MOB || !mob.IsActive || !seen.Add(mob)) continue;
+                        var definition = mob.GetComponent<MobBrain>().Definition; int type = (int)definition.Kind; counts[type]++;
+                        if (counts[type] == 1)
+                        {
+                            Near(mob.Radius,loop.Settings.ActorRadius,"Shared collider radius " + definition.Kind);
+                            var sprite = mob.GetComponent<SpriteRenderer>(); Near(sprite.sprite.bounds.extents.x,loop.Settings.ActorRadius,"Shared circular placeholder radius " + definition.Kind);
+                            Color expected = type == 0 ? new Color(.4f,.7f,.4f) : type == 1 ? new Color(1,.55f,.15f) : new Color(.7f,.35f,.9f);
+                            Check(sprite.color == expected,"Identification color " + definition.Kind);
+                            Near(mob.Stats.HP,definition.BaseStats.HP,"Own HP " + definition.Kind);
+                            Near(mob.Stats.MoveSpeed,type == 0 ? 90 : type == 1 ? 120 : 80,"GDD MOVE SPD " + definition.Kind);
+                        }
+                        expectedGold += definition.GoldDrop; mob.Die();
+                    }
+                    yield return null;
+                }
+                while (loop.Experience.Choices != null) { loop.Experience.Choose(0); yield return null; }
+                var expectedCounts = SpawnManager.Allocate(config.AreaTotals[area],config.AreaMobDistributions[area].Percentages);
+                for (int type = 0; type < 5; type++) Near(counts[type],expectedCounts[type],"Final AREA quota type " + type);
+                Near(loop.Gold,expectedGold,"Gold from actual MOB definitions");
+                loop.Player.transform.position=loop.Exit.transform.position; Call(loop,"OpenBonus");
+                Check(loop.State == LoopState.Bonus,"End AREA opens bonus"); loop.SelectBonus(0); loop.ConfirmBonus();
+                if (area < 2) { while (loop.State != LoopState.Combat) yield return null; }
+                else Check(loop.State == LoopState.Finished,"Third AREA completes test sequence");
+            }
+        }
+
+        private static IEnumerator WanderChecks()
+        {
+            config.EnableCompanion = false;
+            yield return Start(LoopPlayer.PG01);
+            var player = loop.Player.Actor; player.transform.position = Vector2.right * 20;
+            player.InvisibleQuery = () => true;
+            try
+            {
+                foreach (MobKind kind in Enum.GetValues(typeof(MobKind)))
+                {
+                    var definition = UnityEngine.Object.Instantiate(config.ZOMB01); definition.Kind = kind;
+                    var mob = Probe(Vector2.zero); var brain = mob.gameObject.AddComponent<MobBrain>();
+                    brain.Initialize(definition, loop.Navigation); brain.enabled = false;
+                    try
+                    {
+                        Call(brain, "ChooseTarget");
+                        Check(brain.GetType().GetField("target", Private).GetValue(brain) == null, kind + " ignores invisible PG");
+                        for (int i = 0; i < 20; i++)
+                        {
+                            Set(brain, "wanderRemaining", 0f); mob.transform.position = Vector2.zero;
+                            Call(brain, "Wander", .01f);
+                            float remaining = (float)brain.GetType().GetField("wanderRemaining", Private).GetValue(brain);
+                            Check(remaining >= .99f && remaining <= 2.99f, kind + " random duration in 1-3 s");
+                        }
+                        mob.transform.position = Vector2.zero; Set(brain, "wanderDirection", Vector2.up); Set(brain, "wanderRemaining", 2f);
+                        Call(brain, "Wander", .5f);
+                        Near(mob.transform.position.y, mob.MovementMetresPerSecond * .3f * .5f, kind + " moves at 30 percent speed");
+                        Near(mob.Stats.MoveSpeed, definition.BaseStats.MoveSpeed, kind + " preserves persistent MOVE SPD");
+                        Near((float)brain.GetType().GetField("wanderRemaining", Private).GetValue(brain), 1.5f, kind + " direction retained before interval expires");
+                        mob.ApplyPestoneSlow(30, 5); mob.transform.position = Vector2.zero;
+                        Call(brain, "Wander", .5f);
+                        Near(mob.transform.position.y, definition.BaseStats.MetresPerSecond * .7f * .3f * .5f, kind + " SLOW combines with wandering");
+                        mob.transform.position = Vector2.zero;
+                        var block = Obstacle(Vector2.up, new Vector2(4, .2f), true);
+                        yield return null; // Let Unity register the new physics shape before sweeping.
+                        Call(brain, "Wander", 2f);
+                        Check(mob.transform.position.y < .9f - mob.Radius + Physics2D.defaultContactOffset, kind + $" wall blocks movement (y={mob.transform.position.y:0.###}, radius={mob.Radius:0.###})");
+                        block.SetActive(false); UnityEngine.Object.Destroy(block);
+                        Vector3 before = mob.transform.position;
+                        Time.timeScale = 0; Call(brain, "Update"); Time.timeScale = 1;
+                        Near(Vector3.Distance(before, mob.transform.position), 0, kind + " pause stops wandering");
+                        brain.Stun(1); Call(brain, "Update");
+                        Near(Vector3.Distance(before, mob.transform.position), 0, kind + " STUN stops wandering");
+                        Set(brain, "stunnedUntil", 0f);
+                        player.InvisibleQuery = () => false; Call(brain, "ChooseTarget");
+                        Check(brain.GetType().GetField("target", Private).GetValue(brain) == (object)player, kind + " visible PG reacquired");
+                        Near((float)brain.GetType().GetField("wanderRemaining", Private).GetValue(brain), 0, kind + " reacquisition clears wandering timer");
+                        player.InvisibleQuery = () => true; Call(brain, "ChooseTarget");
+                        Check(brain.GetType().GetField("target", Private).GetValue(brain) == null, kind + " losing PG returns to wandering");
+                    }
+                    finally { mob.gameObject.SetActive(false); UnityEngine.Object.Destroy(mob.gameObject); UnityEngine.Object.Destroy(definition); }
+                }
+            }
+            finally { player.InvisibleQuery = null; Time.timeScale = 1; }
+        }
+
+        private static IEnumerator ResurrectionChecks()
+        {
+            config.EnableCompanion = true; config.CompanionPlayer = LoopPlayer.PG02;
+            yield return Start(LoopPlayer.PG01);
+            var buddy = loop.Companion; var main = loop.Player.Actor; var ally = buddy.Player.Actor;
+            buddy.Player.GetComponent<CompanionFormation>().enabled = false;
+            buddy.Player.transform.position = Vector2.right;
+            loop.enabled = false;
+            try
+            {
+                main.Hit(100000);
+                Near(loop.Resurrection.DownRemaining, 20, "DOWN starts at 20 s");
+                Check(main.GetComponent<CircleCollider2D>().enabled, "DOWN retains physical collider");
+                loop.TickResurrection(3, false);
+                Near(loop.Resurrection.DownRemaining, 17, "DOWN time elapses");
+                Check(loop.Controlled == buddy, "Control transfers to active IA");
+                loop.TickResurrection(2, true);
+                Near(loop.Resurrection.Progress, 2, "Controlled IA revives original PG");
+                Near(loop.Resurrection.DownRemaining, 17, "Reviving freezes DOWN");
+                loop.TickResurrection(1, false);
+                Near(loop.Resurrection.Progress, 1, "Progress regresses at 1 s per second");
+                Near(loop.Resurrection.DownRemaining, 16, "DOWN resumes exact residual timer");
+                loop.TickResurrection(0, true);
+                Near(loop.Resurrection.Progress, 1, "Zero delta preserves timers");
+                buddy.Player.transform.position = Vector2.right * 2.01f;
+                loop.TickResurrection(.5f, true);
+                Near(loop.Resurrection.Progress, .5f, "Out of radius interrupts interaction");
+                buddy.Player.transform.position = Vector2.right * 2;
+                Time.timeScale = 0; loop.TickResurrection(2, true);
+                Near(loop.Resurrection.Progress, .5f, "Pause freezes interaction"); Time.timeScale = 1;
+                var stats = main.Stats; stats.HP += 40; main.SetStats(stats);
+                loop.TickResurrection(4.5f, true);
+                Check(main.IsActive, "At exactly 5 seconds target resurrects");
+                Near(main.CurrentHP, main.EffectiveStats.HP * .5f, "Resurrection uses current maximum HP");
+                Check(loop.Controlled == loop, "Original PG immediately regains control");
+                Near(loop.Resurrection.Progress, 0, "Resurrection clears progress");
+                Check(main.ResurrectionProtectionRemaining > 1.9f, "Two seconds protection starts");
+                float health = main.CurrentHP; int hits = 0; System.Action onHit = () => hits++;
+                main.BeforeHit += onHit; Check(!main.Hit(100000, true), "Invulnerability rejects HIT");
+                Near(main.CurrentHP, health, "Invulnerability prevents damage"); Near(hits, 0, "Rejected HIT has no passive side effects"); main.BeforeHit -= onHit;
+                Check(main.GetComponent<CircleCollider2D>().enabled, "Protection retains physical collider");
+                yield return Wait(2.1f);
+                Check(main.Hit(100000, true), "HIT resumes after protection expires");
+                Near(loop.Resurrection.DownRemaining, 20, "Repeated DOWN resets timer");
+                loop.TickResurrection(20, false);
+                Check(main.State == LifeState.Dead, "DOWN expires into MORTE");
+                Check(!main.GetComponent<CircleCollider2D>().enabled, "MORTE disables collision");
+                loop.TickResurrection(5, true); Check(main.State == LifeState.Dead, "F cannot revive MORTE");
+                typeof(LoopSession).GetMethod("RestoreMemberForArea", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic).Invoke(null, new object[] { loop });
+                Near(main.CurrentHP, main.EffectiveStats.HP * .5f, "Area resurrection excludes extra 15 percent heal");
+                Check(main.GetComponent<CircleCollider2D>().enabled, "Area resurrection restores collision");
+                ally.Hit(100000); buddy.Player.transform.position = Vector2.right;
+                loop.TickResurrection(5, true); Check(ally.IsActive, "Original PLAYER revives IA");
+            }
+            finally { loop.enabled = true; Time.timeScale = 1; }
+            yield return Start(LoopPlayer.PG01);
+            Near(loop.Resurrection.DownRemaining, 0, "RUN reset clears DOWN timer");
+            Near(loop.Resurrection.Progress, 0, "RUN reset clears revival progress");
+            Near(loop.Player.Actor.ResurrectionProtectionRemaining, 0, "RUN reset clears protection");
+        }
+
+        private static IEnumerator CompanionChecks()
+        {
+            var selection = new RunPreparationSelection(); selection.OpenPreparation();
+            Check(selection.OpenBanner(0), "Open PLAYER banner"); selection.SelectPlayer(0); selection.SelectOption(false, 0); selection.SelectOption(true, 0); selection.ConfirmSelection();
+            Check(selection.OpenBanner(1), "Open IA banner"); Check(!selection.IsAvailable(0), "Already selected PG blocked for IA");
+            selection.SelectPlayer(1); selection.SelectOption(false, 0); selection.SelectOption(true, 1); selection.Back();
+            Check(!selection.CanStart && selection.GetMember(1).Player == 1, "Back preserves IA draft without confirmation");
+            selection.OpenBanner(1); selection.ConfirmSelection(); Check(selection.CanStart, "Both confirmed allow RUN");
+            var run = selection.CreateRunDefinition(config); Check(run.EnableCompanion && run.SelectedPlayer == LoopPlayer.PG01 && run.CompanionPlayer == LoopPlayer.PG02 && run.CompanionPassive == 1, "Separate configuration snapshot"); UnityEngine.Object.Destroy(run);
+            config.EnableCompanion = true;
+            for (int pg = 0; pg < 8; pg++)
+            for (int ability = 0; ability < 2; ability++)
+            {
+                config.CompanionPlayer = (LoopPlayer)pg; config.CompanionAbility = ability; config.CompanionPassive = ability;
+                yield return Start(pg == 0 ? LoopPlayer.PG02 : LoopPlayer.PG01);
+                var buddy = loop.Companion;
+                Check(buddy != null && buddy.Player.Definition.PlayerId == ((LoopPlayer)pg).ToString(), "IA selected " + pg + "/" + ability);
+                Check(buddy.Player.Actor != loop.Player.Actor && buddy.Bonuses != loop.Bonuses, "Independent actors and inventory");
+                Check(!buddy.Player.GetComponent<PlayerMovement>().enabled, "IA does not read WASD");
+                if (buddy.PG04Items != null) Near(buddy.PG04Items.SlotCount, 0, "IA has no item slots");
+                var formation = buddy.Player.GetComponent<CompanionFormation>(); formation.enabled = false;
+                buddy.Player.transform.SetPositionAndRotation(new Vector2(-1.5f, 0), Quaternion.identity);
+                buddy.Player.GetComponent<PlayerAim>().enabled = false; buddy.Player.GetComponent<PlayerWeapon>().enabled = false;
+                foreach (var c in buddy.Player.GetComponents<MonoBehaviour>()) if (c.GetType().Name.EndsWith("AbilityInput")) c.enabled = false;
+                Physics2D.SyncTransforms();
+                var weapon = buddy.Player.GetComponent<PlayerWeapon>();
+                Check(weapon.TryFireAt(new Vector2(8, 0)), "IA base attack " + pg); Check(!weapon.TryFireAt(new Vector2(8, 0)), "IA own cadence blocks immediate second shot");
+                if (buddy.Ability != null) { Ready(buddy.Ability); Check(ability == 0 ? buddy.Ability.TryPestone(new Vector2(5, 0)) : buddy.Ability.BeginAim(new Vector2(5, 0)) && buddy.Ability.ReleaseAim(new Vector2(5, 0)), "IA PG01 ability"); }
+                if (buddy.PG02Ability != null) { Ready(buddy.PG02Ability); Check(buddy.PG02Ability.TryActivate(new Vector2(5, 0)), "IA PG02 ability"); }
+                if (buddy.PG03Ability != null) { Ready(buddy.PG03Ability); Check(buddy.PG03Ability.TryActivate(new Vector2(5, 0)), "IA PG03 ability"); }
+                if (buddy.PG04Ability != null) { Ready(buddy.PG04Ability); Check(ability == 0 ? buddy.PG04Ability.BeginAim(new Vector2(5, 0)) && buddy.PG04Ability.ReleaseAim(new Vector2(5, 0)) : buddy.PG04Ability.TryActivate(new Vector2(5, 0)), "IA PG04 ability"); }
+                if (buddy.PG05Ability != null) { Ready(buddy.PG05Ability); Check(buddy.PG05Ability.TryActivate(new Vector2(5, 0)), "IA PG05 ability"); }
+                if (buddy.PG06Ability != null) { buddy.Player.Actor.Hit(10); Ready(buddy.PG06Ability); Check(buddy.PG06Ability.TryActivate(new Vector2(5, 0)), "IA PG06 ability"); }
+                if (buddy.PG07Ability != null) { Ready(buddy.PG07Ability); Check(ability == 1 ? buddy.PG07Ability.BeginAim(new Vector2(5, 0)) && buddy.PG07Ability.ReleaseAim(new Vector2(5, 0)) : buddy.PG07Ability.TryActivate(new Vector2(5, 0)), "IA PG07 ability"); }
+                if (buddy.PG08Ability != null) { Ready(buddy.PG08Ability); Check(buddy.PG08Ability.TryActivate(), "IA PG08 ability"); }
+                Check(loop.Player.Actor.HealthFraction == 1, "Companion actions preserve main HP");
+            }
+            config.CompanionPlayer = LoopPlayer.PG01; config.CompanionAbility = 1; config.CompanionPassive = 0;
+            yield return Start(LoopPlayer.PG02);
+            var controlledAI = loop.Companion; var adapter = controlledAI.Player.GetComponent<PG01AbilityInput>();
+            controlledAI.Player.GetComponent<CompanionFormation>().enabled = false;
+            controlledAI.Player.transform.position = new Vector2(-1.5f, 0);
+            var keyboard = UnityEngine.InputSystem.InputSystem.AddDevice<UnityEngine.InputSystem.Keyboard>();
+            var mouse = UnityEngine.InputSystem.InputSystem.AddDevice<UnityEngine.InputSystem.Mouse>();
+            try
+            {
+                yield return null; yield return null; // Let the camera follow the relocated fixture before projecting the cursor.
+                var screenPoint = loop.GameCamera.WorldToScreenPoint(new Vector3(4, 0, 0));
+                UnityEngine.InputSystem.InputSystem.QueueStateEvent(mouse, new UnityEngine.InputSystem.LowLevel.MouseState { position = screenPoint });
+                companionInputPhase = true;
+                loop.Player.GetComponent<PlayerWeapon>().enabled = true;
+                controlledAI.Player.GetComponent<PlayerWeapon>().enabled = true;
+                int leaderShots = 0, followerShots = 0;
+                System.Action leaderAction = () => leaderShots++, followerAction = () => followerShots++;
+                loop.Player.Actor.PerformedAction += leaderAction; controlledAI.Player.Actor.PerformedAction += followerAction;
+                UnityEngine.InputSystem.InputSystem.QueueStateEvent(mouse, new UnityEngine.InputSystem.LowLevel.MouseState { position = screenPoint, buttons = 1 });
+                yield return Wait(.65f);
+                Check(leaderShots > followerShots && followerShots > 0, "Shared LMB with independent ATK SPD: " + leaderShots + "/" + followerShots + " focused=" + Application.isFocused + " pointerBlocked=" + TestHUD.PointerOverControls);
+                UnityEngine.InputSystem.InputSystem.QueueStateEvent(mouse, new UnityEngine.InputSystem.LowLevel.MouseState { position = screenPoint });
+                yield return null; yield return null;
+                int stopped = followerShots; yield return Wait(.2f); Check(followerShots == stopped, "IA stops firing when LMB released");
+                loop.Player.Actor.PerformedAction -= leaderAction; controlledAI.Player.Actor.PerformedAction -= followerAction;
+                Ready(controlledAI.Ability); adapter.enabled = true;
+                UnityEngine.InputSystem.InputSystem.QueueStateEvent(keyboard, new UnityEngine.InputSystem.LowLevel.KeyboardState(UnityEngine.InputSystem.Key.Q));
+                yield return null; yield return null;
+                Check(!controlledAI.Ability.IsAiming, "Q does not activate companion ability");
+                UnityEngine.InputSystem.InputSystem.QueueStateEvent(keyboard, new UnityEngine.InputSystem.LowLevel.KeyboardState(UnityEngine.InputSystem.Key.Space, UnityEngine.InputSystem.Key.Digit1));
+                yield return null; yield return null;
+                Check(controlledAI.Ability.IsAiming, "SPACE+1 begins companion preview");
+                UnityEngine.InputSystem.InputSystem.QueueStateEvent(keyboard, new UnityEngine.InputSystem.LowLevel.KeyboardState());
+                yield return null; yield return null;
+                Check(!controlledAI.Ability.IsAiming && controlledAI.Ability.CooldownRemaining > 0, "Chord release places companion BARRIERA");
+            }
+            finally { companionInputPhase = false; UnityEngine.InputSystem.InputSystem.RemoveDevice(mouse); UnityEngine.InputSystem.InputSystem.RemoveDevice(keyboard); adapter.enabled = false; }
+            config.CompanionPlayer = LoopPlayer.PG02; config.CompanionAbility = 0; config.CompanionPassive = 0;
+            yield return Start(LoopPlayer.PG01);
+            var ai = loop.Companion; var follower = ai.Player.GetComponent<CompanionFormation>(); follower.enabled = false;
+            ai.Player.GetComponent<PlayerWeapon>().enabled = false; ai.Player.GetComponent<PlayerAim>().enabled = false;
+            foreach (var c in ai.Player.GetComponents<MonoBehaviour>()) if (c.GetType().Name.EndsWith("AbilityInput")) c.enabled = false;
+            ai.Player.transform.position = new Vector2(-1f, 0); Physics2D.SyncTransforms();
+            follower.Advance(new Vector2(10, 0), .02f); Near(Vector2.Distance(follower.Goal, new Vector2(-1f, 0)), 0, "Formation behind cursor aim");
+            Vector2 beforeTurn = ai.Player.transform.position;
+            follower.Advance(new Vector2(0, 10), .02f);
+            Check(Vector2.Distance(beforeTurn, ai.Player.transform.position) < .1f, "Cursor turn starts gradually without a formation jump");
+            for (int n = 0; n < 100; n++) follower.Advance(new Vector2(0, 10), .02f);
+            Near(Vector2.Distance(ai.Player.transform.position, new Vector2(0, -1f)), 0, "Formation rotates behind aim", .05f);
+            for (int n = 0; n < 100; n++) { follower.Advance(new Vector2(0, -10), .02f); Physics2D.SyncTransforms(); }
+            Near(Vector2.Distance(ai.Player.transform.position, new Vector2(0, 1f)), 0, "Formation handles reversed aim without crossing PLAYER", .05f);
+            var formationBlocker = Obstacle(new Vector2(-1, 0), new Vector2(.5f, .5f), true);
+            loop.RefreshNavigation();
+            Check(follower.TryResolvePosition(Vector2.zero, Vector2.left, out var alternative), "Blocked formation finds a NavMesh alternative");
+            Check(alternative.sqrMagnitude <= 1f && Vector2.Distance(alternative, Vector2.left) > .35f, "Alternative is free and inside one metre");
+            formationBlocker.SetActive(false); loop.RefreshNavigation();
+            var crowd = new List<Combatant>();
+            for (int n = 0; n < 16; n++) { float angle = n * Mathf.PI / 8; crowd.Add(Probe(new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)) * .8f, Faction.PG)); }
+            ai.Player.transform.position = new Vector2(3, 0); Physics2D.SyncTransforms();
+            Check(follower.TryResolvePosition(Vector2.zero, Vector2.left, out var distant) && distant.sqrMagnitude > 1f, "Temporary distance above one metre when all local positions occupied");
+            foreach (var member in crowd) member.gameObject.SetActive(false);
+            Check(follower.TryResolvePosition(Vector2.zero, Vector2.left, out var restored) && restored.sqrMagnitude <= 1f, "Returns to one-metre destination as soon as space is free");
+            float baseMove = ai.Player.Actor.Stats.MoveSpeed;
+            Time.timeScale = 0; Vector3 paused = ai.Player.transform.position; follower.Advance(new Vector2(-10, 0), 1); Near(Vector2.Distance(paused, ai.Player.transform.position), 0, "Formation pauses"); Time.timeScale = 1;
+            Near(ai.Player.Actor.Stats.MoveSpeed, baseMove, "Formation preserves persistent MOVE SPD");
+            ai.Experience.Award(225); loop.Experience.Award(225); yield return WaitRealtime(.1f);
+            Check((ai.Experience.Choices != null) != (loop.Experience.Choices != null), "Simultaneous LEVEL UP serialized");
+            for (int n = 0; n < 20 && (ai.Experience.PendingChoices > 0 || loop.Experience.PendingChoices > 0); n++)
+            { var ctx = loop.ChoiceContext; if (ctx.Experience.Choices != null) ctx.Experience.Choose(0); yield return null; }
+            Check(ai.Experience.PendingChoices == 0 && loop.Experience.PendingChoices == 0 && Time.timeScale > 0, "Both LEVEL UP queues resolve without stuck pause");
+            var persistent = ai.Player; ai.Player.Actor.Hit(10); float health = ai.Player.Actor.CurrentHP;
+            foreach (var mob in Combatant.All.ToArray()) if (mob.Faction == Faction.MOB) mob.gameObject.SetActive(false);
+            Set(loop, "<State>k__BackingField", LoopState.AreaComplete); Call(loop, "OpenBonus");
+            Check(loop.RewardContext == loop && loop.State == LoopState.Bonus, "End AREA first choice for PLAYER");
+            loop.SelectBonus(3); loop.ConfirmBonus();
+            Check(loop.RewardContext == ai && loop.State == LoopState.Bonus, "End AREA requires separate IA choice");
+            loop.SelectBonus(3); loop.ConfirmBonus();
+            while (loop.State != LoopState.Combat) yield return null;
+            Check(loop.Companion.Player == persistent, "Companion persists across AREA"); Check(ai.Player.Actor.CurrentHP >= health, "Companion AREA heal retained");
+            yield return null;
+            UnityEngine.ScreenCapture.CaptureScreenshot("Builds/Companion-prototype.png");
+            yield return null; yield return null;
+            loop.Player.transform.position = loop.Exit.transform.position;
+            ai.Player.transform.position = loop.Exit.transform.position + Vector3.right * 6;
+            Check(!loop.PartyReadyForExit(), "Exit waits for companion inside radius");
+            ai.Player.transform.position = loop.Exit.transform.position + Vector3.right * 1.5f;
+            Check(loop.PartyReadyForExit(), "Both active PG inside exit are ready");
+            loop.Player.Actor.Hit(10000); yield return null; yield return null;
+            Check(loop.Controlled == ai && ai.Player.GetComponent<PlayerMovement>().enabled, "DOWN transfers direct control to companion");
+            Check(!loop.PartyReadyForExit(), "DOWN member blocks AREA exit");
+            ai.Player.Actor.Hit(10000); yield return null; yield return null;
+            Check(loop.State == LoopState.Defeat, "Both DOWN ends RUN");
+            yield return Start(LoopPlayer.PG01); Check(loop.Companion.Player != persistent && loop.Companion.Experience.Level == 1, "RUN resets companion state");
+        }
+        private static IEnumerator WaitRealtime(float seconds)
+        { double until = EditorApplication.timeSinceStartup + seconds; while (EditorApplication.timeSinceStartup < until) yield return null; }
+
         private static IEnumerator WireChecks()
         {
             config.SelectedPG08Ability = PG08Ability.FiloSpinato;
@@ -273,18 +604,53 @@ namespace RogZombie.PreGameplayLoop.Editor
             var mob = Probe(new Vector2(4, 0)); var hole = Probe(new Vector2(2, 0));
             Ready(loop.PG08Ability); Check(loop.PG08Ability.TryActivate(), "FILO SPINATO activation");
             var ring = UnityEngine.Object.FindFirstObjectByType<PG08WireArea>();
-            Visual(ring.gameObject, "FILO SPINATO visual"); Near(ring.ValidSections, 10, "Wire all sections valid in open space");
+            Visual(ring.gameObject, "FILO SPINATO visual"); Check(ring.Contains(mob), "Wire continuous annulus includes exposed target");
             Near(mob.CurrentHP, 500, "Wire no immediate damage"); Near(mob.MovementMetresPerSecond, 1.2f, "Wire 40 percent SLOW"); Near(hole.MovementMetresPerSecond, 2, "Wire central hole excluded");
+            var blocker = Obstacle(new Vector2(2, 0), new Vector2(.2f, .2f), true);
+            Physics2D.SyncTransforms();
+            Check(!ring.Contains(mob), "Wire wall between center and ring shields target");
+            Near(mob.MovementMetresPerSecond, 2, "Wire cover removes SLOW immediately");
+            var adjacent = Probe(new Vector2(3.8f, .8f));
+            Check(ring.Contains(adjacent), "Wire adjacent visible target remains affected");
+            yield return Wait(1.1f); Near(mob.CurrentHP, 500, "Wire covered target receives no tick damage");
+            Near(adjacent.CurrentHP, 490, "Wire adjacent visible target receives damage");
+            blocker.SetActive(false); Physics2D.SyncTransforms();
+            Check(ring.Contains(mob), "Wire removal of cover restores coverage");
             Ready(loop.PG08Ability); Check(loop.PG08Ability.TryActivate(), "Second overlapping wire");
             yield return Wait(1.1f); Near(mob.CurrentHP, 490, "Wire overlaps do not duplicate damage"); Near(mob.MovementMetresPerSecond, 1.2f, "Wire overlaps do not stack SLOW");
             UnityEngine.ScreenCapture.CaptureScreenshot("Builds/AREA-wire-visible.png");
             Time.timeScale = 0; float before = ring.Remaining; double until = EditorApplication.timeSinceStartup + .15;
             while (EditorApplication.timeSinceStartup < until) yield return null;
             Near(ring.Remaining, before, "Wire duration pauses"); Near(mob.CurrentHP, 490, "Wire ticks pause"); Time.timeScale = 1;
-            mob.transform.position = new Vector2(0, 2); yield return null;
+            mob.transform.position = new Vector2(0, 2); Physics2D.SyncTransforms(); yield return null;
             Near(mob.MovementMetresPerSecond, 2, "Wire exit removes SLOW"); yield return Wait(1.1f); Near(mob.CurrentHP, 490, "Wire exit stops ticks");
             loop.PG08Ability.ChangeArea(); yield return null;
             Check(UnityEngine.Object.FindObjectsByType<PG08WireArea>(FindObjectsSortMode.None).Length == 0, "Wire area change removes rings");
+            if (WireOnly)
+            {
+                yield return Start(LoopPlayer.PG08);
+                mob = Probe(new Vector2(4, 0));
+                var outside = Probe(new Vector2(4.51f, 0));
+                var inside = Probe(new Vector2(3.49f, 0));
+                blocker = Obstacle(new Vector2(2, 0), new Vector2(.2f, .2f), false);
+                Ready(loop.PG08Ability); Check(loop.PG08Ability.TryActivate(), "Wire obstacle fixture activation");
+                ring = UnityEngine.Object.FindFirstObjectByType<PG08WireArea>();
+                Check(!ring.Contains(mob), "OSTACOLO shields target from fixed center");
+                Check(!ring.Contains(outside) && !ring.Contains(inside), "Wire excludes both radial boundaries beyond annulus");
+                yield return Wait(1.1f); Near(mob.CurrentHP, 500, "OSTACOLO prevents tick damage");
+                Near(mob.MovementMetresPerSecond, 2, "OSTACOLO prevents SLOW");
+                blocker.SetActive(false); Physics2D.SyncTransforms();
+                yield return Wait(.2f);
+                UnityEngine.ScreenCapture.CaptureScreenshot("Builds/PG08-wire-only-visible.png");
+                Near(mob.MovementMetresPerSecond, 1.2f, "Wire SLOW returns after obstacle removal");
+                yield return Wait(4f);
+                Check(UnityEngine.Object.FindObjectsByType<PG08WireArea>(FindObjectsSortMode.None).Length == 0, "Wire expires after five seconds");
+                Near(mob.CurrentHP, 470, "Wire three complete contact seconds after late entry");
+                Near(mob.MovementMetresPerSecond, 2, "Wire natural expiry removes SLOW");
+                Ready(loop.PG08Ability); Check(loop.PG08Ability.TryActivate(), "Wire active before RUN reset");
+                yield return Start(LoopPlayer.PG08);
+                Check(UnityEngine.Object.FindObjectsByType<PG08WireArea>(FindObjectsSortMode.None).Length == 0, "RUN reset removes wire");
+            }
         }
         private static IEnumerator BonusChecks(string id)
         {

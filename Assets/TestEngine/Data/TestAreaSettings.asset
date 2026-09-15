@@ -46,7 +46,7 @@ MonoBehaviour:
   - 21
   - 10
   - 4
-  OffscreenExtraRange: 5
+  OffscreenExtraRange: 15
   ExperienceThresholds:
   - 100
   - 120

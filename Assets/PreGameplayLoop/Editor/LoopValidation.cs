@@ -105,6 +105,9 @@ namespace RogZombie.PreGameplayLoop.Editor
                     configured = true;
                     var definition = UnityEngine.Object.Instantiate(loop.Definition);
                     definition.SelectedPlayer = LoopPlayer.PG01;
+                    definition.EnableCompanion = false;
+                definition.AreaTotals = new[] { 100, 120 };
+                definition.AreaMobDistributions = new[] { new AreaMobDistribution(), new AreaMobDistribution() }; // Preserve this legacy ZOMB01-only fixture.
                     loop.Definition = definition;
                     loop.RestartTest();
                     return;
@@ -235,7 +238,7 @@ namespace RogZombie.PreGameplayLoop.Editor
                         break;
                     case 10:
                         if (loop.State != LoopState.Combat) return;
-                        Check(loop.AreaIndex == 0 && loop.Gold == 0 && loop.Player.Actor.CurrentHP == 100, "Restart creates clean RUN");
+                        Check(loop.AreaIndex == 0 && loop.Gold == 0 && loop.Player.Actor.CurrentHP == 120, "Restart creates clean RUN (PG01 HP 120)");
                         loop.Player.Actor.Hit(10000);
                         Check(!loop.Exit.ContainsActivePlayer(), "DOWN cannot enter exit");
                         step = 11;

@@ -13,7 +13,7 @@ namespace RogZombie.PreGameplayLoop
         {
             if (Application.isFocused && ability.CanUse && aim.TryGetCursorWorldPosition(out var currentCursor))
                 ability.SetAimPoint(currentCursor);
-            if (Application.isFocused && Keyboard.current != null && Keyboard.current.qKey.wasPressedThisFrame &&
+            if (Application.isFocused && Keyboard.current != null && PartyCommands.Pressed(this) &&
                 ability.CanUse && aim.TryGetCursorWorldPosition(out var cursor)) ability.TryActivate(cursor);
         }
     }

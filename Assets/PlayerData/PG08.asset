@@ -15,7 +15,7 @@ MonoBehaviour:
   playerId: PG08
   baseStats:
     hp: 100
-    atk: 7
+    atk: 8
     defPercent: 10
     moveSpeed: 90
     attackSpeed: 650

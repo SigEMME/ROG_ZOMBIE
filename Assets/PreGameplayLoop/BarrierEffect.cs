@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using RogZombie.TestEngine;
 
@@ -7,6 +8,8 @@ namespace RogZombie.PreGameplayLoop
     [RequireComponent(typeof(BoxCollider2D), typeof(TestObstacle))]
     public sealed class BarrierEffect : MonoBehaviour
     {
+        public PolygonCollider2D Solid { get; private set; }
+        private Mesh navigationMesh;
         public float Remaining { get; private set; }
 
         public void Initialize(float duration) => Remaining = duration;
@@ -27,7 +30,7 @@ namespace RogZombie.PreGameplayLoop
             var overlapping = Physics2D.OverlapBoxAll(transform.position, box.size, transform.eulerAngles.z);
             foreach (var body in overlapping)
             {
-                if (body == box || body.isTrigger || !IsActor(body)) continue;
+                if (body == Solid || body.isTrigger || !IsActor(body) || !Physics2D.Distance(body, Solid).isOverlapped) continue;
                 Vector2 original = body.bounds.center;
                 float radius = body is CircleCollider2D ? Mathf.Max(body.bounds.extents.x, body.bounds.extents.y) :
                     ((Vector2)body.bounds.extents).magnitude;
@@ -87,17 +90,37 @@ namespace RogZombie.PreGameplayLoop
                 body.gameObject.layer == LayerMask.NameToLayer("PET");
         }
 
-        public static BarrierEffect Spawn(Vector2 centre, float angle, PG01AbilityCatalog data)
+        public static BarrierEffect Spawn(Vector2 centre, float angle, PG01AbilityCatalog data, BarrierGeometry geometry = null)
         {
-            var go = TestVisuals.Box("BARRIERA PG01", centre, data.BarrierSize, new Color(.25f, .7f, .95f), 2);
-            go.transform.rotation = Quaternion.Euler(0, 0, angle);
+            if (geometry == null) { geometry = new BarrierGeometry(); Physics2D.SyncTransforms(); geometry.Build(centre, data.BarrierSize, angle); }
+            if (!geometry.HasArea) return null;
+            var go = new GameObject("BARRIERA PG01"); go.transform.SetParent(TestVisuals.Root, false);
+            go.transform.SetPositionAndRotation(centre, Quaternion.Euler(0, 0, angle));
             go.layer = LayerMask.NameToLayer("OSTACOLO");
-            go.AddComponent<BoxCollider2D>().size = data.BarrierSize;
-            go.AddComponent<TestObstacle>().IsWall = false;
-            var effect = go.AddComponent<BarrierEffect>();
+            // Retain the bounding box only for the established displacement search; it is never physical.
+            var box = go.AddComponent<BoxCollider2D>(); box.size = data.BarrierSize; box.enabled = false;
+            var solid = go.AddComponent<PolygonCollider2D>(); solid.SetPath(0, geometry.Points);
+            var obstacle = go.AddComponent<TestObstacle>(); obstacle.IsWall = false; obstacle.UsePolygon(solid);
+            go.AddComponent<PG04AreaVisual>().InitializePolygon(geometry.Points, new Color(.25f, .7f, .95f), 2);
+            var effect = go.AddComponent<BarrierEffect>(); effect.Solid = solid;
+            effect.navigationMesh = BuildNavigationMesh(geometry.Points); obstacle.NavigationMesh = effect.navigationMesh;
             effect.Initialize(data.BarrierDuration);
             Physics2D.SyncTransforms();
             return effect;
         }
+        private static Mesh BuildNavigationMesh(IList<Vector2> outline)
+        {
+            var vertices = new List<Vector3> { Vector3.zero, new Vector3(0, 2, 0) };
+            var triangles = new List<int>();
+            foreach (var point in outline) { vertices.Add(new Vector3(point.x, 0, point.y)); vertices.Add(new Vector3(point.x, 2, point.y)); }
+            for (int i = 0; i < outline.Count; i++)
+            {
+                int a = 2 + i * 2, b = 2 + ((i + 1) % outline.Count) * 2;
+                triangles.AddRange(new[] { 0, a, b, 1, b + 1, a + 1, a, a + 1, b + 1, a, b + 1, b });
+            }
+            var mesh = new Mesh { name = "BARRIERA clipped navigation" };
+            mesh.SetVertices(vertices); mesh.SetTriangles(triangles, 0); mesh.RecalculateBounds(); return mesh;
+        }
+        private void OnDestroy() { if (navigationMesh != null) Destroy(navigationMesh); }
     }
 }

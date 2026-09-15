@@ -1,0 +1,13 @@
+FAIL | Unity 6000.3.16f1 | checks=10 | warnings=0
+PASS RUN selects PESTONE only
+PASS PESTONE unavailable during initial CD
+PASS PESTONE starts RUN with full 10-second CD
+PASS BARRIERA unavailable when PESTONE is selected
+PASS Inspector choice cannot switch current RUN ability
+PASS Inactive CD preserves exact residue across AREA (7/7)
+PASS Available ability stays available across AREA
+PASS Active ability restarts full CD with current reduction (14,3/14,3)
+PASS Stat and seconds use mathematical rounding (14,3/14,3)
+PASS CD REDUCTION minimum 10 (1,5/1,5)
+System.TimeoutException: Ability test timeout.
+  at RogZombie.PreGameplayLoop.Editor.AbilityValidation.Tick () [0x00075] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AbilityValidation.cs:78 

@@ -1,0 +1,97 @@
+PASS | Unity 6000.3.16f1 | checks=95 | warnings=0
+PASS Mixed MOB configuration valid
+PASS Correct AREA index 0
+PASS AREA width (100/100)
+PASS AREA height (100/100)
+PASS Spawn and exit connected on actual NavMesh
+PASS FIRST SPAWN type 0 (22/22)
+PASS FIRST SPAWN type 1 (6/6)
+PASS FIRST SPAWN type 2 (2/2)
+PASS FIRST SPAWN type 3 (0/0)
+PASS FIRST SPAWN type 4 (0/0)
+PASS Shared collider radius ZOMB01 (0,35/0,35)
+PASS Shared circular placeholder radius ZOMB01 (0,35/0,35)
+PASS Identification color ZOMB01
+PASS Own HP ZOMB01 (60/60)
+PASS GDD MOVE SPD ZOMB01 (90/90)
+PASS Shared collider radius ZOMB02 (0,35/0,35)
+PASS Shared circular placeholder radius ZOMB02 (0,35/0,35)
+PASS Identification color ZOMB02
+PASS Own HP ZOMB02 (40/40)
+PASS GDD MOVE SPD ZOMB02 (100/100)
+PASS Shared collider radius ZOMB03 (0,35/0,35)
+PASS Shared circular placeholder radius ZOMB03 (0,35/0,35)
+PASS Identification color ZOMB03
+PASS Own HP ZOMB03 (110/110)
+PASS GDD MOVE SPD ZOMB03 (70/70)
+PASS Final AREA quota type 0 (75/75)
+PASS Final AREA quota type 1 (20/20)
+PASS Final AREA quota type 2 (5/5)
+PASS Final AREA quota type 3 (0/0)
+PASS Final AREA quota type 4 (0/0)
+PASS Gold from actual MOB definitions (1150/1150)
+PASS End AREA opens bonus
+PASS Correct AREA index 1
+PASS AREA width (100/100)
+PASS AREA height (100/100)
+PASS Spawn and exit connected on actual NavMesh
+PASS FIRST SPAWN type 0 (23/23)
+PASS FIRST SPAWN type 1 (9/9)
+PASS FIRST SPAWN type 2 (4/4)
+PASS FIRST SPAWN type 3 (0/0)
+PASS FIRST SPAWN type 4 (0/0)
+PASS Shared collider radius ZOMB01 (0,35/0,35)
+PASS Shared circular placeholder radius ZOMB01 (0,35/0,35)
+PASS Identification color ZOMB01
+PASS Own HP ZOMB01 (60/60)
+PASS GDD MOVE SPD ZOMB01 (90/90)
+PASS Shared collider radius ZOMB02 (0,35/0,35)
+PASS Shared circular placeholder radius ZOMB02 (0,35/0,35)
+PASS Identification color ZOMB02
+PASS Own HP ZOMB02 (40/40)
+PASS GDD MOVE SPD ZOMB02 (100/100)
+PASS Shared collider radius ZOMB03 (0,35/0,35)
+PASS Shared circular placeholder radius ZOMB03 (0,35/0,35)
+PASS Identification color ZOMB03
+PASS Own HP ZOMB03 (110/110)
+PASS GDD MOVE SPD ZOMB03 (70/70)
+PASS Final AREA quota type 0 (78/78)
+PASS Final AREA quota type 1 (30/30)
+PASS Final AREA quota type 2 (12/12)
+PASS Final AREA quota type 3 (0/0)
+PASS Final AREA quota type 4 (0/0)
+PASS Gold from actual MOB definitions (2620/2620)
+PASS End AREA opens bonus
+PASS Correct AREA index 2
+PASS AREA width (130/130)
+PASS AREA height (130/130)
+PASS Spawn and exit connected on actual NavMesh
+PASS FIRST SPAWN type 0 (24/24)
+PASS FIRST SPAWN type 1 (14/14)
+PASS FIRST SPAWN type 2 (7/7)
+PASS FIRST SPAWN type 3 (0/0)
+PASS FIRST SPAWN type 4 (0/0)
+PASS Shared collider radius ZOMB01 (0,35/0,35)
+PASS Shared circular placeholder radius ZOMB01 (0,35/0,35)
+PASS Identification color ZOMB01
+PASS Own HP ZOMB01 (60/60)
+PASS GDD MOVE SPD ZOMB01 (90/90)
+PASS Shared collider radius ZOMB02 (0,35/0,35)
+PASS Shared circular placeholder radius ZOMB02 (0,35/0,35)
+PASS Identification color ZOMB02
+PASS Own HP ZOMB02 (40/40)
+PASS GDD MOVE SPD ZOMB02 (100/100)
+PASS Shared collider radius ZOMB03 (0,35/0,35)
+PASS Shared circular placeholder radius ZOMB03 (0,35/0,35)
+PASS Identification color ZOMB03
+PASS Own HP ZOMB03 (110/110)
+PASS GDD MOVE SPD ZOMB03 (70/70)
+PASS Final AREA quota type 0 (82/82)
+PASS Final AREA quota type 1 (45/45)
+PASS Final AREA quota type 2 (23/23)
+PASS Final AREA quota type 3 (0/0)
+PASS Final AREA quota type 4 (0/0)
+PASS Gold from actual MOB definitions (4575/4575)
+PASS End AREA opens bonus
+PASS Third AREA completes test sequence
+Three actual AREA cycles, mixed MOB quotas/first spawn, shared circle/collider, colors, stats, drops, transition and third layout NavMesh. MOB brains disabled while draining populations; combat feel not tested.

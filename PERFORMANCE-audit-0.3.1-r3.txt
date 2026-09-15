@@ -1,0 +1,29 @@
+Unity 6000.3.16f1 | version 0.3.1 | Editor Play Mode, not standalone FPS
+CPU 13th Gen Intel(R) Core(TM) i5-13450HX | logical cores 16 | RAM 16091 MB | GPU NVIDIA GeForce RTX 5050 Laptop GPU
+Resolution 1534x664 | VSync 0 | targetFPS -1
+Allocation counter calibration: requested 65536 bytes, observed 0; usable=False. Zero per-call values from unsupported counters are NOT zero allocations.
+FRAME scenarios: city geometry, stationary high-HP PGs, companion formation/input disabled, autonomous ZOMB01 movement/attacks, no player firing; 30 warm-up + 180 measured frames.
+CITY_0_MOB | observed frame ms mean=2,934, median=2,751, p95=4,694, max=10,186
+CITY_0_MOB | main-thread recorder valid=True ms mean=2,915, median=2,726, p95=4,574, max=9,823
+CITY_0_MOB | GC recorder valid=True bytes/frame mean=20028,489, median=19923,000, p95=20013,000, max=24339,000 | memory valid=True usedMiB=1312,3
+Spawned audit MOB: 26
+CITY_30_MOB | observed frame ms mean=3,190, median=3,089, p95=4,229, max=6,255
+CITY_30_MOB | main-thread recorder valid=True ms mean=3,180, median=3,043, p95=4,172, max=6,240
+CITY_30_MOB | GC recorder valid=True bytes/frame mean=22837,989, median=21691,000, p95=30699,000, max=31231,000 | memory valid=True usedMiB=1312,9
+Spawned audit MOB: 82
+CITY_100_MOB_STRESS | observed frame ms mean=8,810, median=9,541, p95=10,984, max=11,352
+CITY_100_MOB_STRESS | main-thread recorder valid=True ms mean=8,833, median=9,609, p95=11,057, max=11,586
+CITY_100_MOB_STRESS | GC recorder valid=True bytes/frame mean=32288,744, median=32447,000, p95=38963,000, max=47339,000 | memory valid=True usedMiB=1316,5
+City visual fixture cover count within 4m: 4
+AREA_VISUAL_R4_CITY_SPAWN | ms/call mean=6,677, median=6,644, p95=7,376, max=7,603 | managed bytes/call UNAVAILABLE (calibration failed)
+MICRO scenarios: isolated calls, Stopwatch CPU wall time + current-thread managed allocation. Not full frame time. Warm-up 5, then 60 calls, one per frame.
+IA_RESOLVE_FREE | ms/call mean=0,034, median=0,025, p95=0,078, max=0,300 | managed bytes/call UNAVAILABLE (calibration failed)
+IA_RESOLVE_WALL | ms/call mean=0,241, median=0,233, p95=0,329, max=0,345 | managed bytes/call UNAVAILABLE (calibration failed)
+IA_RESOLVE_FULL_LOCAL_CROWD | ms/call mean=1,419, median=1,386, p95=1,659, max=1,749 | managed bytes/call UNAVAILABLE (calibration failed)
+IA_ADVANCE_ROTATING_CURSOR | ms/call mean=0,061, median=0,053, p95=0,146, max=0,158 | managed bytes/call UNAVAILABLE (calibration failed)
+AREA_VISUAL_R4_NO_COVER | ms/call mean=0,236, median=0,224, p95=0,360, max=0,406 | managed bytes/call UNAVAILABLE (calibration failed)
+AREA_VISUAL_R4_4_COVERS | ms/call mean=1,869, median=1,829, p95=2,122, max=2,223 | managed bytes/call UNAVAILABLE (calibration failed)
+AREA_VISUAL_R4_12_COVERS | ms/call mean=6,157, median=6,115, p95=6,564, max=7,079 | managed bytes/call UNAVAILABLE (calibration failed)
+AREA_FLASH_R4_CREATE | ms/call mean=6,308, median=6,226, p95=7,008, max=7,161 | managed bytes/call UNAVAILABLE (calibration failed)
+No gameplay optimization, build export, or persistent character-stat change performed by this audit.
+COMPLETE | warnings=0

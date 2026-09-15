@@ -12,11 +12,14 @@ namespace RogZombie.TestEngine
         public bool ShowDebug;
         public System.Action<Vector2, Vector2, CombatStats> BaseAttackOverride { get; set; }
         public System.Func<bool> InputBlocked { get; set; }
+        public System.Func<bool> TrajectoryVisibleWhen { get; set; }
         public int? BasePenetrationsOverride { get; set; }
         public IProjectileHitEffect BaseProjectileEffect { get; set; }
         private Combatant actor;
         private PlayerAim aim;
         private float readyAt;
+        private LineRenderer trajectoryLine;
+        private Material trajectoryMaterial;
         private Vector2 lastImpact;
         private float flashUntil;
         private struct PendingExplosion
@@ -43,10 +46,58 @@ namespace RogZombie.TestEngine
 
         private void LateUpdate()
         {
+            UpdateTrajectoryLine();
             if (Time.timeScale == 0f || actor == null || !actor.IsActive || Definition == null || Muzzle == null || TestHUD.PointerOverControls || (InputBlocked != null && InputBlocked())) return;
             if (Mouse.current == null || !Mouse.current.leftButton.isPressed || Time.time < readyAt) return;
             if (!aim.TryGetCursorWorldPosition(out var cursor)) return;
             TryFireAt(cursor);
+        }
+
+        private void UpdateTrajectoryLine()
+        {
+            if (TrajectoryVisibleWhen != null && !TrajectoryVisibleWhen())
+            {
+                if (trajectoryLine != null) trajectoryLine.enabled = false;
+                return;
+            }
+            if (Time.timeScale <= 0f) return; // Keep the last visible trajectory while paused.
+            if (actor == null || !actor.IsActive || aim == null || Muzzle == null || Definition == null ||
+                !aim.TryGetCursorWorldPosition(out var cursor))
+            {
+                if (trajectoryLine != null) trajectoryLine.enabled = false;
+                return;
+            }
+            if (trajectoryLine == null)
+            {
+                var go = new GameObject("Linea traiettoria");
+                go.transform.SetParent(transform, false);
+                trajectoryLine = go.AddComponent<LineRenderer>();
+                trajectoryMaterial = new Material(Shader.Find("Sprites/Default"));
+                trajectoryMaterial.mainTexture = Texture2D.whiteTexture;
+                trajectoryLine.sharedMaterial = trajectoryMaterial;
+                trajectoryLine.useWorldSpace = true;
+                trajectoryLine.positionCount = 2;
+                trajectoryLine.startWidth = trajectoryLine.endWidth = .02f;
+                trajectoryLine.startColor = trajectoryLine.endColor = Color.white;
+                trajectoryLine.sortingOrder = 10;
+            }
+            Vector3 origin = Muzzle.position;
+            Vector2 offset = (Vector2)cursor - (Vector2)origin;
+            Vector2 end = (Vector2)origin + Vector2.ClampMagnitude(offset, Mathf.Max(0, actor.EffectiveStats.RangeMetres));
+            trajectoryLine.SetPosition(0, origin);
+            trajectoryLine.SetPosition(1, new Vector3(end.x, end.y, origin.z));
+            trajectoryLine.enabled = true;
+        }
+
+        private void OnDisable()
+        {
+            if (trajectoryLine != null) trajectoryLine.enabled = false;
+        }
+
+        private void OnDestroy()
+        {
+            if (trajectoryLine != null) Destroy(trajectoryLine.gameObject);
+            if (trajectoryMaterial != null) Destroy(trajectoryMaterial);
         }
 
         public bool TryFireAt(Vector2 cursor)

@@ -1,0 +1,15 @@
+FAIL | Unity 6000.3.16f1 | checks=6 | warnings=0
+PASS Open PLAYER banner
+PASS Open IA banner
+PASS Already selected PG blocked for IA
+PASS Back preserves IA draft without confirmation
+PASS Both confirmed allow RUN
+PASS Separate configuration snapshot
+UnityException: InitializeNavMeshPath is not allowed to be called from a MonoBehaviour constructor (or instance field initializer), call it in Awake or Start instead. Called from MonoBehaviour 'CompanionFormation' on game object 'PG01'.
+See "Script Serialization" page in the Unity Manual for further details.
+UnityEngine.AI.NavMeshPath..ctor () (at <7019f5cece074dd69769d7c2268a31de>:0)
+RogZombie.PreGameplayLoop.CompanionFormation..ctor () (at Assets/PreGameplayLoop/CompanionFormation.cs:10)
+UnityEngine.GameObject:AddComponent()
+RogZombie.PreGameplayLoop.LoopSession:PrepareCompanion() (at Assets/PreGameplayLoop/LoopSession.Party.cs:27)
+RogZombie.PreGameplayLoop.<BuildArea>d__154:MoveNext() (at Assets/PreGameplayLoop/LoopSession.cs:98)
+UnityEngine.SetupCoroutine:InvokeMoveNext(IEnumerator, IntPtr)

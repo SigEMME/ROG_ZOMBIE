@@ -7,18 +7,33 @@ namespace RogZombie.PreGameplayLoop
     {
         private LoopSession session;
         private Combatant source;
-        private float damage, radius, remaining;
+        public const float TriggerRadius = .5f;
+        public const float DetonationDelay = 1f;
+        private float damage, radius, remaining, detonationRemaining;
+        private bool activated;
         public void Initialize(LoopSession owner, Combatant caster, float attack, float metres, float duration)
-        { session = owner; source = caster; damage = attack; radius = metres; remaining = duration; }
+        { session = owner; source = caster; damage = attack; radius = metres; remaining = duration; activated = false; }
         private void Update()
         {
             if (!session.GameplayRunning) return;
-            remaining -= Time.deltaTime;
-            bool trigger = remaining <= 0;
-            foreach (var mob in Combatant.All)
-                if (mob != null && mob.IsActive && mob.Faction == Faction.MOB &&
-                    Vector2.Distance(transform.position, mob.transform.position) <= 1 + mob.Radius) { trigger = true; break; }
-            if (!trigger) return;
+            if (activated)
+            {
+                detonationRemaining -= Time.deltaTime;
+                if (detonationRemaining > 0) return;
+            }
+            else
+            {
+                foreach (var mob in Combatant.All)
+                    if (mob != null && mob.IsActive && mob.Faction == Faction.MOB &&
+                        Vector2.Distance(transform.position, mob.transform.position) <= TriggerRadius + mob.Radius)
+                    {
+                        activated = true;
+                        detonationRemaining = DetonationDelay;
+                        return;
+                    }
+                remaining -= Time.deltaTime;
+                if (remaining > 0) return;
+            }
             var valid = PG04ExplosionEffect.Sectors(transform.position, radius);
             PG04ExplosionEffect.Hit(source, transform.position, radius, valid, damage);
             BonusAbilityRuntime.Flash(transform.position, radius, valid, Color.yellow);
@@ -30,16 +45,14 @@ namespace RogZombie.PreGameplayLoop
             Physics2D.SyncTransforms();
             result = original;
             if (Free(original, size)) return true;
-            // Closest point on the free boundary of the union of rectangular obstacles.
+            // Closest point on the free boundary of the union of obstacle polygons.
             // Split edges at intersections; the closest point lies on one of the resulting segments.
             var edges = new List<Edge>();
             foreach (var obstacle in TestObstacle.All)
             {
-                var box = obstacle.GetComponent<BoxCollider2D>();
-                Vector2 half = box.size * .5f, offset = box.offset;
-                Vector2[] corners = { offset + new Vector2(-half.x,-half.y), offset + new Vector2(half.x,-half.y),
-                    offset + new Vector2(half.x,half.y), offset + new Vector2(-half.x,half.y) };
-                for (int i = 0; i < 4; i++) edges.Add(new Edge(box.transform.TransformPoint(corners[i]), box.transform.TransformPoint(corners[(i+1)%4])));
+                if (!obstacle.Body.enabled) continue;
+                var corners = obstacle.WorldOutline();
+                for (int i = 0; i < corners.Length; i++) edges.Add(new Edge(corners[i], corners[(i + 1) % corners.Length]));
             }
             float best = float.PositiveInfinity;
             foreach (var edge in edges)
@@ -75,7 +88,7 @@ namespace RogZombie.PreGameplayLoop
         {
             if (Mathf.Abs(point.x) >= size.x*.5f || Mathf.Abs(point.y) >= size.y*.5f) return false;
             foreach (var obstacle in TestObstacle.All)
-                if (obstacle.GetComponent<Collider2D>().OverlapPoint(point)) return false;
+                if (obstacle.Body.enabled && obstacle.Body.OverlapPoint(point)) return false;
             return true;
         }
     }

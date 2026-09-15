@@ -1,0 +1,25 @@
+Unity 6000.3.16f1 | version 0.3.1 | Editor Play Mode, not standalone FPS
+CPU 13th Gen Intel(R) Core(TM) i5-13450HX | logical cores 16 | RAM 16091 MB | GPU NVIDIA GeForce RTX 5050 Laptop GPU
+Resolution 1534x664 | VSync 0 | targetFPS -1
+FRAME scenarios: city geometry, stationary invulnerable-by-HP PGs, autonomous ZOMB01 movement/attacks, no player firing; 30 warm-up + 180 measured frames.
+CITY_0_MOB | observed frame ms mean=2,194, median=2,138, p95=2,828, max=6,923
+CITY_0_MOB | main-thread recorder valid=True ms mean=2,184, median=2,095, p95=2,719, max=7,308
+CITY_0_MOB | GC recorder valid=True bytes/frame mean=20013,522, median=19923,000, p95=20013,000, max=24339,000 | memory valid=True usedMiB=1313,9
+Spawned audit MOB: 26
+CITY_30_MOB | observed frame ms mean=2,674, median=2,613, p95=3,441, max=4,706
+CITY_30_MOB | main-thread recorder valid=True ms mean=2,670, median=2,643, p95=3,358, max=4,581
+CITY_30_MOB | GC recorder valid=True bytes/frame mean=24722,278, median=22243,000, p95=33377,000, max=34463,000 | memory valid=True usedMiB=1314,7
+Spawned audit MOB: 82
+CITY_100_MOB_STRESS | observed frame ms mean=7,757, median=9,090, p95=10,162, max=11,073
+CITY_100_MOB_STRESS | main-thread recorder valid=True ms mean=7,791, median=9,070, p95=10,175, max=11,136
+CITY_100_MOB_STRESS | GC recorder valid=True bytes/frame mean=32604,700, median=32129,000, p95=40095,000, max=46991,000 | memory valid=True usedMiB=1318,1
+MICRO scenarios: isolated calls, Stopwatch CPU wall time + current-thread managed allocation. Not full frame time. Warm-up 5, then 60 calls, one per frame.
+IA_RESOLVE_FREE | ms/call mean=0,019, median=0,019, p95=0,028, max=0,032 | managed bytes/call mean=0,000, median=0,000, p95=0,000, max=0,000
+IA_RESOLVE_WALL | ms/call mean=0,235, median=0,227, p95=0,295, max=0,422 | managed bytes/call mean=0,000, median=0,000, p95=0,000, max=0,000
+IA_RESOLVE_FULL_LOCAL_CROWD | ms/call mean=1,387, median=1,350, p95=1,644, max=1,694 | managed bytes/call mean=0,000, median=0,000, p95=0,000, max=0,000
+IA_ADVANCE_ROTATING_CURSOR | ms/call mean=0,046, median=0,039, p95=0,083, max=0,128 | managed bytes/call mean=0,000, median=0,000, p95=0,000, max=0,000
+AREA_VISUAL_R4_NO_COVER | ms/call mean=0,217, median=0,213, p95=0,275, max=0,288 | managed bytes/call mean=0,000, median=0,000, p95=0,000, max=0,000
+AREA_VISUAL_R4_12_COVERS | ms/call mean=5,997, median=5,935, p95=6,533, max=8,190 | managed bytes/call mean=0,000, median=0,000, p95=0,000, max=0,000
+AREA_FLASH_R4_CREATE | ms/call mean=6,102, median=6,037, p95=6,530, max=8,112 | managed bytes/call mean=0,000, median=0,000, p95=0,000, max=0,000
+No gameplay optimization, build export, or persistent character-stat change performed by this audit.
+COMPLETE | warnings=0

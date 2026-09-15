@@ -1,0 +1,70 @@
+FAIL | Unity 6000.3.16f1 | checks=63 | warnings=0
+PASS RUN fixture PG01
+PASS Visual reuses mesh/material after geometry change 0
+PASS Rebuilt visual retains colors and UV 0
+PASS Visual reuses mesh/material after geometry change 1
+PASS Rebuilt visual retains colors and UV 1
+PASS Visual reuses mesh/material after geometry change 2
+PASS Rebuilt visual retains colors and UV 2
+PASS Visual reuses mesh/material after geometry change 3
+PASS Rebuilt visual retains colors and UV 3
+PASS Visual reuses mesh/material after geometry change 4
+PASS Rebuilt visual retains colors and UV 4
+PASS 3600 occlusion rays match live geometry (moved/scaled/disabled/removed cover)
+PASS Visual refresh restores shadow when cover reappears
+PASS 128 MOB steering cases match original algorithm, including overlap and long movement
+PASS Buffered movement query retains all hits 0
+PASS Buffered movement hit matches original 0/0
+PASS Buffered movement hit matches original 0/1
+PASS Buffered movement query retains all hits 1
+PASS Buffered movement hit matches original 1/0
+PASS Buffered movement hit matches original 1/1
+PASS Buffered movement query retains all hits 2
+PASS Buffered movement hit matches original 2/0
+PASS Buffered movement hit matches original 2/1
+PASS Buffered movement query retains all hits 3
+PASS Buffered movement hit matches original 3/0
+PASS Buffered movement hit matches original 3/1
+PASS Buffered movement query retains all hits 4
+PASS Buffered movement hit matches original 4/0
+PASS Buffered movement hit matches original 4/1
+PASS Buffered movement query retains all hits 5
+PASS Buffered movement hit matches original 5/0
+PASS Buffered movement hit matches original 5/1
+PASS Buffered movement query retains all hits 6
+PASS Buffered movement hit matches original 6/0
+PASS Buffered movement hit matches original 6/1
+PASS Buffered movement query retains all hits 7
+PASS Buffered movement hit matches original 7/0
+PASS Buffered movement hit matches original 7/1
+PASS PG01 actual cone attack
+PASS PG01 cone full damage (480/480)
+PASS PG01 cone wall shield (500/500)
+PASS PG01 cone excludes rear (500/500)
+PASS Actual PESTONE activation
+PASS PESTONE damage (440/440)
+PASS PESTONE 30 percent SLOW (1,4/1,4)
+PASS PESTONE covered MOB untouched (500/500)
+PASS PESTONE no SLOW through cover
+PASS PESTONE SLOW expires (2/2)
+PASS RUN fixture PG01
+PASS BARRIERA preview
+PASS BARRIERA preview has no collider
+PASS BARRIERA release activation
+PASS BARRIERA exists
+PASS BARRIERA collider and visual
+PASS BARRIERA blocks circular area line (2,5/2,5)
+PASS BARRIERA expires
+PASS RUN fixture PG03
+PASS LASER 35 damage (465/465)
+PASS LASER retains cover exception (465/465)
+PASS LASER excludes rear (500/500)
+PASS LASER visible rectangle
+PASS RUN fixture PG05
+PASS PG05 actual area attack
+System.InvalidOperationException: PG05 cone damage (475/470)
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation.Check (System.Boolean condition, System.String message) [0x0002a] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:135 
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation.Near (System.Single actual, System.Single expected, System.String message, System.Single tolerance) [0x00000] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:138 
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation+<Checks>d__35.MoveNext () [0x006fc] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:259 
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation+<Flatten>d__30.MoveNext () [0x00044] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:189 
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation.Tick () [0x001e7] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:125 

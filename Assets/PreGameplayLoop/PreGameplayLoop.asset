@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e023cddd396747c3b0a88dbfb7fe7794, type: 3}
   m_Name: PreGameplayLoop
   m_EditorClassIdentifier: 
-  SelectedPlayer: 4
+  SelectedPlayer: 6
+  EnableCompanion: 0
+  CompanionPlayer: 1
+  CompanionAbility: 0
+  CompanionPassive: 0
   PG01Weapon: {fileID: 11400000, guid: 80e0fe24276941b8b4c54fa8bbe9a970, type: 2}
   PG01Abilities: {fileID: 11400000, guid: cc5762ad2fd24c72a3a143040eaa04b2, type: 2}
   SelectedAbility: 0
@@ -49,5 +53,28 @@ MonoBehaviour:
   BonusCatalog: {fileID: 11400000, guid: 15a57b20334c4d81a225d3ef7db1be60, type: 2}
   GeometryTemplate: {fileID: 11400000, guid: 496b5d3b9635460cba4e2455a16aa84c, type: 2}
   ZOMB01: {fileID: 11400000, guid: f46a94a6bfed4325b96f3d2bd548d3a7, type: 2}
-  AreaTotals: 6400000078000000
+  AreaTotals: 640000007800000096000000
   ExitPosition: {x: -1.6, y: 45.5}
+  AreaLayouts:
+  - AreaNumber: 3
+    Geometry: {fileID: 11400000, guid: b63f453066534ddc860fbc61f4abbc57, type: 2}
+    ExitPosition: {x: 0, y: 59}
+  AreaMobDistributions:
+  - Percentages:
+    - 75
+    - 20
+    - 5
+    - 0
+    - 0
+  - Percentages:
+    - 65
+    - 25
+    - 10
+    - 0
+    - 0
+  - Percentages:
+    - 55
+    - 30
+    - 15
+    - 0
+    - 0

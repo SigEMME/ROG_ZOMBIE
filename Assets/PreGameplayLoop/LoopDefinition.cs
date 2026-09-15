@@ -4,11 +4,29 @@ using RogZombie.TestEngine;
 namespace RogZombie.PreGameplayLoop
 {
     public enum LoopPlayer { PG01, PG02, PG03, PG04, PG05, PG06, PG07, PG08 }
+    [System.Serializable]
+    public sealed class AreaMobDistribution
+    {
+        public float[] Percentages = { 100, 0, 0, 0, 0 };
+    }
+    [System.Serializable]
+    public sealed class AreaLayoutOverride
+    {
+        [Min(1)] public int AreaNumber = 3;
+        public TestAreaSettings Geometry;
+        public Vector2 ExitPosition;
+    }
     [CreateAssetMenu(menuName = "ROG ZOMBIE/Pre gameplay loop")]
     public sealed class LoopDefinition : ScriptableObject
     {
         [Header("RUN")]
         public LoopPlayer SelectedPlayer = LoopPlayer.PG01;
+
+        [Header("Compagno IA di prova") ]
+        public bool EnableCompanion;
+        public LoopPlayer CompanionPlayer = LoopPlayer.PG02;
+        [Range(0, 1)] public int CompanionAbility;
+        [Range(0, 1)] public int CompanionPassive;
 
         [Header("PG01")]
         public WeaponDefinition PG01Weapon;
@@ -66,16 +84,33 @@ namespace RogZombie.PreGameplayLoop
         public BonusCatalog BonusCatalog;
         public TestAreaSettings GeometryTemplate;
         public MobDefinition ZOMB01;
-        [Tooltip("GDD section 14: C1 A1 and A2 totals. ZOMB01-only test composition.")]
-        public int[] AreaTotals = { 100, 120 };
+        [Tooltip("GDD section 14: C1 area totals and MOB distributions.")]
+        public int[] AreaTotals = { 100, 120, 150 };
+        public AreaMobDistribution[] AreaMobDistributions = {
+            new AreaMobDistribution { Percentages = new float[] { 75, 20, 5, 0, 0 } },
+            new AreaMobDistribution { Percentages = new float[] { 65, 25, 10, 0, 0 } },
+            new AreaMobDistribution { Percentages = new float[] { 55, 30, 15, 0, 0 } }
+        };
+        public MobDefinition MobAt(int index) => index == 0 ? ZOMB01 :
+            GeometryTemplate != null && GeometryTemplate.Mobs != null && index < GeometryTemplate.Mobs.Length ? GeometryTemplate.Mobs[index] : null;
         [Tooltip("Technical level placement; no final level design is implied.")]
         public Vector2 ExitPosition;
+        public AreaLayoutOverride[] AreaLayouts;
+        private AreaLayoutOverride Layout(int index)
+        {
+            if (AreaLayouts != null) foreach (var layout in AreaLayouts)
+                if (layout != null && layout.AreaNumber == index + 1) return layout;
+            return null;
+        }
+        public TestAreaSettings GeometryForArea(int index) => Layout(index)?.Geometry ?? GeometryTemplate;
+        public Vector2 ExitForArea(int index) => Layout(index)?.ExitPosition ?? ExitPosition;
 
         public WeaponDefinition SelectedWeapon => SelectedPlayer == LoopPlayer.PG01 ? PG01Weapon :
             SelectedPlayer == LoopPlayer.PG02 ? PG02Weapon : SelectedPlayer == LoopPlayer.PG03 ? PG03Weapon : SelectedPlayer == LoopPlayer.PG04 ? PG04Weapon : SelectedPlayer == LoopPlayer.PG05 ? PG05Weapon : SelectedPlayer == LoopPlayer.PG06 ? PG06Weapon : SelectedPlayer == LoopPlayer.PG07 ? PG07Weapon : PG08Weapon;
 
         public string Validate()
         {
+            if (EnableCompanion && (CompanionPlayer == SelectedPlayer || !System.Enum.IsDefined(typeof(LoopPlayer), CompanionPlayer) || CompanionAbility < 0 || CompanionAbility > 1 || CompanionPassive < 0 || CompanionPassive > 1)) return "Selezionare un PG IA distinto, con una ABILITA e una PASSIVA.";
             if (!System.Enum.IsDefined(typeof(LoopPlayer), SelectedPlayer)) return "Selezionare PG01, PG02, PG03, PG04, PG05, PG06, PG07 o PG08.";
             if (GeometryTemplate == null || SelectedWeapon == null || SelectedWeapon.PG == null || ZOMB01 == null)
                 return "Assegnare geometria, arma del PG selezionato e ZOMB01.";
@@ -108,15 +143,29 @@ namespace RogZombie.PreGameplayLoop
             if (SelectedPlayer == LoopPlayer.PG08 && (PG08Abilities == null || !PG08Abilities.IsValid ||
                 !System.Enum.IsDefined(typeof(PG08Ability), SelectedPG08Ability) || !System.Enum.IsDefined(typeof(PG08Passive), SelectedPG08Passive)))
                 return "Assegnare dati, ABILITA e PASSIVA validi per PG08.";
-            if (AreaTotals == null || AreaTotals.Length != 2) return "Configurare esattamente due AREE test.";
+            if (AreaTotals == null || AreaTotals.Length == 0) return "Configurare almeno una AREA test.";
             foreach (int total in AreaTotals)
                 if (total <= 0 || total % 10 != 0) return "Totali positivi multipli di 10: FIRST SPAWN 30% intero.";
-            var g = GeometryTemplate;
-            if (g.ActorRadius <= 0 || g.CameraSize <= 0 || g.AreaSize.x <= 0 || g.AreaSize.y <= 0 || g.SearchAttemptsPerFrame < 1)
-                return "Geometria o budget di ricerca non valido.";
-            if (!g.EnableMobSeparation) return "Il test richiede collisione/separazione MOB attiva.";
-            if (Mathf.Abs(ExitPosition.x) + 4 >= g.AreaSize.x / 2 || Mathf.Abs(ExitPosition.y) + 4 >= g.AreaSize.y / 2)
-                return "Il TRIGGER di uscita deve essere interno all'AREA.";
+            if (AreaMobDistributions == null || AreaMobDistributions.Length < AreaTotals.Length) return "Configurare la distribuzione MOB per ogni AREA.";
+            for (int index = 0; index < AreaTotals.Length; index++)
+            {
+                var weights = AreaMobDistributions[index]?.Percentages;
+                if (weights == null || weights.Length != 5) return "Configurare cinque percentuali ZOMB01-ZOMB05 per AREA.";
+                float sum = 0;
+                for (int type = 0; type < 5; type++)
+                {
+                    if (float.IsNaN(weights[type]) || float.IsInfinity(weights[type]) || weights[type] < 0) return "Percentuali MOB non valide.";
+                    sum += weights[type];
+                    if (weights[type] > 0 && (MobAt(type) == null || (int)MobAt(type).Kind != type)) return "Definizione MOB mancante o non corrispondente al tipo.";
+                }
+                if (Mathf.Abs(sum - 100) > .001f) return "La distribuzione MOB deve totalizzare 100%.";
+                var g = GeometryForArea(index); var exit = ExitForArea(index);
+                if (g.ActorRadius <= 0 || g.CameraSize <= 0 || g.AreaSize.x <= 0 || g.AreaSize.y <= 0 || g.SearchAttemptsPerFrame < 1)
+                    return "Geometria o budget di ricerca non valido.";
+                if (!g.EnableMobSeparation) return "Il test richiede collisione/separazione MOB attiva.";
+                if (Mathf.Abs(exit.x) + 4 >= g.AreaSize.x / 2 || Mathf.Abs(exit.y) + 4 >= g.AreaSize.y / 2)
+                    return "Il TRIGGER di uscita deve essere interno all'AREA.";
+            }
             return null;
         }
     }

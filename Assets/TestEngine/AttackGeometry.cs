@@ -39,8 +39,13 @@ namespace RogZombie.TestEngine
             float visible = distance;
             foreach (var obstacle in TestObstacle.All)
             {
-                if (!obstacle.isActiveAndEnabled || !obstacle.GetComponent<BoxCollider2D>().enabled) continue;
+                if (!obstacle.isActiveAndEnabled || !obstacle.Body.enabled) continue;
                 if (obstacle.Bounds.SqrDistance(center) > visible * visible) continue;
+                if (obstacle.IsPolygon)
+                {
+                    visible = PolygonVisibleDistance(center, direction, visible, obstacle.WorldOutline());
+                    continue;
+                }
                 Vector2 origin = obstacle.UnrotatePoint(center);
                 Vector2 ray = Quaternion.Euler(0, 0, -obstacle.transform.eulerAngles.z) * direction;
                 Bounds bounds = obstacle.UnrotatedBounds;
@@ -49,6 +54,73 @@ namespace RogZombie.TestEngine
                     !ClipAxis(origin.y, ray.y, bounds.min.y, bounds.max.y, ref enter, ref leave)) continue;
                 if (leave > Mathf.Max(0, enter) + .000001f && enter < visible)
                     visible = Mathf.Max(0, enter);
+            }
+            return visible;
+        }
+        // Snapshot once per visual rebuild, not once per ray. Damage queries keep reading live geometry.
+        public readonly struct OcclusionBox
+        {
+            public readonly Vector2 Origin, Min, Max;
+            public readonly Quaternion Rotation;
+            public readonly float DistanceSquared;
+            public readonly Vector2[] Polygon;
+            public readonly Vector2 Center;
+            public OcclusionBox(TestObstacle obstacle, Vector2 center)
+            {
+                Center = center; Polygon = obstacle.IsPolygon ? (Vector2[])obstacle.WorldOutline().Clone() : null;
+                DistanceSquared = obstacle.Bounds.SqrDistance(center);
+                Origin = obstacle.UnrotatePoint(center);
+                Rotation = Quaternion.Euler(0, 0, -obstacle.transform.eulerAngles.z);
+                var bounds = obstacle.UnrotatedBounds;
+                Min = bounds.min; Max = bounds.max;
+            }
+        }
+        public static float VisibleDistance(Vector2 direction, float distance, List<OcclusionBox> boxes)
+        {
+            float visible = distance;
+            foreach (var box in boxes)
+            {
+                if (box.DistanceSquared > visible * visible) continue;
+                if (box.Polygon != null)
+                { visible = PolygonVisibleDistance(box.Center, direction, visible, box.Polygon); continue; }
+                Vector2 ray = box.Rotation * direction;
+                float enter = float.NegativeInfinity, leave = float.PositiveInfinity;
+                if (!ClipAxis(box.Origin.x, ray.x, box.Min.x, box.Max.x, ref enter, ref leave) ||
+                    !ClipAxis(box.Origin.y, ray.y, box.Min.y, box.Max.y, ref enter, ref leave)) continue;
+                if (leave > Mathf.Max(0, enter) + .000001f && enter < visible)
+                    visible = Mathf.Max(0, enter);
+            }
+            return visible;
+        }
+        public static bool PointInPolygon(Vector2 point, IList<Vector2> points)
+        {
+            bool inside = false;
+            for (int i = 0, j = points.Count - 1; i < points.Count; j = i++)
+            {
+                Vector2 a = points[i], b = points[j];
+                if ((a.y > point.y) != (b.y > point.y) && point.x < (b.x - a.x) * (point.y - a.y) / (b.y - a.y) + a.x) inside = !inside;
+            }
+            return inside;
+        }
+        private static float PolygonVisibleDistance(Vector2 origin, Vector2 direction, float distance, IList<Vector2> points)
+        {
+            // Probe just inside the ray so leaving an impact point stays visible.
+            if (PointInPolygon(origin + direction * .000001f, points)) return 0;
+            float visible = distance;
+            for (int i = 0; i < points.Count; i++)
+            {
+                Vector2 a = points[i], edge = points[(i + 1) % points.Count] - a;
+                float denominator = direction.x * edge.y - direction.y * edge.x;
+                if (Mathf.Abs(denominator) < .0000001f) continue;
+                Vector2 offset = a - origin;
+                float t = (offset.x * edge.y - offset.y * edge.x) / denominator;
+                float u = (offset.x * direction.y - offset.y * direction.x) / denominator;
+                // CCW outline: only crossings entering the solid polygon occlude.
+                if (denominator < 0 && t >= -.000001f && u >= 0 && u <= 1)
+                {
+                    if ((u < .000001f || u > .999999f) && !PointInPolygon(origin + direction * (Mathf.Max(0, t) + .00001f), points)) continue;
+                    visible = Mathf.Min(visible, Mathf.Max(0, t));
+                }
             }
             return visible;
         }

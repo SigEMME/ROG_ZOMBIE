@@ -46,7 +46,7 @@ namespace RogZombie.TestEngine
             var item = owned.Find(value => value.DefinitionIndex == bonus);
             if (item == null || upgrade < 0 || upgrade >= item.UpgradeCounts.Length) return false;
             string key = Catalog.Bonuses[bonus].Upgrades[upgrade].Key;
-            if (key == "CD") return item.UpgradeCounts[upgrade] < 9;
+            if (key == "CD") return item.UpgradeCounts[upgrade] < 18; // 18 x 5% of base CD reaches the 90% cap.
             return !(Catalog.Bonuses[bonus].Id == "shield" && key == "DEF" && Value(item, "DEF") >= 90);
         }
 

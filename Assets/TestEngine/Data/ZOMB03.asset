@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier:
   Kind: 2
   BaseStats:
-    HP: 110
+    HP: 120
     ATK: 20
     DEF: 110
-    MoveSpeed: 90
-    AttackSpeed: 50
+    MoveSpeed: 80
+    AttackSpeed: 70
     Range: 250
   ExpDrop: 20
   GoldDrop: 20

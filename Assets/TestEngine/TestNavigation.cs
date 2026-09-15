@@ -35,6 +35,14 @@ namespace RogZombie.TestEngine
             Physics2D.SyncTransforms();
             foreach (var wall in TestObstacle.All)
             {
+                if (!wall.Body.enabled) continue;
+                if (wall.NavigationMesh != null)
+                {
+                    Vector3 position = wall.transform.position;
+                    sources.Add(new NavMeshBuildSource { shape = NavMeshBuildSourceShape.Mesh, sourceObject = wall.NavigationMesh,
+                        transform = Matrix4x4.TRS(new Vector3(position.x, 0, position.y), Quaternion.Euler(0, -wall.transform.eulerAngles.z, 0), Vector3.one), area = 1 });
+                    continue;
+                }
                 var box = wall.GetComponent<BoxCollider2D>();
                 Vector3 centre = box.transform.TransformPoint(box.offset);
                 Vector3 scale = box.transform.lossyScale;

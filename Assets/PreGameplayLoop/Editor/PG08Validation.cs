@@ -228,14 +228,11 @@ namespace RogZombie.PreGameplayLoop.Editor
         }
         private static void GeometryChecks()
         {
-            Check(PG08WireGeometry.CircleIntersects(new Vector2(6.5f, 0), 0, 6, 7, 0, 36), "Annulus middle inside");
-            Check(!PG08WireGeometry.CircleIntersects(new Vector2(5.99f, 0), 0, 6, 7, 0, 36), "Annulus inner hole excluded");
-            Check(!PG08WireGeometry.CircleIntersects(new Vector2(7.01f, 0), 0, 6, 7, 0, 36), "Annulus outside excluded");
-            Check(PG08WireGeometry.CircleIntersects(new Vector2(5.7f, 0), .35f, 6, 7, 0, 36), "Body overlaps inner rim");
-            Check(PG08WireGeometry.CircleIntersects(new Vector2(7.3f, 0), .35f, 6, 7, 0, 36), "Body overlaps outer rim");
-            Check(!PG08WireGeometry.BoxIntersects(Vector2.zero, 6, 7, 0, 36, new Bounds(Vector3.zero, Vector3.one)), "Blocker in hole does not delete ring");
-            Check(PG08WireGeometry.BoxIntersects(Vector2.zero, 6, 7, 0, 36, new Bounds(new Vector3(6.5f, .5f), Vector3.one * .1f)), "Tiny blocker deletes intersected sector");
-            Check(!PG08WireGeometry.BoxIntersects(Vector2.zero, 6, 7, 0, 36, new Bounds(new Vector3(6.5f, -.5f), Vector3.one * .1f)), "Other sector unaffected");
+            Check(PG08WireGeometry.Contains(new Vector2(4, 0), 3.5f, 4.5f), "Annulus middle inside");
+            Check(!PG08WireGeometry.Contains(new Vector2(3.49f, 0), 3.5f, 4.5f), "Annulus inner hole excluded");
+            Check(!PG08WireGeometry.Contains(new Vector2(4.51f, 0), 3.5f, 4.5f), "Annulus outside excluded");
+            Check(PG08WireGeometry.Contains(new Vector2(3.5f, 0), 3.5f, 4.5f), "Annulus inner boundary included");
+            Check(PG08WireGeometry.Contains(new Vector2(4.5f, 0), 3.5f, 4.5f), "Annulus outer boundary included");
             Near(AbilityCooldown.FinalSeconds(16, 10), 1.6f, "Wire min CD1.6"); Near(AbilityCooldown.FinalSeconds(10, 95), 9.5f, "Push CD modifier");
         }
         private static IEnumerator BaseChecks()
@@ -321,7 +318,7 @@ namespace RogZombie.PreGameplayLoop.Editor
             var middle = Probe(Origin + AttackGeometry.Direction(18) * 6.5f, defence:115);
             var hole = Probe(Origin + Vector2.up * 5); var outside = Probe(Origin + Vector2.up * 8); var ally = Probe(Origin + Vector2.up * 6.5f, Faction.PG);
             ability.Advance(100); Check(ability.TryActivate(), "Wire activation");
-            var ring = UnityEngine.Object.FindFirstObjectByType<PG08WireArea>(); Check(ring != null && ring.ValidSections == 10, "All10 valid sections");
+            var ring = UnityEngine.Object.FindFirstObjectByType<PG08WireArea>(); Check(ring != null && ring.Remaining > 0, "Continuous wire annulus created");
             Near(middle.CurrentHP, 500, "Wire has no immediate damage tick"); Near(middle.MovementMetresPerSecond, 1.5f, "Wire slow immediate"); Near(hole.MovementMetresPerSecond, 2, "Hole has no slow");
             loop.Player.transform.position = Origin + Vector2.left * 3; Near(Vector2.Distance(ring.transform.position, Origin), 0, "Ring does not follow PG");
             var overlapping = Ring(Origin); Near(middle.MovementMetresPerSecond, 1.5f, "Overlapping SLOW stays25%");
@@ -338,15 +335,15 @@ namespace RogZombie.PreGameplayLoop.Editor
             middle = Probe(Origin + Vector2.right * 6.5f); ring = Ring(Origin);
             wait = Wait(3.15f); while (wait.MoveNext()) yield return null; Near(middle.CurrentHP, 470, "Wire three ticks over3s"); Near(middle.MovementMetresPerSecond, 2, "Natural expiry clears slow"); Remove(middle); yield return null;
             var blocker = Obstacle(Origin + AttackGeometry.Direction(18) * 6.5f, Vector2.one * .1f, false);
-            ring = Ring(Origin); Near(ring.ValidSections, 9, "Partial overlap removes entire36-degree section");
-            middle = Probe(Origin + AttackGeometry.Direction(25) * 6.5f); Check(!ring.Contains(middle), "Deleted section has no contact away from blocker");
+            ring = Ring(Origin); Check(ring != null, "Cover does not remove the annulus");
+            middle = Probe(Origin + AttackGeometry.Direction(25) * 6.5f); Check(ring.Contains(middle), "Target outside blocker shadow remains exposed");
             ring.End(); Remove(middle); UnityEngine.Object.Destroy(blocker); yield return null;
-            blocker = Obstacle(Origin, Vector2.one * 16, true); ability.Advance(100); Check(ability.TryActivate(), "Zero-section cast still used");
-            Near(ability.CooldownRemaining, 16, "Zero-section cast starts full CD"); Check(!ability.EffectActive, "Zero-section ring not active");
+            blocker = Obstacle(Origin, Vector2.one * 16, true); ability.Advance(100); Check(ability.TryActivate(), "Fully shielded cast still used");
+            Near(ability.CooldownRemaining, 16, "Fully shielded cast starts full CD"); Check(ability.EffectActive, "Fully shielded ring retains its duration");
             UnityEngine.Object.Destroy(blocker); yield return null;
             ability.Advance(100); ReducedCD(); Check(ability.TryActivate(), "Reduced-CD wire cast"); ability.Advance(1.6f); Check(ability.TryActivate(), "Reduced CD allows overlapping rings");
-            blocker = Obstacle(Origin, Vector2.one * 16, true); ability.Advance(1.6f); Check(ability.TryActivate(), "Zero-section cast while prior rings exist");
-            Check(ability.EffectActive && ability.DurationRemaining > 0, "Zero-section cast preserves HUD state of prior rings");
+            blocker = Obstacle(Origin, Vector2.one * 16, true); ability.Advance(1.6f); Check(ability.TryActivate(), "Fully shielded cast while prior rings exist");
+            Check(ability.EffectActive && ability.DurationRemaining > 0, "Fully shielded cast preserves HUD state of prior rings");
             UnityEngine.Object.Destroy(blocker); ability.ChangeArea();
             typeof(LoopSession).GetField("cdReduction", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).SetValue(loop, 100f);
         }

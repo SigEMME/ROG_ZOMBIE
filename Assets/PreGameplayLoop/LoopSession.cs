@@ -7,7 +7,7 @@ namespace RogZombie.PreGameplayLoop
     public enum LoopState { Loading, Combat, AreaComplete, Bonus, Transition, Finished, Defeat, Error }
 
     [DefaultExecutionOrder(-100)]
-    public sealed class LoopSession : MonoBehaviour, ISpawnWorld
+    public sealed partial class LoopSession : MonoBehaviour, ISpawnWorld
     {
         public LoopDefinition Definition;
         public LoopState State { get; private set; } = LoopState.Loading;
@@ -34,8 +34,9 @@ namespace RogZombie.PreGameplayLoop
         public PG06AbilityRuntime PG06Ability { get; private set; }
         public PG05AbilityRuntime PG05Ability { get; private set; }
         public PG04ItemSlots PG04Items { get; private set; }
-        public bool GameplayRunning => Time.timeScale > 0 && (State == LoopState.Combat || State == LoopState.AreaComplete);
+        public bool GameplayRunning => ParentSession != null ? ParentSession.GameplayRunning : Time.timeScale > 0 && (State == LoopState.Combat || State == LoopState.AreaComplete);
         public string Failure { get; private set; }
+        public ResurrectionRuntime Resurrection { get; private set; }
         public BonusInventory Bonuses { get; private set; }
         public BonusAbilityRuntime BonusAbilities { get; private set; }
         public ExperienceProgression Experience { get; private set; }
@@ -49,6 +50,7 @@ namespace RogZombie.PreGameplayLoop
 
         private void Start()
         {
+            if (ParentSession != null) return;
             previousTimeScale = Time.timeScale;
             GameCamera = Camera.main;
             gameObject.AddComponent<LoopHUD>();
@@ -73,13 +75,14 @@ namespace RogZombie.PreGameplayLoop
         {
             State = LoopState.Loading;
             Time.timeScale = 0;
-            Settings = Instantiate(Definition.GeometryTemplate);
+            Settings = Instantiate(Definition.GeometryForArea(AreaIndex));
             Settings.TotalMobs = Definition.AreaTotals[AreaIndex];
             Settings.FirstSpawnPercent = 30;
-            Settings.MobPercentages = new float[] { 100, 0, 0, 0, 0 };
-            Settings.OffscreenExtraRange = 5;
+            Settings.MobPercentages = (float[])Definition.AreaMobDistributions[AreaIndex].Percentages.Clone();
+            Settings.OffscreenExtraRange = 15;
             Settings.PlayerMoveSpeedBase = 2; // GDD unit conversion, supersedes old test tuning only here.
-            Settings.Mobs = new[] { Definition.ZOMB01 };
+            Settings.Mobs = new MobDefinition[5];
+            for (int i = 0; i < Settings.Mobs.Length; i++) Settings.Mobs[i] = Definition.MobAt(i);
             GameCamera.orthographic = true;
             GameCamera.orthographicSize = Settings.CameraSize;
             areaRoot = new GameObject("AREA test " + (AreaIndex + 1)).transform;
@@ -90,16 +93,20 @@ namespace RogZombie.PreGameplayLoop
             Navigation.AgentRadius = Settings.ActorRadius;
             Navigation.Build(Settings.AreaSize);
             if (!Navigation.Ready || !Navigation.Sample(Settings.StartPosition, out var start, .1f) ||
-                !Navigation.Sample(Definition.ExitPosition, out var exit, .1f) || !Navigation.Reachable(start, exit))
+                !Navigation.Sample(Definition.ExitForArea(AreaIndex), out var exit, .1f) || !Navigation.Reachable(start, exit))
             { Fail("Inizio/uscita non validi o non collegati sulla NavMesh."); yield break; }
+            if (Controlled == null) Controlled = this;
             if (Player == null) CreatePlayer();
+            PrepareCompanion();
             Player.GetComponent<PlayerMovement>().TestSettings = Settings;
             Player.transform.SetPositionAndRotation(Settings.StartPosition, Quaternion.identity);
+            PlaceCompanion();
             FollowCamera();
-            var exitObject = TestVisuals.Box("USCITA AREA", Definition.ExitPosition, Vector2.one, Color.gray, 1);
+            var exitObject = TestVisuals.Box("USCITA AREA", Definition.ExitForArea(AreaIndex), Vector2.one, Color.gray, 1);
             Exit = exitObject.AddComponent<AreaExitTrigger>();
             Exit.Initialize(Player.Actor);
             Exit.Entered += OpenBonus;
+            Exit.PartyReady = PartyReadyForExit;
             var debug = areaRoot.gameObject.AddComponent<DamageNumbersDebug>();
             debug.Settings = Settings;
             debug.ViewCamera = GameCamera;
@@ -124,7 +131,7 @@ namespace RogZombie.PreGameplayLoop
                 AreaIndex == 0 ? new Color(.09f, .12f, .13f) : new Color(.13f, .10f, .09f), -10);
             TestVisuals.FloorGrid(size);
             TestVisuals.Box("SPAWN PG", Settings.StartPosition, Vector2.one, Color.green, -8);
-            TestVisuals.Box("Riferimento USCITA", Definition.ExitPosition, Vector2.one * 1.5f, Color.yellow, -8);
+            TestVisuals.Box("Riferimento USCITA", Definition.ExitForArea(AreaIndex), Vector2.one * 1.5f, Color.yellow, -8);
             MakeObstacle(new Vector2(-size.x / 2, 0), new Vector2(1, size.y), true);
             MakeObstacle(new Vector2(size.x / 2, 0), new Vector2(1, size.y), true);
             MakeObstacle(new Vector2(0, -size.y / 2), new Vector2(size.x, 1), true);
@@ -162,6 +169,7 @@ namespace RogZombie.PreGameplayLoop
             go.AddComponent<PlayerAim>();
             Player = go.AddComponent<PlayerRuntime>();
             Player.Initialize(selectedWeapon.PG);
+            Resurrection = go.AddComponent<ResurrectionRuntime>();
             Player.Actor.RoundFinalDamage = true; // GDD: round only after final DEF mitigation.
             Ability = null; Passive = null; PG02Ability = null; PG02Passive = null; PG03Ability = null; PG03Passive = null; PG04Ability = null; PG04Items = null; PG05Ability = null; PG06Ability = null; PG07Ability = null; PG08Ability = null; PG08Passive = null;
             cdReduction = Player.CdReduction;
@@ -175,6 +183,7 @@ namespace RogZombie.PreGameplayLoop
             if (Definition.SelectedPlayer == LoopPlayer.PG05) { runtimeWeapon.Shape = AttackShape.Cone; runtimeWeapon.ConeAngle = 135; }
             weapon.Definition = runtimeWeapon;
             weapon.Muzzle = muzzle;
+            weapon.TrajectoryVisibleWhen = () => DirectlyControlled;
             if (Definition.SelectedPlayer == LoopPlayer.PG01)
             {
                 Passive = go.AddComponent<PG01PassiveRuntime>();
@@ -202,7 +211,7 @@ namespace RogZombie.PreGameplayLoop
             else if (Definition.SelectedPlayer == LoopPlayer.PG04)
             {
                 PG04Items = go.AddComponent<PG04ItemSlots>();
-                PG04Items.Initialize(Definition.PG04TestItemSlots, Definition.SelectedPG04Passive);
+                PG04Items.Initialize(ParentSession == null ? Definition.PG04TestItemSlots : 0, Definition.SelectedPG04Passive);
                 PG04Ability = go.AddComponent<PG04AbilityRuntime>();
                 PG04Ability.Initialize(this, Definition.SelectedPG04Ability, Definition.SelectedPG04Passive, Definition.PG04Abilities);
                 go.AddComponent<PG04AbilityInput>();
@@ -240,29 +249,37 @@ namespace RogZombie.PreGameplayLoop
             BonusAbilities.Initialize(this, Bonuses);
             Experience = go.AddComponent<ExperienceProgression>();
             Experience.Thresholds = (int[])Settings.ExperienceThresholds.Clone();
+            go.AddComponent<PartyCommands>().Context = this;
             go.SetActive(true);
+            if (ParentSession != null) go.GetComponent<PlayerMovement>().enabled = false;
         }
 
         public Combatant CreateMob(int index, Vector2 position)
         {
-            var go = TestVisuals.Circle("ZOMB01", position, Settings.ActorRadius, new Color(.4f, .7f, .4f), 2);
+            var definition = Settings.Mobs[index];
+            Color color = index == 0 ? new Color(.4f, .7f, .4f) : index == 1 ? new Color(1f, .55f, .15f) :
+                index == 2 ? new Color(.7f, .35f, .9f) : index == 3 ? Color.cyan : new Color(.9f, .25f, .25f);
+            var go = TestVisuals.Circle(definition.Kind.ToString(), position, Settings.ActorRadius, color, 2);
             go.layer = LayerMask.NameToLayer("MOB");
             go.AddComponent<CircleCollider2D>().radius = Settings.ActorRadius;
             var actor = go.AddComponent<Combatant>();
-            go.AddComponent<MobBrain>().Initialize(Definition.ZOMB01, Navigation);
+            go.AddComponent<MobBrain>().Initialize(definition, Navigation);
             go.AddComponent<MobSeparation>().Settings = Settings;
             return actor;
         }
 
         private void Update()
         {
+            if (ParentSession != null) return;
             if (State != LoopState.Combat && State != LoopState.AreaComplete) return;
-            if (!Player.Actor.IsActive)
+            UpdatePartyControl();
+            if (!Player.Actor.IsActive && (Companion == null || !Companion.Player.Actor.IsActive))
             {
                 State = LoopState.Defeat;
-                Time.timeScale = 0; // Sole PG DOWN means no active party member remains.
+                Time.timeScale = 0; // No active party member remains.
                 return;
             }
+            TickResurrection(Time.deltaTime, UnityEngine.InputSystem.Keyboard.current != null && UnityEngine.InputSystem.Keyboard.current.fKey.isPressed);
             if (State == LoopState.Combat && Spawns.Killed == Settings.TotalMobs &&
                 Spawns.TotalSpawned == Settings.TotalMobs && Spawns.Alive == 0)
             {
@@ -273,11 +290,11 @@ namespace RogZombie.PreGameplayLoop
 
         private void OpenBonus()
         {
-            if (State != LoopState.AreaComplete || !Player.Actor.IsActive) return;
+            if (State != LoopState.AreaComplete || !Controlled.Player.Actor.IsActive) return;
             State = LoopState.Bonus;
             Time.timeScale = 0;
-            Choices = AreaStatBonus.Draw();
-            AbilityChoices = Bonuses.Generate(2, System.Array.ConvertAll(Choices, stat => (int)stat));
+            rewardContext = this;
+            DrawAreaChoices();
             Selected = -1;
         }
 
@@ -289,8 +306,11 @@ namespace RogZombie.PreGameplayLoop
         public void ConfirmBonus()
         {
             if (State != LoopState.Bonus || Selected < 0) return;
-            if (Selected < Choices.Length) ApplyStat(Choices[Selected]);
-            else Bonuses.Apply(AbilityChoices[Selected - Choices.Length]);
+            if (Selected < Choices.Length) RewardContext.ApplyStat(Choices[Selected]);
+            else RewardContext.Bonuses.Apply(AbilityChoices[Selected - Choices.Length]);
+            if (Companion != null && RewardContext == this && Companion.Player.Actor.State != LifeState.Dead)
+            { rewardContext = Companion; DrawAreaChoices(); return; }
+            rewardContext = null;
             AbilityChoices = null;
             Choices = null;
             Selected = -1;
@@ -300,7 +320,7 @@ namespace RogZombie.PreGameplayLoop
             StartCoroutine(NextArea());
         }
 
-        private IEnumerator NextArea()
+        private void ClearAbilityEffects()
         {
             BonusAbilities?.ChangeArea();
             if (Ability != null) Ability.ChangeArea();
@@ -313,13 +333,19 @@ namespace RogZombie.PreGameplayLoop
             if (PG02Passive != null) PG02Passive.ChangeArea();
             if (PG08Ability != null) PG08Ability.ChangeArea();
             if (PG08Passive != null) PG08Passive.ChangeArea();
+        }
+
+        private IEnumerator NextArea()
+        {
+            ClearAbilityEffects(); Companion?.ClearAbilityEffects();
             Exit.Entered -= OpenBonus;
             areaRoot.gameObject.SetActive(false);
             Destroy(areaRoot.gameObject);
             Destroy(Settings);
             yield return null; // Dispose corpse timers, effects, NavMesh and spawn subscriptions.
-            Player.Actor.Heal(.15f);
+            RestoreMemberForArea(this);
             Experience.DropPercent = Experience.DropPercent * 105 / 100;
+            if (Companion != null) { RestoreMemberForArea(Companion); Companion.Experience.DropPercent = Companion.Experience.DropPercent * 105 / 100; }
             AreaIndex++;
             yield return BuildArea();
         }
@@ -329,6 +355,7 @@ namespace RogZombie.PreGameplayLoop
         public void AddGold(int value) => Gold += value;
         public void RefreshNavigation()
         {
+            if (ParentSession != null) { ParentSession.RefreshNavigation(); return; }
             if (Navigation != null && Settings != null) Navigation.Build(Settings.AreaSize);
         }
         public void RestartTest()
@@ -336,7 +363,7 @@ namespace RogZombie.PreGameplayLoop
             if (Loading) return;
             string issue = Definition == null ? "LoopDefinition mancante." : Definition.Validate();
             if (issue != null) { Fail(issue); return; }
-            Experience?.CancelChoices();
+            Experience?.CancelChoices(); Companion?.Experience?.CancelChoices();
             StopAllCoroutines();
             State = LoopState.Transition;
             Time.timeScale = 0;
@@ -345,6 +372,8 @@ namespace RogZombie.PreGameplayLoop
 
         private IEnumerator RestartRoutine()
         {
+            if (Companion != null) { Companion.gameObject.SetActive(false); Destroy(Companion.gameObject); Companion = null; }
+            Controlled = this; rewardContext = null;
             if (areaRoot != null) { areaRoot.gameObject.SetActive(false); Destroy(areaRoot.gameObject); }
             if (Player != null) { Player.gameObject.SetActive(false); Destroy(Player.gameObject); }
             if (Settings != null) Destroy(Settings);
@@ -357,15 +386,16 @@ namespace RogZombie.PreGameplayLoop
             Failure = null;
             yield return BuildArea();
         }
-        private void LateUpdate() => FollowCamera();
+        private void LateUpdate() { if (ParentSession == null) FollowCamera(); }
         private void FollowCamera()
         {
             if (Player != null && GameCamera != null)
-                GameCamera.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, -10);
+                GameCamera.transform.position = new Vector3(Controlled.Player.transform.position.x, Controlled.Player.transform.position.y, -10);
         }
 
         private void OnDestroy()
         {
+            if (ParentSession != null) { if (runtimeWeapon != null) Destroy(runtimeWeapon); if (Definition != null) Destroy(Definition); return; }
             if (Exit != null) Exit.Entered -= OpenBonus;
             if (Settings != null) Destroy(Settings);
             if (TestVisuals.Root == areaRoot) TestVisuals.Root = null;

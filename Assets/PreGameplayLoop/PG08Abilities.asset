@@ -18,7 +18,6 @@ MonoBehaviour:
   WireDamage: 10
   WireSlow: 40
   WireCooldown: 16
-  WireSections: 10
   PushDistance: 1.5
   PushDuration: 0.25
   PushActiveDuration: 4

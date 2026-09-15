@@ -36,7 +36,7 @@ namespace RogZombie.TestEngine
         public int TotalMobs = 330;
         public float FirstSpawnPercent = 30f;
         public float[] MobPercentages = { 32f, 33f, 21f, 10f, 4f };
-        public float OffscreenExtraRange = 5f;
+        public float OffscreenExtraRange = 15f;
         public int[] ExperienceThresholds = { 100, 120, 130, 150, 170, 200, 230, 270, 310, 350 };
         [Header("CHEST / MEDI KIT")]
         public float ChestRate = 5f;

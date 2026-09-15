@@ -1,0 +1,201 @@
+PASS | Unity 6000.3.16f1 | checks=199 | warnings=0
+PASS RUN fixture PG01
+PASS DOWN starts at 20 s (20/20)
+PASS DOWN retains physical collider
+PASS DOWN time elapses (17/17)
+PASS Control transfers to active IA
+PASS Controlled IA revives original PG (2/2)
+PASS Reviving freezes DOWN (17/17)
+PASS Progress regresses at 1 s per second (1/1)
+PASS DOWN resumes exact residual timer (16/16)
+PASS Zero delta preserves timers (1/1)
+PASS Out of radius interrupts interaction (0,5/0,5)
+PASS Pause freezes interaction (0,5/0,5)
+PASS At exactly 5 seconds target resurrects
+PASS Resurrection uses current maximum HP (80/80)
+PASS Original PG immediately regains control
+PASS Resurrection clears progress (0/0)
+PASS Two seconds protection starts
+PASS Invulnerability rejects HIT
+PASS Invulnerability prevents damage (80/80)
+PASS Rejected HIT has no passive side effects (0/0)
+PASS Protection retains physical collider
+PASS HIT resumes after protection expires
+PASS Repeated DOWN resets timer (20/20)
+PASS DOWN expires into MORTE
+PASS MORTE disables collision
+PASS F cannot revive MORTE
+PASS Area resurrection excludes extra 15 percent heal (80/80)
+PASS Area resurrection restores collision
+PASS Original PLAYER revives IA
+PASS RUN fixture PG01
+PASS RUN reset clears DOWN timer (0/0)
+PASS RUN reset clears revival progress (0/0)
+PASS RUN reset clears protection (0/0)
+PASS Open PLAYER banner
+PASS Open IA banner
+PASS Already selected PG blocked for IA
+PASS Back preserves IA draft without confirmation
+PASS Both confirmed allow RUN
+PASS Separate configuration snapshot
+PASS RUN fixture PG02
+PASS IA selected 0/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 0
+PASS IA own cadence blocks immediate second shot
+PASS IA PG01 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG02
+PASS IA selected 0/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 0
+PASS IA own cadence blocks immediate second shot
+PASS IA PG01 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 1/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 1
+PASS IA own cadence blocks immediate second shot
+PASS IA PG02 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 1/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 1
+PASS IA own cadence blocks immediate second shot
+PASS IA PG02 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 2/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 2
+PASS IA own cadence blocks immediate second shot
+PASS IA PG03 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 2/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 2
+PASS IA own cadence blocks immediate second shot
+PASS IA PG03 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 3/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA has no item slots (0/0)
+PASS IA base attack 3
+PASS IA own cadence blocks immediate second shot
+PASS IA PG04 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 3/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA has no item slots (0/0)
+PASS IA base attack 3
+PASS IA own cadence blocks immediate second shot
+PASS IA PG04 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 4/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 4
+PASS IA own cadence blocks immediate second shot
+PASS IA PG05 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 4/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 4
+PASS IA own cadence blocks immediate second shot
+PASS IA PG05 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 5/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 5
+PASS IA own cadence blocks immediate second shot
+PASS IA PG06 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 5/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 5
+PASS IA own cadence blocks immediate second shot
+PASS IA PG06 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 6/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 6
+PASS IA own cadence blocks immediate second shot
+PASS IA PG07 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 6/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 6
+PASS IA own cadence blocks immediate second shot
+PASS IA PG07 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 7/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 7
+PASS IA own cadence blocks immediate second shot
+PASS IA PG08 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 7/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 7
+PASS IA own cadence blocks immediate second shot
+PASS IA PG08 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG02
+PASS Shared LMB with independent ATK SPD: 3/1 focused=True pointerBlocked=False
+PASS IA stops firing when LMB released
+PASS Q does not activate companion ability
+PASS SPACE+1 begins companion preview
+PASS Chord release places companion BARRIERA
+PASS RUN fixture PG01
+PASS Formation behind cursor aim (0/0)
+PASS Cursor turn starts gradually without a formation jump
+PASS Formation rotates behind aim (0,001/0)
+PASS Formation handles reversed aim without crossing PLAYER (0,001/0)
+PASS Blocked formation finds a NavMesh alternative
+PASS Alternative is free and inside one metre
+PASS Temporary distance above one metre when all local positions occupied
+PASS Returns to one-metre destination as soon as space is free
+PASS Formation pauses (0/0)
+PASS Formation preserves persistent MOVE SPD (100/100)
+PASS Simultaneous LEVEL UP serialized
+PASS Both LEVEL UP queues resolve without stuck pause
+PASS End AREA first choice for PLAYER
+PASS End AREA requires separate IA choice
+PASS Companion persists across AREA
+PASS Companion AREA heal retained
+PASS Exit waits for companion inside radius
+PASS Both active PG inside exit are ready
+PASS DOWN transfers direct control to companion
+PASS DOWN member blocks AREA exit
+PASS Both DOWN ends RUN
+PASS RUN fixture PG01
+PASS RUN resets companion state
+Companion prototype: selection, formation, individual attacks, abilities, progression, AREA and RUN lifecycle.

@@ -11,6 +11,8 @@ namespace RogZombie.PreGameplayLoop
         private LoopSession session;
         private readonly AbilityCooldown cooldown = new AbilityCooldown();
         private readonly List<BarrierEffect> barriers = new List<BarrierEffect>();
+        private readonly List<Collider2D> placementOverlaps = new List<Collider2D>();
+        private readonly BarrierGeometry geometry = new BarrierGeometry();
         private GameObject preview;
         private Vector2 previewCentre;
         private float previewAngle;
@@ -67,7 +69,8 @@ namespace RogZombie.PreGameplayLoop
         public bool BeginAim(Vector2 cursor)
         {
             if (selected != PG01Ability.Barriera || !CanUse || !cooldown.Ready || IsAiming) return false;
-            preview = TestVisuals.Box("Anteprima BARRIERA", cursor, data.BarrierSize, Color.cyan, 5);
+            preview = new GameObject("Anteprima BARRIERA"); preview.transform.SetParent(TestVisuals.Root, false);
+            preview.AddComponent<PG04AreaVisual>();
             // Presentation only; no Collider, TestObstacle or navigation changes until release.
             AimAt(cursor);
             return true;
@@ -83,8 +86,35 @@ namespace RogZombie.PreGameplayLoop
             previewCentre = origin + Vector2.ClampMagnitude(offset, data.BarrierPlacementRange);
             previewAngle = Mathf.Atan2(heading.y, heading.x) * Mathf.Rad2Deg + 90;
             preview.transform.SetPositionAndRotation(previewCentre, Quaternion.Euler(0, 0, previewAngle));
-            PreviewValid = true; // Owner permits overlap with actors and level geometry.
-            preview.GetComponent<SpriteRenderer>().color = PreviewValid ? new Color(0, 1, 1, .4f) : new Color(1, .1f, .1f, .4f);
+            Physics2D.SyncTransforms();
+            var filter = ContactFilter2D.noFilter;
+            filter.SetLayerMask(LayerMask.GetMask("PG"));
+            filter.useTriggers = false;
+            Physics2D.OverlapBox(previewCentre, data.BarrierSize, previewAngle, filter, placementOverlaps);
+            geometry.Build(previewCentre, data.BarrierSize, previewAngle);
+            PreviewValid = geometry.HasArea;
+            foreach (var body in placementOverlaps)
+            {
+                Vector2 local = preview.transform.InverseTransformPoint(body.bounds.center);
+                float radius = Mathf.Max(body.bounds.extents.x, body.bounds.extents.y);
+                if (geometry.OverlapsCircle(local, radius)) { PreviewValid = false; break; }
+            }
+            preview.GetComponent<PG04AreaVisual>().InitializePolygon(geometry.Points,
+                PreviewValid ? new Color(0, 1, 1, .4f) : new Color(1, .1f, .1f, .4f), 5);
+            var outline = preview.GetComponent<LineRenderer>();
+            if (!geometry.HasArea)
+            {
+                if (outline == null)
+                {
+                    outline = preview.AddComponent<LineRenderer>(); outline.useWorldSpace = false;
+                    outline.positionCount = 4; outline.loop = true; outline.startWidth = outline.endWidth = .025f;
+                    outline.sharedMaterial = preview.GetComponent<MeshRenderer>().sharedMaterial; outline.sortingOrder = 5;
+                }
+                Vector2 half = data.BarrierSize * .5f;
+                outline.SetPosition(0, new Vector2(-half.x,-half.y)); outline.SetPosition(1,new Vector2(half.x,-half.y));
+                outline.SetPosition(2,new Vector2(half.x,half.y)); outline.SetPosition(3,new Vector2(-half.x,half.y));
+            }
+            if (outline != null) outline.enabled = !geometry.HasArea;
         }
 
         public bool ReleaseAim(Vector2 cursor)
@@ -92,7 +122,7 @@ namespace RogZombie.PreGameplayLoop
             if (!IsAiming) return false;
             AimAt(cursor); // Use the current cursor and PG position at release.
             if (!IsAiming || !CanUse || !cooldown.Ready || !PreviewValid) { CancelAim(); return false; }
-            var barrier = BarrierEffect.Spawn(previewCentre, previewAngle, data);
+            var barrier = BarrierEffect.Spawn(previewCentre, previewAngle, data, geometry);
             barriers.Add(barrier);
             cooldown.Restart(data.BarrierBaseCooldown, session.CdReduction);
             CancelAim();

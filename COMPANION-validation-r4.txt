@@ -1,0 +1,143 @@
+FAIL | Unity 6000.3.16f1 | checks=137 | warnings=0
+PASS Open PLAYER banner
+PASS Open IA banner
+PASS Already selected PG blocked for IA
+PASS Back preserves IA draft without confirmation
+PASS Both confirmed allow RUN
+PASS Separate configuration snapshot
+PASS RUN fixture PG02
+PASS IA selected 0/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 0
+PASS IA own cadence blocks immediate second shot
+PASS IA PG01 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG02
+PASS IA selected 0/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 0
+PASS IA own cadence blocks immediate second shot
+PASS IA PG01 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 1/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 1
+PASS IA own cadence blocks immediate second shot
+PASS IA PG02 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 1/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 1
+PASS IA own cadence blocks immediate second shot
+PASS IA PG02 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 2/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 2
+PASS IA own cadence blocks immediate second shot
+PASS IA PG03 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 2/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 2
+PASS IA own cadence blocks immediate second shot
+PASS IA PG03 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 3/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA has no item slots (0/0)
+PASS IA base attack 3
+PASS IA own cadence blocks immediate second shot
+PASS IA PG04 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 3/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA has no item slots (0/0)
+PASS IA base attack 3
+PASS IA own cadence blocks immediate second shot
+PASS IA PG04 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 4/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 4
+PASS IA own cadence blocks immediate second shot
+PASS IA PG05 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 4/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 4
+PASS IA own cadence blocks immediate second shot
+PASS IA PG05 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 5/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 5
+PASS IA own cadence blocks immediate second shot
+PASS IA PG06 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 5/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 5
+PASS IA own cadence blocks immediate second shot
+PASS IA PG06 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 6/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 6
+PASS IA own cadence blocks immediate second shot
+PASS IA PG07 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 6/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 6
+PASS IA own cadence blocks immediate second shot
+PASS IA PG07 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 7/0
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 7
+PASS IA own cadence blocks immediate second shot
+PASS IA PG08 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG01
+PASS IA selected 7/1
+PASS Independent actors and inventory
+PASS IA does not read WASD
+PASS IA base attack 7
+PASS IA own cadence blocks immediate second shot
+PASS IA PG08 ability
+PASS Companion actions preserve main HP
+PASS RUN fixture PG02
+System.InvalidOperationException: Shared LMB with independent ATK SPD
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation.Check (System.Boolean condition, System.String message) [0x0002a] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:135 
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation+<CompanionChecks>d__36.MoveNext () [0x0095a] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:346 
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation+<Flatten>d__30.MoveNext () [0x00044] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:189 
+  at RogZombie.PreGameplayLoop.Editor.AreaEffectsValidation.Tick () [0x001e7] in C:\UnityProjects\ROG_ZOMBIE\Assets\PreGameplayLoop\Editor\AreaEffectsValidation.cs:125 

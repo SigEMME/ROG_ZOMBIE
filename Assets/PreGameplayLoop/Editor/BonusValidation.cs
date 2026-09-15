@@ -217,7 +217,7 @@ namespace RogZombie.PreGameplayLoop.Editor
             }
             var shield = Fixture("shield", out var pg, out var bag);
             Near(shield.Cooldown("shield"),6,"SCUDO acquired in CD");
-            Upgrade(bag,"shield","DEF",10); Upgrade(bag,"shield","CD",9);
+            Upgrade(bag,"shield","DEF",10); Upgrade(bag,"shield","CD",18);
             Near(shield.Value("shield","DEF"),90,"SCUDO DEF cap90"); Near(shield.Value("shield","CD"),.6f,"SCUDO CD cap90 percent");
             int fallback = 0; bag.ApplyStatFallback = _ => fallback++;
             for (int i=0;i<100;i++) foreach(var banner in bag.Generate())
@@ -245,8 +245,8 @@ namespace RogZombie.PreGameplayLoop.Editor
             Remove(pg,victim);yield return null;
 
             var ricochet=Fixture("ricochet",out pg,out bag);Upgrade(bag,"ricochet","RIMBALZI",2);
-            var a=Probe(new Vector2(0,0));var b=Probe(new Vector2(4,0),Faction.MOB,150);var far=Probe(new Vector2(10,0));
-            ricochet.Bounce(a,50);Near(a.CurrentHP,480,"RICOCHET can return to prior MOB");Near(b.CurrentHP,480,"RICOCHET three bounces use original50 before DEF each time");Near(far.CurrentHP,500,"RICOCHET range5 from last target");
+            var a=Probe(new Vector2(0,0));var b=Probe(new Vector2(3,0),Faction.MOB,150);var far=Probe(new Vector2(6.01f,0));
+            ricochet.Bounce(a,50);Near(a.CurrentHP,480,"RICOCHET can return to prior MOB");Near(b.CurrentHP,480,"RICOCHET three bounces use original50 before DEF each time");Near(far.CurrentHP,500,"RICOCHET range3 from last target");
             Check(ricochet.RicochetHits==3 && ricochet.RicochetRolls==0,"Additional bounces automatic without rerolls/recursion");
             a.Hit(1,true,pg);Check(ricochet.RicochetRolls==0,"Ability HIT cannot trigger RICOCHET");
             a.Hit(1,true,pg,true);Check(ricochet.RicochetRolls==1,"BASE HIT performs exactly one initial roll");
@@ -289,7 +289,7 @@ namespace RogZombie.PreGameplayLoop.Editor
             Remove(pg);UnityEngine.Object.Destroy(wall);yield return null;
             var mines=Fixture("mines",out pg,out bag);mines.Advance(7);
             var mine=UnityEngine.Object.FindFirstObjectByType<BonusMine>();Check(mine!=null,"MINE launched after CD");Near(mines.Cooldown("mines"),7,"MINE CD starts on launch");
-            victim=Probe(mine.transform.position);yield return null;yield return null;Near(victim.CurrentHP,490,"MINE trigger actual damage10");Remove(pg,victim);yield return null;
+            victim=Probe(mine.transform.position);yield return null;yield return null;Near(victim.CurrentHP,500,"MINE trigger waits before explosion");yield return Wait(1.1f);Near(victim.CurrentHP,490,"MINE trigger actual damage10 after delay");Remove(pg,victim);yield return null;
 
             var petRuntime=Fixture("pet",out pg,out bag);petRuntime.Advance(.01f);
             var pet=UnityEngine.Object.FindFirstObjectByType<BonusPet>();Check(pet!=null,"PET always active on acquisition");

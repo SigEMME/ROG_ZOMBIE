@@ -16,7 +16,8 @@ MonoBehaviour:
   LaserRange: 20
   LaserWidth: 2
   LaserBaseCooldown: 18
-  TripleDamage: 40
+  TripleDamage: 30
+  TriplePenetrations: 2
   TripleRange: 20
   TripleAngle: 30
   TripleInterval: 0.5

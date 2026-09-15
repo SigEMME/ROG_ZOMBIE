@@ -29,6 +29,9 @@ namespace RogZombie.TestEngine
         private bool positioned;
         private bool retreating;
         private bool died;
+        private bool aggroEvaluated;
+        private Vector2 wanderDirection;
+        private float wanderRemaining;
 
         public void Initialize(MobDefinition definition, TestNavigation nav)
         {
@@ -66,7 +69,11 @@ namespace RogZombie.TestEngine
                 TestVisuals.FlashOccludedArea(fixedImpact, Definition.ImpactRadius, new Color(0.7f, 0.2f, 0.9f));
             }
             if (target != null && target.IsInvisible) ChooseTarget();
-            if (target == null || !target.IsActive || target.IsInvisible) return;
+            if (target == null || !target.IsActive || target.IsInvisible)
+            {
+                if (aggroEvaluated) Wander(Time.deltaTime);
+                return;
+            }
             float distance = Vector2.Distance(transform.position, target.transform.position);
             switch (Definition.Kind)
             {
@@ -82,6 +89,19 @@ namespace RogZombie.TestEngine
                     }
                     break;
             }
+        }
+
+        private void Wander(float seconds)
+        {
+            if (seconds <= 0) return;
+            if (wanderRemaining <= 0)
+            {
+                wanderDirection = AttackGeometry.Direction(Random.Range(0f, 360f));
+                wanderRemaining = Random.Range(1f, 3f);
+            }
+            // Apply to the current movement speed, preserving SLOW and persistent stats.
+            actor.Move(wanderDirection * (actor.MovementMetresPerSecond * .3f * seconds));
+            wanderRemaining -= seconds;
         }
 
         private bool ReadyToAttack() => actor.Stats.AttackSpeed > 0f && Time.time >= attackReady;
@@ -175,6 +195,7 @@ namespace RogZombie.TestEngine
 
         private void ChooseTarget()
         {
+            aggroEvaluated = true;
             Combatant selected = null;
             float best = float.PositiveInfinity;
             int ties = 0;
@@ -189,6 +210,10 @@ namespace RogZombie.TestEngine
             {
                 if (target != null) target.StateChanged -= TargetStateChanged;
                 target = selected;
+                wanderRemaining = 0;
+                corners = null;
+                corner = 0;
+                if (target == null) { positioned = false; retreating = false; }
                 if (target != null) target.StateChanged += TargetStateChanged;
                 nextPath = 0f;
             }

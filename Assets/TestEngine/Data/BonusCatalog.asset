@@ -37,9 +37,9 @@ MonoBehaviour:
       BasePercent: 15
       FlatAmount: 0
     - Key: CD
-      Label: CD -10%
+      Label: CD -5%
       Weight: 20
-      BasePercent: -10
+      BasePercent: -5
       FlatAmount: 0
     - Key: N_COLTELLI
       Label: N COLTELLI +1
@@ -100,9 +100,9 @@ MonoBehaviour:
       BasePercent: 10
       FlatAmount: 0
     - Key: CD
-      Label: CD -10%
+      Label: CD -5%
       Weight: 20
-      BasePercent: -10
+      BasePercent: -5
       FlatAmount: 0
   - Id: ricochet
     Name: RICOCHET
@@ -111,14 +111,14 @@ MonoBehaviour:
     - Key: DANNO
       BaseValue: 40
     - Key: RANGE
-      BaseValue: 5
+      BaseValue: 3
     - Key: RIMBALZI
       BaseValue: 1
     Upgrades:
     - Key: DANNO
-      Label: DANNO +10%
+      Label: DANNO +5%
       Weight: 80
-      BasePercent: 10
+      BasePercent: 5
       FlatAmount: 0
     - Key: RIMBALZI
       Label: N RIMBALZI +1
@@ -132,7 +132,7 @@ MonoBehaviour:
     - Key: DANNO
       BaseValue: 10
     - Key: RAGGIO
-      BaseValue: 3
+      BaseValue: 2
     - Key: CD
       BaseValue: 7
     - Key: DURATA
@@ -149,9 +149,9 @@ MonoBehaviour:
       BasePercent: 10
       FlatAmount: 0
     - Key: CD
-      Label: CD -10%
+      Label: CD -5%
       Weight: 20
-      BasePercent: -10
+      BasePercent: -5
       FlatAmount: 0
   - Id: shield
     Name: SCUDO
@@ -168,9 +168,9 @@ MonoBehaviour:
       BasePercent: 0
       FlatAmount: 5
     - Key: CD
-      Label: CD -10%
+      Label: CD -5%
       Weight: 50
-      BasePercent: -10
+      BasePercent: -5
       FlatAmount: 0
   - Id: fire
     Name: FIRE BULLET
@@ -198,9 +198,9 @@ MonoBehaviour:
       BasePercent: 50
       FlatAmount: 0
     - Key: CD
-      Label: CD -10%
+      Label: CD -5%
       Weight: 20
-      BasePercent: -10
+      BasePercent: -5
       FlatAmount: 0
   - Id: taser
     Name: TASER
@@ -231,9 +231,9 @@ MonoBehaviour:
       BasePercent: 25
       FlatAmount: 0
     - Key: CD
-      Label: CD -10%
+      Label: CD -5%
       Weight: 15
-      BasePercent: -10
+      BasePercent: -5
       FlatAmount: 0
   - Id: repulse
     Name: REPULSE
@@ -264,9 +264,9 @@ MonoBehaviour:
       BasePercent: 20
       FlatAmount: 0
     - Key: CD
-      Label: CD -10%
+      Label: CD -5%
       Weight: 15
-      BasePercent: -10
+      BasePercent: -5
       FlatAmount: 0
   - Id: slash
     Name: SCIABOLATA
@@ -290,9 +290,9 @@ MonoBehaviour:
       BasePercent: 15
       FlatAmount: 0
     - Key: CD
-      Label: CD -10%
+      Label: CD -5%
       Weight: 20
-      BasePercent: -10
+      BasePercent: -5
       FlatAmount: 0
   Slots: 3
   NewAtZeroSlots: 100

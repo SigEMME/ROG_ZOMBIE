@@ -5,23 +5,38 @@ namespace RogZombie.PreGameplayLoop
     public enum PreparationPage { Hub, Preparation, Selection, Run }
     public sealed class RunPreparationSelection
     {
-        public int Player { get; private set; } = -1;
-        public int Ability { get; private set; } = -1;
-        public int Passive { get; private set; } = -1;
-        public int DescriptionIndex { get; private set; } = -1;
-        public bool Confirmed { get; private set; }
+        public sealed class Member
+        {
+            public int Player = -1, Ability = -1, Passive = -1, DescriptionIndex = -1;
+            public bool Confirmed;
+            public bool Complete => Player >= 0 && Player < 8 && Ability >= 0 && Passive >= 0;
+        }
+        private readonly Member[] members = { new Member(), new Member() };
+        public Member GetMember(int index) => members[index];
+        public int EditingSlot { get; private set; }
+        public bool CompanionEnabled { get; private set; }
+        private Member Current => members[EditingSlot];
+        public int Player { get => Current.Player; private set => Current.Player = value; }
+        public int Ability { get => Current.Ability; private set => Current.Ability = value; }
+        public int Passive { get => Current.Passive; private set => Current.Passive = value; }
+        public int DescriptionIndex { get => Current.DescriptionIndex; private set => Current.DescriptionIndex = value; }
+        public bool Confirmed { get => Current.Confirmed; private set => Current.Confirmed = value; }
         public PreparationPage Page { get; private set; } = PreparationPage.Hub;
-        public bool Complete => Player >= 0 && Player < 8 && Ability >= 0 && Passive >= 0;
-        public bool CanStart => Page == PreparationPage.Preparation && Complete && Confirmed;
+        public bool Complete => Current.Complete;
+        public bool CanStart => Page == PreparationPage.Preparation && members[0].Complete && members[0].Confirmed &&
+            (!CompanionEnabled || members[1].Complete && members[1].Confirmed && members[1].Player != members[0].Player);
+        public bool IsAvailable(int player) => !CompanionEnabled || members[1 - EditingSlot].Player != player;
+        public void RemoveCompanion() { if (Page == PreparationPage.Preparation) { CompanionEnabled = false; EditingSlot = 0; } }
         public void OpenPreparation() { if (Page == PreparationPage.Hub) Page = PreparationPage.Preparation; }
         public bool OpenBanner(int index)
         {
-            if (Page != PreparationPage.Preparation || index != 0) return false;
+            if (Page != PreparationPage.Preparation || index < 0 || index > 1) return false;
+            EditingSlot = index; if (index == 1) CompanionEnabled = true;
             Confirmed = false; Page = PreparationPage.Selection; return true;
         }
         public void SelectPlayer(int index)
         {
-            if (Page != PreparationPage.Selection || index < 0 || index >= 8 || Player == index) return;
+            if (Page != PreparationPage.Selection || index < 0 || index >= 8 || Player == index || !IsAvailable(index)) return;
             Player = index; Ability = Passive = DescriptionIndex = -1; Confirmed = false;
         }
         public void SelectOption(bool passive, int index)
@@ -53,19 +68,26 @@ namespace RogZombie.PreGameplayLoop
         public LoopDefinition CreateRunDefinition(LoopDefinition source)
         {
             if (!CanStart) return null;
-            var d = Object.Instantiate(source); d.SelectedPlayer = (LoopPlayer)Player;
-            switch (Player)
-            {
-                case 0: d.SelectedAbility = (PG01Ability)Ability; d.SelectedPassive = (PG01Passive)Passive; break;
-                case 1: d.SelectedPG02Ability = (PG02Ability)Ability; d.SelectedPG02Passive = (PG02Passive)Passive; break;
-                case 2: d.SelectedPG03Ability = (PG03Ability)Ability; d.SelectedPG03Passive = (PG03Passive)Passive; break;
-                case 3: d.SelectedPG04Ability = (PG04Ability)Ability; d.SelectedPG04Passive = (PG04Passive)Passive; break;
-                case 4: d.SelectedPG05Ability = (PG05Ability)Ability; d.SelectedPG05Passive = (PG05Passive)Passive; break;
-                case 5: d.SelectedPG06Ability = (PG06Ability)Ability; d.SelectedPG06Passive = (PG06Passive)Passive; break;
-                case 6: d.SelectedPG07Ability = (PG07Ability)Ability; d.SelectedPG07Passive = (PG07Passive)Passive; break;
-                case 7: d.SelectedPG08Ability = (PG08Ability)Ability; d.SelectedPG08Passive = (PG08Passive)Passive; break;
-            }
+            var d = Object.Instantiate(source);
+            ApplyMember(d, members[0].Player, members[0].Ability, members[0].Passive);
+            d.EnableCompanion = CompanionEnabled;
+            d.CompanionPlayer = (LoopPlayer)members[1].Player; d.CompanionAbility = members[1].Ability; d.CompanionPassive = members[1].Passive;
             return d;
+        }
+        public static void ApplyMember(LoopDefinition d, int player, int ability, int passive)
+        {
+            d.SelectedPlayer = (LoopPlayer)player;
+            switch (player)
+            {
+                case 0: d.SelectedAbility = (PG01Ability)ability; d.SelectedPassive = (PG01Passive)passive; break;
+                case 1: d.SelectedPG02Ability = (PG02Ability)ability; d.SelectedPG02Passive = (PG02Passive)passive; break;
+                case 2: d.SelectedPG03Ability = (PG03Ability)ability; d.SelectedPG03Passive = (PG03Passive)passive; break;
+                case 3: d.SelectedPG04Ability = (PG04Ability)ability; d.SelectedPG04Passive = (PG04Passive)passive; break;
+                case 4: d.SelectedPG05Ability = (PG05Ability)ability; d.SelectedPG05Passive = (PG05Passive)passive; break;
+                case 5: d.SelectedPG06Ability = (PG06Ability)ability; d.SelectedPG06Passive = (PG06Passive)passive; break;
+                case 6: d.SelectedPG07Ability = (PG07Ability)ability; d.SelectedPG07Passive = (PG07Passive)passive; break;
+                case 7: d.SelectedPG08Ability = (PG08Ability)ability; d.SelectedPG08Passive = (PG08Passive)passive; break;
+            }
         }
     }
     [System.Serializable] public sealed class PreparationContent { public PreparationCharacter[] Characters; }

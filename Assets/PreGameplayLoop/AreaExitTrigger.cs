@@ -9,6 +9,7 @@ namespace RogZombie.PreGameplayLoop
         public const float Radius = 4;
         public bool Available { get; private set; }
         public System.Action Entered;
+        public System.Func<bool> PartyReady;
         private Combatant player;
         private bool consumed;
         private Material ringMaterial;
@@ -37,6 +38,8 @@ namespace RogZombie.PreGameplayLoop
             }
         }
 
+        public void SetPlayer(Combatant value) => player = value;
+
         public void Open()
         {
             Available = true;
@@ -53,7 +56,7 @@ namespace RogZombie.PreGameplayLoop
         {
             // Existing actors move using swept queries, without dynamic Rigidbodies.
             // Explicit logical detection also handles already standing inside when opened.
-            if (!Available || consumed || Time.timeScale <= 0 || !ContainsActivePlayer() ||
+            if (!Available || consumed || Time.timeScale <= 0 || !ContainsActivePlayer() || (PartyReady != null && !PartyReady()) ||
                 player.GetComponent<ExperienceProgression>()?.PendingChoices > 0) return;
             consumed = true;
             Entered?.Invoke();

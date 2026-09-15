@@ -1,0 +1,9 @@
+PASS — static geometry validation (not Unity NavMesh)
+AREA 3 size: 130 x 130 m
+MURI: 29 rectangles; OSTACOLI: 84 rectangles
+SPAWN: (0, -59); USCITA: (0, 59)
+Spawn/exit clear for radius 0.35 m; boundary thickness 1 m respected
+Connected spawn-exit route found on conservative 0.25 m occupancy grid
+Population: 150 ZOMB01 (prototype composition), FIRST SPAWN 45
+Compilation: runtime/editor PASS; two existing PG05 warnings
+Unity Play Mode/NavMesh: NOT RUN (Editor/licensing unavailable)

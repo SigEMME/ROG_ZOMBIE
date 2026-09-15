@@ -18,7 +18,7 @@ MonoBehaviour:
     ATK: 15
     DEF: 100
     MoveSpeed: 90
-    AttackSpeed: 70
+    AttackSpeed: 80
     Range: 100
   ExpDrop: 10
   GoldDrop: 10

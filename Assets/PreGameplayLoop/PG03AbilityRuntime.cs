@@ -58,7 +58,7 @@ namespace RogZombie.PreGameplayLoop
             var shot = TestVisuals.SpawnProjectile(session.Player.Actor, origin,
                 AttackGeometry.Direction(facing + (1 - ShotsFired) * data.TripleAngle / 3),
                 weapon.Definition.ProjectileSpeed, data.TripleRange, data.TripleDamage,
-                weapon.Definition.ProjectileRadius, 0, false);
+                weapon.Definition.ProjectileRadius, data.TriplePenetrations, false);
             TripleShot?.Invoke(shot, ShotsFired);
             ShotsFired++;
         }

@@ -1,0 +1,6 @@
+PASS - static configuration checks (not Play Mode)
+AREA 1: total=[75, 20, 5, 0, 0]; FIRST SPAWN=[22, 6, 2, 0, 0]
+AREA 2: total=[78, 30, 12, 0, 0]; FIRST SPAWN=[23, 9, 4, 0, 0]
+AREA 3: total=[82, 45, 23, 0, 0]; FIRST SPAWN=[24, 14, 7, 0, 0]
+ZOMB01-03 asset references and MOVE SPD match GDD. Shared placeholder/collider factory preserved.
+Runtime/editor compilation PASS; existing PG05 CS0252 warnings remain.

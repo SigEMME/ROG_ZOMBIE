@@ -14,7 +14,7 @@ namespace RogZombie.PreGameplayLoop
             var keyboard = Keyboard.current;
             if (!Application.isFocused || TestHUD.PointerOverControls || keyboard == null || !ability.CanUse ||
                 !aim.TryGetCursorWorldPosition(out var cursor)) { ability.CancelAim(); return; }
-            if (keyboard.qKey.wasPressedThisFrame)
+            if (PartyCommands.Pressed(this))
             {
                 if (ability.Selected == PG07Ability.PioggiaDiFrecce) ability.BeginAim(cursor);
                 else ability.TryActivate(cursor);
@@ -22,8 +22,8 @@ namespace RogZombie.PreGameplayLoop
             if (ability.IsAiming)
             {
                 ability.AimAt(cursor);
-                if (keyboard.qKey.wasReleasedThisFrame) ability.ReleaseAim(cursor);
-                else if (!keyboard.qKey.isPressed) ability.CancelAim();
+                if (PartyCommands.Released(this)) ability.ReleaseAim(cursor);
+                else if (!PartyCommands.Held(this)) ability.CancelAim();
             }
         }
         private void OnApplicationFocus(bool focused) { if (!focused && ability != null) ability.CancelAim(); }
