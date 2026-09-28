@@ -16,17 +16,32 @@ namespace RogZombie.PreGameplayLoop
         public TestAreaSettings Geometry;
         public Vector2 ExitPosition;
     }
+    [System.Serializable]
+    public sealed class CompanionSelection
+    {
+        public bool Enabled;
+        public LoopPlayer Player = LoopPlayer.PG03;
+        [Range(0, 1)] public int Ability;
+        [Range(0, 1)] public int Passive;
+    }
     [CreateAssetMenu(menuName = "ROG ZOMBIE/Pre gameplay loop")]
     public sealed class LoopDefinition : ScriptableObject
     {
+        [Header("Grafica TOP-DOWN provvisoria")]
+        public Shader EnvironmentShader;
         [Header("RUN")]
         public LoopPlayer SelectedPlayer = LoopPlayer.PG01;
 
-        [Header("Compagno IA di prova") ]
+        [Header("PG IA 1") ]
         public bool EnableCompanion;
         public LoopPlayer CompanionPlayer = LoopPlayer.PG02;
         [Range(0, 1)] public int CompanionAbility;
         [Range(0, 1)] public int CompanionPassive;
+        [Header("PG IA 2 e 3")]
+        public CompanionSelection[] AdditionalCompanions = { new CompanionSelection(), new CompanionSelection { Player = LoopPlayer.PG04 } };
+        public CompanionSelection CompanionAt(int slot) => slot == 1
+            ? new CompanionSelection { Enabled = EnableCompanion, Player = CompanionPlayer, Ability = CompanionAbility, Passive = CompanionPassive }
+            : AdditionalCompanions != null && slot >= 2 && slot <= 3 && AdditionalCompanions.Length > slot - 2 ? AdditionalCompanions[slot - 2] : null;
 
         [Header("PG01")]
         public WeaponDefinition PG01Weapon;
@@ -111,6 +126,14 @@ namespace RogZombie.PreGameplayLoop
         public string Validate()
         {
             if (EnableCompanion && (CompanionPlayer == SelectedPlayer || !System.Enum.IsDefined(typeof(LoopPlayer), CompanionPlayer) || CompanionAbility < 0 || CompanionAbility > 1 || CompanionPassive < 0 || CompanionPassive > 1)) return "Selezionare un PG IA distinto, con una ABILITA e una PASSIVA.";
+            var selected = new System.Collections.Generic.HashSet<LoopPlayer> { SelectedPlayer };
+            for (int slot = 1; slot <= 3; slot++)
+            {
+                var member = CompanionAt(slot);
+                if (member == null || !member.Enabled) continue;
+                if (!System.Enum.IsDefined(typeof(LoopPlayer), member.Player) || !selected.Add(member.Player) || member.Ability < 0 || member.Ability > 1 || member.Passive < 0 || member.Passive > 1)
+                    return "Selezionare PG distinti, ciascuno con una ABILITA e una PASSIVA.";
+            }
             if (!System.Enum.IsDefined(typeof(LoopPlayer), SelectedPlayer)) return "Selezionare PG01, PG02, PG03, PG04, PG05, PG06, PG07 o PG08.";
             if (GeometryTemplate == null || SelectedWeapon == null || SelectedWeapon.PG == null || ZOMB01 == null)
                 return "Assegnare geometria, arma del PG selezionato e ZOMB01.";

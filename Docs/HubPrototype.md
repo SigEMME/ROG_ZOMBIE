@@ -2,7 +2,7 @@
 
 ## Avvio e utilizzo
 
-Aprire `Assets/Scenes/HubPrototype.unity` in Unity 6000.3.16f1 e premere Play. Nell’HUB tecnico, WASD muove il quadrato blu; raggiungere EXIT e premere F per aprire PREPARAZIONE RUN.
+Aprire `Assets/Scenes/HubPrototype.unity` in Unity 6000.3.16f1 e premere Play. La schermata iniziale mostra il logo e i pulsanti START / ESCI forniti dal proprietario. START apre l’HUB; ESCI chiude il gioco nella build e termina Play Mode nell’Editor. Nell’HUB tecnico, WASD muove il quadrato blu; raggiungere EXIT e premere F per aprire PREPARAZIONE RUN.
 
 1. Premere il primo BANNER. Gli altri tre sono bloccati e non creano PG IA.
 2. Selezionare uno degli otto PG sbloccati, una ABILITÀ e una PASSIVA indipendenti. Cambiare PG azzera le due opzioni.
@@ -49,3 +49,30 @@ Distribuire l’intera cartella della build, non il solo eseguibile. Estrarre lo
 Esportazione del 13/09/2026 completata: `Builds/Windows-HUB-20260913-170818/ROG_ZOMBIE.exe`, Windows x64 Development, Unity 6000.3.16f1. BuildReport: Succeeded, 0 errori, 0 warning, 167845723 byte, durata 2m13s. Avvio del player osservato tramite log fino all’inizializzazione di assembly, fisica e input, senza eccezioni gestite. Presente il messaggio diagnostico D3D12 `failed to query info queue interface (0x80004002)`. La finestra standalone non era raggiungibile dallo strumento di controllo: nessuna verifica visiva standalone attestata.
 
 Durante l’esportazione Unity ha serializzato aggiornamenti automatici a profili URP, GraphicsSettings e PlayerSettings (preloaded input asset e batching). È rimasta anche la selezione PG08 PASSIVA 2 salvata dall’Editor in PreGameplayLoop.asset; non è stata ripristinata, per preservare le scelte presenti nella sessione. Nessuna modifica manuale ai valori di gameplay o aggiornamento di Unity/pacchetti.
+
+## Schermata iniziale — 28/09/2026
+
+`TitleScreen.cs` disegna le tre immagini su fondo nero con proporzioni conservate e layout adattato al viewport. Le copie in `Assets/Art/TitleScreen` sono identiche ai PNG forniti (hash verificati), importate senza compressione né mipmap e con filtro Point. `HubPrototype.unity` conserva l'ingresso usato dall'esportatore Windows: non è richiesta una scena aggiuntiva. START sblocca input e visuale HUB; la RUN resta subordinata alla preparazione. Il ritorno dalla RUN continua ad aprire l'HUB, senza riproporre la schermata iniziale.
+
+Verifiche: compilazione runtime/Editor riuscita; `TITLE-hub-validation-r1.txt` PASS, 121 verifiche, 0 warning Play Mode. Controllo visivo del menu e click reali: START apre l'HUB, ESCI termina Play Mode. Restano due warning CS0252 preesistenti in PG05Validation.cs. La chiamata Application.Quit è implementata per la build, ma la chiusura di un eseguibile standalone non è stata provata in questa attività: nessuna nuova build, commit o push.
+
+### Conferma della prova manuale — 28/09/2026
+
+Il proprietario ha confermato che la schermata iniziale è funzionante. La conferma riguarda la prova manuale comunicata; non specifica una nuova verifica su build standalone.
+
+## PAUSA — 28/09/2026
+
+Durante una RUN avviata dal HUB, ESC apre il menu con le quattro immagini fornite: RIPRENDI, OPZIONI, TORNA ALL’HUB, ESCI. Sfondo grigio, opacità 65% (trasparenza 35%), pulsanti centrati in colonna.
+
+RIPRENDI/ESC chiudono PAUSA. OPZIONI è una pagina provvisoria; conferme CONFERMA/ANNULLA con le immagini fornite, affiancate sotto il messaggio. Le sottoschermate mantengono la pausa; ESC torna indietro. La conferma di abbandono elimina la sessione e i G della RUN, preservando la configurazione preparata. ESCI chiude l’applicazione (nell’Editor termina Play Mode). Una pausa BONUS già presente viene conservata alla chiusura del menu.
+
+Limiti: prototipo locale con un PLAYER e PG IA; nessun networking o consenso PAUSA CO-OP operativo. Non esiste ancora un portafoglio/progresso persistente HUB da verificare. La schermata non viene aggiunta alla scena tecnica che avvia direttamente la RUN senza HUB.
+
+Verifica: compilazione runtime/editor senza errori o warning; `PAUSE-validation-r4.txt`: PASS 21 controlli, 0 warning in Unity 6000.3.16f1. Verificati congelamento tempo/HP/posizione, navigazione, conferme/annullamento, riaperture ripetute, pausa preesistente, perdita G all’abbandono, ritorno HUB e nuova RUN pulita. Prime prove r1/r2 fallite per un’asserzione del verificatore che richiedeva CanStart nel HUB (valido solo in PREPARAZIONE); corretta prima del PASS.
+
+Controllo manuale nell’Editor: layout e immagini, ESC riprende/apre PAUSA, OPZIONI e ritorno con ESC, ESCI con ANNULLA e successiva CONFERMA che termina Play Mode. La gestione ESC usa gli eventi GUI, verificati anche a tempo fermo. Nessuna build generata; chiusura standalone non verificata.
+
+Aggiornamento grafico CONFERMA/ANNULLA: immagini originali importate senza alterazioni, pulsanti affiancati nelle conferme HUB/ESCI. Compilazione riuscita; PAUSE-validation-r5.txt PASS 21 controlli, 0 warning; resa grafica verificata in Play Mode.
+
+PAUSA anche nel HUB: ESC apre RIPRENDI / OPZIONI / ESCI, centrati in colonna. Movimento e interazione F sono bloccati fino a RIPRENDI/ESC. ESCI richiede CONFERMA/ANNULLA senza avviso di perdita della RUN, poiché nel HUB non esiste una RUN attiva. OPZIONI resta provvisoria.
+Verifica PAUSA HUB: PAUSE-HUB-validation-r1.txt PASS 27 controlli, 0 warning; compilazione runtime/editor riuscita. Controllo visivo in Play Mode: ESC nel HUB mostra solo i tre pulsanti richiesti sopra lo sfondo HUB attenuato.

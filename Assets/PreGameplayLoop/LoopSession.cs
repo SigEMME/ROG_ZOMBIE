@@ -20,6 +20,7 @@ namespace RogZombie.PreGameplayLoop
         public bool Loading => State == LoopState.Loading || State == LoopState.Transition;
         public int AreaIndex { get; private set; }
         public int Gold { get; private set; }
+        public bool PauseMenuOpen => GetComponentInParent<HubPrototype>()?.Pause?.IsOpen == true;
         public float CdReduction => cdReduction;
         public PG01AbilityRuntime Ability { get; private set; }
         public PG01PassiveRuntime Passive { get; private set; }
@@ -45,6 +46,7 @@ namespace RogZombie.PreGameplayLoop
         public int Selected { get; private set; } = -1;
         private float cdReduction;
         private Transform areaRoot;
+        private TopDownEnvironment environment;
         private float previousTimeScale;
         private WeaponDefinition runtimeWeapon;
 
@@ -83,11 +85,15 @@ namespace RogZombie.PreGameplayLoop
             Settings.PlayerMoveSpeedBase = 2; // GDD unit conversion, supersedes old test tuning only here.
             Settings.Mobs = new MobDefinition[5];
             for (int i = 0; i < Settings.Mobs.Length; i++) Settings.Mobs[i] = Definition.MobAt(i);
-            GameCamera.orthographic = true;
+            GameCamera.orthographic = false;
             GameCamera.orthographicSize = Settings.CameraSize;
+            GameCamera.fieldOfView = 2 * Mathf.Atan(Settings.CameraSize / TopDownEnvironment.CameraHeight) * Mathf.Rad2Deg;
+            GameCamera.transform.rotation = Quaternion.identity;
             areaRoot = new GameObject("AREA test " + (AreaIndex + 1)).transform;
             areaRoot.SetParent(transform);
             TestVisuals.Root = areaRoot;
+            environment = areaRoot.gameObject.AddComponent<TopDownEnvironment>();
+            environment.Initialize(Definition.EnvironmentShader);
             BuildGeometry();
             Navigation = areaRoot.gameObject.AddComponent<TestNavigation>();
             Navigation.AgentRadius = Settings.ActorRadius;
@@ -98,6 +104,7 @@ namespace RogZombie.PreGameplayLoop
             if (Controlled == null) Controlled = this;
             if (Player == null) CreatePlayer();
             PrepareCompanion();
+            if (State == LoopState.Error) yield break;
             Player.GetComponent<PlayerMovement>().TestSettings = Settings;
             Player.transform.SetPositionAndRotation(Settings.StartPosition, Quaternion.identity);
             PlaceCompanion();
@@ -127,20 +134,20 @@ namespace RogZombie.PreGameplayLoop
         private void BuildGeometry()
         {
             Vector2 size = Settings.AreaSize;
-            TestVisuals.Box("Pavimento test", Vector2.zero, size,
-                AreaIndex == 0 ? new Color(.09f, .12f, .13f) : new Color(.13f, .10f, .09f), -10);
+            environment.PrepareBuildings(Settings.Obstacles);
+            environment.Floor(size);
             TestVisuals.FloorGrid(size);
             TestVisuals.Box("SPAWN PG", Settings.StartPosition, Vector2.one, Color.green, -8);
             TestVisuals.Box("Riferimento USCITA", Definition.ExitForArea(AreaIndex), Vector2.one * 1.5f, Color.yellow, -8);
-            MakeObstacle(new Vector2(-size.x / 2, 0), new Vector2(1, size.y), true);
-            MakeObstacle(new Vector2(size.x / 2, 0), new Vector2(1, size.y), true);
-            MakeObstacle(new Vector2(0, -size.y / 2), new Vector2(size.x, 1), true);
-            MakeObstacle(new Vector2(0, size.y / 2), new Vector2(size.x, 1), true);
+            MakeObstacle(new Vector2(-size.x / 2, 0), new Vector2(1, size.y), true, boundary: true);
+            MakeObstacle(new Vector2(size.x / 2, 0), new Vector2(1, size.y), true, boundary: true);
+            MakeObstacle(new Vector2(0, -size.y / 2), new Vector2(size.x, 1), true, boundary: true);
+            MakeObstacle(new Vector2(0, size.y / 2), new Vector2(size.x, 1), true, boundary: true);
             if (Settings.Obstacles != null)
                 foreach (var obstacle in Settings.Obstacles) MakeObstacle(obstacle.Position, obstacle.Size, obstacle.Wall, obstacle.Rotation);
         }
 
-        private void MakeObstacle(Vector2 position, Vector2 size, bool wall, float rotation = 0)
+        private void MakeObstacle(Vector2 position, Vector2 size, bool wall, float rotation = 0, bool boundary = false)
         {
             string layer = wall ? "MURO" : "OSTACOLO";
             var go = TestVisuals.Box(layer, position, size, wall ? new Color(.25f, .28f, .8f) : new Color(.65f, .05f, .12f), 1);
@@ -148,6 +155,8 @@ namespace RogZombie.PreGameplayLoop
             go.layer = LayerMask.NameToLayer(layer);
             go.AddComponent<BoxCollider2D>().size = size;
             go.AddComponent<TestObstacle>().IsWall = wall;
+            go.GetComponent<SpriteRenderer>().enabled = false;
+            environment.Obstacle(go.transform, size, wall, boundary);
         }
 
         private void CreatePlayer()
@@ -270,10 +279,10 @@ namespace RogZombie.PreGameplayLoop
 
         private void Update()
         {
-            if (ParentSession != null) return;
+            if (ParentSession != null || PauseMenuOpen) return;
             if (State != LoopState.Combat && State != LoopState.AreaComplete) return;
             UpdatePartyControl();
-            if (!Player.Actor.IsActive && (Companion == null || !Companion.Player.Actor.IsActive))
+            if (!Controlled.Player.Actor.IsActive)
             {
                 State = LoopState.Defeat;
                 Time.timeScale = 0; // No active party member remains.
@@ -294,6 +303,7 @@ namespace RogZombie.PreGameplayLoop
             State = LoopState.Bonus;
             Time.timeScale = 0;
             rewardContext = this;
+            foreach (var member in Members) if (member.Player.Actor.State != LifeState.Dead) { rewardContext = member; break; }
             DrawAreaChoices();
             Selected = -1;
         }
@@ -308,8 +318,13 @@ namespace RogZombie.PreGameplayLoop
             if (State != LoopState.Bonus || Selected < 0) return;
             if (Selected < Choices.Length) RewardContext.ApplyStat(Choices[Selected]);
             else RewardContext.Bonuses.Apply(AbilityChoices[Selected - Choices.Length]);
-            if (Companion != null && RewardContext == this && Companion.Player.Actor.State != LifeState.Dead)
-            { rewardContext = Companion; DrawAreaChoices(); return; }
+            bool passedCurrent = false;
+            foreach (var member in Members)
+            {
+                if (member == RewardContext) { passedCurrent = true; continue; }
+                if (passedCurrent && member.Player.Actor.State != LifeState.Dead)
+                { rewardContext = member; DrawAreaChoices(); return; }
+            }
             rewardContext = null;
             AbilityChoices = null;
             Choices = null;
@@ -337,15 +352,14 @@ namespace RogZombie.PreGameplayLoop
 
         private IEnumerator NextArea()
         {
-            ClearAbilityEffects(); Companion?.ClearAbilityEffects();
+            foreach (var member in Members) member.ClearAbilityEffects();
             Exit.Entered -= OpenBonus;
             areaRoot.gameObject.SetActive(false);
             Destroy(areaRoot.gameObject);
             Destroy(Settings);
             yield return null; // Dispose corpse timers, effects, NavMesh and spawn subscriptions.
-            RestoreMemberForArea(this);
-            Experience.DropPercent = Experience.DropPercent * 105 / 100;
-            if (Companion != null) { RestoreMemberForArea(Companion); Companion.Experience.DropPercent = Companion.Experience.DropPercent * 105 / 100; }
+            foreach (var member in Members)
+            { RestoreMemberForArea(member); member.Experience.DropPercent = member.Experience.DropPercent * 105 / 100; }
             AreaIndex++;
             yield return BuildArea();
         }
@@ -353,6 +367,10 @@ namespace RogZombie.PreGameplayLoop
         private void ApplyStat(AreaStat stat) => AreaStatBonus.Apply(Player.Actor, stat, ref cdReduction);
 
         public void AddGold(int value) => Gold += value;
+        public void DiscardRunProgress()
+        {
+            foreach (var member in Members) member.Gold = 0;
+        }
         public void RefreshNavigation()
         {
             if (ParentSession != null) { ParentSession.RefreshNavigation(); return; }
@@ -363,7 +381,7 @@ namespace RogZombie.PreGameplayLoop
             if (Loading) return;
             string issue = Definition == null ? "LoopDefinition mancante." : Definition.Validate();
             if (issue != null) { Fail(issue); return; }
-            Experience?.CancelChoices(); Companion?.Experience?.CancelChoices();
+            foreach (var member in Members) member.Experience?.CancelChoices();
             StopAllCoroutines();
             State = LoopState.Transition;
             Time.timeScale = 0;
@@ -372,7 +390,8 @@ namespace RogZombie.PreGameplayLoop
 
         private IEnumerator RestartRoutine()
         {
-            if (Companion != null) { Companion.gameObject.SetActive(false); Destroy(Companion.gameObject); Companion = null; }
+            foreach (var member in companions) { member.gameObject.SetActive(false); Destroy(member.gameObject); }
+            companions.Clear();
             Controlled = this; rewardContext = null;
             if (areaRoot != null) { areaRoot.gameObject.SetActive(false); Destroy(areaRoot.gameObject); }
             if (Player != null) { Player.gameObject.SetActive(false); Destroy(Player.gameObject); }
@@ -390,7 +409,7 @@ namespace RogZombie.PreGameplayLoop
         private void FollowCamera()
         {
             if (Player != null && GameCamera != null)
-                GameCamera.transform.position = new Vector3(Controlled.Player.transform.position.x, Controlled.Player.transform.position.y, -10);
+                GameCamera.transform.position = new Vector3(Controlled.Player.transform.position.x, Controlled.Player.transform.position.y, -TopDownEnvironment.CameraHeight);
         }
 
         private void OnDestroy()

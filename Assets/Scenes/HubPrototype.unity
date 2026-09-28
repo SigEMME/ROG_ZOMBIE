@@ -350,6 +350,8 @@ GameObject:
   m_Component:
   - component: {fileID: 800000002}
   - component: {fileID: 800000003}
+  - component: {fileID: 800000004}
+  - component: {fileID: 800000005}
   m_Layer: 0
   m_Name: HUB prototype
   m_TagString: Untagged
@@ -386,6 +388,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Definition: {fileID: 11400000, guid: 8446c380f1ce4497952d8def39a9a45e, type: 2}
   Content: {fileID: 4900000, guid: 61d3ea2d219147d0b38e23f5a071a86f, type: 3}
+--- !u!114 &800000004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ab2abc68e59421fbf8edf295049a280, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  Logo: {fileID: 2800000, guid: e1bef9e3b83c4341875818b8cb541c12, type: 3}
+  StartImage: {fileID: 2800000, guid: 801c249ac0f247a8a5b6e78d8e46aec9, type: 3}
+  ExitImage: {fileID: 2800000, guid: 979a42ce935140009e77c59ca3852804, type: 3}
+--- !u!114 &800000005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 800000001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcbd1cdb987e433b81df6a285c24dcb7, type: 3}
+  m_Name:
+  m_EditorClassIdentifier:
+  ResumeImage: {fileID: 2800000, guid: 38379b08f3cc43abafb8f0b187d62cee, type: 3}
+  OptionsImage: {fileID: 2800000, guid: cee5bda6c80a438983c32e4038658c1b, type: 3}
+  ReturnImage: {fileID: 2800000, guid: 4b24c142a77f440481bb57defaba168c, type: 3}
+  ExitImage: {fileID: 2800000, guid: 698aa10f5fd44e4196b09f76470df8ba, type: 3}
+  ConfirmImage: {fileID: 2800000, guid: 0b1c57ffa53b41b9865bea3a36e882eb, type: 3}
+  CancelImage: {fileID: 2800000, guid: f01bc99f4d6d417fa3c85212f412d46e, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

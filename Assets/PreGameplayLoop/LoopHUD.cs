@@ -21,8 +21,8 @@ namespace RogZombie.PreGameplayLoop
         }
         private void OnGUI()
         {
-            DrawResurrection(loop);
-            if (loop.Companion != null) DrawResurrection(loop.Companion);
+            if (loop.PauseMenuOpen) return;
+            foreach (var member in loop.Members) DrawResurrection(member);
             var view = loop.Controlled != null ? loop.Controlled : loop;
             GUI.Box(new Rect(8, 8, Screen.width - 16, 94), "Pre gameplay loop prototype | WASD / Mouse / LMB / Q");
             GUI.Label(new Rect(20, 30, Screen.width - 160, 24), $"AREA {loop.AreaIndex + 1}/{loop.Definition.AreaTotals.Length} | {loop.State} | G {loop.Gold}");
@@ -122,13 +122,13 @@ namespace RogZombie.PreGameplayLoop
             {
                 Vector3 exitView = loop.GameCamera.WorldToViewportPoint(loop.Exit.transform.position);
                 bool visible = exitView.z > 0 && exitView.x >= 0 && exitView.x <= 1 && exitView.y >= 0 && exitView.y <= 1;
-                GUI.Label(new Rect(20, 190, Screen.width - 40, 30), "AREA COMPLETATA — raggiungi l'USCITA verde (raggio 4 m)");
+                GUI.Label(new Rect(20, 270, Screen.width - 40, 30), "AREA COMPLETATA — raggiungi l'USCITA verde (raggio 4 m)");
                 if (!visible)
                 {
                     Vector2 delta = loop.Exit.transform.position - loop.Player.transform.position;
                     float angle = Mathf.Atan2(-delta.y, delta.x) * Mathf.Rad2Deg;
                     var matrix = GUI.matrix;
-                    var pivot = new Vector2(Screen.width / 2f, 230);
+                    var pivot = new Vector2(Screen.width / 2f, 310);
                     GUIUtility.RotateAroundPivot(angle, pivot);
                     GUI.Label(new Rect(pivot.x - 12, pivot.y - 12, 50, 30), "-->");
                     GUI.matrix = matrix;
@@ -155,11 +155,10 @@ namespace RogZombie.PreGameplayLoop
                     return;
                 }
             }
-            if (loop.Companion != null)
+            foreach (var companion in loop.Companions)
             {
-                var companion = loop.Companion;
                 var exp = companion.Experience;
-                GUI.Label(new Rect(20, 186, Screen.width - 40, 24), $"PG IA 1 — {companion.Player.Definition.PlayerId} HP {companion.Player.Actor.CurrentHP:0.#}/{companion.Player.Actor.Stats.HP:0.#} | LVL {exp.Level} EXP {exp.Experience}/{exp.NextThreshold} | SPACE + 1: ABILITA | controllo: {view.Player.Definition.PlayerId}");
+                GUI.Label(new Rect(20, 186 + (companion.PartySlot - 1) * 24, Screen.width - 40, 24), $"PG IA {companion.PartySlot} — {companion.Player.Definition.PlayerId} HP {companion.Player.Actor.CurrentHP:0.#}/{companion.Player.Actor.Stats.HP:0.#} | LVL {exp.Level} EXP {exp.Experience}/{exp.NextThreshold} | SPACE + {companion.PartySlot}: ABILITA | controllo: {view.Player.Definition.PlayerId}");
             }
             if (loop.State != LoopState.Bonus) return;
             GUI.Box(new Rect(10, 140, Screen.width - 20, 320), "BONUS FINE AREA — " + loop.RewardContext.Player.Definition.PlayerId + " — scegli un BONUS, poi conferma");

@@ -53,7 +53,7 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 ## 1. CONCEPT
 
-- Genere: rogue-lite in pixel art con visuale isometrica.
+- Genere: rogue-lite in pixel art con visuale TOP-DOWN.
 - Atmosfera: post-apocalittica, dark e frenetica.
 - Combattimento con armi umane realistiche contro zombie e altri MOB.
 - CO-OP fino a 4 giocatori: requisito fondamentale del progetto.
@@ -240,10 +240,11 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - SOPRAVVIVENZA: nessuna scelta autonoma. INTERAZIONI: controllate dal PLAYER; restano valide le regole già definite per gli incontri con CHEST/MEDI KIT e per la RESURREZIONE.
 - PLAYER + 1 PG IA: il PG IA occupa la posizione di formazione a 1 m dietro il PLAYER rispetto alla mira.
 - PLAYER + 2 PG IA: entrambi dietro il PLAYER, a 1 m da lui e a 1 m l’uno dall’altro, formando un triangolo.
-- PLAYER + 3 PG IA: formazione a rombo dietro il PLAYER, con distanze di formazione di 1 m come indicato dal progetto. La geometria dettagliata sarà precisata prima di estendere il prototipo a tre PG IA.
-- PRIMA INTEGRAZIONE NEL PROTOTIPO: un PLAYER e un solo PG IA assegnato. Le formazioni da due e tre PG IA sono successive.
+- PLAYER + 3 PG IA: rombo con PLAYER nel vertice anteriore e lato di 1 m. Rispetto alla DIREZIONE DI MIRA, PG IA 1 e PG IA 2 sono arretrati di 1/√2 m e spostati lateralmente di ±1/√2 m (circa 0,71 m); PG IA 3 è nel vertice posteriore, a √2 m (circa 1,41 m) dal PLAYER. Entrambe le diagonali misurano √2 m.
+- PROTOTIPO: un PLAYER e fino a tre PG IA opzionali, configurati separatamente nei rispettivi BANNER. Il numero dei compagni ATTIVI determina la formazione: fila con uno, triangolo con due, rombo con tre; i comandi SPACE BAR + 1/2/3 conservano il numero del BANNER scelto.
 - VELOCITÀ DI FORMAZIONE: il PG IA adegua la velocità al PLAYER responsabile per mantenere la formazione a 1 m, anche se ha MOVE SPD inferiore. Questa regola di inseguimento non modifica la STAT persistente MOVE SPD.
-- POSIZIONE INVALIDA: ricalcolare una posizione libera e raggiungibile sulla NAVMESH entro 1 m dal PG del PLAYER. Solo se non esiste una posizione libera entro 1 m è consentita temporaneamente una distanza maggiore; rientrare entro 1 m appena si libera spazio.
+- POSIZIONE INVALIDA: ricalcolare una posizione libera e raggiungibile sulla NAVMESH entro il raggio della posizione di formazione rispetto al PG controllato (1 m; √2 m per il vertice posteriore del rombo). Solo se non esiste una posizione libera entro tale raggio è consentita temporaneamente una distanza maggiore; rientrare appena si libera spazio.
+- PASSAGGI STRETTI: se un PG IA davanti alla direzione di movimento non ha spazio per aggirare il PG controllato, segue temporaneamente il suo spostamento anche davanti o di lato, senza insistere sul rientro dietro e bloccarlo. Il comando di movimento vale anche quando il PLAYER è già fermo contro il compagno. Quando torna spazio, recupera gradualmente la formazione. Collisioni e MURI/OSTACOLI rimangono attivi; nessun teletrasporto.
 
 
 ### 8.6 CONFERMA, ANNULLAMENTO E AVVIO RUN
@@ -1594,6 +1595,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - Un altro PG sotto controllo diretto di un PLAYER può avviare la RIANIMAZIONE tenendo premuto F entro il TRIGGER_PG di raggio 2 m attorno al PG in DOWN, senza collisione fisica aggiuntiva. Il timer di RIANIMAZIONE avanza fino a 5 s; al raggiungimento dei 5 s il PG viene RESUSCITATO. Le RESURREZIONI eseguite dai PG sono consentite esclusivamente sotto controllo diretto di un PLAYER.
 - Un PG controllato da PLAYER in DOWN può essere resuscitato solo da un altro PLAYER; un PG IA in DOWN può essere resuscitato solo da un PLAYER. Un PG IA non esegue autonomamente RESURREZIONI. Quando il PLAYER assume il controllo del proprio PG IA, può usarlo per rianimare il proprio PG originale in DOWN; al completamento il controllo torna al PG originale.
 - Dopo la resurrezione, il PG IA rientra in formazione.
+- Se più PG in DOWN sono entro 2 m, F rianima soltanto il più vicino al PG controllato, uno alla volta. Gli altri mantengono il normale conteggio DOWN e la regressione del progresso eventualmente accumulato.
 - Durante l’interazione di RIANIMAZIONE, il timer DOWN di 20 s è in PAUSA.
 - Se l’interazione viene interrotta prima del completamento, il timer di RIANIMAZIONE regredisce verso 0 s alla velocità di 1 s di progresso per ogni secondo trascorso senza rianimare e il timer DOWN riprende dal valore esatto in cui era stato congelato.
 - Se la RIANIMAZIONE riprende prima che il relativo timer raggiunga 0 s, riparte dal valore residuo; durante l’interazione il timer DOWN torna in PAUSA.
@@ -1643,11 +1645,26 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 
 ### 29.3 Abbandono / disconnessione durante la RUN
 
+- Eccezione per abbandono volontario tramite PAUSA: si applica la sezione 29.4 (perdita totale dei G della RUN), che prevale sul trattamento al 50% descritto sotto.
+
 - Se un PLAYER abbandona o si disconnette durante la RUN, perde i progressi di quella RUN.
 - Il G guadagnato durante la RUN viene trattato secondo le regole della SCONFITTA: il PLAYER mantiene il 50% del G ottenuto durante quella RUN, arrotondato per difetto, e perde la parte restante.
 - Il PG controllato direttamente dal PLAYER uscente diventa automaticamente PG IA.
 - Questo PG e gli eventuali PG IA già di sua responsabilità vengono riassegnati agli altri PLAYER secondo le regole di ASSEGNAZIONE IA già stabilite nella sezione 8.5, in base al nuovo numero di PLAYER presenti.
 - La RUN può continuare per gli altri PLAYER secondo le condizioni di SCONFITTA già definite.
+
+### 29.4 Schermata PAUSA — regole confermate il 28/09/2026
+
+- Anche nell’HUB, ESC apre PAUSA con i soli tasti RIPRENDI / OPZIONI / ESCI, in quest’ordine. Movimento e interazioni HUB restano sospesi; RIPRENDI/ESC tornano all’HUB. ESCI richiede CONFERMA/ANNULLA, senza perdita di progressi di una RUN inesistente.
+
+- ESC apre PAUSA durante la RUN; RIPRENDI oppure ESC dalla schermata PAUSA riprendono il gioco.
+- Pulsanti in colonna al centro: RIPRENDI / OPZIONI / TORNA ALL’HUB / ESCI. Sfondo grigio con trasparenza 35% (opacità 65%).
+- OPZIONI apre una schermata da definire. OPZIONI e tutte le conferme mantengono lo stato di PAUSA; ESC torna alla schermata precedente.
+- TORNA ALL’HUB ed ESCI richiedono una schermata con CONFERMA e ANNULLA. ANNULLA torna a PAUSA; CONFERMA termina la RUN per il PLAYER, tornando all’HUB oppure chiudendo l’applicazione.
+- L’abbandono volontario da PAUSA fa perdere TUTTI i progressi e TUTTI i G ottenuti esclusivamente nella RUN; progressi, sblocchi e G precedenti alla RUN restano conservati.
+- SINGLE PLAYER: il gioco si ferma all’apertura della PAUSA. CO-OP: il gioco si ferma solo quando tutti i PLAYER presenti hanno aperto PAUSA; riprende quando almeno uno la chiude. Se gli altri continuano a giocare, il PG del PLAYER nel menu resta fermo e vulnerabile, senza comandi di movimento, attacco o abilità.
+- L’abbandono riguarda solo il PLAYER uscente. Il suo PG diventa PG IA e viene riassegnato insieme agli eventuali IA già assegnati secondo le regole di ASSEGNAZIONE IA.
+- Se abbandona l’HOST, la RUN termina per tutti e TUTTI i PLAYER perdono TUTTI i progressi e i G ottenuti nella RUN.
 
 <a id="sezione-30"></a>
 
@@ -1659,7 +1676,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - Definire MINI BOSS, EVENTI SPECIALI e livelli/quest bonus. Per MINI BOSS e BOSS sono già definiti l’esclusione dal totale/massimo dei MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti, e il punto di SPAWN specifico stabilito in fase di LEVEL DESIGN; tutto il resto rimane DA DEFINIRE.
 - Definire nomi propri, mappe, layout e identità visiva dettagliata delle CITTÀ e delle AREE.
 - Definire eventuali ulteriori MOB/varianti oltre ZOMB01–ZOMB05; la progettazione dei MOB è per ora conclusa con ZOMB05.
-- Comportamento dei PG IA definito nella sezione 8.5; resta da precisare la formazione futura a tre PG IA. Equipaggiamento, progressione, DOWN e cambio controllo sono definiti nelle sezioni 8 e 28. Definire le specifiche dei futuri MOB. AGGRO, MOVIMENTO/COLLISIONI, HIT/DANNO/STUN, MORTE/DROP e le schede ZOMB01–ZOMB05 sono consolidati nella sezione 13.
+- Comportamento dei PG IA e formazione fino a tre compagni definiti nella sezione 8.5. Equipaggiamento, progressione, DOWN e cambio controllo sono definiti nelle sezioni 8 e 28. Definire le specifiche dei futuri MOB. AGGRO, MOVIMENTO/COLLISIONI, HIT/DANNO/STUN, MORTE/DROP e le schede ZOMB01–ZOMB05 sono consolidati nella sezione 13.
 - SISTEMA DI SPAWN e distribuzione ZOMB01–ZOMB05 consolidati nelle sezioni 14–15. BALISTICA dei PG consolidata nella sezione 10.1; PROJECTILE SPD ZOMB04 = 8 m/s è consolidata nella sezione 13.8. LANCIO COLTELLI: PROIETTILI FISICI con PROJECTILE SPD 20 m/s, secondo la sezione 22.1. Resta da esplicitare l’applicazione dello standard PROJECTILE SPD ai proiettili degli altri MOB e alle ABILITÀ non precisate.
 - Definire UI/HUD: HP, abilità, PASSIVA, SLOT BONUS, SLOT ITEM, EXP/LVL, G, indicatori DOWN e schermate di scelta.
 - PREPARAZIONE RUN e logica BANNER LEVEL UP consolidate nelle sezioni 8 e 20; realizzare la grafica definitiva e completare le schermate BONUS dove non descritte.
@@ -1755,7 +1772,7 @@ Le voci seguenti sono note editoriali di verifica. Evidenziano ciò che la fonte
 | Attacchi base e ITEMS | Armi, ATK, RANGE, ATTACCHI ad AREA e PROIETTILI definiti nelle sezioni 10–12. I PROIETTILI FISICI dei PG attraversano gli alleati senza effetti (sezione 10.1). Gli ATTACCHI BASE PG01–PG08, il raggio delle esplosioni PG04 e le eccezioni sono descritti nelle sezioni 10–12. ITEMS definitivamente CONFERMATI: comandi, consumo, mira, RANGE, bersagli, assenza di FRIENDLY FIRE e interazione con MURI/OSTACOLI nelle sezioni 9 e 10.3. Alcuni ITEMS del MERCHANT richiedono sblocco tramite QUEST. | ITEMS e obiettivi delle QUEST di sblocco definiti nella sezione 9.5; restano i dettagli operativi elencati in quella sezione. |
 | MOB, BOSS e spawn | Totali per AREA, distribuzione ZOMB01–ZOMB05, FIRST SPAWN 30%, arrotondamenti a discapito di ZOMB01, quantità residue, probabilità e OFF-SCREEN globale consolidati nelle sezioni 14–15. MINI BOSS e BOSS esclusi dal totale/massimo MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti; punto di SPAWN specifico stabilito in fase di LEVEL DESIGN. | Tutto il resto del funzionamento di MINI BOSS e BOSS, comprese STATS, fasi e meccaniche. |
 | PROF | Incrementi e prezzi nella sezione 27; nessun cap per HP, ATK, MOVE SPD, ATK SPD, G DROP, MEDI KIT; DEF massimo 90%, CD REDUCTION minimo 10; ITEM SLOT massimo 3 UPGRADE / 4 SLOT. HP, ATK, DEF, MOVE SPD, ATK SPD e CD REDUCTION legati al singolo PG; CHEST RATE, G DROP, ITEM SLOT e MEDI KIT legati al PLAYER. CHEST RATE +1 punto percentuale per acquisto, CAP 100%; in CO-OP, all’inizio RUN si applica il BONUS più alto tra i PLAYER presenti. | Costi da ribilanciare in TEST, invariati per ora. |
-| DOWN e morte | A 0 HP: DOWN con timer di 20 s, poi MORTE. SCONFITTA con nessun PG ATTIVO. RIANIMAZIONE con F entro TRIGGER_PG di raggio 2 m, timer 5 s, ritorno al 50% degli HP MASSIMI correnti e 2 s di invulnerabilità; solo PG sotto controllo diretto di un PLAYER. Timer DOWN in pausa durante l’interazione; all’interruzione riprende dal valore congelato e il timer di RIANIMAZIONE regredisce verso 0, riprendendo dal residuo se riavviato prima dello 0. Nessun altro evento interrompe la RIANIMAZIONE. Rientro in formazione dei PG IA, CAMBIO CONTROLLO e SPETTATORE definiti nella sezione 28. | Velocità del regresso del timer di RIANIMAZIONE verso 0 s. |
+| DOWN e morte | A 0 HP: DOWN con timer di 20 s, poi MORTE. SCONFITTA con nessun PG ATTIVO. RIANIMAZIONE con F entro TRIGGER_PG di raggio 2 m, timer 5 s, ritorno al 50% degli HP MASSIMI correnti e 2 s di invulnerabilità; solo PG sotto controllo diretto di un PLAYER. Timer DOWN in pausa durante l’interazione; all’interruzione riprende dal valore congelato e il timer di RIANIMAZIONE regredisce verso 0, riprendendo dal residuo se riavviato prima dello 0. Nessun altro evento interrompe la RIANIMAZIONE. Rientro in formazione dei PG IA, CAMBIO CONTROLLO e SPETTATORE definiti nella sezione 28. | Nessun punto residuo: regressione di 1 s di progresso al secondo; con più bersagli si rianima soltanto il più vicino. |
 | Passaggio AREA | TRIGGER USCITA CIRCOLARE con RAGGIO 4 m; tutti i PG VIVI devono trovarsi contemporaneamente al suo interno. Resurrezione automatica dei PG in MORTE al 50%, senza +15%; cura di ingresso del 15% ai VIVI; DOWN da resuscitare prima (sezione 6). | Nessun punto residuo relativo alla forma e alle dimensioni del TRIGGER USCITA. |
 | Fine RUN | Dopo il BOSS decide l’HOST tra PROSEGUIRE e TORNARE ALL’HUB; solo nella sua schermata compare il tasto TORNA ALL’HUB. Ritorno volontario e sconfitta hanno effetti distinti. In caso di abbandono/disconnessione il PLAYER perde i progressi della RUN e mantiene il 50% del solo G guadagnato nella RUN, arrotondato per difetto, secondo la SCONFITTA. Il PG controllato diventa PG IA; questo PG e gli eventuali PG IA già di sua responsabilità vengono riassegnati agli altri PLAYER secondo le regole stabilite (sezioni 8.5 e 29). | Gestione tecnica dell’HOST uscente, già segnalata nelle note di consolidamento; nessuna modalità tecnica viene introdotta. |
 | DANNI PERIODICI | FILO SPINATO: per ciascun MOB il conteggio parte al contatto con una AREA valida; infligge 10 DANNO ogni secondo durante cui il MOB rimane nell’AREA e termina all’uscita. Per MOB già nella fascia valida all’attivazione, il conteggio parte in quel momento. MOLOTOV, TRAPPOLA e POZIONE CURATIVA: sezione 9.3. BRUCIATURA e VELENO: REGOLA GENERALE DANNI DA STATO (sezione 10.8), primo tick 1 s dopo applicazione/rinnovo e poi ogni 1 s; DANNO per tick = DANNO base dello STATO × numero ISTANZE, massimo 5 dello stesso STATO sullo stesso bersaglio; ogni applicazione rinnova la DURATA completa anche al CAP, senza DURATE indipendenti e senza ulteriore aumento del DANNO oltre il CAP. | Restano DA DEFINIRE soltanto le regole dei DANNI PERIODICI non esplicitate per eventuali altri effetti; la definizione di FILO SPINATO non viene estesa ad altre fonti. |

@@ -232,7 +232,7 @@ namespace RogZombie.PreGameplayLoop.Editor
             {
                 if (CompositionOnly) { yield return CompositionChecks(); yield break; }
                 if (WanderOnly) { yield return WanderChecks(); yield break; }
-                if (CompanionOnly) { yield return ResurrectionChecks(); yield return CompanionChecks(); yield break; }
+                if (CompanionOnly) { yield return ResurrectionChecks(); yield return CompanionChecks(); yield return FullPartyChecks(); yield return PassageChecks(); yield break; }
                 if (WireOnly) { yield return WireChecks(); yield break; }
                 config.SelectedAbility = PG01Ability.Pestone;
                 yield return Start(LoopPlayer.PG01);
@@ -593,6 +593,195 @@ namespace RogZombie.PreGameplayLoop.Editor
             ai.Player.Actor.Hit(10000); yield return null; yield return null;
             Check(loop.State == LoopState.Defeat, "Both DOWN ends RUN");
             yield return Start(LoopPlayer.PG01); Check(loop.Companion.Player != persistent && loop.Companion.Experience.Level == 1, "RUN resets companion state");
+        }
+        private static IEnumerator FullPartyChecks()
+        {
+            var selection = new RunPreparationSelection(); selection.OpenPreparation();
+            for (int slot = 0; slot < 4; slot++)
+            {
+                Check(selection.OpenBanner(slot), "Four-member banner " + slot);
+                for (int used = 0; used < slot; used++) Check(!selection.IsAvailable(used), "No duplicate roster choice " + used);
+                selection.SelectPlayer(slot); selection.SelectOption(false, slot % 2); selection.SelectOption(true, slot % 2);
+                selection.Back(); Check(!selection.CanStart, "Unconfirmed member blocks RUN " + slot);
+                selection.OpenBanner(slot); Check(selection.ConfirmSelection(), "Confirm member " + slot);
+            }
+            var snapshot = selection.CreateRunDefinition(config);
+            Check(snapshot != null && snapshot.CompanionAt(2).Player == LoopPlayer.PG03 && snapshot.CompanionAt(3).Ability == 1, "Snapshot holds all selections");
+            selection.RemoveCompanion(2);
+            Check(selection.CanStart && !selection.IsEnabled(2) && selection.IsEnabled(3) && snapshot.CompanionAt(2).Enabled, "Removal keeps slot 3 and preserves RUN snapshot");
+            UnityEngine.Object.Destroy(snapshot);
+            config.EnableCompanion = true; config.CompanionPlayer = LoopPlayer.PG02;
+            config.CompanionAbility = 0; config.CompanionPassive = 0;
+            config.AdditionalCompanions = new[] {
+                new CompanionSelection { Enabled = true, Player = LoopPlayer.PG03 },
+                new CompanionSelection { Enabled = true, Player = LoopPlayer.PG07, Ability = 1 }
+            };
+            yield return Start(LoopPlayer.PG01);
+            Check(loop.Companions.Count == 3, "Three IA contexts created");
+            var followers = new List<CompanionFormation>();
+            foreach (var member in loop.Companions)
+            {
+                var formation = member.Player.GetComponent<CompanionFormation>(); formation.enabled = false; followers.Add(formation);
+                member.Player.GetComponent<PlayerMovement>().enabled = false;
+                member.Player.GetComponent<PlayerAim>().enabled = false; member.Player.GetComponent<PlayerWeapon>().enabled = false;
+                foreach (var component in member.Player.GetComponents<MonoBehaviour>()) if (component.GetType().Name.EndsWith("AbilityInput")) component.enabled = false;
+                member.Player.transform.position = CompanionFormation.Offset(3, member.PartySlot - 1);
+                Check(!member.Player.GetComponent<PlayerWeapon>().TrajectoryVisibleWhen(), "IA trajectory hidden " + member.PartySlot);
+            }
+            Physics2D.SyncTransforms();
+            Vector2 origin = loop.Player.transform.position;
+            Near(Vector2.Distance(origin, loop.Companions[0].Player.transform.position), 1, "Diamond front-left side");
+            Near(Vector2.Distance(origin, loop.Companions[1].Player.transform.position), 1, "Diamond front-right side");
+            Near(Vector2.Distance(loop.Companions[2].Player.transform.position, loop.Companions[0].Player.transform.position), 1, "Diamond rear-left side");
+            Near(Vector2.Distance(loop.Companions[2].Player.transform.position, loop.Companions[1].Player.transform.position), 1, "Diamond rear-right side");
+            for (int frame = 0; frame < 250; frame++)
+                foreach (var formation in followers) { formation.Advance(new Vector2(0, 10), .02f); Physics2D.SyncTransforms(); }
+            foreach (var formation in followers)
+            {
+                Near(Vector2.Distance(formation.transform.position, formation.Goal), 0, "Diamond follows cursor " + formation.Context.PartySlot, .08f);
+                Vector2 before = formation.transform.position; Time.timeScale = 0; formation.Advance(Vector2.down * 10, .1f); Time.timeScale = 1;
+                Near(Vector2.Distance(before, formation.transform.position), 0, "Formation pause " + formation.Context.PartySlot);
+            }
+            var blocker = Obstacle(followers[2].Goal, new Vector2(.35f, .35f), true); loop.RefreshNavigation();
+            Check(followers[2].TryResolvePosition(origin, followers[2].Goal, out var free), "Rear slot resolves cover on NavMesh");
+            Check(Vector2.Distance(free, followers[2].Goal) > .35f, "Rear alternative clears cover");
+            blocker.SetActive(false); loop.RefreshNavigation();
+            var keyboard = UnityEngine.InputSystem.InputSystem.AddDevice<UnityEngine.InputSystem.Keyboard>();
+            try
+            {
+                for (int slot = 1; slot <= 3; slot++)
+                {
+                    var digit = slot == 1 ? UnityEngine.InputSystem.Key.Digit1 : slot == 2 ? UnityEngine.InputSystem.Key.Digit2 : UnityEngine.InputSystem.Key.Digit3;
+                    UnityEngine.InputSystem.InputSystem.QueueStateEvent(keyboard, new UnityEngine.InputSystem.LowLevel.KeyboardState(UnityEngine.InputSystem.Key.Space, digit));
+                    UnityEngine.InputSystem.InputSystem.Update(); keyboard.MakeCurrent();
+                    for (int other = 1; other <= 3; other++) Check(PartyCommands.Held(loop.Companions[other - 1].Player) == (other == slot), "Isolated chord " + slot + " target " + other + " (slot=" + loop.Companions[other - 1].PartySlot + ", direct=" + loop.Companions[other - 1].DirectlyControlled + ", space=" + keyboard.spaceKey.isPressed + ")");
+                    Check(!PartyCommands.Held(loop.Player), "IA chord does not trigger PLAYER Q");
+                    Check(PartyCommands.Pressed(loop.Companions[slot - 1].Player), "IA chord press " + slot);
+                    UnityEngine.InputSystem.InputSystem.QueueStateEvent(keyboard, new UnityEngine.InputSystem.LowLevel.KeyboardState());
+                    UnityEngine.InputSystem.InputSystem.Update(); keyboard.MakeCurrent();
+                    Check(PartyCommands.Released(loop.Companions[slot - 1].Player) && !PartyCommands.Held(loop.Companions[slot - 1].Player), "IA chord release " + slot);
+                    yield return null;
+                }
+            }
+            finally { UnityEngine.InputSystem.InputSystem.RemoveDevice(keyboard); }
+            loop.enabled = false;
+            try
+            {
+                loop.Player.transform.position = Vector2.zero;
+                loop.Companions[0].Player.transform.position = Vector2.right;
+                loop.Companions[1].Player.transform.position = Vector2.up * 1.5f;
+                loop.Companions[0].Player.Actor.Hit(100000); loop.Companions[1].Player.Actor.Hit(100000);
+                loop.TickResurrection(2, true);
+                Near(loop.Companions[0].Resurrection.Progress, 2, "F revives closest DOWN only");
+                Near(loop.Companions[1].Resurrection.Progress, 0, "Other DOWN has no concurrent progress");
+                loop.Companions[1].Player.transform.position = Vector2.up * .8f;
+                loop.TickResurrection(1, true);
+                Near(loop.Companions[0].Resurrection.Progress, 1, "Previous target regresses when nearer DOWN changes");
+                Near(loop.Companions[1].Resurrection.Progress, 1, "New closest DOWN progresses");
+                loop.TickResurrection(4, true); loop.TickResurrection(5, true);
+                Check(loop.Companions[0].Player.Actor.IsActive && loop.Companions[1].Player.Actor.IsActive, "Both revived sequentially");
+                loop.Player.Actor.Hit(100000); loop.TickResurrection(.01f, false);
+                Check(loop.Controlled == loop.Companions[0], "First active IA takes control");
+                loop.Companions[0].Player.Actor.Die(); loop.TickResurrection(.01f, false);
+                Check(loop.Controlled == loop.Companions[1], "Next active IA takes control");
+                loop.Player.Actor.Resurrect();
+                loop.TickResurrection(.01f, false); Check(loop.Controlled == loop, "Original PG regains control");
+            }
+            finally { loop.enabled = true; }
+            foreach (var member in loop.Members) member.Experience.Award(225);
+            yield return WaitRealtime(.1f);
+            for (int i = 0; i < 60; i++)
+            {
+                var choice = loop.ChoiceContext;
+                if (choice.Experience.Choices != null) choice.Experience.Choose(0);
+                yield return null;
+            }
+            foreach (var member in loop.Members) Check(member.Experience.PendingChoices == 0, "All individual LEVEL UP choices resolved " + member.PartySlot);
+            var persistent = loop.Companions[2].Player;
+            Set(loop, "<State>k__BackingField", LoopState.AreaComplete); Call(loop, "OpenBonus");
+            foreach (var member in loop.Members)
+            {
+                if (member.Player.Actor.State == LifeState.Dead) continue;
+                Check(loop.RewardContext == member, "End AREA rewards follow party order " + member.PartySlot);
+                loop.SelectBonus(0); loop.ConfirmBonus();
+            }
+            while (loop.State != LoopState.Combat) yield return null;
+            Check(loop.Companions.Count == 3 && loop.Companions[2].Player == persistent, "All three IA persist across AREA");
+            Check(loop.Companions[0].Player.Actor.IsActive, "Dead IA resurrects on AREA transition");
+            foreach (var member in loop.Members) member.Player.transform.position = loop.Exit.transform.position;
+            Check(loop.PartyReadyForExit(), "All four PG ready at exit");
+            loop.Companions[2].Player.transform.position += Vector3.right * 5;
+            Check(!loop.PartyReadyForExit(), "Exit waits for third IA");
+            yield return Start(LoopPlayer.PG01);
+            Check(loop.Companions.Count == 3 && loop.Companions[2].Player != persistent, "RUN reset recreates all IA");
+            foreach (var member in loop.Members) Near(member.Experience.Level, 1, "RUN resets member level " + member.PartySlot);
+            config.AdditionalCompanions[1].Enabled = false;
+            yield return Start(LoopPlayer.PG01);
+            Check(loop.Companions.Count == 2, "Two IA configuration supported");
+            var left = loop.FormationOffset(loop.Companions[0]); var right = loop.FormationOffset(loop.Companions[1]);
+            Near(left.magnitude, 1, "Triangle first side"); Near(right.magnitude, 1, "Triangle second side"); Near(Vector2.Distance(left, right), 1, "Triangle IA spacing");
+            config.EnableCompanion = false; config.AdditionalCompanions[0].Enabled = false; config.AdditionalCompanions[1].Enabled = true;
+            yield return Start(LoopPlayer.PG01);
+            Check(loop.Companions.Count == 1 && loop.Companion.PartySlot == 3, "Removing earlier IA preserves banner command 3");
+            Near(Vector2.Distance(loop.FormationOffset(loop.Companion), Vector2.left), 0, "Single remaining IA uses one-metre rear slot");
+            config.AdditionalCompanions = new CompanionSelection[0];
+        }
+        private static IEnumerator PassageChecks()
+        {
+            config.EnableCompanion = true; config.CompanionPlayer = LoopPlayer.PG02;
+            config.AdditionalCompanions = new[] {
+                new CompanionSelection { Enabled = true, Player = LoopPlayer.PG03 },
+                new CompanionSelection { Enabled = true, Player = LoopPlayer.PG07 }
+            };
+            yield return Start(LoopPlayer.PG01);
+            loop.enabled = false;
+            try
+            {
+                var top = Obstacle(new Vector2(0, .8f), new Vector2(20, .5f), true);
+                var bottom = Obstacle(new Vector2(0, -.8f), new Vector2(20, .5f), true);
+                loop.RefreshNavigation();
+                var formations = new List<CompanionFormation>();
+                loop.Player.transform.position = Vector2.zero;
+                foreach (var member in loop.Companions)
+                {
+                    var formation = member.Player.GetComponent<CompanionFormation>(); formation.enabled = false; formations.Add(formation);
+                    member.Player.GetComponent<PlayerAim>().enabled = false; member.Player.GetComponent<PlayerWeapon>().enabled = false;
+                    member.Player.transform.position = Vector2.right * member.PartySlot * .75f;
+                }
+                Physics2D.SyncTransforms();
+                for (int frame = 0; frame < 100; frame++)
+                {
+                    loop.Player.Actor.Move(Vector2.right * .04f);
+                    foreach (var formation in formations) formation.Advance((Vector2)loop.Player.transform.position + Vector2.right * 10, .02f, Vector2.right * 2);
+                    Physics2D.SyncTransforms();
+                }
+                Check(loop.Player.transform.position.x > 3.8f, "Narrow corridor: PLAYER advances past formerly blocking IA");
+                foreach (var formation in formations)
+                {
+                    Check(formation.transform.position.x > loop.Player.transform.position.x, "Queue moves forward outside formation " + formation.Context.PartySlot);
+                    Check(Mathf.Abs(formation.transform.position.y) <= .2f, "Queue respects corridor walls " + formation.Context.PartySlot);
+                    Near(formation.Context.Player.Actor.Stats.MoveSpeed, formation.Context.Player.Actor.InitialStats.MoveSpeed, "Yield preserves MOVE SPD " + formation.Context.PartySlot);
+                }
+                for (int i = 0; i < 2; i++) Check(Vector2.Distance(formations[i].transform.position, formations[i + 1].transform.position) >= .699f, "Queue retains PG collision " + i);
+                var first = formations[0]; Vector2 paused = first.transform.position;
+                Time.timeScale = 0; first.Advance(Vector2.right * 20, .02f, Vector2.right * 2); Time.timeScale = 1;
+                Near(Vector2.Distance(paused, first.transform.position), 0, "Passage following pauses");
+                var end = Obstacle(new Vector2(8, 0), new Vector2(.5f, 2), true); loop.RefreshNavigation();
+                for (int frame = 0; frame < 100; frame++)
+                {
+                    loop.Player.Actor.Move(Vector2.right * .04f);
+                    foreach (var formation in formations) formation.Advance(Vector2.right * 20, .02f, Vector2.right * 2);
+                    Physics2D.SyncTransforms();
+                }
+                Check(formations[2].transform.position.x <= 7.41f, "Front IA stops at solid dead end");
+                foreach (var member in loop.Members) Check(member.Player.transform.position.x < 7.75f, "No PG crosses end wall " + member.PartySlot);
+                top.SetActive(false); bottom.SetActive(false); end.SetActive(false); loop.RefreshNavigation();
+                // Once the passage is free, the ordinary formation must recover without further input.
+                for (int frame = 0; frame < 500; frame++)
+                    foreach (var formation in formations) { formation.Advance((Vector2)loop.Player.transform.position + Vector2.right * 10, .02f, Vector2.zero); Physics2D.SyncTransforms(); }
+                foreach (var formation in formations) Near(Vector2.Distance(formation.transform.position, formation.Goal), 0, "Formation recovers after corridor " + formation.Context.PartySlot, .1f);
+            }
+            finally { loop.enabled = true; Time.timeScale = 1; config.AdditionalCompanions = new CompanionSelection[0]; }
         }
         private static IEnumerator WaitRealtime(float seconds)
         { double until = EditorApplication.timeSinceStartup + seconds; while (EditorApplication.timeSinceStartup < until) yield return null; }

@@ -7,6 +7,9 @@ namespace RogZombie.PreGameplayLoop
     {
         public LoopDefinition Definition;
         public TextAsset Content;
+        public TitleScreen Title { get; private set; }
+        public PauseScreen Pause { get; private set; }
+        public bool AtTitle => Title != null && Title.IsVisible;
         public RunPreparationSelection Selection { get; private set; }
         public PreparationContent Text { get; private set; }
         public LoopSession Run { get; private set; }
@@ -16,20 +19,30 @@ namespace RogZombie.PreGameplayLoop
         public string Failure { get; private set; }
         private LoopDefinition runDefinition;
         private Vector3 cameraPosition;
+        private Quaternion cameraRotation;
+        private bool cameraOrthographic;
+        private float cameraFieldOfView;
         private float cameraSize, previousTimeScale;
         private void Awake()
         {
             previousTimeScale = Time.timeScale; Time.timeScale = 1;
+            Title = GetComponent<TitleScreen>();
+            Pause = GetComponent<PauseScreen>();
             Selection = new RunPreparationSelection();
             Text = Content != null ? JsonUtility.FromJson<PreparationContent>(Content.text) : null;
             if (Definition == null || Text == null || Text.Characters == null || Text.Characters.Length != 8)
                 Failure = "Assegnare configurazione e testi del roster.";
-            if (Camera.main != null) { cameraPosition = Camera.main.transform.position; cameraSize = Camera.main.orthographicSize; }
+            if (Camera.main != null)
+            {
+                cameraPosition = Camera.main.transform.position; cameraSize = Camera.main.orthographicSize;
+                cameraRotation = Camera.main.transform.rotation; cameraOrthographic = Camera.main.orthographic;
+                cameraFieldOfView = Camera.main.fieldOfView;
+            }
             gameObject.AddComponent<RunPreparationUI>();
         }
         private void Update()
         {
-            if (Selection.Page != PreparationPage.Hub || Keyboard.current == null || !Application.isFocused) return;
+            if (AtTitle || (Pause != null && Pause.IsOpen) || Selection.Page != PreparationPage.Hub || Keyboard.current == null || !Application.isFocused) return;
             var k = Keyboard.current;
             Vector2 axis = new Vector2((k.dKey.isPressed ? 1 : 0) - (k.aKey.isPressed ? 1 : 0), (k.wKey.isPressed ? 1 : 0) - (k.sKey.isPressed ? 1 : 0));
             HubPosition += Vector2.ClampMagnitude(axis, 1) * 2 * Time.unscaledDeltaTime;
@@ -38,7 +51,7 @@ namespace RogZombie.PreGameplayLoop
         }
         public bool BeginRun()
         {
-            if (!Selection.CanStart || Run != null || Failure != null) return false;
+            if (AtTitle || (Pause != null && Pause.IsOpen) || !Selection.CanStart || Run != null || Failure != null) return false;
             var definition = Selection.CreateRunDefinition(Definition);
             string issue = definition.Validate();
             if (issue != null) { Failure = issue; Destroy(definition); return false; }
@@ -51,13 +64,25 @@ namespace RogZombie.PreGameplayLoop
             if (Run == null || (Run.State != LoopState.Finished && Run.State != LoopState.Defeat)) return;
             StartCoroutine(ReturnRoutine());
         }
+        public void AbandonRun()
+        {
+            if (Run == null) return;
+            // All RUN progress is owned by this disposable session; preparation is retained.
+            Run.DiscardRunProgress();
+            StartCoroutine(ReturnRoutine());
+        }
         private IEnumerator ReturnRoutine()
         {
             Run.gameObject.SetActive(false); Destroy(Run.gameObject); Run = null;
             if (runDefinition != null) Destroy(runDefinition);
             yield return null;
             Time.timeScale = 1;
-            if (Camera.main != null) { Camera.main.transform.position = cameraPosition; Camera.main.orthographicSize = cameraSize; }
+            if (Camera.main != null)
+            {
+                Camera.main.transform.SetPositionAndRotation(cameraPosition, cameraRotation);
+                Camera.main.orthographicSize = cameraSize; Camera.main.orthographic = cameraOrthographic;
+                Camera.main.fieldOfView = cameraFieldOfView;
+            }
             HubPosition = Vector2.zero; Selection.ReturnToHub();
         }
         private void OnDestroy()

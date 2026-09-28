@@ -45,7 +45,7 @@ namespace RogZombie.PreGameplayLoop
         }
         private void OnGUI()
         {
-            if (hub.Selection == null) return;
+            if (hub.Selection == null || hub.AtTitle || (hub.Pause != null && hub.Pause.IsOpen && hub.Selection.Page != PreparationPage.Hub)) return;
             Styles();
             var previous = GUI.matrix;
             float scale = Mathf.Min(Screen.width / 1536f, Screen.height / 864f);
@@ -79,7 +79,7 @@ namespace RogZombie.PreGameplayLoop
             GUI.Label(new Rect(exit.x - 60, exit.y - 60, 120, 120), "EXIT\n[F]", centre);
             Vector2 position = origin + new Vector2(hub.HubPosition.x * 60, -hub.HubPosition.y * 60);
             Fill(new Rect(position.x - 18, position.y - 18, 36, 36), blue);
-            GUI.Label(new Rect(240, 760, 1040, 50), hub.AtExit ? "Premi F per PREPARAZIONE RUN" : "PLAYER + 1 PG IA opzionale · ROSTER interamente sbloccato", centre);
+            GUI.Label(new Rect(240, 760, 1040, 50), hub.AtExit ? "Premi F per PREPARAZIONE RUN" : "PLAYER + fino a 3 PG IA opzionali · ROSTER interamente sbloccato", centre);
         }
         private string PGLabel => hub.Selection.Player < 0 ? "SELEZIONA PG" : "PG" + (hub.Selection.Player + 1).ToString("00");
         private string OptionLabel(bool passive)
@@ -93,20 +93,20 @@ namespace RogZombie.PreGameplayLoop
             for (int i = 0; i < 4; i++)
             {
                 float x = 126 + i * 360;
-                bool available = i < 2;
+                bool available = true;
                 var member = available ? hub.Selection.GetMember(i) : null;
                 string pg = member == null || member.Player < 0 ? "SELEZIONA PG" : "PG" + (member.Player + 1).ToString("00");
-                Outline(new Rect(x, 98, 190, 36), blue); GUI.Label(new Rect(x, 98, 190, 36), i == 0 ? "PLAYER 1" : i == 1 ? "PG IA 1" : "POSTO " + (i + 1), centre);
+                Outline(new Rect(x, 98, 190, 36), blue); GUI.Label(new Rect(x, 98, 190, 36), i == 0 ? "PLAYER 1" : "PG IA " + i, centre);
                 string label = available ? pg + (member.Player >= 0 ? "\n" + hub.Text.Characters[member.Player].Name : "") : "BLOCCATO";
-                if (i == 1 && !hub.Selection.CompanionEnabled) label = "AGGIUNGI PG IA";
+                if (i > 0 && !hub.Selection.IsEnabled(i)) label = "AGGIUNGI PG IA";
                 if (BoxButton(new Rect(x, 143, 190, 315), label, red, available)) hub.Selection.OpenBanner(i);
                 if (!available) continue;
                 if (i == 0) { Outline(new Rect(x, 477, 40, 42), green); GUI.Label(new Rect(x + 45, 477, 160, 45), "ITEM VUOTO", text); }
-                else if (hub.Selection.CompanionEnabled && BoxButton(new Rect(x, 477, 190, 42), "RIMUOVI IA", purple)) hub.Selection.RemoveCompanion();
-                DrawOptionCircle(new Rect(x, 537, 82, 82), i == 0 ? "Q" : "SPACE\n+1", yellow, false);
+                else if (hub.Selection.IsEnabled(i) && BoxButton(new Rect(x, 477, 190, 42), "RIMUOVI IA", purple)) hub.Selection.RemoveCompanion(i);
+                DrawOptionCircle(new Rect(x, 537, 82, 82), i == 0 ? "Q" : "SPACE\n+" + i, yellow, false);
                 DrawOptionCircle(new Rect(x + 108, 537, 82, 82), "P", pink, false);
-                if (member.Complete && (i == 0 || hub.Selection.CompanionEnabled)) GUI.Label(new Rect(x - 50, 622, 295, 72), hub.Text.Characters[member.Player].Options[member.Ability].Name + "\n" + hub.Text.Characters[member.Player].Options[2 + member.Passive].Name, centre);
-                GUI.Label(new Rect(x - 55, 690, 305, 40), i == 1 && !hub.Selection.CompanionEnabled ? "OPZIONALE" : member.Confirmed ? "CONFERMATO" : "DA CONFERMARE", centre);
+                if (member.Complete && hub.Selection.IsEnabled(i)) GUI.Label(new Rect(x - 50, 622, 295, 72), hub.Text.Characters[member.Player].Options[member.Ability].Name + "\n" + hub.Text.Characters[member.Player].Options[2 + member.Passive].Name, centre);
+                GUI.Label(new Rect(x - 55, 690, 305, 40), i > 0 && !hub.Selection.IsEnabled(i) ? "OPZIONALE" : member.Confirmed ? "CONFERMATO" : "DA CONFERMARE", centre);
             }
             if (BoxButton(new Rect(506, 735, 398, 85), "CONFERMA PREPARAZIONE\nAVVIA RUN", Color.gray, hub.Selection.CanStart)) hub.BeginRun();
             if (BoxButton(new Rect(40, 800, 170, 44), "INDIETRO", purple)) hub.Selection.Back();

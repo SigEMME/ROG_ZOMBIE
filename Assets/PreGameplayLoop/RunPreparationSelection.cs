@@ -11,10 +11,12 @@ namespace RogZombie.PreGameplayLoop
             public bool Confirmed;
             public bool Complete => Player >= 0 && Player < 8 && Ability >= 0 && Passive >= 0;
         }
-        private readonly Member[] members = { new Member(), new Member() };
+        private readonly Member[] members = { new Member(), new Member(), new Member(), new Member() };
         public Member GetMember(int index) => members[index];
         public int EditingSlot { get; private set; }
-        public bool CompanionEnabled { get; private set; }
+        private readonly bool[] enabled = { true, false, false, false };
+        public bool CompanionEnabled => enabled[1];
+        public bool IsEnabled(int slot) => slot >= 0 && slot < 4 && enabled[slot];
         private Member Current => members[EditingSlot];
         public int Player { get => Current.Player; private set => Current.Player = value; }
         public int Ability { get => Current.Ability; private set => Current.Ability = value; }
@@ -23,15 +25,35 @@ namespace RogZombie.PreGameplayLoop
         public bool Confirmed { get => Current.Confirmed; private set => Current.Confirmed = value; }
         public PreparationPage Page { get; private set; } = PreparationPage.Hub;
         public bool Complete => Current.Complete;
-        public bool CanStart => Page == PreparationPage.Preparation && members[0].Complete && members[0].Confirmed &&
-            (!CompanionEnabled || members[1].Complete && members[1].Confirmed && members[1].Player != members[0].Player);
-        public bool IsAvailable(int player) => !CompanionEnabled || members[1 - EditingSlot].Player != player;
-        public void RemoveCompanion() { if (Page == PreparationPage.Preparation) { CompanionEnabled = false; EditingSlot = 0; } }
+        public bool CanStart
+        {
+            get
+            {
+                if (Page != PreparationPage.Preparation) return false;
+                for (int i = 0; i < 4; i++)
+                {
+                    if (!enabled[i]) continue;
+                    if (!members[i].Complete || !members[i].Confirmed) return false;
+                    for (int j = 0; j < i; j++) if (enabled[j] && members[i].Player == members[j].Player) return false;
+                }
+                return true;
+            }
+        }
+        public bool IsAvailable(int player)
+        {
+            for (int i = 0; i < 4; i++) if (i != EditingSlot && enabled[i] && members[i].Player == player) return false;
+            return true;
+        }
+        public void RemoveCompanion(int slot = 1)
+        {
+            if (Page != PreparationPage.Preparation || slot < 1 || slot > 3) return;
+            enabled[slot] = false; members[slot] = new Member(); EditingSlot = 0;
+        }
         public void OpenPreparation() { if (Page == PreparationPage.Hub) Page = PreparationPage.Preparation; }
         public bool OpenBanner(int index)
         {
-            if (Page != PreparationPage.Preparation || index < 0 || index > 1) return false;
-            EditingSlot = index; if (index == 1) CompanionEnabled = true;
+            if (Page != PreparationPage.Preparation || index < 0 || index > 3) return false;
+            EditingSlot = index; enabled[index] = true;
             Confirmed = false; Page = PreparationPage.Selection; return true;
         }
         public void SelectPlayer(int index)
@@ -72,6 +94,9 @@ namespace RogZombie.PreGameplayLoop
             ApplyMember(d, members[0].Player, members[0].Ability, members[0].Passive);
             d.EnableCompanion = CompanionEnabled;
             d.CompanionPlayer = (LoopPlayer)members[1].Player; d.CompanionAbility = members[1].Ability; d.CompanionPassive = members[1].Passive;
+            d.AdditionalCompanions = new CompanionSelection[2];
+            for (int i = 2; i < 4; i++) d.AdditionalCompanions[i - 2] = new CompanionSelection
+            { Enabled = enabled[i], Player = (LoopPlayer)members[i].Player, Ability = members[i].Ability, Passive = members[i].Passive };
             return d;
         }
         public static void ApplyMember(LoopDefinition d, int player, int ability, int passive)

@@ -314,10 +314,10 @@ namespace RogZombie.PreGameplayLoop.Editor
             brain.Initialize(loop.Definition.ZOMB01, loop.Navigation); brain.enabled = false;
             typeof(MobBrain).GetMethod("ChooseTarget", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(brain, null);
             var targetField = typeof(MobBrain).GetField("target", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            Check(targetField.GetValue(brain) == ally, "MOB chooses visible ally over nearest invisible PG05");
+            Check((Combatant)targetField.GetValue(brain) == ally, "MOB chooses visible ally over nearest invisible PG05");
             effect.Cancel();
             typeof(MobBrain).GetMethod("ChooseTarget", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance).Invoke(brain, null);
-            Check(targetField.GetValue(brain) == a, "MOB reacquires PG05 after invisibility");
+            Check((Combatant)targetField.GetValue(brain) == a, "MOB reacquires PG05 after invisibility");
             Remove(ally, down, mob); yield return null;
         }
         private static IEnumerator KnifeChecks()

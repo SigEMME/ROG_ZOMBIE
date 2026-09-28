@@ -7,7 +7,7 @@
 - Primary platform: Windows
 - Genre: Roguelite
 - Visual style: Pixel Art
-- Camera / perspective: Isometric
+- Camera / perspective: Top-down
 - Multiplayer target: Up to 4 players
 
 ## Role of Codex

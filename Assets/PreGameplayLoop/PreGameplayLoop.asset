@@ -11,6 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e023cddd396747c3b0a88dbfb7fe7794, type: 3}
   m_Name: PreGameplayLoop
+  EnvironmentShader: {fileID: 4800000, guid: 4f069dc050d64e66999b2e302ffc7260, type: 3}
   m_EditorClassIdentifier: 
   SelectedPlayer: 6
   EnableCompanion: 0

@@ -9,6 +9,10 @@ namespace RogZombie
         private PlayerDefinition playerDefinition;
         private TestEngine.Combatant combatant;
         public TestEngine.TestAreaSettings TestSettings;
+        private Vector2 requestedVelocity;
+        private int requestFrame = -1;
+        // Preserve movement intent even when a companion blocks the actual displacement.
+        public Vector2 RequestedVelocity => requestFrame == Time.frameCount && enabled ? requestedVelocity : Vector2.zero;
 
         public void Configure(PlayerDefinition definition)
         {
@@ -29,6 +33,7 @@ namespace RogZombie
 
         private void Update()
         {
+            requestedVelocity = Vector2.zero; requestFrame = Time.frameCount;
             Keyboard keyboard = Keyboard.current;
             if (keyboard == null || playerDefinition == null || !Application.isFocused)
                 return;
@@ -42,7 +47,8 @@ namespace RogZombie
             if (TestSettings != null)
                 metresPerSecond = (combatant != null ? combatant.EffectiveStats.MoveSpeed : playerDefinition.BaseStats.MoveSpeed) / 100f * TestSettings.PlayerMoveSpeedBase;
             if (combatant != null) metresPerSecond *= combatant.CurrentMovementMultiplier;
-            Vector2 displacement = Vector2.ClampMagnitude(input, 1f) * metresPerSecond * Time.deltaTime;
+            requestedVelocity = Vector2.ClampMagnitude(input, 1f) * metresPerSecond;
+            Vector2 displacement = requestedVelocity * Time.deltaTime;
             // World-space movement stays independent of the mouse-facing rotation.
             if (combatant != null) combatant.Move(displacement);
             else transform.position += new Vector3(displacement.x, displacement.y, 0f);

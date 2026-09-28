@@ -68,10 +68,17 @@ namespace RogZombie.PreGameplayLoop.Editor
             var hub = UnityEngine.Object.FindFirstObjectByType<HubPrototype>();
             Check(hub != null && hub.Failure == null, "HUB scene loads with definition and content");
             Check(UnityEngine.Object.FindFirstObjectByType<LoopSession>() == null && Combatant.All.Count == 0, "No gameplay session or combatants started");
+            var title = hub.Title;
+            Check(title != null && title.IsVisible && hub.AtTitle, "Title is the initial screen");
+            Check(title.Logo != null && title.StartImage != null && title.ExitImage != null, "All supplied title images assigned");
+            Check(!hub.BeginRun() && hub.Run == null, "Title blocks RUN before START");
+            title.StartGame();
+            Check(!hub.AtTitle && hub.Selection.Page == PreparationPage.Hub && hub.Run == null, "START opens HUB without starting RUN");
+            title.StartGame(); Check(!hub.AtTitle, "Repeated START is harmless");
             var model = hub.Selection;
             Check(model.Page == PreparationPage.Hub, "Initial HUB page");
             model.OpenPreparation(); Check(!model.CanStart, "No start with empty selection");
-            for (int i = 2; i < 4; i++) Check(!model.OpenBanner(i), "Banner blocked " + (i + 1));
+            for (int i = 2; i < 4; i++) { Check(model.OpenBanner(i), "IA banner available " + i); model.Back(); model.RemoveCompanion(i); }
             Check(model.OpenBanner(0), "First banner opens selection");
             Check(!model.ConfirmSelection(), "Cannot confirm empty selection");
             for (int pg = 0; pg < 8; pg++)
@@ -102,6 +109,15 @@ namespace RogZombie.PreGameplayLoop.Editor
             Check(party.EnableCompanion && party.SelectedPlayer == LoopPlayer.PG08 && party.CompanionPlayer == LoopPlayer.PG01 && party.CompanionPassive == 1, "Party snapshot contains both PG selections");
             UnityEngine.Object.Destroy(party);
             model.RemoveCompanion(); Check(model.CanStart && !model.CompanionEnabled, "Optional companion removable without losing PLAYER confirmation");
+            for (int slot = 1; slot < 4; slot++)
+            {
+                Check(model.OpenBanner(slot), "Open remaining IA banner " + slot);
+                Check(!model.IsAvailable(7), "Main PG blocked for IA " + slot);
+                model.SelectPlayer(slot - 1); model.SelectOption(false, 0); model.SelectOption(true, 0); model.ConfirmSelection();
+            }
+            var fullParty = model.CreateRunDefinition(hub.Definition);
+            Check(model.CanStart && fullParty.CompanionAt(2).Enabled && fullParty.CompanionAt(3).Enabled && fullParty.Validate() == null, "Four-member preparation valid");
+            UnityEngine.Object.Destroy(fullParty);
             Check(hub.Run == null && UnityEngine.Object.FindFirstObjectByType<LoopSession>() == null, "Screen tests did not launch RUN");
         }
     }

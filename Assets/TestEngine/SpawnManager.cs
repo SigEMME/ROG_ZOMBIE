@@ -93,7 +93,7 @@ namespace RogZombie.TestEngine
                 }
                 Vector2 direction = UnityEngine.Random.insideUnitCircle.normalized;
                 Camera camera = world.GameCamera;
-                float halfHeight = camera.orthographicSize;
+                float halfHeight = GroundHalfHeight(camera);
                 float halfWidth = halfHeight * camera.aspect;
                 float edge = Mathf.Min(halfWidth / Mathf.Max(Mathf.Abs(direction.x), 0.00001f), halfHeight / Mathf.Max(Mathf.Abs(direction.y), 0.00001f));
                 Vector2 candidate = (Vector2)reference.transform.position + direction * (edge + UnityEngine.Random.Range(0.05f, extra));
@@ -141,7 +141,7 @@ namespace RogZombie.TestEngine
 
         private bool OffscreenForAll(Vector2 point)
         {
-            float halfHeight = world.GameCamera.orthographicSize;
+            float halfHeight = GroundHalfHeight(world.GameCamera);
             float halfWidth = halfHeight * world.GameCamera.aspect;
             foreach (var actor in Combatant.All)
             {
@@ -151,6 +151,10 @@ namespace RogZombie.TestEngine
             }
             return true;
         }
+
+        // Prototype cameras face the XY ground vertically in both projection modes.
+        public static float GroundHalfHeight(Camera camera) => camera.orthographic ? camera.orthographicSize :
+            Mathf.Abs(camera.transform.position.z) * Mathf.Tan(camera.fieldOfView * .5f * Mathf.Deg2Rad);
 
         private void OnDeath(Combatant actor)
         {
