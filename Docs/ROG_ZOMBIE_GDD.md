@@ -316,6 +316,7 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - SMOKE: rende INVISIBILI tutti i PG nell’AREA secondo le regole di INVISIBILITÀ del GDD. Uscendo dall’AREA, l’INVISIBILITÀ conferita da SMOKE termina immediatamente. Se il PG compie un’AZIONE che annulla INVISIBILITÀ, può riottenere l’effetto di SMOKE 1 s dopo tale AZIONE, purché si trovi nell’AREA ancora attiva. Una nuova AZIONE che annulla INVISIBILITÀ fa ripartire l’attesa di 1 s per quel PG.
 - POZIONE CURATIVA: cura i PG nell’AREA di 10 HP ogni secondo per 4 s e ignora completamente i MOB.
 - TRAPPOLA: colpisce solo i MOB nell’AREA valida, infliggendo 5 DANNO ogni secondo e SLOW 40% durante la permanenza; durata massima dell’AREA: 5 s.
+- Sovrapposizione confermata: le AREE degli ITEMS sommano DANNI e CURE. Ogni AREA conserva il proprio timer e il proprio tick immediato; lo SLOW di TRAPPOLA non si moltiplica.
 
 ### 9.4 AREE, MURI E OSTACOLI — CONFERMATO
 

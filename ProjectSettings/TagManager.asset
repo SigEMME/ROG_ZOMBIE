@@ -22,8 +22,8 @@ TagManager:
   - PROJECTILE_PG
   - PROJECTILE_MOB
   - TRIGGER_MOB
-  - 
-  - 
+  - AREA_EFFECT_PG
+  - AREA_EFFECT_MOB
   - 
   - 
   - 

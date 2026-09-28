@@ -73,6 +73,8 @@ namespace RogZombie.PreGameplayLoop
         }
         private IEnumerator ReturnRoutine()
         {
+            // Acquired items are consumed by this RUN; the free test selector can refill them explicitly.
+            for (int i = 0; i < 4; i++) { Selection.Items[i] = PrototypeItem.None; Selection.ItemCounts[i] = 0; }
             Run.gameObject.SetActive(false); Destroy(Run.gameObject); Run = null;
             if (runDefinition != null) Destroy(runDefinition);
             yield return null;

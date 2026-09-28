@@ -5,6 +5,7 @@ namespace RogZombie.PreGameplayLoop
     {
         private HubPrototype hub;
         private Vector2 descriptionScroll;
+        private int itemPicker = -1, draggedItem = -1;
         private GUIStyle text, centre;
         private Texture2D circle;
         private readonly Color red = new Color(.85f, .08f, .15f), green = new Color(.12f, .65f, .3f),
@@ -89,6 +90,7 @@ namespace RogZombie.PreGameplayLoop
         }
         private void DrawPreparation()
         {
+            GUI.enabled = itemPicker < 0;
             GUI.Label(new Rect(470, 22, 600, 50), "PREPARAZIONE RUN", centre);
             for (int i = 0; i < 4; i++)
             {
@@ -101,7 +103,7 @@ namespace RogZombie.PreGameplayLoop
                 if (i > 0 && !hub.Selection.IsEnabled(i)) label = "AGGIUNGI PG IA";
                 if (BoxButton(new Rect(x, 143, 190, 315), label, red, available)) hub.Selection.OpenBanner(i);
                 if (!available) continue;
-                if (i == 0) { Outline(new Rect(x, 477, 40, 42), green); GUI.Label(new Rect(x + 45, 477, 160, 45), "ITEM VUOTO", text); }
+                if (i == 0) DrawItemSlots(x);
                 else if (hub.Selection.IsEnabled(i) && BoxButton(new Rect(x, 477, 190, 42), "RIMUOVI IA", purple)) hub.Selection.RemoveCompanion(i);
                 DrawOptionCircle(new Rect(x, 537, 82, 82), i == 0 ? "Q" : "SPACE\n+" + i, yellow, false);
                 DrawOptionCircle(new Rect(x + 108, 537, 82, 82), "P", pink, false);
@@ -110,6 +112,47 @@ namespace RogZombie.PreGameplayLoop
             }
             if (BoxButton(new Rect(506, 735, 398, 85), "CONFERMA PREPARAZIONE\nAVVIA RUN", Color.gray, hub.Selection.CanStart)) hub.BeginRun();
             if (BoxButton(new Rect(40, 800, 170, 44), "INDIETRO", purple)) hub.Selection.Back();
+            GUI.enabled = true;
+            if (!string.IsNullOrEmpty(hub.Selection.ItemNotice)) GUI.Label(new Rect(20, 60, 1490, 35), hub.Selection.ItemNotice, text);
+            else if (!string.IsNullOrEmpty(GUI.tooltip)) GUI.Label(new Rect(20, 60, 1490, 35), GUI.tooltip, centre);
+            if (itemPicker >= 0) DrawItemPicker();
+        }
+        private void DrawItemSlots(float x)
+        {
+            var e = Event.current;
+            for (int slot = 0; slot < 4; slot++)
+            {
+                var rect = new Rect(x + slot * 48, 477, 44, 48);
+                Outline(rect, green);
+                string name = ItemRuntime.Label(hub.Selection.Items[slot]);
+                string abbreviation = hub.Selection.ItemCounts[slot] > 0 ? name.Substring(0, Mathf.Min(3, name.Length)) : "—";
+                GUI.Label(rect, new GUIContent((slot + 1) + " x" + hub.Selection.ItemCounts[slot] + "\n" + abbreviation, name), new GUIStyle(centre) { fontSize = 12, padding = new RectOffset() });
+                if (itemPicker >= 0) continue;
+                if (e.type == EventType.MouseDown && e.button == 0 && rect.Contains(e.mousePosition)) { draggedItem = slot; e.Use(); }
+                if (e.type == EventType.MouseUp && e.button == 0 && rect.Contains(e.mousePosition) && draggedItem >= 0)
+                {
+                    if (draggedItem == slot) itemPicker = slot; else hub.Selection.SwapItems(draggedItem, slot);
+                    draggedItem = -1; e.Use();
+                }
+            }
+            if (e.type == EventType.MouseUp) draggedItem = -1;
+        }
+        private void DrawItemPicker()
+        {
+            Fill(new Rect(270, 130, 996, 630), new Color(.95f, .97f, .95f)); Outline(new Rect(270, 130, 996, 630), green);
+            GUI.Label(new Rect(300, 140, 930, 60), "SLOT " + (itemPicker + 1) + " — ITEMS DI PROVA · SELEZIONE GRATUITA", centre);
+            for (int i = 0; i < 8; i++)
+            {
+                var kind = (PrototypeItem)i;
+                if (BoxButton(new Rect(305 + i % 2 * 465, 220 + i / 2 * 85, 445, 70), ItemRuntime.Label(kind),
+                    hub.Selection.Items[itemPicker] == kind ? green : Color.gray)) hub.Selection.SetItem(itemPicker, kind);
+            }
+            var selected = hub.Selection.Items[itemPicker]; int count = hub.Selection.ItemCounts[itemPicker];
+            GUI.Label(new Rect(430, 565, 650, 60), "QUANTITÀ: " + count + " / " + hub.Selection.ItemCapacity(selected), centre);
+            if (BoxButton(new Rect(335, 575, 80, 55), "−", green, count > 1)) hub.Selection.SetItem(itemPicker, selected, count - 1);
+            if (BoxButton(new Rect(1100, 575, 80, 55), "+", green, selected != PrototypeItem.None && count < hub.Selection.ItemCapacity(selected))) hub.Selection.SetItem(itemPicker, selected, count + 1);
+            GUI.Label(new Rect(320, 640, 620, 70), "Click su uno slot: scegli ITEM. Trascina tra slot: sposta o scambia. In RUN: tieni 1–4 e rilascia per usare.", text);
+            if (BoxButton(new Rect(965, 665, 235, 65), "CHIUDI", purple)) itemPicker = -1;
         }
         private bool DrawOptionCircle(Rect rect, string label, Color color, bool selected, bool enabled = false)
         {

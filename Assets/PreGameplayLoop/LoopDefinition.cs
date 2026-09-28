@@ -29,6 +29,9 @@ namespace RogZombie.PreGameplayLoop
     {
         [Header("Grafica TOP-DOWN provvisoria")]
         public Shader EnvironmentShader;
+        [Header("ITEMS di prova")]
+        public PrototypeItem[] StartingItems = new PrototypeItem[4];
+        public int[] StartingItemCounts = new int[4];
         [Header("RUN")]
         public LoopPlayer SelectedPlayer = LoopPlayer.PG01;
 

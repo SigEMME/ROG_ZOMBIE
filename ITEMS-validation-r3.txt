@@ -1,0 +1,65 @@
+PASS | Unity 6000.3.16f1 | checks=63 | warnings=0
+PASS Selectable Granata
+PASS Selectable Molotov
+PASS Selectable Smoke
+PASS Selectable PozioneCurativa
+PASS Selectable Trappola
+PASS Selectable BombaVelenosa
+PASS Selectable MinaElettrica
+PASS Drag model swaps kind and count
+PASS Losing SCORTA reduces capacity
+PASS Start RUN from selected loadout
+PASS Four slots copied into RUN
+PASS Preview does not consume
+PASS Release activates
+PASS Grenade respects DEF (960)
+PASS Empty slot rejected
+PASS Load Granata
+PASS Pause cancels use without consumption
+PASS Wall shields grenade (1000)
+PASS Load Molotov
+PASS Molotov immediate tick (993)
+PASS Load Molotov
+PASS Overlapping areas add damage (986)
+PASS Each area ticks once after one second (972)
+PASS Leaving fire stops damage (972)
+PASS Load BombaVelenosa
+PASS Poison has no immediate damage (1000)
+PASS Poison first tick after one second (995)
+PASS Load BombaVelenosa
+PASS Load BombaVelenosa
+PASS Load BombaVelenosa
+PASS Load BombaVelenosa
+PASS Load BombaVelenosa
+PASS Load BombaVelenosa
+PASS Poison stack cap five
+PASS Load Trappola
+PASS Trap immediate tick (995)
+PASS Trap slow 40 percent (1,2)
+PASS Load Trappola
+PASS Trap slow does not stack (1,2)
+PASS Trap slow ends on exit (2)
+PASS Trap range clamp (7)
+PASS Trap section initially free
+PASS Only obstructed trap section removed
+PASS Load PozioneCurativa
+PASS Potion immediate 10 HP heal (160)
+PASS Load PozioneCurativa
+PASS Overlapping healing adds (170)
+PASS Load Smoke
+PASS New smoke applies immediately to PG inside
+PASS Smoke grants invisibility after action delay
+PASS Smoke ends immediately outside area
+PASS Smoke returns on reentry
+PASS Action cancels smoke
+PASS Smoke cannot return before one second
+PASS Load MinaElettrica
+PASS Mine waits outside trigger (1000)
+PASS Mine delay before explosion (1000)
+PASS Mine explosion 10 HP (990)
+PASS Mine applies 2.5 second stun
+PASS Area transition keeps remaining inventory
+PASS Area transition clears effects
+PASS Restart restores selected loadout
+PASS Abandon discards RUN items
+ITEMS integration verified; no build.

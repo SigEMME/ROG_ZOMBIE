@@ -35,6 +35,7 @@ namespace RogZombie.PreGameplayLoop
         public PG06AbilityRuntime PG06Ability { get; private set; }
         public PG05AbilityRuntime PG05Ability { get; private set; }
         public PG04ItemSlots PG04Items { get; private set; }
+        public ItemRuntime Items { get; private set; }
         public bool GameplayRunning => ParentSession != null ? ParentSession.GameplayRunning : Time.timeScale > 0 && (State == LoopState.Combat || State == LoopState.AreaComplete);
         public string Failure { get; private set; }
         public ResurrectionRuntime Resurrection { get; private set; }
@@ -57,7 +58,7 @@ namespace RogZombie.PreGameplayLoop
             GameCamera = Camera.main;
             gameObject.AddComponent<LoopHUD>();
             string issue = Definition == null ? "LoopDefinition mancante." : Definition.Validate();
-            foreach (string layer in new[] { "PG", "MOB", "MURO", "OSTACOLO", "TRIGGER_PG", "TRIGGER_MOB", "PET" })
+            foreach (string layer in new[] { "PG", "MOB", "MURO", "OSTACOLO", "TRIGGER_PG", "TRIGGER_MOB", "PET", "AREA_EFFECT_PG", "AREA_EFFECT_MOB" })
                 if (LayerMask.NameToLayer(layer) < 0) issue = "Layer mancante: " + layer;
             if (GameCamera == null) issue = "Main Camera mancante.";
             if (issue != null) { Fail(issue); return; }
@@ -219,8 +220,6 @@ namespace RogZombie.PreGameplayLoop
             }
             else if (Definition.SelectedPlayer == LoopPlayer.PG04)
             {
-                PG04Items = go.AddComponent<PG04ItemSlots>();
-                PG04Items.Initialize(ParentSession == null ? Definition.PG04TestItemSlots : 0, Definition.SelectedPG04Passive);
                 PG04Ability = go.AddComponent<PG04AbilityRuntime>();
                 PG04Ability.Initialize(this, Definition.SelectedPG04Ability, Definition.SelectedPG04Passive, Definition.PG04Abilities);
                 go.AddComponent<PG04AbilityInput>();
@@ -251,6 +250,13 @@ namespace RogZombie.PreGameplayLoop
                 PG08Ability.Initialize(this, Definition.SelectedPG08Ability, Definition.PG08Abilities);
                 go.AddComponent<PG08AbilityInput>();
             }
+            PG04Items = go.AddComponent<PG04ItemSlots>();
+            PG04Items.Initialize(ParentSession != null ? 0 : Definition.SelectedPlayer == LoopPlayer.PG04 ? Definition.PG04TestItemSlots : 4,
+                Definition.SelectedPlayer == LoopPlayer.PG04 ? Definition.SelectedPG04Passive : PG04Passive.Pyromania);
+            for (int slot = 0; slot < PG04Items.SlotCount; slot++)
+                if (Definition.StartingItems != null && Definition.StartingItemCounts != null && slot < Definition.StartingItems.Length && slot < Definition.StartingItemCounts.Length)
+                    for (int count = 0; count < Mathf.Min(3, Definition.StartingItemCounts[slot]); count++) PG04Items.TryAdd(slot, Definition.StartingItems[slot]);
+            Items = go.AddComponent<ItemRuntime>(); Items.Initialize(this, PG04Items);
             Bonuses = go.AddComponent<BonusInventory>();
             Bonuses.Catalog = Definition.BonusCatalog != null ? Definition.BonusCatalog : Settings.BonusCatalog;
             Bonuses.ApplyStatFallback = index => ApplyStat((AreaStat)index);
@@ -337,6 +343,7 @@ namespace RogZombie.PreGameplayLoop
 
         private void ClearAbilityEffects()
         {
+            Items?.CancelAim();
             BonusAbilities?.ChangeArea();
             if (Ability != null) Ability.ChangeArea();
             if (PG02Ability != null) PG02Ability.ChangeArea();

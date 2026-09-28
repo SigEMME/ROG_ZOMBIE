@@ -28,7 +28,7 @@ namespace RogZombie.TestEngine
         public event Action PerformedAction;
         public Func<bool> InvisibleQuery { get; set; }
         public Func<float> MovementMultiplier { get; set; }
-        public bool IsInvisible => InvisibleQuery != null && InvisibleQuery();
+        public bool IsInvisible => (InvisibleQuery != null && InvisibleQuery()) || (GetComponent<RogZombie.PreGameplayLoop.ItemSmokeStatus>()?.Invisible ?? false);
         public float CurrentMovementMultiplier => MovementMultiplier != null ? MovementMultiplier() : 1;
         public void NotifyAction() => PerformedAction?.Invoke();
         public event Action<Combatant> Died;
@@ -61,8 +61,8 @@ namespace RogZombie.TestEngine
         public bool IsActive => state == LifeState.Active;
         public float Radius => body != null ? body.radius : 0f;
         public float PestoneSlowRemaining => Mathf.Max(0f, pestoneSlowUntil - Time.time);
-        public float MovementMetresPerSecond => EffectiveStats.MetresPerSecond * CurrentMovementMultiplier *
-            (PestoneSlowRemaining > 0f ? 1f - pestoneSlowPercent / 100f : 1f);
+        public float MovementMetresPerSecond => EffectiveStats.MetresPerSecond * Mathf.Min(CurrentMovementMultiplier *
+            (PestoneSlowRemaining > 0f ? 1f - pestoneSlowPercent / 100f : 1f), RogZombie.PreGameplayLoop.ItemArea.SlowMultiplier(this));
 
         public void ApplyPestoneSlow(float percent, float seconds)
         {

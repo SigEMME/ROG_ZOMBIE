@@ -2,21 +2,19 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 namespace RogZombie.PreGameplayLoop
 {
-    public enum PrototypeItem { None, Granata, Molotov, Smoke, PozioneCurativa, Trappola }
-    // Minimal slot storage for testing SCORTA ESPLOSIVA. No merchant or item combat is simulated.
+    public enum PrototypeItem { None, Granata, Molotov, Smoke, PozioneCurativa, Trappola, BombaVelenosa, MinaElettrica }
+    // Inventory shared by the seven prototype items; SCORTA changes only per-slot capacity.
     public sealed class PG04ItemSlots : MonoBehaviour
     {
         private PrototypeItem[] kinds;
         private int[] amounts;
         private bool scorta;
-        public int SlotCount => kinds.Length;
+        public int SlotCount => kinds != null ? kinds.Length : 0;
         public bool PointerOverControls
         {
             get
             {
-                if (Mouse.current == null) return false;
-                Vector2 pointer = Mouse.current.position.ReadValue();
-                return pointer.y >= 110 && pointer.y <= 185 && pointer.x >= 20 && pointer.x <= 20 + SlotCount * 230;
+                return false; // The runtime inventory HUD is display-only.
             }
         }
         public void Initialize(int slots, PG04Passive passive)

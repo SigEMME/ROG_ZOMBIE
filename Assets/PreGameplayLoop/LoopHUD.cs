@@ -104,18 +104,14 @@ namespace RogZombie.PreGameplayLoop
                     $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | DURATA {ability.ActiveRemaining:0.0} s | CARICHE {ability.Charges}" +
                     (ability.Selected == PG04Ability.PioggiaDiGranate ? " | Tieni Q: anteprima; rilascia: attiva" : ""));
                 GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26), $"{ability.PassiveLabel} | AUTOMATICA");
-                GUI.Label(new Rect(20, Screen.height - 185, 600, 22), "TEST SLOT ITEM — carica/consuma senza lanciare ITEMS");
-                GUI.enabled = loop.GameplayRunning;
+
+            }
+            if (view.PG04Items != null && view.PG04Items.SlotCount > 0)
+            {
+                float itemWidth = (Screen.width - 40f) / 4;
                 for (int i = 0; i < view.PG04Items.SlotCount; i++)
-                {
-                    var items = view.PG04Items;
-                    float x = 20 + i * 230;
-                    GUI.Label(new Rect(x, Screen.height - 161, 220, 22), $"SLOT {i + 1}: {items.Kind(i)} × {items.Count(i)}");
-                    if (GUI.Button(new Rect(x, Screen.height - 135, 75, 24), "+GRANATA")) items.TryAdd(i, PrototypeItem.Granata);
-                    if (GUI.Button(new Rect(x + 78, Screen.height - 135, 75, 24), "+MOLOTOV")) items.TryAdd(i, PrototypeItem.Molotov);
-                    if (GUI.Button(new Rect(x + 156, Screen.height - 135, 70, 24), "Consuma 1")) items.TryConsume(i);
-                }
-                GUI.enabled = true;
+                    GUI.Box(new Rect(20 + i * itemWidth, Screen.height - 150, itemWidth - 5, 45),
+                        (i + 1) + ": " + ItemRuntime.Label(view.PG04Items.Kind(i)) + "\nx" + view.PG04Items.Count(i));
             }
             GUI.Label(new Rect(20, Screen.height - 34, Screen.width - 40, 28), "Prototype: roster PG01–PG08 + ZOMB01; ABILITÀ BONUS e LEVEL UP attivi.");
             if (loop.State == LoopState.AreaComplete)

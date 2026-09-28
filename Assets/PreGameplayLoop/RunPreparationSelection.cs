@@ -11,6 +11,31 @@ namespace RogZombie.PreGameplayLoop
             public bool Confirmed;
             public bool Complete => Player >= 0 && Player < 8 && Ability >= 0 && Passive >= 0;
         }
+        public readonly PrototypeItem[] Items = new PrototypeItem[4];
+        public readonly int[] ItemCounts = new int[4];
+        public string ItemNotice { get; private set; }
+        public int ItemCapacity(PrototypeItem kind) => members[0].Player == 3 && members[0].Passive == 0 &&
+            (kind == PrototypeItem.Granata || kind == PrototypeItem.Molotov) ? 3 : 1;
+        public void SetItem(int slot, PrototypeItem kind, int count = 1)
+        {
+            if (Page != PreparationPage.Preparation || slot < 0 || slot >= 4 || !System.Enum.IsDefined(typeof(PrototypeItem), kind)) return;
+            Items[slot] = kind; ItemCounts[slot] = kind == PrototypeItem.None ? 0 : Mathf.Clamp(count, 1, ItemCapacity(kind));
+        }
+        public void SwapItems(int first, int second)
+        {
+            if (Page != PreparationPage.Preparation || first < 0 || first >= 4 || second < 0 || second >= 4) return;
+            var kind = Items[first]; int count = ItemCounts[first];
+            Items[first] = Items[second]; ItemCounts[first] = ItemCounts[second]; Items[second] = kind; ItemCounts[second] = count;
+        }
+        private void ClampItems()
+        {
+            ItemNotice = null;
+            for (int i = 0; i < 4; i++) if (ItemCounts[i] > ItemCapacity(Items[i]))
+            {
+                ItemCounts[i] = ItemCapacity(Items[i]);
+                ItemNotice = "SCORTA ESPLOSIVA non selezionata: quantità riportate a 1 per slot. Selezione gratuita nel test.";
+            }
+        }
         private readonly Member[] members = { new Member(), new Member(), new Member(), new Member() };
         public Member GetMember(int index) => members[index];
         public int EditingSlot { get; private set; }
@@ -60,12 +85,14 @@ namespace RogZombie.PreGameplayLoop
         {
             if (Page != PreparationPage.Selection || index < 0 || index >= 8 || Player == index || !IsAvailable(index)) return;
             Player = index; Ability = Passive = DescriptionIndex = -1; Confirmed = false;
+            if (EditingSlot == 0) ClampItems();
         }
         public void SelectOption(bool passive, int index)
         {
             if (Page != PreparationPage.Selection || Player < 0 || index < 0 || index > 1) return;
             if (passive) Passive = index; else Ability = index;
             DescriptionIndex = (passive ? 2 : 0) + index; Confirmed = false;
+            if (EditingSlot == 0 && passive) ClampItems();
         }
         public bool ConfirmSelection()
         {
@@ -91,6 +118,7 @@ namespace RogZombie.PreGameplayLoop
         {
             if (!CanStart) return null;
             var d = Object.Instantiate(source);
+            d.StartingItems = (PrototypeItem[])Items.Clone(); d.StartingItemCounts = (int[])ItemCounts.Clone(); d.PG04TestItemSlots = 4;
             ApplyMember(d, members[0].Player, members[0].Ability, members[0].Passive);
             d.EnableCompanion = CompanionEnabled;
             d.CompanionPlayer = (LoopPlayer)members[1].Player; d.CompanionAbility = members[1].Ability; d.CompanionPassive = members[1].Passive;
