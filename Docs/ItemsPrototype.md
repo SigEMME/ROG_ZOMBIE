@@ -1,5 +1,7 @@
 # ITEMS nel prototipo
 
+> Aggiornamento MERCHANT (29/09/2026): il selettore gratuito descritto sotto è stato sostituito dalla schermata acquisto/vendita. Vedere [MerchantPrototype.md](MerchantPrototype.md) per comportamento attuale, limiti e verifica manuale. Le validazioni del 28/09 riportate sotto precedono questa modifica.
+
 Tutti i sette ITEMS sono sbloccati nel test. Nella PREPARAZIONE RUN, i quattro slot del PLAYER aprono un selettore gratuito con click; trascinare uno slot sopra un altro sposta/scambia tipo e quantità. PG IA senza ITEMS. Il selettore consente anche VUOTO; SCORTA ESPLOSIVA permette quantità fino a 3 per GRANATA/MOLOTOV, altrimenti il limite è 1.
 
 La RUN copia la configurazione confermata. Tieni premuto 1/2/3/4 per l'anteprima e rilascia per usare una unità. SPACE + 1/2/3 resta riservato alle abilità dei PG IA. Pausa, perdita del focus, cambio AREA e indisponibilità del PG annullano l'anteprima senza consumo. Nessun uso dal PG IA quando viene controllato temporaneamente dopo il DOWN del PG principale.

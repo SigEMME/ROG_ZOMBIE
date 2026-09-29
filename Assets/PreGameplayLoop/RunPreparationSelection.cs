@@ -2,7 +2,7 @@ using UnityEngine;
 using RogZombie.TestEngine;
 namespace RogZombie.PreGameplayLoop
 {
-    public enum PreparationPage { Hub, Preparation, Selection, Run }
+    public enum PreparationPage { Hub, Preparation, Selection, Run, Merchant }
     public sealed class RunPreparationSelection
     {
         public sealed class Member
@@ -11,6 +11,7 @@ namespace RogZombie.PreGameplayLoop
             public bool Confirmed;
             public bool Complete => Player >= 0 && Player < 8 && Ability >= 0 && Passive >= 0;
         }
+        public readonly MerchantAccount Merchant = new MerchantAccount();
         public readonly PrototypeItem[] Items = new PrototypeItem[4];
         public readonly int[] ItemCounts = new int[4];
         public string ItemNotice { get; private set; }
@@ -32,8 +33,10 @@ namespace RogZombie.PreGameplayLoop
             ItemNotice = null;
             for (int i = 0; i < 4; i++) if (ItemCounts[i] > ItemCapacity(Items[i]))
             {
+                int refund = (ItemCounts[i] - ItemCapacity(Items[i])) * MerchantAccount.Price(Items[i]) / 2;
+                Merchant.Credit(refund);
                 ItemCounts[i] = ItemCapacity(Items[i]);
-                ItemNotice = "SCORTA ESPLOSIVA non selezionata: quantità riportate a 1 per slot. Selezione gratuita nel test.";
+                ItemNotice = "SCORTA ESPLOSIVA non selezionata: ITEMS in eccesso venduti al 50%; ricavato accreditato al saldo G.";
             }
         }
         private readonly Member[] members = { new Member(), new Member(), new Member(), new Member() };
@@ -74,6 +77,7 @@ namespace RogZombie.PreGameplayLoop
             if (Page != PreparationPage.Preparation || slot < 1 || slot > 3) return;
             enabled[slot] = false; members[slot] = new Member(); EditingSlot = 0;
         }
+        public void OpenMerchant() { if (Page == PreparationPage.Hub) Page = PreparationPage.Merchant; }
         public void OpenPreparation() { if (Page == PreparationPage.Hub) Page = PreparationPage.Preparation; }
         public bool OpenBanner(int index)
         {
@@ -102,7 +106,7 @@ namespace RogZombie.PreGameplayLoop
         public void Back()
         {
             if (Page == PreparationPage.Selection) { Confirmed = false; Page = PreparationPage.Preparation; }
-            else if (Page == PreparationPage.Preparation) Page = PreparationPage.Hub;
+            else if (Page == PreparationPage.Preparation || Page == PreparationPage.Merchant) Page = PreparationPage.Hub;
         }
         public void ReturnToHub() { Page = PreparationPage.Hub; }
         public bool StartRun() { if (!CanStart) return false; Page = PreparationPage.Run; return true; }

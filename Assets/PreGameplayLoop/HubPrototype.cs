@@ -15,6 +15,8 @@ namespace RogZombie.PreGameplayLoop
         public LoopSession Run { get; private set; }
         public Vector2 HubPosition { get; private set; }
         public readonly Vector2 ExitPosition = new Vector2(6, 0);
+        public readonly Vector2 MerchantPosition = new Vector2(-5, 0);
+        public bool AtMerchant => Vector2.Distance(HubPosition, MerchantPosition) <= 1.6f;
         public bool AtExit => Vector2.Distance(HubPosition, ExitPosition) <= 1;
         public string Failure { get; private set; }
         private LoopDefinition runDefinition;
@@ -45,10 +47,16 @@ namespace RogZombie.PreGameplayLoop
             if (AtTitle || (Pause != null && Pause.IsOpen) || Selection.Page != PreparationPage.Hub || Keyboard.current == null || !Application.isFocused) return;
             var k = Keyboard.current;
             Vector2 axis = new Vector2((k.dKey.isPressed ? 1 : 0) - (k.aKey.isPressed ? 1 : 0), (k.wKey.isPressed ? 1 : 0) - (k.sKey.isPressed ? 1 : 0));
-            HubPosition += Vector2.ClampMagnitude(axis, 1) * 2 * Time.unscaledDeltaTime;
+            Vector2 step = Vector2.ClampMagnitude(axis, 1) * 2 * Time.unscaledDeltaTime;
+            Vector2 next = HubPosition + new Vector2(step.x, 0);
+            if (!MerchantBodyContains(next)) HubPosition = next;
+            next = HubPosition + new Vector2(0, step.y);
+            if (!MerchantBodyContains(next)) HubPosition = next;
             HubPosition = new Vector2(Mathf.Clamp(HubPosition.x, -8, 8), Mathf.Clamp(HubPosition.y, -4, 4));
-            if (AtExit && k.fKey.wasPressedThisFrame) Selection.OpenPreparation();
+            if (AtMerchant && k.fKey.wasPressedThisFrame) Selection.OpenMerchant();
+            else if (AtExit && k.fKey.wasPressedThisFrame) Selection.OpenPreparation();
         }
+        private bool MerchantBodyContains(Vector2 position) => Mathf.Abs(position.x - MerchantPosition.x) < .8f && Mathf.Abs(position.y - MerchantPosition.y) < .8f;
         public bool BeginRun()
         {
             if (AtTitle || (Pause != null && Pause.IsOpen) || !Selection.CanStart || Run != null || Failure != null) return false;

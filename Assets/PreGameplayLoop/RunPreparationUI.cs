@@ -1,11 +1,11 @@
 using UnityEngine;
 namespace RogZombie.PreGameplayLoop
 {
-    public sealed class RunPreparationUI : MonoBehaviour
+    public sealed partial class RunPreparationUI : MonoBehaviour
     {
         private HubPrototype hub;
         private Vector2 descriptionScroll;
-        private int itemPicker = -1, draggedItem = -1;
+        private int draggedItem = -1;
         private GUIStyle text, centre;
         private Texture2D circle;
         private readonly Color red = new Color(.85f, .08f, .15f), green = new Color(.12f, .65f, .3f),
@@ -63,6 +63,7 @@ namespace RogZombie.PreGameplayLoop
                 else switch (hub.Selection.Page)
                 {
                     case PreparationPage.Hub: DrawHub(); break;
+                    case PreparationPage.Merchant: DrawMerchant(); break;
                     case PreparationPage.Preparation: DrawPreparation(); break;
                     case PreparationPage.Selection: DrawSelection(); break;
                 }
@@ -78,9 +79,12 @@ namespace RogZombie.PreGameplayLoop
             Vector2 exit = origin + new Vector2(hub.ExitPosition.x * 60, -hub.ExitPosition.y * 60);
             Outline(new Rect(exit.x - 60, exit.y - 60, 120, 120), green);
             GUI.Label(new Rect(exit.x - 60, exit.y - 60, 120, 120), "EXIT\n[F]", centre);
+            Vector2 merchant = origin + new Vector2(hub.MerchantPosition.x * 60, -hub.MerchantPosition.y * 60);
+            Outline(new Rect(merchant.x - 30, merchant.y - 30, 60, 60), orange);
+            GUI.Label(new Rect(merchant.x - 100, merchant.y - 90, 200, 50), "MERCHANT [F]", centre);
             Vector2 position = origin + new Vector2(hub.HubPosition.x * 60, -hub.HubPosition.y * 60);
             Fill(new Rect(position.x - 18, position.y - 18, 36, 36), blue);
-            GUI.Label(new Rect(240, 760, 1040, 50), hub.AtExit ? "Premi F per PREPARAZIONE RUN" : "PLAYER + fino a 3 PG IA opzionali · ROSTER interamente sbloccato", centre);
+            GUI.Label(new Rect(240, 760, 1040, 50), hub.AtMerchant ? "Premi F per MERCHANT" : hub.AtExit ? "Premi F per PREPARAZIONE RUN" : "PLAYER + fino a 3 PG IA opzionali · ROSTER interamente sbloccato", centre);
         }
         private string PGLabel => hub.Selection.Player < 0 ? "SELEZIONA PG" : "PG" + (hub.Selection.Player + 1).ToString("00");
         private string OptionLabel(bool passive)
@@ -90,7 +94,7 @@ namespace RogZombie.PreGameplayLoop
         }
         private void DrawPreparation()
         {
-            GUI.enabled = itemPicker < 0;
+            GUI.enabled = true;
             GUI.Label(new Rect(470, 22, 600, 50), "PREPARAZIONE RUN", centre);
             for (int i = 0; i < 4; i++)
             {
@@ -115,7 +119,7 @@ namespace RogZombie.PreGameplayLoop
             GUI.enabled = true;
             if (!string.IsNullOrEmpty(hub.Selection.ItemNotice)) GUI.Label(new Rect(20, 60, 1490, 35), hub.Selection.ItemNotice, text);
             else if (!string.IsNullOrEmpty(GUI.tooltip)) GUI.Label(new Rect(20, 60, 1490, 35), GUI.tooltip, centre);
-            if (itemPicker >= 0) DrawItemPicker();
+
         }
         private void DrawItemSlots(float x)
         {
@@ -127,32 +131,15 @@ namespace RogZombie.PreGameplayLoop
                 string name = ItemRuntime.Label(hub.Selection.Items[slot]);
                 string abbreviation = hub.Selection.ItemCounts[slot] > 0 ? name.Substring(0, Mathf.Min(3, name.Length)) : "—";
                 GUI.Label(rect, new GUIContent((slot + 1) + " x" + hub.Selection.ItemCounts[slot] + "\n" + abbreviation, name), new GUIStyle(centre) { fontSize = 12, padding = new RectOffset() });
-                if (itemPicker >= 0) continue;
+
                 if (e.type == EventType.MouseDown && e.button == 0 && rect.Contains(e.mousePosition)) { draggedItem = slot; e.Use(); }
                 if (e.type == EventType.MouseUp && e.button == 0 && rect.Contains(e.mousePosition) && draggedItem >= 0)
                 {
-                    if (draggedItem == slot) itemPicker = slot; else hub.Selection.SwapItems(draggedItem, slot);
+                    if (draggedItem != slot) hub.Selection.SwapItems(draggedItem, slot);
                     draggedItem = -1; e.Use();
                 }
             }
             if (e.type == EventType.MouseUp) draggedItem = -1;
-        }
-        private void DrawItemPicker()
-        {
-            Fill(new Rect(270, 130, 996, 630), new Color(.95f, .97f, .95f)); Outline(new Rect(270, 130, 996, 630), green);
-            GUI.Label(new Rect(300, 140, 930, 60), "SLOT " + (itemPicker + 1) + " — ITEMS DI PROVA · SELEZIONE GRATUITA", centre);
-            for (int i = 0; i < 8; i++)
-            {
-                var kind = (PrototypeItem)i;
-                if (BoxButton(new Rect(305 + i % 2 * 465, 220 + i / 2 * 85, 445, 70), ItemRuntime.Label(kind),
-                    hub.Selection.Items[itemPicker] == kind ? green : Color.gray)) hub.Selection.SetItem(itemPicker, kind);
-            }
-            var selected = hub.Selection.Items[itemPicker]; int count = hub.Selection.ItemCounts[itemPicker];
-            GUI.Label(new Rect(430, 565, 650, 60), "QUANTITÀ: " + count + " / " + hub.Selection.ItemCapacity(selected), centre);
-            if (BoxButton(new Rect(335, 575, 80, 55), "−", green, count > 1)) hub.Selection.SetItem(itemPicker, selected, count - 1);
-            if (BoxButton(new Rect(1100, 575, 80, 55), "+", green, selected != PrototypeItem.None && count < hub.Selection.ItemCapacity(selected))) hub.Selection.SetItem(itemPicker, selected, count + 1);
-            GUI.Label(new Rect(320, 640, 620, 70), "Click su uno slot: scegli ITEM. Trascina tra slot: sposta o scambia. In RUN: tieni 1–4 e rilascia per usare.", text);
-            if (BoxButton(new Rect(965, 665, 235, 65), "CHIUDI", purple)) itemPicker = -1;
         }
         private bool DrawOptionCircle(Rect rect, string label, Color color, bool selected, bool enabled = false)
         {
@@ -164,6 +151,7 @@ namespace RogZombie.PreGameplayLoop
         private void DrawSelection()
         {
             var model = hub.Selection;
+            if (!string.IsNullOrEmpty(model.ItemNotice)) GUI.Label(new Rect(300, 816, 640, 48), model.ItemNotice, new GUIStyle(text) { fontSize = 14 });
             Outline(new Rect(16, 12, 810, 450), green); Outline(new Rect(16, 12, 278, 450), green);
             Outline(new Rect(948, 12, 578, 835), new Color(.6f, .83f, .87f));
             Outline(new Rect(975, 36, 530, 323), blue);
