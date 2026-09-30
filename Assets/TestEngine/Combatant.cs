@@ -175,13 +175,19 @@ namespace RogZombie.TestEngine
 
         public void Move(Vector2 displacement)
         {
-            if (!IsActive) return;
+            if (!IsActive || RogZombie.BossTest.BossPlayerStatus.Blocks(this)) return;
             var separation = GetComponent<MobSeparation>();
             if (separation != null) displacement = separation.Steer(displacement);
             MoveBody(displacement);
         }
 
         internal void Separate(Vector2 displacement) { if (IsActive) MoveBody(displacement); }
+
+        public void Stun(float seconds)
+        {
+            GetComponent<MobBrain>()?.Stun(seconds);
+            GetComponent<RogZombie.BossTest.BossBrain>()?.Stun(seconds);
+        }
 
         public void Push(Vector2 displacement)
         {

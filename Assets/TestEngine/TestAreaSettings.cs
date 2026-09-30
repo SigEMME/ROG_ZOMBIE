@@ -15,6 +15,7 @@ namespace RogZombie.TestEngine
     [CreateAssetMenu(menuName = "ROG ZOMBIE/Test AREA Settings")]
     public sealed class TestAreaSettings : ScriptableObject
     {
+        public bool UrbanArea01;
         public WeaponDefinition[] Weapons;
         public MobDefinition[] Mobs;
         public BonusCatalog BonusCatalog;

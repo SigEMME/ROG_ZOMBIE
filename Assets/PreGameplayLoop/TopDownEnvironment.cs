@@ -10,6 +10,7 @@ namespace RogZombie.PreGameplayLoop
         private readonly List<Material> materials = new List<Material>();
         private readonly Dictionary<Vector2, float> buildingHeights = new Dictionary<Vector2, float>();
         private Material facade, roof, trim, asphalt, pavement, red, boundaryMaterial;
+        private bool urban;
 
         public void Initialize(Shader shader)
         {
@@ -32,12 +33,60 @@ namespace RogZombie.PreGameplayLoop
             return material;
         }
 
-        public void Floor(Vector2 size)
+        public void Floor(Vector2 size, bool urbanArea01 = false)
         {
-            // All free space remains street; no new road layout or walkability rules.
+            urban = urbanArea01;
+            if (urban) { UrbanFloor(size); return; }
+            // Legacy areas retain their original presentation.
             Box(transform, "Asfalto", new Vector3(0, 0, .18f), new Vector3(size.x, size.y, .2f), asphalt, -10);
         }
 
+        private Material Surface(string texture, float tileMeters, float curbAxis = 0)
+        {
+            var result = Material(asphalt.shader, Color.white);
+            result.SetTexture("_SurfaceTex", Resources.Load<Texture2D>("UrbanTextures/" + texture));
+            result.SetFloat("_Textured", texture == "mattonellato" ? 2 : 1);
+            result.SetFloat("_TileMeters", tileMeters);
+            result.SetFloat("_CurbAxis", curbAxis);
+            return result;
+        }
+
+        private void UrbanFloor(Vector2 size)
+        {
+            var road = Surface("asfalto", 4);
+            var sidewalk = Surface("marciapiede", 1);
+            var paving = Surface("mattonellato", 4);
+            var horizontalCurb = Surface("cordolo-diritto", 4, 1);
+            var verticalCurb = Surface("cordolo-diritto", 4, 2);
+            Box(transform, "Asfalto - strade 8 m", new Vector3(0, 0, .18f),
+                new Vector3(size.x, size.y, .2f), road, -10);
+            // Block exteriors leave exactly eight metres between facing sidewalks.
+            foreach (var block in new[] {
+                Rect.MinMaxRect(-62, -13, -7, 62),
+                Rect.MinMaxRect(1, -13, 31, 62),
+                Rect.MinMaxRect(39, -13, 62, 62),
+                Rect.MinMaxRect(-62, -62, -7, -21),
+                Rect.MinMaxRect(1, -62, 62, -21) })
+            {
+                Box(transform, "Marciapiede 3 m", new Vector3(block.center.x, block.center.y, .05f),
+                    new Vector3(block.width, block.height, .04f), sidewalk, -10);
+                Box(transform, "Mattonellato isolato", new Vector3(block.center.x, block.center.y, .03f),
+                    new Vector3(block.width - 6, block.height - 6, .02f), paving, -10);
+                // Curbs occupy the outer 20 cm of the sidewalk, never the roadway.
+                const float curb = .2f;
+                foreach (float y in new[] { block.yMin + curb / 2, block.yMax - curb / 2 })
+                    Box(transform, "Cordolo orizzontale", new Vector3(block.center.x, y, .02f),
+                        new Vector3(block.width, curb, .02f), horizontalCurb, -10);
+                foreach (float x in new[] { block.xMin + curb / 2, block.xMax - curb / 2 })
+                    Box(transform, "Cordolo verticale", new Vector3(x, block.center.y, .02f),
+                        new Vector3(curb, block.height - curb * 2, .02f), verticalCurb, -10);
+            }
+            // Outer boundary strips keep perimeter roads at the same 8 m width.
+            foreach (float x in new[] { -71f, 71f })
+                Box(transform, "Margine esterno", new Vector3(x, 0, .05f), new Vector3(2, 144, .04f), sidewalk, -10);
+            foreach (float y in new[] { -71f, 71f })
+                Box(transform, "Margine esterno", new Vector3(0, y, .05f), new Vector3(140, 2, .04f), sidewalk, -10);
+        }
         public void PrepareBuildings(RogZombie.TestEngine.ObstaclePlacement[] placements)
         {
             buildingHeights.Clear();
@@ -91,7 +140,7 @@ namespace RogZombie.PreGameplayLoop
                 return;
             }
             float buildingHeight = buildingHeights.TryGetValue(footprint.position, out var heightForBuilding) ? heightForBuilding : 5;
-            Box(footprint, "Marciapiede", new Vector3(0, 0, .04f), new Vector3(size.x + .6f, size.y + .6f, .04f), pavement, -10);
+            if (!urban) Box(footprint, "Marciapiede", new Vector3(0, 0, .04f), new Vector3(size.x + .6f, size.y + .6f, .04f), pavement, -10);
             Box(footprint, "Palazzo", new Vector3(0, 0, -buildingHeight / 2), new Vector3(size.x, size.y, buildingHeight), facade);
             Box(footprint, "Tetto", new Vector3(0, 0, -buildingHeight - .08f), new Vector3(size.x, size.y, .16f), roof);
             if (Mathf.Min(size.x, size.y) < 2) return;

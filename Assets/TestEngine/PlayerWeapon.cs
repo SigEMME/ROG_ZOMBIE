@@ -102,6 +102,7 @@ namespace RogZombie.TestEngine
 
         public bool TryFireAt(Vector2 cursor)
         {
+            if (RogZombie.BossTest.BossPlayerStatus.Blocks(this)) return false;
             if (actor == null || !actor.IsActive || Definition == null || Muzzle == null || Time.timeScale == 0f || Time.time < readyAt) return false;
             Vector2 origin = Muzzle.position;
             Vector2 offset = cursor - origin;

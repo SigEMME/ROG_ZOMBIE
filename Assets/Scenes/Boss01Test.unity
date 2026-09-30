@@ -351,9 +351,8 @@ GameObject:
   - component: {fileID: 800000002}
   - component: {fileID: 800000003}
   - component: {fileID: 800000004}
-  - component: {fileID: 800000005}
   m_Layer: 0
-  m_Name: HUB prototype
+  m_Name: BOSS 01 test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -383,12 +382,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 800000001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ee8ad6500f645298841a2d272175165, type: 3}
+  m_Script: {fileID: 11500000, guid: 4efb49a41a1d420c8d5141fff644a3e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Definition: {fileID: 11400000, guid: 8446c380f1ce4497952d8def39a9a45e, type: 2}
-  Boss: {fileID: 11400000, guid: 76fb71147f4f4adbba084f152d46178e, type: 2}
-  Content: {fileID: 4900000, guid: 61d3ea2d219147d0b38e23f5a071a86f, type: 3}
 --- !u!114 &800000004
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,30 +395,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 800000001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ab2abc68e59421fbf8edf295049a280, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  Logo: {fileID: 2800000, guid: e1bef9e3b83c4341875818b8cb541c12, type: 3}
-  StartImage: {fileID: 2800000, guid: 801c249ac0f247a8a5b6e78d8e46aec9, type: 3}
-  ExitImage: {fileID: 2800000, guid: 979a42ce935140009e77c59ca3852804, type: 3}
---- !u!114 &800000005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 800000001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcbd1cdb987e433b81df6a285c24dcb7, type: 3}
-  m_Name:
-  m_EditorClassIdentifier:
-  ResumeImage: {fileID: 2800000, guid: 38379b08f3cc43abafb8f0b187d62cee, type: 3}
-  OptionsImage: {fileID: 2800000, guid: cee5bda6c80a438983c32e4038658c1b, type: 3}
-  ReturnImage: {fileID: 2800000, guid: 4b24c142a77f440481bb57defaba168c, type: 3}
-  ExitImage: {fileID: 2800000, guid: 698aa10f5fd44e4196b09f76470df8ba, type: 3}
-  ConfirmImage: {fileID: 2800000, guid: 0b1c57ffa53b41b9865bea3a36e882eb, type: 3}
-  CancelImage: {fileID: 2800000, guid: f01bc99f4d6d417fa3c85212f412d46e, type: 3}
+  m_Script: {fileID: 11500000, guid: e213b03f8e9d4dcb9f0d0731704652bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Boss: {fileID: 11400000, guid: 76fb71147f4f4adbba084f152d46178e, type: 2}
+  PlayerStart: {x: 0, y: -12}
+  BossStart: {x: 0, y: 8}
+  Area3ApproachOffset: {x: 0, y: -10}
+  EntranceHoldSeconds: 1
+  LetterboxHeight: 0.1
+  CameraPanSeconds: 1.5
+  PresentationSeconds: 2
+  CameraZoomSeconds: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -429,3 +414,4 @@ SceneRoots:
   - {fileID: 800000002}
   - {fileID: 519420032}
   - {fileID: 619394802}
+

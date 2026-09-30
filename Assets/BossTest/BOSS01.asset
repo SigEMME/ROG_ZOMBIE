@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4e1173ed44a4f4792021f7e83baad7d, type: 3}
+  m_Name: BOSS01
+  m_EditorClassIdentifier: 
+  Stats:
+    HP: 15000
+    ATK: 80
+    DEF: 100
+    MoveSpeed: 90
+    AttackSpeed: 50
+    Range: 300
+  Diameter: 5
+  ArenaSize: {x: 60, y: 40}
+  CameraWidth: 55
+  CameraBorder: 3
+  SpecialInterval: 14
+  SpecialOrder: 01000000020000000100000004000000
+  ChargeThresholds:
+  - 0.8
+  - 0.6
+  - 0.4
+  - 0.2
+  BaseAngle: 110
+  BaseDepth: 4
+  BaseHitAt: 1.2
+  BaseDuration: 1.5
+  TrackSeconds: 1
+  WaveChannel: 2
+  WaveDamage: 70
+  WaveWidth: 2.5
+  WaveLength: 12
+  WaveSideAngle: 30
+  WaveRecovery: 1
+  RockDelay: 3
+  RockRadius: 3
+  RockDamage: 40
+  RockStill: 2
+  RockStun: 1
+  ChargeRange: 18
+  ChargeLength: 18
+  ChargeSpeed: 8
+  ChargeChannel: 1.5
+  ChargeDamage: 40
+  PushDistance: 3
+  PushSeconds: 0.25
+  ChargeRecovery: 0.5
+  WallStun: 1.5
+  BileAngle: 150
+  BileChannel: 1
+  BileInterval: 0.33
+  BileSpeed: 10
+  BileRange: 12
+  BileDamage: 30
+  BileRecovery: 0.5
+  PoisonDamage: 5
+  PoisonSeconds: 3
+  BileProjectileRadius: 0.5
+  RockCount: 3
+  BileSlices: 10
+
+

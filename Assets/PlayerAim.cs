@@ -29,7 +29,7 @@ namespace RogZombie
         {
             var actor = GetComponent<TestEngine.Combatant>();
             if (actor != null && !actor.IsActive) { HasAimPoint = false; return; }
-            if (Time.timeScale == 0f) return;
+            if (Time.timeScale == 0f || BossTest.BossPlayerStatus.Blocks(this)) return;
             HasAimPoint = TryGetCursorWorldPosition(out Vector3 cursorPosition);
             if (!HasAimPoint)
                 return;

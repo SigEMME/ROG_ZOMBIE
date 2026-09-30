@@ -37,7 +37,7 @@ namespace RogZombie
             Keyboard keyboard = Keyboard.current;
             if (keyboard == null || playerDefinition == null || !Application.isFocused)
                 return;
-            if (combatant != null && !combatant.IsActive) return;
+            if (combatant != null && (!combatant.IsActive || BossTest.BossPlayerStatus.Blocks(this))) return;
 
             Vector2 input = new Vector2(
                 (keyboard.dKey.isPressed ? 1f : 0f) - (keyboard.aKey.isPressed ? 1f : 0f),

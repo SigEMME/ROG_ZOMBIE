@@ -55,6 +55,7 @@ namespace RogZombie.PreGameplayLoop
         {
             if (ParentSession != null) return;
             previousTimeScale = Time.timeScale;
+            if (GetComponent<RogZombie.BossTest.BossTestScene>()?.StartAtCompletedArea3 == true) AreaIndex = 2;
             GameCamera = Camera.main;
             gameObject.AddComponent<LoopHUD>();
             string issue = Definition == null ? "LoopDefinition mancante." : Definition.Validate();
@@ -110,6 +111,12 @@ namespace RogZombie.PreGameplayLoop
             Player.transform.SetPositionAndRotation(Settings.StartPosition, Quaternion.identity);
             PlaceCompanion();
             FollowCamera();
+            var bossTest = GetComponent<RogZombie.BossTest.BossTestScene>();
+            if (bossTest != null && bossTest.enabled && (bossTest.StartAtCompletedArea3 || bossTest.InBossArea))
+            {
+                yield return BuildBossTestStage(bossTest);
+                yield break;
+            }
             var exitObject = TestVisuals.Box("USCITA AREA", Definition.ExitForArea(AreaIndex), Vector2.one, Color.gray, 1);
             Exit = exitObject.AddComponent<AreaExitTrigger>();
             Exit.Initialize(Player.Actor);
@@ -134,16 +141,16 @@ namespace RogZombie.PreGameplayLoop
 
         private void BuildGeometry()
         {
-            Vector2 size = Settings.AreaSize;
+            Vector2 size = Settings.AreaSize; bool bossArena = GetComponent<RogZombie.BossTest.BossTestScene>()?.InBossArea ?? false; Vector2 wallHalf = size / 2 + (bossArena ? Vector2.one * .5f : Vector2.zero);
             environment.PrepareBuildings(Settings.Obstacles);
-            environment.Floor(size);
-            TestVisuals.FloorGrid(size);
+            environment.Floor(size, Settings.UrbanArea01);
+            if (!Settings.UrbanArea01) TestVisuals.FloorGrid(size);
             TestVisuals.Box("SPAWN PG", Settings.StartPosition, Vector2.one, Color.green, -8);
-            TestVisuals.Box("Riferimento USCITA", Definition.ExitForArea(AreaIndex), Vector2.one * 1.5f, Color.yellow, -8);
-            MakeObstacle(new Vector2(-size.x / 2, 0), new Vector2(1, size.y), true, boundary: true);
-            MakeObstacle(new Vector2(size.x / 2, 0), new Vector2(1, size.y), true, boundary: true);
-            MakeObstacle(new Vector2(0, -size.y / 2), new Vector2(size.x, 1), true, boundary: true);
-            MakeObstacle(new Vector2(0, size.y / 2), new Vector2(size.x, 1), true, boundary: true);
+            if (!bossArena) TestVisuals.Box("Riferimento USCITA", Definition.ExitForArea(AreaIndex), Vector2.one * 1.5f, Color.yellow, -8);
+            MakeObstacle(new Vector2(-wallHalf.x, 0), new Vector2(1, size.y), true, boundary: true);
+            MakeObstacle(new Vector2(wallHalf.x, 0), new Vector2(1, size.y), true, boundary: true);
+            MakeObstacle(new Vector2(0, -wallHalf.y), new Vector2(size.x, 1), true, boundary: true);
+            MakeObstacle(new Vector2(0, wallHalf.y), new Vector2(size.x, 1), true, boundary: true);
             if (Settings.Obstacles != null)
                 foreach (var obstacle in Settings.Obstacles) MakeObstacle(obstacle.Position, obstacle.Size, obstacle.Wall, obstacle.Rotation);
         }
@@ -295,7 +302,7 @@ namespace RogZombie.PreGameplayLoop
                 return;
             }
             TickResurrection(Time.deltaTime, UnityEngine.InputSystem.Keyboard.current != null && UnityEngine.InputSystem.Keyboard.current.fKey.isPressed);
-            if (State == LoopState.Combat && Spawns.Killed == Settings.TotalMobs &&
+            if (State == LoopState.Combat && Spawns != null && Spawns.Killed == Settings.TotalMobs &&
                 Spawns.TotalSpawned == Settings.TotalMobs && Spawns.Alive == 0)
             {
                 State = LoopState.AreaComplete;
@@ -405,7 +412,9 @@ namespace RogZombie.PreGameplayLoop
             if (Settings != null) Destroy(Settings);
             yield return null;
             Player = null; Bonuses = null; BonusAbilities = null; Experience = null; AbilityChoices = null;
-            AreaIndex = 0;
+            var bossTest = GetComponent<RogZombie.BossTest.BossTestScene>();
+            bossTest?.ResetEntrance();
+            AreaIndex = bossTest != null && bossTest.StartAtCompletedArea3 ? 2 : 0;
             Gold = 0;
             Choices = null;
             Selected = -1;
@@ -415,6 +424,8 @@ namespace RogZombie.PreGameplayLoop
         private void LateUpdate() { if (ParentSession == null) FollowCamera(); }
         private void FollowCamera()
         {
+            var bossTest = GetComponent<RogZombie.BossTest.BossTestScene>();
+            if (bossTest != null && bossTest.enabled && (bossTest.StartAtCompletedArea3 || bossTest.InBossArea)) { bossTest.FollowCamera(); return; }
             if (Player != null && GameCamera != null)
                 GameCamera.transform.position = new Vector3(Controlled.Player.transform.position.x, Controlled.Player.transform.position.y, -TopDownEnvironment.CameraHeight);
         }

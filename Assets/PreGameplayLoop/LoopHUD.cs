@@ -22,6 +22,7 @@ namespace RogZombie.PreGameplayLoop
         private void OnGUI()
         {
             if (loop.PauseMenuOpen) return;
+            if (loop.GetComponent<RogZombie.BossTest.BossTestScene>()?.Presenting == true) return;
             foreach (var member in loop.Members) DrawResurrection(member);
             var view = loop.Controlled != null ? loop.Controlled : loop;
             GUI.Box(new Rect(8, 8, Screen.width - 16, 94), "Pre gameplay loop prototype | WASD / Mouse / LMB / Q");
@@ -130,7 +131,12 @@ namespace RogZombie.PreGameplayLoop
                     GUI.matrix = matrix;
                 }
             }
-            if (loop.Loading) GUI.Box(new Rect(30, 180, Screen.width - 60, 60), "Caricamento AREA / FIRST SPAWN off-screen...");
+            if (loop.Loading)
+            {
+                var bossTest = loop.GetComponent<RogZombie.BossTest.BossTestScene>();
+                string message = bossTest != null && bossTest.Presenting ? bossTest.PhaseLabel : "Caricamento AREA / FIRST SPAWN off-screen...";
+                GUI.Box(new Rect(30, 180, Screen.width - 60, 60), message);
+            }
             if (loop.State == LoopState.Error) GUI.Box(new Rect(30, 180, Screen.width - 60, 80), loop.Failure);
             if (loop.State == LoopState.Defeat) GUI.Box(new Rect(30, 180, Screen.width - 60, 60), "SCONFITTA: PG DOWN, nessun PG attivo. Riprova test.");
             if (loop.State == LoopState.Finished) GUI.Box(new Rect(30, 180, Screen.width - 60, 60), "Due cicli completati. Fine del test tecnico; Riprova test per una nuova prova.");

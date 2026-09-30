@@ -68,6 +68,16 @@ namespace RogZombie.PreGameplayLoop
                     case PreparationPage.Selection: DrawSelection(); break;
                 }
             }
+            if (hub.Selection.Page == PreparationPage.Preparation && draggedItem >= 0)
+            {
+                // Draw last so the translucent preview stays above slots and labels.
+                var tint = GUI.color;
+                GUI.color = new Color(tint.r, tint.g, tint.b, tint.a * .6f);
+                Vector2 pointer = Event.current.mousePosition;
+                DrawMerchantIcon(new Rect(pointer.x - 40, pointer.y - 40, 80, 80), hub.Selection.Items[draggedItem]);
+                GUI.color = tint;
+            }
+            else if (hub.Selection.Page != PreparationPage.Preparation) draggedItem = -1;
             GUI.matrix = previous;
         }
         private void DrawHub()
@@ -95,51 +105,80 @@ namespace RogZombie.PreGameplayLoop
         private void DrawPreparation()
         {
             GUI.enabled = true;
-            GUI.Label(new Rect(470, 22, 600, 50), "PREPARAZIONE RUN", centre);
+            const float canvasWidth = 1536, columnWidth = 300, columnGap = 72;
+            float left = (canvasWidth - (4 * columnWidth + 3 * columnGap)) / 2;
+            var small = new GUIStyle(centre) { fontSize = 14, padding = new RectOffset(4, 4, 2, 2) };
             for (int i = 0; i < 4; i++)
             {
-                float x = 126 + i * 360;
-                bool available = true;
-                var member = available ? hub.Selection.GetMember(i) : null;
-                string pg = member == null || member.Player < 0 ? "SELEZIONA PG" : "PG" + (member.Player + 1).ToString("00");
-                Outline(new Rect(x, 98, 190, 36), blue); GUI.Label(new Rect(x, 98, 190, 36), i == 0 ? "PLAYER 1" : "PG IA " + i, centre);
-                string label = available ? pg + (member.Player >= 0 ? "\n" + hub.Text.Characters[member.Player].Name : "") : "BLOCCATO";
-                if (i > 0 && !hub.Selection.IsEnabled(i)) label = "AGGIUNGI PG IA";
-                if (BoxButton(new Rect(x, 143, 190, 315), label, red, available)) hub.Selection.OpenBanner(i);
-                if (!available) continue;
-                if (i == 0) DrawItemSlots(x);
-                else if (hub.Selection.IsEnabled(i) && BoxButton(new Rect(x, 477, 190, 42), "RIMUOVI IA", purple)) hub.Selection.RemoveCompanion(i);
-                DrawOptionCircle(new Rect(x, 537, 82, 82), i == 0 ? "Q" : "SPACE\n+" + i, yellow, false);
-                DrawOptionCircle(new Rect(x + 108, 537, 82, 82), "P", pink, false);
-                if (member.Complete && hub.Selection.IsEnabled(i)) GUI.Label(new Rect(x - 50, 622, 295, 72), hub.Text.Characters[member.Player].Options[member.Ability].Name + "\n" + hub.Text.Characters[member.Player].Options[2 + member.Passive].Name, centre);
-                GUI.Label(new Rect(x - 55, 690, 305, 40), i > 0 && !hub.Selection.IsEnabled(i) ? "OPZIONALE" : member.Confirmed ? "CONFERMATO" : "DA CONFERMARE", centre);
-            }
-            if (BoxButton(new Rect(506, 735, 398, 85), "CONFERMA PREPARAZIONE\nAVVIA RUN", Color.gray, hub.Selection.CanStart)) hub.BeginRun();
-            if (BoxButton(new Rect(40, 800, 170, 44), "INDIETRO", purple)) hub.Selection.Back();
-            GUI.enabled = true;
-            if (!string.IsNullOrEmpty(hub.Selection.ItemNotice)) GUI.Label(new Rect(20, 60, 1490, 35), hub.Selection.ItemNotice, text);
-            else if (!string.IsNullOrEmpty(GUI.tooltip)) GUI.Label(new Rect(20, 60, 1490, 35), GUI.tooltip, centre);
+                float x = left + i * (columnWidth + columnGap);
+                float bannerX = x + (columnWidth - 224) / 2;
+                var member = hub.Selection.GetMember(i);
+                bool active = hub.Selection.IsEnabled(i);
+                string pg = member.Player < 0 ? "SELEZIONA PG" : "PG" + (member.Player + 1).ToString("00");
+                var heading = new Rect(bannerX, 38, 224, 38);
+                Outline(heading, blue);
+                GUI.Label(heading, i == 0 ? "PLAYER 1" : "PG IA " + i, centre);
+                string label = pg + (member.Player >= 0 ? "\n" + hub.Text.Characters[member.Player].Name : "");
+                if (i > 0 && !active) label = "AGGIUNGI PG IA";
+                var banner = new Rect(bannerX, 90, 224, 368);
+                Fill(banner, new Color(.97f, .97f, .97f)); Outline(banner, red);
+                var bannerAction = new Rect(bannerX + 5, 95, 214, i > 0 && active ? 310 : 358);
+                if (GUI.Button(bannerAction, GUIContent.none, GUIStyle.none)) hub.Selection.OpenBanner(i);
+                GUI.Label(bannerAction, label, centre);
+                if (i > 0 && active && BoxButton(new Rect(bannerX + 22, 414, 180, 34), "RIMUOVI IA", purple))
+                    hub.Selection.RemoveCompanion(i);
 
+                DrawItemSlots(x + 8, i == 0);
+                Rect ability = new Rect(x + 198, 472, 96, 96), passive = new Rect(x + 198, 572, 96, 96);
+                DrawOptionCircle(ability, i == 0 ? "Q" : "SPACE\n+" + i, yellow, false);
+                DrawOptionCircle(passive, "P", pink, false);
+                string options = "";
+                if (member.Complete && active)
+                {
+                    string abilityName = hub.Text.Characters[member.Player].Options[member.Ability].Name;
+                    string passiveName = hub.Text.Characters[member.Player].Options[2 + member.Passive].Name;
+                    GUI.Label(ability, new GUIContent("", abilityName));
+                    GUI.Label(passive, new GUIContent("", passiveName));
+                    options = abilityName + "\n" + passiveName;
+                }
+                GUI.Label(new Rect(x, 674, columnWidth, 28), i > 0 && !active ? "OPZIONALE" : member.Confirmed ? "CONFERMATO" : "DA CONFERMARE", small);
+                GUI.Label(new Rect(x, 702, columnWidth, 40), options, small);
+            }
+            const float confirmWidth = 398;
+            if (BoxButton(new Rect((canvasWidth - confirmWidth) / 2, 748, confirmWidth, 80), "CONFERMA PREPARAZIONE\nAVVIA RUN", Color.gray, hub.Selection.CanStart)) hub.BeginRun();
+            if (BoxButton(new Rect(54, 780, 230, 52), "INDIETRO", purple)) hub.Selection.Back();
+            GUI.enabled = true;
+            string notice = !string.IsNullOrEmpty(hub.Selection.ItemNotice) ? hub.Selection.ItemNotice : GUI.tooltip;
+            if (!string.IsNullOrEmpty(notice)) GUI.Label(new Rect(20, 835, 1496, 24), notice, small);
         }
-        private void DrawItemSlots(float x)
+        private void DrawItemSlots(float x, bool usable)
         {
             var e = Event.current;
+            var slotStyle = new GUIStyle(centre) { fontSize = 13, padding = new RectOffset() };
             for (int slot = 0; slot < 4; slot++)
             {
-                var rect = new Rect(x + slot * 48, 477, 44, 48);
-                Outline(rect, green);
-                string name = ItemRuntime.Label(hub.Selection.Items[slot]);
-                string abbreviation = hub.Selection.ItemCounts[slot] > 0 ? name.Substring(0, Mathf.Min(3, name.Length)) : "—";
-                GUI.Label(rect, new GUIContent((slot + 1) + " x" + hub.Selection.ItemCounts[slot] + "\n" + abbreviation, name), new GUIStyle(centre) { fontSize = 12, padding = new RectOffset() });
-
-                if (e.type == EventType.MouseDown && e.button == 0 && rect.Contains(e.mousePosition)) { draggedItem = slot; e.Use(); }
+                var rect = new Rect(x + (slot % 2) * 92, 482 + (slot / 2) * 92, 80, 80);
+                Fill(rect, usable ? Color.white : new Color(.93f, .93f, .93f));
+                Outline(rect, usable ? green : new Color(.55f, .67f, .58f));
+                bool occupied = usable && hub.Selection.ItemCounts[slot] > 0;
+                string name = usable ? (occupied ? ItemRuntime.Label(hub.Selection.Items[slot]) : "SLOT " + (slot + 1) + " — VUOTO") : "I PG IA non utilizzano ITEMS";
+                if (occupied)
+                {
+                    DrawMerchantIcon(new Rect(rect.x + 8, rect.y + 6, 64, 52), hub.Selection.Items[slot]);
+                    GUI.Label(new Rect(rect.x + 5, rect.y + 58, 70, 17), (slot + 1) + " · x" + hub.Selection.ItemCounts[slot], slotStyle);
+                }
+                else GUI.Label(rect, usable ? (slot + 1) + "\nVUOTO" : "—", slotStyle);
+                GUI.Label(rect, new GUIContent("", name));
+                if (!usable) continue;
+                if (e.type == EventType.MouseDown && e.button == 0 && occupied && rect.Contains(e.mousePosition))
+                { draggedItem = slot; e.Use(); }
                 if (e.type == EventType.MouseUp && e.button == 0 && rect.Contains(e.mousePosition) && draggedItem >= 0)
                 {
                     if (draggedItem != slot) hub.Selection.SwapItems(draggedItem, slot);
                     draggedItem = -1; e.Use();
                 }
             }
-            if (e.type == EventType.MouseUp) draggedItem = -1;
+            if (usable && e.type == EventType.MouseUp) draggedItem = -1;
         }
         private bool DrawOptionCircle(Rect rect, string label, Color color, bool selected, bool enabled = false)
         {
@@ -190,6 +229,8 @@ namespace RogZombie.PreGameplayLoop
             if (BoxButton(new Rect(660, 690, 220, 120), "CONFERMA", Color.gray, model.Complete)) model.ConfirmSelection();
             if (BoxButton(new Rect(48, 804, 180, 42), "INDIETRO", purple)) model.Back();
         }
+        private void OnApplicationFocus(bool focused) { if (!focused) draggedItem = -1; }
+        private void OnDisable() { draggedItem = -1; }
         private void OnDestroy() { if (circle != null) Destroy(circle); }
     }
 }

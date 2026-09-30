@@ -80,7 +80,7 @@ namespace RogZombie.PreGameplayLoop
                         if (poison == null) poison = target.gameObject.AddComponent<PG05Poison>();
                         poison.Apply(session, source, 5, 5); break;
                     case PrototypeItem.MinaElettrica:
-                        target.Hit(10, true, source); if (target.IsActive) target.GetComponent<MobBrain>()?.Stun(2.5f); break;
+                        target.Hit(10, true, source); if (target.IsActive) target.Stun(2.5f); break;
                 }
             }
         }

@@ -44,6 +44,7 @@ namespace RogZombie.PreGameplayLoop
         }
         public void Advance(Vector2 cursor, float seconds, Vector2 leaderVelocity)
         {
+            if (RogZombie.BossTest.BossPlayerStatus.Blocks(this)) return;
             if (seconds <= 0 || Context == null || Context.DirectlyControlled || !Context.GameplayRunning || !Context.Player.Actor.IsActive) return;
             var leader = Context.World.Controlled.Player;
             Vector2 origin = leader.transform.position, direction = cursor - origin;

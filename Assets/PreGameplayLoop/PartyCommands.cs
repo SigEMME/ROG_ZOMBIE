@@ -18,11 +18,13 @@ namespace RogZombie.PreGameplayLoop
         }
         public static bool Held(Component caller)
         {
+            if (RogZombie.BossTest.BossPlayerStatus.Blocks(caller)) return false;
             var k = Keyboard.current; if (k == null) return false;
             return IsCompanion(caller) ? k.spaceKey.isPressed && AbilityKey(caller, k).isPressed : k.qKey.isPressed;
         }
         public static bool Pressed(Component caller)
         {
+            if (RogZombie.BossTest.BossPlayerStatus.Blocks(caller)) return false;
             var k = Keyboard.current; if (k == null) return false;
             return IsCompanion(caller) ? Held(caller) && (k.spaceKey.wasPressedThisFrame || AbilityKey(caller, k).wasPressedThisFrame) : k.qKey.wasPressedThisFrame;
         }

@@ -6,6 +6,7 @@ namespace RogZombie.PreGameplayLoop
     public sealed class HubPrototype : MonoBehaviour
     {
         public LoopDefinition Definition;
+        public RogZombie.BossTest.BossDefinition Boss;
         public TextAsset Content;
         public TitleScreen Title { get; private set; }
         public PauseScreen Pause { get; private set; }
@@ -64,8 +65,17 @@ namespace RogZombie.PreGameplayLoop
             string issue = definition.Validate();
             if (issue != null) { Failure = issue; Destroy(definition); return false; }
             runDefinition = definition; Selection.StartRun();
-            var go = new GameObject("RUN dal HUB"); go.transform.SetParent(transform);
-            Run = go.AddComponent<LoopSession>(); Run.Definition = runDefinition; return true;
+            var go = new GameObject("RUN dal HUB"); go.SetActive(false); go.transform.SetParent(transform);
+            Run = go.AddComponent<LoopSession>(); Run.Definition = runDefinition;
+            if (Boss != null)
+            {
+                var encounter = go.AddComponent<RogZombie.BossTest.BossTestScene>();
+                encounter.Boss = Boss;
+                encounter.StartAtCompletedArea3 = false;
+            }
+            // Configure all references before Awake prepares the runtime encounter data.
+            go.SetActive(true);
+            return true;
         }
         public void ReturnFromRun()
         {

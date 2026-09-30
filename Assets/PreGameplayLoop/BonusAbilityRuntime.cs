@@ -139,7 +139,7 @@ namespace RogZombie.PreGameplayLoop
                 if (target == null || !target.IsActive || target.Faction != Faction.MOB ||
                     !AttackGeometry.InVisibleArea(center, radius, target)) continue;
                 if (!target.Hit(Value(id, "DANNO"), true, actor) || !target.IsActive) continue;
-                if (id == "taser") target.GetComponent<MobBrain>()?.Stun(Value(id, "BLOCK"));
+                if (id == "taser") target.Stun(Value(id, "BLOCK"));
                 if (id == "repulse")
                 {
                     var motion = new GameObject("REPULSE motion"); motion.transform.SetParent(TestVisuals.Root, false);
@@ -206,7 +206,7 @@ namespace RogZombie.PreGameplayLoop
             while (pets.Count < Mathf.RoundToInt(Value("pet", "N_PET")))
             {
                 if (!PetPosition(out var position)) break;
-                var go = TestVisuals.Circle("PET", position, session.Settings.ActorRadius, new Color(.8f,.5f,1), 3);
+                var go = TestVisuals.Circle("PET", position, session.Settings.ActorRadius, Color.blue, 3);
                 go.layer = LayerMask.NameToLayer("PET"); go.AddComponent<CircleCollider2D>().radius = session.Settings.ActorRadius;
                 var pet = go.AddComponent<BonusPet>(); pet.Initialize(session, this, actor); pets.Add(pet);
             }
