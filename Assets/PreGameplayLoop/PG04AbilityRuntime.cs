@@ -8,6 +8,8 @@ namespace RogZombie.PreGameplayLoop
     {
         private LoopSession session;
         private PG04AbilityCatalog data;
+        private readonly List<PG04BurningArea> burningAreas = new List<PG04BurningArea>();
+        public bool PyromaniaActive { get { foreach (var area in burningAreas) if (area != null && area.Remaining > 0) return true; return false; } }
         private PlayerWeapon weapon;
         private readonly AbilityCooldown cooldown = new AbilityCooldown();
         private Vector2 rainCenter;
@@ -31,6 +33,7 @@ namespace RogZombie.PreGameplayLoop
         public bool EffectActive => raining || Charges > 0;
         public float ActiveRemaining => raining ? Mathf.Max(0, data.RainDuration - rainElapsed) : 0;
         public float CooldownRemaining => cooldown.Remaining;
+        public float CooldownProgress => cooldown.RecoveryProgress;
         public bool CanUse => session != null && session.GameplayRunning && session.Player.Actor.IsActive;
         public string Label => Selected == PG04Ability.PioggiaDiGranate ? "PIOGGIA DI GRANATE" : "COLPO GROSSO";
         public string PassiveLabel => Passive == PG04Passive.ScortaEsplosiva ? "SCORTA ESPLOSIVA" : "PYROMANIA";
@@ -146,7 +149,10 @@ namespace RogZombie.PreGameplayLoop
             {
                 var go = new GameObject("PYROMANIA");
                 go.transform.SetParent(TestVisuals.Root, false); go.transform.position = center;
-                go.AddComponent<PG04BurningArea>().Initialize(session, session.Player.Actor, radius, data.FireDuration, data.FireDamage, valid);
+                var area = go.AddComponent<PG04BurningArea>();
+                area.Initialize(session, session.Player.Actor, radius, data.FireDuration, data.FireDamage, valid);
+                burningAreas.RemoveAll(value => value == null);
+                burningAreas.Add(area);
             }
             Explosion?.Invoke(center, radius, damage);
         }
@@ -155,7 +161,7 @@ namespace RogZombie.PreGameplayLoop
             CancelAim(); ClearAreaMarker();
             cooldown.ChangeArea(EffectActive, data.BaseCooldown(Selected), session.CdReduction);
             Charges = 0; raining = false; rainTimes = null; rainPositions = null;
-            pendingBaseHits.Clear();
+            pendingBaseHits.Clear(); burningAreas.Clear();
         }
         private void OnDisable() { CancelAim(); ClearAreaMarker(); }
         private void OnDestroy() { CancelAim(); ClearAreaMarker(); if (data != null) Destroy(data); }

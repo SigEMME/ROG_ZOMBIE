@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace RogZombie.PreGameplayLoop
 {
-    public sealed class LoopHUD : MonoBehaviour
+    public sealed partial class LoopHUD : MonoBehaviour
     {
         private LoopSession loop;
         private void Awake() => loop = GetComponent<LoopSession>();
@@ -25,96 +25,7 @@ namespace RogZombie.PreGameplayLoop
             if (loop.GetComponent<RogZombie.BossTest.BossTestScene>()?.Presenting == true) return;
             foreach (var member in loop.Members) DrawResurrection(member);
             var view = loop.Controlled != null ? loop.Controlled : loop;
-            GUI.Box(new Rect(8, 8, Screen.width - 16, 94), "Pre gameplay loop prototype | WASD / Mouse / LMB / Q");
-            GUI.Label(new Rect(20, 30, Screen.width - 160, 24), $"AREA {loop.AreaIndex + 1}/{loop.Definition.AreaTotals.Length} | {loop.State} | G {loop.Gold}");
-            if (GUI.Button(new Rect(Screen.width - 140, 32, 115, 26), "Riprova test"))
-                loop.RestartTest();
-            if (view.Player != null)
-                GUI.Label(new Rect(20, 58, Screen.width - 40, 26), $"{view.Player.Definition.PlayerId} HP {view.Player.Actor.CurrentHP:0.#}/{view.Player.Actor.Stats.HP:0.#} | CD REDUCTION {view.CdReduction}");
-            if (loop.Spawns != null)
-                GUI.Label(new Rect(20, 110, Screen.width - 40, 24), $"MOB {loop.Spawns.Alive}/{loop.Spawns.MaxSimultaneous} | Generati {loop.Spawns.TotalSpawned}/{loop.Settings.TotalMobs} | Morti {loop.Spawns.Killed}");
-            if (view.Ability != null)
-                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
-                    $"Q — {view.Ability.Selected.ToString().ToUpperInvariant()} | CD {view.Ability.CooldownRemaining:0.0} s" +
-                    (view.Ability.Selected == PG01Ability.Barriera ? " | Tieni Q: anteprima, rilascia: piazza" : ""));
-            if (view.Passive != null && view.Player != null)
-                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
-                    $"{view.Passive.Label} | {(view.Passive.EffectActive ? "ATTIVA" : "INATTIVA")} | " +
-                    $"ATK {view.Player.Actor.EffectiveStats.ATK:0.##} | DEF {view.Player.Actor.EffectiveStats.DEF - 100:0.##}%");
-            if (view.PG02Ability != null)
-                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
-                    $"Q — {view.PG02Ability.Label} | CD {view.PG02Ability.CooldownRemaining:0.0} s | DURATA {view.PG02Ability.ActiveRemaining:0.0} s");
-            if (view.PG02Passive != null && view.Player != null)
-            {
-                var passive = view.PG02Passive;
-                var stats = view.Player.Actor.EffectiveStats;
-                GUI.Label(new Rect(20, Screen.height - 110, Screen.width - 40, 26),
-                    $"{passive.Label} | {(passive.EffectActive ? "ATTIVA" : "INATTIVA")} | KILL {passive.Kills}" +
-                    (passive.Selected == PG02Passive.Passiva2 ? $" | RAGE {passive.KillsTowardRage}/15 — {passive.RageRemaining:0.0} s" : ""));
-                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
-                    $"ATK {stats.ATK:0.##} | ATK SPD {stats.AttackSpeed:0.##} ({stats.AttackSpeed / 100f:0.##}/s) | DEF {stats.DEF - 100:0.##}%");
-            }
-            if (view.PG03Ability != null && view.Player != null)
-            {
-                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
-                    $"Q — {view.PG03Ability.Label} | CD {view.PG03Ability.CooldownRemaining:0.0} s | DURATA {view.PG03Ability.ActiveRemaining:0.0} s");
-                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
-                    $"{view.PG03Passive.Label} | AUTOMATICA | ATK {view.Player.Actor.EffectiveStats.ATK:0.##} | MOVE SPD {view.Player.Actor.Stats.MoveSpeed:0.##}");
-            }
-            if (view.PG08Ability != null)
-            {
-                var ability = view.PG08Ability; var passive = view.PG08Passive; var stats = view.Player.Actor.EffectiveStats;
-                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
-                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | DURATA {ability.DurationRemaining:0.0} s");
-                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
-                    $"{passive.Label} | {(passive.EffectActive ? "ATTIVA" : "INATTIVA")} | " +
-                    (passive.Selected == PG08Passive.Tenacia ? $"HIT {passive.Hits}/150 | BONUS DEF +{passive.TenacityBonus:0.0}%" : $"FUOCO {passive.ContinuousFire:0.0}/5 s") +
-                    $" | ATK {stats.ATK:0.##} | DEF {stats.DEF - 100:0.##}% | MOVE SPD {stats.MoveSpeed:0.##}");
-            }
-            if (view.PG07Ability != null)
-            {
-                var ability = view.PG07Ability;
-                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
-                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | FRECCE {ability.RainEmitted}/20" +
-                    (ability.Selected == PG07Ability.PioggiaDiFrecce ? " | Tieni Q: anteprima; rilascia: attiva" : ""));
-                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
-                    $"{ability.PassiveLabel} | ATTIVAZIONI {ability.PassiveTriggers} / ROLL {ability.PassiveRolls}");
-            }
-            if (view.PG06Ability != null)
-            {
-                var ability = view.PG06Ability;
-                var vitamin = view.Player.GetComponent<PG06Vitamin>();
-                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
-                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | CARICHE {ability.Charges}");
-                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
-                    $"{ability.PassiveLabel} | VITAMINA C {(vitamin != null ? vitamin.Remaining : 0):0.0} s | ATK SPD {view.Player.Actor.EffectiveStats.AttackSpeed:0.##} | DROP {ability.Drops}");
-            }
-            if (view.PG05Ability != null)
-            {
-                var ability = view.PG05Ability;
-                var hidden = view.Player.GetComponent<PG05Invisibility>();
-                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
-                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | INVISIBILITA {(hidden != null ? hidden.Remaining : 0):0.0} s");
-                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26),
-                    $"{ability.PassiveLabel} | CICUTA {ability.CicutaHits}/15 | MOVE {view.Player.Actor.MovementMetresPerSecond:0.##} m/s");
-            }
-            if (view.PG04Ability != null)
-            {
-                var ability = view.PG04Ability;
-                GUI.Label(new Rect(20, Screen.height - 60, Screen.width - 40, 26),
-                    $"Q — {ability.Label} | CD {ability.CooldownRemaining:0.0} s | DURATA {ability.ActiveRemaining:0.0} s | CARICHE {ability.Charges}" +
-                    (ability.Selected == PG04Ability.PioggiaDiGranate ? " | Tieni Q: anteprima; rilascia: attiva" : ""));
-                GUI.Label(new Rect(20, Screen.height - 86, Screen.width - 40, 26), $"{ability.PassiveLabel} | AUTOMATICA");
-
-            }
-            if (view.PG04Items != null && view.PG04Items.SlotCount > 0)
-            {
-                float itemWidth = (Screen.width - 40f) / 4;
-                for (int i = 0; i < view.PG04Items.SlotCount; i++)
-                    GUI.Box(new Rect(20 + i * itemWidth, Screen.height - 150, itemWidth - 5, 45),
-                        (i + 1) + ": " + ItemRuntime.Label(view.PG04Items.Kind(i)) + "\nx" + view.PG04Items.Count(i));
-            }
-            GUI.Label(new Rect(20, Screen.height - 34, Screen.width - 40, 28), "Prototype: roster PG01–PG08 + ZOMB01; ABILITÀ BONUS e LEVEL UP attivi.");
+            DrawRunHud(view);
             if (loop.State == LoopState.AreaComplete)
             {
                 Vector3 exitView = loop.GameCamera.WorldToViewportPoint(loop.Exit.transform.position);
@@ -139,14 +50,13 @@ namespace RogZombie.PreGameplayLoop
             }
             if (loop.State == LoopState.Error) GUI.Box(new Rect(30, 180, Screen.width - 60, 80), loop.Failure);
             if (loop.State == LoopState.Defeat) GUI.Box(new Rect(30, 180, Screen.width - 60, 60), "SCONFITTA: PG DOWN, nessun PG attivo. Riprova test.");
-            if (loop.State == LoopState.Finished) GUI.Box(new Rect(30, 180, Screen.width - 60, 60), "Due cicli completati. Fine del test tecnico; Riprova test per una nuova prova.");
-            if (loop.BonusAbilities != null)
-                GUI.Label(new Rect(20, 136, Screen.width - 40, 25), loop.BonusAbilities.Status());
+            if (loop.State == LoopState.Finished) GUI.Box(new Rect(30, 180, Screen.width - 60, 60), "RUN completata. Riprova test per una nuova prova.");
+            if (loop.State == LoopState.Defeat || loop.State == LoopState.Finished || loop.State == LoopState.Error)
+                if (GUI.Button(new Rect(Screen.width / 2f - 70, 270, 140, 30), "Riprova test")) loop.RestartTest();
             var choiceContext = loop.ChoiceContext;
             if (choiceContext.Experience != null)
             {
                 var exp = choiceContext.Experience;
-                GUI.Label(new Rect(20, 162, Screen.width - 40, 24), $"LVL {exp.Level} | EXP {exp.Experience}/{exp.NextThreshold} | Scelte pendenti {exp.PendingChoices}");
                 if (exp.Choices != null)
                 {
                     GUI.Box(new Rect(10, 205, Screen.width - 20, 140), "LEVEL UP — " + choiceContext.Player.Definition.PlayerId + " — scegli un BONUS");
@@ -156,11 +66,6 @@ namespace RogZombie.PreGameplayLoop
                         { exp.Choose(i); break; }
                     return;
                 }
-            }
-            foreach (var companion in loop.Companions)
-            {
-                var exp = companion.Experience;
-                GUI.Label(new Rect(20, 186 + (companion.PartySlot - 1) * 24, Screen.width - 40, 24), $"PG IA {companion.PartySlot} — {companion.Player.Definition.PlayerId} HP {companion.Player.Actor.CurrentHP:0.#}/{companion.Player.Actor.Stats.HP:0.#} | LVL {exp.Level} EXP {exp.Experience}/{exp.NextThreshold} | SPACE + {companion.PartySlot}: ABILITA | controllo: {view.Player.Definition.PlayerId}");
             }
             if (loop.State != LoopState.Bonus) return;
             GUI.Box(new Rect(10, 140, Screen.width - 20, 320), "BONUS FINE AREA — " + loop.RewardContext.Player.Definition.PlayerId + " — scegli un BONUS, poi conferma");

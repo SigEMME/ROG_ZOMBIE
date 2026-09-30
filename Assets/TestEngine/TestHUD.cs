@@ -14,7 +14,7 @@ namespace RogZombie.TestEngine
         {
             get
             {
-                if (Mouse.current == null) return false;
+                if (RogZombie.PreGameplayLoop.LoopHUD.Displaying || Mouse.current == null) return false;
                 float top = Screen.height - Mouse.current.position.ReadValue().y;
                 return top < 105f;
             }

@@ -12,6 +12,10 @@ namespace RogZombie.PreGameplayLoop
         private PlayerWeapon weapon;
         private readonly AbilityCooldown cooldown = new AbilityCooldown();
         private float ghostRemaining;
+        public bool GhostActive => ghostRemaining > 0;
+        public readonly HudPulse PoisonPulse = new HudPulse();
+        private readonly List<PG05Poison> passivePoisons = new List<PG05Poison>();
+        public bool CicutaActive { get { foreach (var poison in passivePoisons) if (poison != null && poison.Remaining > 0 && poison.GetComponent<Combatant>().IsActive) return true; return false; } }
         private readonly List<PG05Invisibility> partyEffects = new List<PG05Invisibility>();
         public bool EffectActive
         {
@@ -21,6 +25,7 @@ namespace RogZombie.PreGameplayLoop
         public PG05Passive Passive { get; private set; }
         public int CicutaHits { get; private set; }
         public float CooldownRemaining => cooldown.Remaining;
+        public float CooldownProgress => cooldown.RecoveryProgress;
         public bool CanUse => session != null && session.GameplayRunning && actor.IsActive;
         public string Label => Selected == PG05Ability.Invisibilita ? "INVISIBILITA" : "COLTELLI AVVELENATI";
         public string PassiveLabel => Passive == PG05Passive.Ghosting ? "GHOSTING" : "LAMA DI CICUTA";
@@ -96,9 +101,14 @@ namespace RogZombie.PreGameplayLoop
                 if (!target.Hit(stats.ATK, true, actor, true)) continue;
                 hits++;
                 if (poison && target.IsActive)
-                    (target.GetComponent<PG05Poison>() ?? target.gameObject.AddComponent<PG05Poison>())
-                        .Apply(session, actor, data.PoisonDamage, data.PoisonDuration);
+                {
+                    var effect = target.GetComponent<PG05Poison>() ?? target.gameObject.AddComponent<PG05Poison>();
+                    effect.Apply(session, actor, data.PoisonDamage, data.PoisonDuration);
+                    passivePoisons.RemoveAll(value => value == null || value.Remaining <= 0);
+                    if (!passivePoisons.Contains(effect)) passivePoisons.Add(effect);
+                }
             }
+            if (poison && hits > 0) PoisonPulse.Trigger();
             if (Passive == PG05Passive.LamaDiCicuta)
                 CicutaHits = poison ? 0 : Mathf.Min(data.CicutaThreshold, CicutaHits + hits);
             TestVisuals.FlashFront(origin, direction, stats.RangeMetres, weapon.Definition);

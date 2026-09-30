@@ -16,8 +16,10 @@ namespace RogZombie.PreGameplayLoop
         public int Charges { get; private set; }
         public int KillRolls { get; private set; }
         public int Drops { get; private set; }
+        public readonly HudPulse DropPulse = new HudPulse();
         public bool EffectActive => Charges > 0;
         public float CooldownRemaining => cooldown.Remaining;
+        public float CooldownProgress => cooldown.RecoveryProgress;
         public bool CanUse => session != null && session.GameplayRunning && actor.IsActive;
         public string Label => Selected == PG06Ability.CuraAdArea ? "CURA AD AREA" : "FUOCO CURATIVO";
         public string PassiveLabel => Passive == PG06Passive.Elemosina ? "ELEMOSINA" : "VITAMINA C";
@@ -82,7 +84,7 @@ namespace RogZombie.PreGameplayLoop
             if (Passive != PG06Passive.Elemosina) return;
             KillRolls++;
             if (UnityEngine.Random.value >= data.DropChance) return;
-            Drops++;
+            Drops++; DropPulse.Trigger();
             var go = TestVisuals.Box("ELEMOSINA MEDI KIT", victim.transform.position, Vector2.one * .5f, Color.green, 2);
             go.AddComponent<PG06Medikit>().Initialize(session, data.MedikitFraction, data.TestMedikitRadius);
         }

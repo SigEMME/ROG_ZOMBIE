@@ -1,5 +1,17 @@
 # Pre gameplay loop prototype
 
+## SCATTO — 30/09/2026
+
+SHIFT sinistro o destro attiva 2 s di movimento al doppio della velocità corrente, interrompendo INVISIBILITÀ. Il recupero fisso di 15 s parte alla fine dell'effetto e ignora CD REDUCTION. HUD: PRONTO / ATTIVO / RECUPERO. Nessuna modifica persistente a MOVE SPD; PG IA seguono la velocità del leader secondo la formazione esistente. La PAUSA congela i timer; CAMBIO AREA termina l'effetto attivo avviando il recupero, oppure conserva il recupero residuo. DOWN/MORTE interrompono l'effetto. Una nuova RUN riparte pronta.
+
+Compilazione runtime/editor riuscita. `SPRINT-15s-loop-validation-r1.txt`: 389 verifiche PASS in Unity, comprese 21 aggiuntive per SCATTO (durata, recupero, non cumulo, bonus MOVE SPD, CD REDUCTION, INVISIBILITÀ PG05/SMOKE, pausa, cambio AREA, DOWN e reset). Le soglie dei timer sono verificate con avanzamento controllato; pausa e cambio AREA attraversano il loop reale. Sensazione del movimento e combinazioni fisiche dei tasti restano da provare manualmente. Nessuna build o commit.
+
+## Crescita MOB durante la RUN — 30/09/2026
+
+ZOMB01–ZOMB05 ricevono +5% del valore BASE di HP, ATK, MOVE SPD e ATK SPD per ogni AREA ORDINARIA completata: fattore 1 + 0,05 × conteggio delle AREE ORDINARIE precedenti nella RUN. LoopDefinition.BossAreaNumbers identifica le AREE BOSS nella sequenza globale e le esclude dal conteggio; BOSS01 registra AREA 4. Arrotondamento matematico all'intero più vicino (0,5 per eccesso), calcolato in decimale per evitare errori alle soglie. DEF, RANGE, G/EXP DROP e dati degli asset rimangono invariati. I due danni dell'esplosione ZOMB05 seguono la stessa crescita; BOSS e MINI BOSS sono esclusi. FIRST SPAWN e rimpiazzi ricevono i valori della propria AREA; una nuova RUN riparte dalle STATS base.
+
+Compilazione runtime/editor riuscita. Regressione Unity: 368 verifiche PASS (`MOB-growth-loop-validation-r3.txt`), inclusi cinque tipi di MOB, crescita lineare, arrotondamenti, danni effettivi dell'esplosione contro PG/MOB, passaggio alla seconda AREA e reset RUN. Il primo tentativo ha rilevato un errore di precisione a 103,5, corretto con aritmetica decimale; il secondo una mancanza dello SpriteRenderer nella fixture, poi corretta. Nessuna build. La continuità tra CITTÀ è verificata sul conteggio globale fino a 22 AREE completate; il prototipo non contiene ancora la sequenza giocabile completa delle cinque CITTÀ.
+
 ## Aggiornamento schermatura AREE — 14/09/2026
 
 MURI/OSTACOLI schermano solo i bersagli con linea interrotta fra centro dell’AREA e centro del collider; i bersagli esposti entro la forma e il RAGGIO previsti ricevono la HIT completa prima della DEF, senza propagazione attorno agli angoli. La regola sostituisce gli SPICCHI anche per COLPO GROSSO, PIOGGIA DI GRANATE, PYROMANIA, LUCKY SHOT, ABILITÀ BONUS ad area e attacchi ad area dei MOB. SCIABOLATA resta un SEMICERCHIO. Le SEZIONI di FILO SPINATO/TRAPPOLA e le eccezioni esplicite restano invariate. Visuali ritagliate; PYROMANIA rivaluta coperture e visuale a ogni tick.
@@ -12,7 +24,7 @@ Base: `6fa6b25` — GDD ufficiale `Docs/ROG_ZOMBIE_GDD.md`, revisione finale CLA
 
 Aprire `Assets/Scenes/PreGameplayLoopPrototype.unity` in Unity 6000.3.16f1 e premere Play. WASD muove il PG selezionato, mouse orienta, LMB attacca; Q usa l'ABILITA selezionata. Per BARRIERA, tenere Q mostra l'anteprima e rilasciare piazza il muro. Dettagli in Docs/PG01AbilitiesPrototype.md. Il pulsante Riprova test ripristina la RUN senza dipendere dalle Build Settings.
 
-Il caricamento costruisce NavMesh e FIRST SPAWN off-screen. A1: 100 MOB, 30 iniziali. A2: 120 MOB, 36 iniziali. Una morte effettiva genera un rimpiazzo finché il totale è esaurito. All'ultima morte l'uscita diventa verde; raggiungere il cerchio di raggio 4 m. La freccia compare quando il centro uscita è off-screen. Scegliere una delle tre STATS e confermare. La seconda AREA conserva PG, selezioni ABILITÀ/PASSIVA, STATS, HP e G; il passaggio cura il 15% degli HP massimi correnti. Dopo il secondo BONUS il test termina, senza simulare vittoria RUN o BOSS. Il PG in DOWN termina il test perché non resta alcun PG attivo.
+Il caricamento costruisce NavMesh e FIRST SPAWN off-screen. A1: 130 MOB, 39 iniziali. A2: 160 MOB, 48 iniziali. A3: 200 MOB, 60 iniziali. Una morte effettiva genera un rimpiazzo finché il totale è esaurito. All'ultima morte l'uscita diventa verde; raggiungere il cerchio di raggio 4 m. La freccia compare quando il centro uscita è off-screen. Scegliere una delle tre STATS e confermare. La seconda AREA conserva PG, selezioni ABILITÀ/PASSIVA, STATS, HP e G; il passaggio cura il 15% degli HP massimi correnti. Dopo il secondo BONUS il test termina, senza simulare vittoria RUN o BOSS. Il PG in DOWN termina il test perché non resta alcun PG attivo.
 
 ## Struttura
 
@@ -69,3 +81,8 @@ I segnaposto MOB nel gameplay loop e nel TestEngine sono cerchi colorati di diam
 ## ABILITÀ BONUS nel loop
 
 La precedente esclusione di EXP/LVL e ABILITÀ BONUS è superata: ora sono disponibili LEVEL UP, dieci ABILITÀ BONUS, UPGRADE e i due BANNER dedicati di FINE AREA. Regole, uso e limiti: [BonusAbilitiesPrototype.md](BonusAbilitiesPrototype.md). Nessuna build esportata per questa integrazione.
+
+### HUD RUN — reference HUD_Test
+Il nuovo HUD usa gli angoli della reference: EXP verticale, ritratto PLAYER con bordo HP orario, ABILITÀ/PASSIVA e tre BONUS sopra; fino a tre IA a destra; quattro ITEMS con sprite MERCHANT in basso a destra; MOB rimanenti e G in alto. Slot verde scuro riservato e nessun indicatore SCATTO. Le sigle provvisorie hanno descrizioni al passaggio del mouse. Gli indicatori sono di sola lettura e non bloccano la mira; la PAUSA nasconde l'HUD. Il PG controllato occupa il ritratto principale anche durante il subentro.
+I CD usano la durata del recupero effettivamente avviato, così gli upgrade durante il recupero non deformano il riempimento. Le passive leggono gli effetti reali o un flash di 0,5 s per i proc istantanei. Riprova test resta nelle schermate di errore, sconfitta e fine test.
+Verificatore dedicato: `RunHudValidation`, richiesta `.run-hud-test.request` con percorso del report. Nessuna build necessaria.

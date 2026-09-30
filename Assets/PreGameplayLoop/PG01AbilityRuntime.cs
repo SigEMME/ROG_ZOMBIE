@@ -19,6 +19,7 @@ namespace RogZombie.PreGameplayLoop
 
         public PG01Ability Selected => selected;
         public float CooldownRemaining => cooldown.Remaining;
+        public float CooldownProgress => cooldown.RecoveryProgress;
         public float FinalCooldown => AbilityCooldown.FinalSeconds(data.BaseCooldown(selected), session.CdReduction);
         public bool IsAiming => preview != null;
         public bool PreviewValid { get; private set; }

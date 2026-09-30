@@ -103,7 +103,16 @@ namespace RogZombie.PreGameplayLoop
         public TestAreaSettings GeometryTemplate;
         public MobDefinition ZOMB01;
         [Tooltip("GDD section 14: C1 area totals and MOB distributions.")]
-        public int[] AreaTotals = { 100, 120, 150 };
+        public int[] AreaTotals = { 130, 160, 200 };
+        [Tooltip("Numeri delle AREE BOSS nella sequenza globale della RUN (prima AREA = 1). Escluse dalla crescita delle STATS MOB.")]
+        public int[] BossAreaNumbers = new int[0];
+        public int OrdinaryAreasBefore(int areaIndex)
+        {
+            int count = 0;
+            for (int index = 0; index < areaIndex; index++)
+                if (BossAreaNumbers == null || System.Array.IndexOf(BossAreaNumbers, index + 1) < 0) count++;
+            return count;
+        }
         public AreaMobDistribution[] AreaMobDistributions = {
             new AreaMobDistribution { Percentages = new float[] { 75, 20, 5, 0, 0 } },
             new AreaMobDistribution { Percentages = new float[] { 65, 25, 10, 0, 0 } },

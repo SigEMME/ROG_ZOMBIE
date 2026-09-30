@@ -15,6 +15,7 @@ namespace RogZombie.PreGameplayLoop
         public bool EffectActive => Selected == PG03Ability.TriploSparo && ShotsFired > 0 && ShotsFired < 3;
         public float ActiveRemaining => EffectActive ? Mathf.Max(0, data.TripleInterval * 2 - elapsed) : 0;
         public float CooldownRemaining => cooldown.Remaining;
+        public float CooldownProgress => cooldown.RecoveryProgress;
         public bool CanUse => session != null && session.GameplayRunning && session.Player.Actor.IsActive;
         public string Label => Selected == PG03Ability.ColpoLaser ? "COLPO LASER" : "TRIPLO SPARO";
         public event System.Action<Projectile, int> TripleShot;

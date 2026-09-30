@@ -10,6 +10,7 @@ namespace RogZombie.PreGameplayLoop
         private LoopSession session;
         public PG02Passive Selected { get; private set; }
         public int Kills { get; private set; }
+        public readonly HudPulse HealPulse = new HudPulse();
         public int KillsTowardRage => Kills % 15;
         public float RageRemaining { get; private set; }
         public bool RageActive => RageRemaining > 0 && actor != null && actor.IsActive;
@@ -35,7 +36,7 @@ namespace RogZombie.PreGameplayLoop
             if (Selected == PG02Passive.Passiva1)
             {
                 // Reevaluate per KILL: one multi-target HIT can cross the healing threshold.
-                if (BelowHealThreshold) actor.Heal(.01f);
+                if (BelowHealThreshold) { actor.Heal(.01f); HealPulse.Trigger(); }
             }
             else if (KillsTowardRage == 0) RageRemaining = 4f;
         }

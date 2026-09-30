@@ -27,6 +27,7 @@ namespace RogZombie.PreGameplayLoop
             }
         }
         public float CooldownRemaining => cooldown.Remaining;
+        public float CooldownProgress => cooldown.RecoveryProgress;
         public bool CanUse => session != null && session.GameplayRunning && actor.IsActive && !passive.IsStunned;
         public string Label => Selected == PG08Ability.FiloSpinato ? "FILO SPINATO" : "COLPI RESPINGENTI";
         public event Action<Projectile> BaseShot;

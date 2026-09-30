@@ -1,0 +1,85 @@
+PASS | Unity 6000.3.16f1 | checks=82 | warnings=0
+PASS HUD attached to RUN scene
+PASS Full HP edge 0
+PASS Empty HP edge 0
+PASS Half HP empties bottom then left, edge 0
+PASS Full HP edge 1
+PASS Empty HP edge 1
+PASS Half HP empties bottom then left, edge 1
+PASS Full HP edge 2
+PASS Empty HP edge 2
+PASS Half HP empties bottom then left, edge 2
+PASS Full HP edge 3
+PASS Empty HP edge 3
+PASS Half HP empties bottom then left, edge 3
+PASS First lost eighth starts at bottom-right
+PASS Last remaining eighth on right edge near bottom
+PASS MOB counter uses total minus KILL, including future spawns
+PASS Ready icon fully colored
+PASS New CD icon gray
+PASS Quarter CD elapsed reveals left quarter
+PASS Area preserves original CD duration after stat change
+PASS Completed CD restores full icon
+PASS Existing item sprite Granata
+PASS Existing item sprite Molotov
+PASS Existing item sprite Smoke
+PASS Existing item sprite PozioneCurativa
+PASS Existing item sprite Trappola
+PASS Existing item sprite BombaVelenosa
+PASS Existing item sprite MinaElettrica
+PASS Four portrait party group 0
+PASS Live ability CD PG01
+PASS Passive identity PG01
+PASS Live ability CD PG02
+PASS Passive identity PG02
+PASS Live ability CD PG03
+PASS Passive identity PG03
+PASS Live ability CD PG04
+PASS Passive identity PG04
+PASS EXP fill from current level requirement
+PASS Loaded item inventory
+PASS Consumed slot empties
+PASS PG01 low HP lights passive
+PASS PG01 healing extinguishes passive
+PASS Permanent CALIBRO PERFORANTE stays lit
+PASS Permanent SCORTA ESPLOSIVA stays lit
+PASS PUNTO DEBOLE tracks active mark
+PASS Second HIT removes HUD mark state
+PASS PYROMANIA dark without fires
+PASS Real PYROMANIA explosion lights passive for fire lifetime
+PASS Removing last fire extinguishes PYROMANIA
+PASS PG02 real heal proc flashes passive
+PASS HUD timing freezes in pause
+PASS Ability CD freezes in pause
+PASS Proc flash freezes in pause
+PASS Proc flash expires after half second
+PASS New bonus starts with gray CD icon
+PASS Bonus CD reveals half icon
+PASS Upgrade does not distort current bonus CD progress
+PASS Four portrait party group 1
+PASS Live ability CD PG05
+PASS Passive identity PG05
+PASS Live ability CD PG06
+PASS Passive identity PG06
+PASS Live ability CD PG07
+PASS Passive identity PG07
+PASS Live ability CD PG08
+PASS Passive identity PG08
+PASS EXP fill from current level requirement
+PASS Loaded item inventory
+PASS Consumed slot empties
+PASS Real below-threshold HIT lights GHOSTING
+PASS Action cancels GHOSTING indicator
+PASS Real CICUTA HIT lights poison effect
+PASS CICUTA tracked effect clears when target disappears
+PASS PG06 tracks vitamin applied to another party member
+PASS Vitamin expiry extinguishes source passive
+PASS PG07 actual successful proc lights passive
+PASS PG08 TENACIA tracks real HIT bonus
+PASS New bonus starts with gray CD icon
+PASS Bonus CD reveals half icon
+PASS Upgrade does not distort current bonus CD progress
+PASS RUN reset clears EXP and bonus icons
+PASS RUN reset restores configured items and HP frame
+
+RUN HUD integration verified. No build exported.

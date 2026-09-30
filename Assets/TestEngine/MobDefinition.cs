@@ -28,5 +28,20 @@ namespace RogZombie.TestEngine
         public float ExplosionRadius = 4f;
         public float ExplosionDamagePG = 50f;
         public float ExplosionDamageMOB = 25f;
+
+        // Always derive growth from authored base values, never from a previous AREA's rounded stats.
+        public static float ScaleForRun(float baseValue, int completedAreas) =>
+            (float)System.Math.Round((decimal)baseValue * (1m + .05m * Mathf.Max(0, completedAreas)),
+                0, System.MidpointRounding.AwayFromZero);
+
+        public CombatStats StatsForRun(int completedAreas)
+        {
+            var stats = BaseStats;
+            stats.HP = ScaleForRun(BaseStats.HP, completedAreas);
+            stats.ATK = ScaleForRun(BaseStats.ATK, completedAreas);
+            stats.MoveSpeed = ScaleForRun(BaseStats.MoveSpeed, completedAreas);
+            stats.AttackSpeed = ScaleForRun(BaseStats.AttackSpeed, completedAreas);
+            return stats;
+        }
     }
 }

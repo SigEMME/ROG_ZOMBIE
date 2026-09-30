@@ -7,6 +7,7 @@ namespace RogZombie.TestEngine
 {
     public sealed class SpawnManager : MonoBehaviour
     {
+        public const float MinimumOffscreenDistance = 25f;
         public bool ShowSpawnPoints;
         [SerializeField] private int totalSpawned;
         [SerializeField] private int alive;
@@ -95,7 +96,8 @@ namespace RogZombie.TestEngine
                 Camera camera = world.GameCamera;
                 float halfHeight = GroundHalfHeight(camera);
                 float halfWidth = halfHeight * camera.aspect;
-                float edge = Mathf.Min(halfWidth / Mathf.Max(Mathf.Abs(direction.x), 0.00001f), halfHeight / Mathf.Max(Mathf.Abs(direction.y), 0.00001f));
+                float clearance = MinimumOffscreenDistance + settings.ActorRadius;
+                float edge = Mathf.Min((halfWidth + clearance) / Mathf.Max(Mathf.Abs(direction.x), 0.00001f), (halfHeight + clearance) / Mathf.Max(Mathf.Abs(direction.y), 0.00001f));
                 Vector2 candidate = (Vector2)reference.transform.position + direction * (edge + UnityEngine.Random.Range(0.05f, extra));
                 lastCandidate = candidate;
                 lastValid = navigation.Sample(candidate, out var valid, 0.5f) && OffscreenForAll(valid) && HasRoom(valid) && ReachableFromAny(valid);
@@ -147,9 +149,18 @@ namespace RogZombie.TestEngine
             {
                 if (actor.Faction != Faction.PG || !actor.IsActive) continue;
                 Vector2 delta = point - (Vector2)actor.transform.position;
-                if (Mathf.Abs(delta.x) <= halfWidth + settings.ActorRadius && Mathf.Abs(delta.y) <= halfHeight + settings.ActorRadius) return false;
+                if (!HasOffscreenClearance(delta, halfWidth, halfHeight, settings.ActorRadius)) return false;
             }
             return true;
+        }
+
+        public static bool HasOffscreenClearance(Vector2 delta, float halfWidth, float halfHeight, float radius)
+        {
+            // Shortest ground distance to the visible rectangle, checked again after NavMesh sampling.
+            float x = Mathf.Max(0, Mathf.Abs(delta.x) - halfWidth);
+            float y = Mathf.Max(0, Mathf.Abs(delta.y) - halfHeight);
+            float required = MinimumOffscreenDistance + radius;
+            return x * x + y * y >= required * required;
         }
 
         // Prototype cameras face the XY ground vertically in both projection modes.

@@ -80,7 +80,6 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 - È trascorso circa 1 anno dall'inizio dell'apocalisse.
 - Le città sono state abbandonate e invase dagli zombie.
 - I superstiti vivono principalmente sottoterra.
-- Possono esistere livelli/quest bonus sotterranei in cui liberare superstiti, completare obiettivi e sbloccare NPC o contenuti dell'HUB.
 - Sono previsti zombie umani e animali e altre varianti di MOB.
 - L'idea dello scienziato responsabile come possibile BOSS finale esiste, ma non è ancora definitiva.
 
@@ -88,16 +87,16 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 
 ## 4. CITTÀ E AREE
 
-| CITTÀ | BIOMA / AMBIENTE | N° AREE |
-| --- | --- | --- |
-| CITTÀ 1 | Campagna | 3 |
-| CITTÀ 2 | Residenziale / periferia | 4 |
-| CITTÀ 3 | Industriale | 5 |
-| CITTÀ 4 | Fogne / sotterraneo | 5 |
-| CITTÀ 5 | Metropolitana | 6 |
+| CITTÀ | BIOMA / AMBIENTE | AREE ORDINARIE | AREA BOSS | TOTALE AREE |
+| --- | --- | --- | --- | --- |
+| CITTÀ 1 | Campagna | 3 | AREA 4 | 4 |
+| CITTÀ 2 | Residenziale / periferia | 4 | AREA 5 | 5 |
+| CITTÀ 3 | Industriale | 5 | AREA 6 | 6 |
+| CITTÀ 4 | Fogne / sotterraneo | 5 | AREA 6 | 6 |
+| CITTÀ 5 | Metropolitana | 6 | AREA 7 | 7 |
 
-- Totale attuale: 23 AREE.
-- L'ultima AREA di ogni CITTÀ contiene il BOSS.
+- Totale attuale: 23 AREE ORDINARIE + 5 AREE BOSS dedicate = 28 AREE.
+- Come per BOSS01, ogni BOSS ha un'AREA dedicata aggiuntiva, collocata dopo tutte le AREE ORDINARIE della propria CITTÀ; non sostituisce l'ultima AREA ORDINARIA. L'AREA BOSS conclude la CITTÀ.
 - Le AREE possono includere EVENTI SPECIALI, orde maggiori, MINI BOSS e obiettivi speciali.
 - Il numero e la struttura generale delle città sono definiti come base di progetto, ma nomi propri, mappe e dettagli ambientali sono ancora da sviluppare.
 
@@ -344,14 +343,14 @@ Questo GDD raccoglie integralmente le specifiche presenti nella fonte, organizza
 | --- | --- | --- |
 | POZIONE CURATIVA | Dopo aver terminato AREA 2 di CITTÀ 1. | Uccidere 250 MOB; al completamento della QUEST è possibile acquistare POZIONE CURATIVA. |
 | BOMBA VELENOSA | Dopo aver completato la QUEST di POZIONE CURATIVA. | Raccogliere un oggetto nell’AREA 1 di CITTÀ 2 e riconsegnarlo al MERCHANT; dopo la consegna è possibile acquistare BOMBA VELENOSA. |
-| MINA ELETTRICA | Dopo aver completato la QUEST di BOMBA VELENOSA. | Uccidere il BOSS nell’AREA 4 di CITTÀ 2; obiettivo condiviso tra tutti i PLAYER del PARTY con la QUEST attiva. Al completamento della QUEST è possibile acquistare MINA ELETTRICA. |
+| MINA ELETTRICA | Dopo aver completato la QUEST di BOMBA VELENOSA. | Uccidere il BOSS nell’AREA 5 di CITTÀ 2; obiettivo condiviso tra tutti i PLAYER del PARTY con la QUEST attiva. Al completamento della QUEST è possibile acquistare MINA ELETTRICA. |
 
 - AVVIO: le QUEST si avviano quando il PLAYER le accetta dal MERCHANT. Avere accesso alla QUEST non equivale ad averla attivata.
 - PERSISTENZA: una volta accettata, la QUEST rimane attiva fino al completamento e il progresso acquisito viene conservato tra AREE e RUN, anche in caso di sconfitta.
 - BOMBA VELENOSA — OGGETTO QUEST: dopo la raccolta resta in possesso del PLAYER anche in caso di sconfitta, per la successiva riconsegna al MERCHANT.
 - BOMBA VELENOSA — MULTIPLAYER: la raccolta dell’oggetto è valida per tutti i PLAYER presenti nella RUN che hanno la relativa QUEST attiva. Per ogni PLAYER valido viene registrato il recupero e conservato l’oggetto anche in caso di sconfitta. I PLAYER che non hanno accettato la QUEST o l’hanno già completata non ricevono alcun conteggio o progresso per quella QUEST.
 - POZIONE CURATIVA — ATTRIBUZIONE AL PLAYER: le 250 KILL di MOB devono essere attribuite al singolo PLAYER, secondo la regola generale di attribuzione del DANNO al PG (sezione 10.7). Il progresso è personale e viene registrato solo se quel PLAYER ha la relativa QUEST attiva. Le KILL di altri PLAYER della RUN non incrementano il suo conteggio.
-- MINA ELETTRICA — BOSS CONDIVISO: l’uccisione del BOSS nell’AREA 4 di CITTÀ 2 soddisfa l’obiettivo per tutti i PLAYER del PARTY che hanno la relativa QUEST attiva, indipendentemente da quale PLAYER riceva l’attribuzione della KILL. I PLAYER che non hanno accettato la QUEST o l’hanno già completata non ricevono alcun conteggio o progresso per quella QUEST. Questa condivisione riguarda l’obiettivo della QUEST e non modifica la regola generale di attribuzione delle KILL.
+- MINA ELETTRICA — BOSS CONDIVISO: l’uccisione del BOSS nell’AREA 5 di CITTÀ 2 soddisfa l’obiettivo per tutti i PLAYER del PARTY che hanno la relativa QUEST attiva, indipendentemente da quale PLAYER riceva l’attribuzione della KILL. I PLAYER che non hanno accettato la QUEST o l’hanno già completata non ricevono alcun conteggio o progresso per quella QUEST. Questa condivisione riguarda l’obiettivo della QUEST e non modifica la regola generale di attribuzione delle KILL.
 - L’identità dell’oggetto da recuperare sarà specificata in seguito insieme alle linee di dialogo. Resta da precisare la sua collocazione nell’AREA 1 di CITTÀ 2.
 
 ### 9.6 CLASSIFICAZIONE TECNICA ITEMS — CONFERMATO
@@ -398,6 +397,14 @@ Gli ITEMS usano esclusivamente i layer esistenti AREA_EFFECT_MOB e AREA_EFFECT_P
 - I BONUS PROF si sommano alla DEF BASE del PG. I BONUS CHEST e i BONUS STATS DI FINE AREA sono calcolati sul VALORE ATTUALE della STAT al momento dell’acquisizione, comprensivo degli UPGRADE permanenti del PROF e di tutti i precedenti BONUS STATS acquisiti durante la RUN, sia da CHEST sia da FINE AREA; le PASSIVE influenzano le STATS CORRENTI al momento dell’applicazione.
 
 ### 10.1 ATTACCHI E PROIETTILI — REGOLE GENERALI
+
+#### SCATTO DEI PG
+
+- Premendo SHIFT, il PG controllato attiva SCATTO: velocità di movimento corrente raddoppiata per 2 s. Il modificatore è temporaneo e separato dalle STATS persistenti; variazioni di MOVE SPD durante l'effetto restano valide dopo la sua scadenza.
+- Allo scadere dello SCATTO inizia un recupero fisso di 15 s, non influenzato da CD REDUCTION. Non è possibile riattivarlo durante l'effetto o il recupero; occorre una nuova pressione del tasto.
+- L'attivazione è un'AZIONE che interrompe INVISIBILITÀ, comprese le regole di riacquisizione di SMOKE. SCATTO non conferisce invulnerabilità e conserva le collisioni e i comandi di movimento normali.
+- I PG IA mantengono le regole esistenti di adeguamento della velocità alla formazione. SHIFT agisce sul PG controllato direttamente.
+- Disponibile all'inizio della RUN. La PAUSA ferma durata e recupero. Al CAMBIO AREA si applica la gestione generale degli effetti attivi: SCATTO attivo termina e parte il recupero fisso; se già in recupero conserva il residuo, se pronto rimane pronto. DOWN/MORTE interrompono lo SCATTO attivo avviando il recupero. Una nuova RUN ripristina SCATTO disponibile.
 
 - LMB mantenuto premuto: l’ARMA attacca automaticamente rispettando ATK SPD.
 - ATTACCHI/s = ATK SPD / 100; intervallo tra ATTACCHI = 100 / ATK SPD, in secondi.
@@ -909,6 +916,14 @@ Nessuna PASSIVA richiede nuovi TAG o LAYER. Le modifiche logiche mantengono laye
 | ZOMB04 | 50 | 35 | 0% | 70 | 75 | 30 m | 15 G | 15 EXP |
 | ZOMB05 | 200 | 35 | +10% | 70 | 70 | 1 m | 25 G | 25 EXP |
 
+### 13.0 CRESCITA DELLE STATS DURANTE LA RUN
+
+- Solo ZOMB01–ZOMB05: dopo ogni AREA ORDINARIA completata, HP, ATK, MOVE SPD e ATK SPD aumentano di un ulteriore 5% del rispettivo VALORE BASE. DEF e RANGE rimangono invariati. MINI BOSS e BOSS sono esclusi.
+- Formula all'ingresso nell'AREA: STAT = arrotonda(VALORE BASE × (1 + 0,05 × numero totale di AREE ORDINARIE già completate nella RUN)). Crescita lineare, non composta: BASE 100 → 100 nella prima AREA → 105 nella seconda → 110 nella terza.
+- Arrotondamento matematico all'intero più vicino a ogni calcolo: frazione <0,5 per difetto, frazione ≥0,5 per eccesso. Si riparte sempre dal VALORE BASE, senza accumulare gli arrotondamenti delle AREE precedenti.
+- La stessa formula si applica ai danni dell'ESPLOSIONE di ZOMB05 sia contro PG sia contro MOB; raggio, tempi e altre proprietà dell'esplosione restano invariati.
+- Il conteggio continua anche passando alla CITTÀ successiva e si azzera a ogni nuova RUN. Le AREE BOSS non incrementano questo conteggio: CITTÀ 2 / AREA 1, dopo le tre AREE ORDINARIE e BOSS01, applica +15% alle STATS base dei MOB, non +20%. Tutti i MOB generati nella stessa AREA, compresi FIRST SPAWN e rimpiazzi, usano gli stessi valori cresciuti. I dati BASE restano invariati; G ed EXP seguono le rispettive regole di DROP.
+
 ### 13.1 REGOLE GENERALI MOB — AGGRO
 
 - Ogni MOB considera l’intera AREA e seleziona il PG attivo non-DOWN più vicino, secondo la REGOLA DELLA DISTANZA. I PG in DOWN sono esclusi; resta valida l’eccezione INVISIBILITÀ della sezione 10.5.
@@ -1091,17 +1106,18 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 
 ## 14. MOB PER AREA
 
+- I totali e le distribuzioni delle sezioni 14 e 14.1 si riferiscono alle 23 AREE ORDINARIE; non assegnano una popolazione alle 5 AREE BOSS dedicate aggiuntive.
 - MINI BOSS e BOSS non sono conteggiati nel totale/massimo dei MOB previsto per l’AREA.
 
 | CITTÀ | A1 | A2 | A3 | A4 | A5 | A6 |
 | --- | --- | --- | --- | --- | --- | --- |
-| C1 | 100 | 120 | 150 | — | — | — |
-| C2 | 120 | 150 | 180 | 220 | — | — |
-| C3 | 150 | 180 | 220 | 270 | 330 | — |
-| C4 | 150 | 180 | 220 | 270 | 330 | — |
-| C5 | 180 | 220 | 270 | 330 | 400 | 480 |
+| C1 | 130 | 160 | 200 | — | — | — |
+| C2 | 160 | 200 | 240 | 290 | — | — |
+| C3 | 190 | 230 | 280 | 340 | 410 | — |
+| C4 | 190 | 230 | 280 | 340 | 410 | — |
+| C5 | 220 | 270 | 330 | 400 | 480 | 580 |
 
-- Progressione generale: ogni AREA successiva aumenta il numero di MOB di circa il 20%, con arrotondamento per eccesso alla decina secondo i valori fissati in tabella.
+- Progressione generale: partendo dal totale di A1 di ciascuna CITTÀ, ogni AREA successiva aumenta del 20% il totale dell'AREA precedente, arrotondando per eccesso alla decina a ogni passaggio: MOB(A successiva) = 10 × ceil(MOB(A precedente) × 1,20 / 10).
 ### 14.1 DISTRIBUZIONE ZOMB01–ZOMB05 PER CITTÀ / AREA
 
 | CITTÀ | AREA | ZOMB01 | ZOMB02 | ZOMB03 | ZOMB04 | ZOMB05 |
@@ -1170,8 +1186,8 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 
 - A ogni SPAWN viene scelto CASUALMENTE 1 PG ATTIVO come riferimento. I PG in DOWN o MORTE sono esclusi. La scelta si ripete per ogni MOB, anche se i PG sono separati.
 - La posizione deve essere **OFF-SCREEN rispetto a tutti i PG ATTIVI**, non solo rispetto al PG scelto.
-- La ricerca preferenziale avviene in prossimità del PG scelto, nella fascia da OFF-SCREEN a 15 m oltre il limite visibile.
-- I 15 m non sono un limite massimo assoluto: se non esiste un punto valido nella fascia, la ricerca viene estesa progressivamente oltre 15 m e ricalcolata fino a trovare una posizione valida. OFF-SCREEN rimane obbligatorio.
+- I MOB devono essere generati OFF-SCREEN ad almeno 25 m oltre il bordo visibile di tutti i PG ATTIVI. La ricerca usa il PG scelto come riferimento.
+- I 25 m sono una distanza minima, non un limite massimo: se non esiste un punto valido, la ricerca viene estesa progressivamente più lontano, mantenendo sempre almeno 25 m dal bordo visibile. OFF-SCREEN rimane obbligatorio.
 - Il punto deve essere valido sulla NAVMESH e deve esistere un percorso NAVMESH da esso verso almeno un PG ATTIVO. I punti non validi o non raggiungibili vengono scartati.
 - Sono ammessi punti dietro MURI/OSTACOLI se rispettano OFF-SCREEN e permettono di raggiungere almeno un PG ATTIVO tramite NAVMESH. Non è necessaria una linea di vista diretta.
 - Il FIRST SPAWN segue le stesse regole di posizionamento. All’ingresso nella nuova AREA i PG sono tutti vicini.
@@ -1667,6 +1683,20 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - L’abbandono riguarda solo il PLAYER uscente. Il suo PG diventa PG IA e viene riassegnato insieme agli eventuali IA già assegnati secondo le regole di ASSEGNAZIONE IA.
 - Se abbandona l’HOST, la RUN termina per tutti e TUTTI i PLAYER perdono TUTTI i progressi e i G ottenuti nella RUN.
 
+### 29.5 HUD DELLA RUN — reference HUD_Test
+
+- Layout della reference `HUD_Test.png`: EXP e gruppo PG in basso a sinistra, quattro SLOT ITEM in basso a destra, MOB in alto a sinistra e G in alto a destra. I colori della reference identificano gli elementi.
+- EXP: barra verticale AZZURRA, riempimento dal basso verso l'alto proporzionale all'EXP accumulata verso il prossimo LVL.
+- PG PLAYER: icona nel riquadro NERO; il bordo rappresenta gli HP. A HP pieni il bordo è interamente verde. Diminuendo gli HP, si svuota in senso orario dall'angolo in basso a destra: lato inferiore, sinistro, superiore, destro. Le cure ripristinano la porzione corrispondente.
+- ABILITÀ ATTIVA PLAYER (GIALLO): icona colorata quando pronta; grigia in CD, con riempimento colorato da sinistra verso destra durante il recupero.
+- PASSIVA PLAYER (ROSSO): icona accesa durante l'effetto; accesa stabilmente per le passive permanenti; flash di 0,5 s per le attivazioni istantanee. I timer della presentazione seguono la pausa della RUN.
+- Tre SLOT ABILITÀ BONUS (VERDE CHIARO): stessa visualizzazione del CD dell'ABILITÀ ATTIVA; bonus privi di CD rimangono colorati quando acquisiti.
+- PG IA (GRIGIO): icone a destra del PG PLAYER, fino a tre; il terzo slot viene aggiunto quando presente. Bordo HP con le stesse regole del PLAYER. Le loro ABILITÀ ATTIVE (BLU), sopra le icone, seguono la stessa visualizzazione del CD.
+- Quattro SLOT ITEM (ROSA): icone degli ITEMS già utilizzate nel MERCHANT, con tasto e quantità disponibili; gli slot vuoti rimangono riconoscibili.
+- Indicatore G (MARRONE): G della RUN. Indicatore MOB (VIOLA): totale MOB previsti nell'AREA meno le KILL, inclusi i MOB ancora da generare, fino a zero; non coincide con i soli MOB attualmente vivi/spawnati.
+- Slot VERDE SCURO: inattivo e riservato per ora. Nessun indicatore SCATTO in questo HUD.
+- Per il prototipo: icone provvisorie con sigle per PG, ABILITÀ e PASSIVE; nomi e valori completi visibili al passaggio del mouse. Restano gli avvisi DOWN/RIANIMAZIONE e le schermate di scelta BONUS.
+
 <a id="sezione-30"></a>
 
 ## 30. STATO DI SVILUPPO — PUNTI RIMANENTI
@@ -1674,12 +1704,12 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 **DA DEFINIRE / DA SVILUPPARE:** tutti i punti seguenti restano aperti secondo la fonte.
 
 - Definire BOSS di ogni CITTÀ, relative STATS, fasi e meccaniche.
-- Definire MINI BOSS, EVENTI SPECIALI e livelli/quest bonus. Per MINI BOSS e BOSS sono già definiti l’esclusione dal totale/massimo dei MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti, e il punto di SPAWN specifico stabilito in fase di LEVEL DESIGN; tutto il resto rimane DA DEFINIRE.
+- Definire MINI BOSS ed EVENTI SPECIALI. Per MINI BOSS e BOSS sono già definiti l’esclusione dal totale/massimo dei MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti, e il punto di SPAWN specifico stabilito in fase di LEVEL DESIGN; tutto il resto rimane DA DEFINIRE.
 - Definire nomi propri, mappe, layout e identità visiva dettagliata delle CITTÀ e delle AREE.
 - Definire eventuali ulteriori MOB/varianti oltre ZOMB01–ZOMB05; la progettazione dei MOB è per ora conclusa con ZOMB05.
 - Comportamento dei PG IA e formazione fino a tre compagni definiti nella sezione 8.5. Equipaggiamento, progressione, DOWN e cambio controllo sono definiti nelle sezioni 8 e 28. Definire le specifiche dei futuri MOB. AGGRO, MOVIMENTO/COLLISIONI, HIT/DANNO/STUN, MORTE/DROP e le schede ZOMB01–ZOMB05 sono consolidati nella sezione 13.
 - SISTEMA DI SPAWN e distribuzione ZOMB01–ZOMB05 consolidati nelle sezioni 14–15. BALISTICA dei PG consolidata nella sezione 10.1; PROJECTILE SPD ZOMB04 = 8 m/s è consolidata nella sezione 13.8. LANCIO COLTELLI: PROIETTILI FISICI con PROJECTILE SPD 20 m/s, secondo la sezione 22.1. Resta da esplicitare l’applicazione dello standard PROJECTILE SPD ai proiettili degli altri MOB e alle ABILITÀ non precisate.
-- Definire UI/HUD: HP, abilità, PASSIVA, SLOT BONUS, SLOT ITEM, EXP/LVL, G, indicatori DOWN e schermate di scelta.
+- HUD della RUN definito nella sezione 29.5; restano da realizzare le icone definitive e le parti delle schermate di scelta non ancora descritte.
 - PREPARAZIONE RUN e logica BANNER LEVEL UP consolidate nelle sezioni 8 e 20; realizzare la grafica definitiva e completare le schermate BONUS dove non descritte.
 - Ribilanciare i COSTI degli UPGRADE permanenti del PROF in fase di TEST; per ora restano quelli della sezione 27. Restano aperti solo gli aspetti PROF indicati nella sezione 32.
 - Bilanciamento complessivo di EXP/LVL, G, MOB per AREA, danni, cure, cooldown e probabilità.
@@ -1767,7 +1797,7 @@ Le voci seguenti sono note editoriali di verifica. Evidenziano ciò che la fonte
 | Ambito | Dati conservati | DA DEFINIRE |
 | --- | --- | --- |
 | Lore e vittoria finale | Esperimento scientifico; scienziato come possibile BOSS finale, non definitivo. | Identità e ruolo definitivo dello scienziato, cura, conclusione narrativa e comportamento dopo il BOSS della CITTÀ 5. |
-| Città e contenuti opzionali | 5 CITTÀ, 23 AREE; percorso principale lineare; possibili quest sotterranee. | Nomi, mappe, accesso e rientro dalle quest bonus, loro rapporto con il conteggio delle AREE e l’aumento dell’EXP DROP. |
+| Città e AREE | 5 CITTÀ, 23 AREE ORDINARIE e 5 AREE BOSS dedicate aggiuntive, per un totale di 28 AREE; percorso lineare. | Nomi, mappe, layout e identità visiva dettagliata delle CITTÀ e delle AREE. |
 | PARTY e sblocchi | 4 PG, roster di 8; PG selezionati BLOCKED; non sbloccati in silhouette. PG01–PG04 disponibili fin dall’inizio; PG05–PG08 inizialmente BLOCCATI, tutti immediatamente acquistabili dal RECLUTATORE dopo CITTÀ 1 a 5000 G ciascuno, senza ordine obbligatorio e con sblocco permanente. | Movimento, fuoco condiviso, comando ABILITÀ e formazione dei PG IA sono definiti nella sezione 8.5; restano i dettagli esplicitamente indicati in quella sezione. Equipaggiamento, progressione, responsabilità delle scelte e distribuzione dei PG IA sono definiti nella sezione 8; DOWN, RESURREZIONE e CAMBIO CONTROLLO nella sezione 28. |
 | HUB e NPC | MERCHANT, PROF, EXIT; RECLUTATORE sbloccato al completamento di CITTÀ 1, inserito permanentemente nell’HUB e necessario per sbloccare nuovi PG (sezione 7); possibili NPC liberati nelle quest. | Identità, dialoghi, condizioni di sblocco e servizi degli altri NPC. |
 | Attacchi base e ITEMS | Armi, ATK, RANGE, ATTACCHI ad AREA e PROIETTILI definiti nelle sezioni 10–12. I PROIETTILI FISICI dei PG attraversano gli alleati senza effetti (sezione 10.1). Gli ATTACCHI BASE PG01–PG08, il raggio delle esplosioni PG04 e le eccezioni sono descritti nelle sezioni 10–12. ITEMS definitivamente CONFERMATI: comandi, consumo, mira, RANGE, bersagli, assenza di FRIENDLY FIRE e interazione con MURI/OSTACOLI nelle sezioni 9 e 10.3. Alcuni ITEMS del MERCHANT richiedono sblocco tramite QUEST. | ITEMS e obiettivi delle QUEST di sblocco definiti nella sezione 9.5; restano i dettagli operativi elencati in quella sezione. |

@@ -4,6 +4,9 @@ namespace RogZombie.PreGameplayLoop
 {
     public sealed class PG03PassiveRuntime : MonoBehaviour, IProjectileHitEffect
     {
+        public readonly HudPulse MarkPulse = new HudPulse();
+        private readonly System.Collections.Generic.List<WeakPointMark> marks = new System.Collections.Generic.List<WeakPointMark>();
+        public bool MarkActive { get { foreach (var mark in marks) if (mark != null && mark.Active && mark.GetComponent<Combatant>().IsActive) return true; return false; } }
         public PG03Passive Selected { get; private set; }
         public string Label => Selected == PG03Passive.CalibroPerforante ? "CALIBRO PERFORANTE" : "PUNTO DEBOLE";
         public void Initialize(PG03Passive selected)
@@ -24,9 +27,13 @@ namespace RogZombie.PreGameplayLoop
             }
             var mark = target.GetComponent<WeakPointMark>();
             bool alreadyMarked = mark != null && mark.Active;
-            if (!target.Hit(damage, roundDamage, source, true) || alreadyMarked || !target.IsActive || target.Faction != Faction.MOB) return;
+            bool hit = target.Hit(damage, roundDamage, source, true);
+            if (hit && target.Faction == Faction.MOB) MarkPulse.Trigger();
+            if (!hit || alreadyMarked || !target.IsActive || target.Faction != Faction.MOB) return;
             if (mark == null) mark = target.gameObject.AddComponent<WeakPointMark>();
             mark.ApplyTo(target);
+            marks.RemoveAll(value => value == null || !value.Active);
+            if (!marks.Contains(mark)) marks.Add(mark);
         }
     }
 }

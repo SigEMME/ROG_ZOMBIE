@@ -8,7 +8,7 @@ namespace RogZombie.PreGameplayLoop
     // Run-owned inventory/timers survive AREA teardown; spawned objects belong to the AREA.
     public sealed class BonusAbilityRuntime : MonoBehaviour
     {
-        private sealed class Timer { public float Cooldown, Active; }
+        private sealed class Timer { public float Cooldown, Duration, Active; }
         private readonly Dictionary<string, Timer> timers = new Dictionary<string, Timer>();
         private readonly List<BonusMine> mines = new List<BonusMine>();
         private readonly List<BonusPet> pets = new List<BonusPet>();
@@ -22,6 +22,7 @@ namespace RogZombie.PreGameplayLoop
         public int RicochetRolls { get; private set; }
         public int RicochetHits { get; private set; }
         public float Cooldown(string id) => timers.TryGetValue(id, out var t) ? t.Cooldown : 0;
+        public float CooldownProgress(string id) => timers.TryGetValue(id, out var t) && t.Cooldown > 0 ? (t.Duration > 0 ? Mathf.Clamp01(1 - t.Cooldown / t.Duration) : 0) : 1;
         public float ActiveRemaining(string id) => timers.TryGetValue(id, out var t) ? t.Active : 0;
         public float Value(string id, string key) => inventory.Value(inventory.Find(id), key);
         public void Initialize(LoopSession owner, BonusInventory bonuses)
@@ -38,7 +39,7 @@ namespace RogZombie.PreGameplayLoop
         {
             if (choice.Bonus < 0 || choice.Upgrade >= 0) return;
             string id = inventory.Catalog.Bonuses[choice.Bonus].Id;
-            timers[id] = new Timer { Cooldown = id == "pet" || id == "ricochet" ? 0 : Cd(id) };
+            timers[id] = new Timer { Duration = id == "pet" || id == "ricochet" ? 0 : Cd(id), Cooldown = id == "pet" || id == "ricochet" ? 0 : Cd(id) };
         }
         private float BaseDamage(float attack) => FireActive ? attack * (1 + Value("fire", "ATK_PERCENT") / 100) : attack;
         private float Mitigate(float attack)
@@ -51,7 +52,7 @@ namespace RogZombie.PreGameplayLoop
         private void EndShield()
         {
             if (!shield) return;
-            shield = false; timers["shield"].Cooldown = Cd("shield");
+            shield = false; timers["shield"].Cooldown = timers["shield"].Duration = Cd("shield");
             if (shieldVisual != null) Destroy(shieldVisual);
         }
         private void StateChanged(Combatant value)
@@ -63,7 +64,7 @@ namespace RogZombie.PreGameplayLoop
         private void EndFire()
         {
             if (!FireActive) return;
-            timers["fire"].Active = 0; timers["fire"].Cooldown = Cd("fire");
+            timers["fire"].Active = 0; timers["fire"].Cooldown = timers["fire"].Duration = Cd("fire");
         }
         private void Update()
         {
@@ -80,12 +81,12 @@ namespace RogZombie.PreGameplayLoop
                 if (timer.Active > 0)
                 {
                     timer.Active = Mathf.Max(0, timer.Active - seconds);
-                    if (timer.Active == 0) timer.Cooldown = Cd(id);
+                    if (timer.Active == 0) timer.Cooldown = timer.Duration = Cd(id);
                     continue;
                 }
                 timer.Cooldown = Mathf.Max(0, timer.Cooldown - seconds);
                 if (timer.Cooldown > .00001f) continue;
-                if (Activate(id) && id != "shield" && id != "fire") timer.Cooldown = Cd(id);
+                if (Activate(id) && id != "shield" && id != "fire") timer.Cooldown = timer.Duration = Cd(id);
             }
         }
         private Vector2 AimDirection()
@@ -233,7 +234,7 @@ namespace RogZombie.PreGameplayLoop
         public void ChangeArea()
         {
             EndFire();
-            if (mines.Exists(mine => mine != null && mine.gameObject.activeSelf)) timers["mines"].Cooldown = Cd("mines");
+            if (mines.Exists(mine => mine != null && mine.gameObject.activeSelf)) timers["mines"].Cooldown = timers["mines"].Duration = Cd("mines");
             foreach (var mine in mines) if (mine != null) { mine.gameObject.SetActive(false); Destroy(mine.gameObject); }
             mines.Clear();
             // Mines/projectiles/PET belong to the old AREA. Existing cooldowns and SCUDO persist.

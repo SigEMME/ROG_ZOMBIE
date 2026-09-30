@@ -8,6 +8,7 @@ namespace RogZombie.PreGameplayLoop
         private Combatant actor;
         private float bonus;
         public float Remaining { get; private set; }
+        public LoopSession Source => session;
         public void Refresh(LoopSession owner, float percent, float duration)
         {
             session = owner; actor = GetComponent<Combatant>();

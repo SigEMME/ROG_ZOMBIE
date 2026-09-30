@@ -6,6 +6,8 @@ namespace RogZombie.PreGameplayLoop
     public sealed class AbilityCooldown
     {
         public float Remaining { get; private set; }
+        public float Duration { get; private set; }
+        public float RecoveryProgress => Ready ? 1f : Duration > 0 ? UnityEngine.Mathf.Clamp01(1f - Remaining / Duration) : 0f;
         public bool Ready => Remaining <= 0f;
 
         public static float FinalSeconds(float baseSeconds, float cdReduction)
@@ -15,7 +17,7 @@ namespace RogZombie.PreGameplayLoop
         }
 
         public void Restart(float baseSeconds, float cdReduction)
-            => Remaining = FinalSeconds(baseSeconds, cdReduction);
+            => Remaining = Duration = FinalSeconds(baseSeconds, cdReduction);
 
         public void Tick(float simulationDelta)
         {

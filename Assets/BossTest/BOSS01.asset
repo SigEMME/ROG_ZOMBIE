@@ -16,14 +16,14 @@ MonoBehaviour:
     HP: 15000
     ATK: 80
     DEF: 100
-    MoveSpeed: 90
+    MoveSpeed: 95
     AttackSpeed: 50
     Range: 300
   Diameter: 5
   ArenaSize: {x: 60, y: 40}
   CameraWidth: 55
   CameraBorder: 3
-  SpecialInterval: 14
+  SpecialInterval: 13
   SpecialOrder: 01000000020000000100000004000000
   ChargeThresholds:
   - 0.8
@@ -32,7 +32,7 @@ MonoBehaviour:
   - 0.2
   BaseAngle: 110
   BaseDepth: 4
-  BaseHitAt: 1.2
+  BaseHitAt: 1
   BaseDuration: 1.5
   TrackSeconds: 1
   WaveChannel: 2
@@ -41,14 +41,14 @@ MonoBehaviour:
   WaveLength: 12
   WaveSideAngle: 30
   WaveRecovery: 1
-  RockDelay: 3
+  RockDelay: 2.5
   RockRadius: 3
   RockDamage: 40
   RockStill: 2
   RockStun: 1
   ChargeRange: 18
   ChargeLength: 18
-  ChargeSpeed: 8
+  ChargeSpeed: 10
   ChargeChannel: 1.5
   ChargeDamage: 40
   PushDistance: 3
@@ -58,8 +58,8 @@ MonoBehaviour:
   BileAngle: 150
   BileChannel: 1
   BileInterval: 0.33
-  BileSpeed: 10
-  BileRange: 12
+  BileSpeed: 13
+  BileRange: 15
   BileDamage: 30
   BileRecovery: 0.5
   PoisonDamage: 5

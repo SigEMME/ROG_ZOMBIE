@@ -9,7 +9,7 @@ namespace RogZombie.PreGameplayLoop
         private string merchantMessage = "";
         private static readonly PrototypeItem[] merchantItems = {
             PrototypeItem.Molotov, PrototypeItem.Granata, PrototypeItem.Smoke,
-            PrototypeItem.PozioneCurativa, PrototypeItem.Trappola,
+            PrototypeItem.Trappola, PrototypeItem.PozioneCurativa,
             PrototypeItem.BombaVelenosa, PrototypeItem.MinaElettrica
         };
 

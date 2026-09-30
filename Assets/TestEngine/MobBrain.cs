@@ -32,13 +32,17 @@ namespace RogZombie.TestEngine
         private bool aggroEvaluated;
         private Vector2 wanderDirection;
         private float wanderRemaining;
+        private int completedRunAreas;
+        public float ExplosionDamagePG => MobDefinition.ScaleForRun(Definition.ExplosionDamagePG, completedRunAreas);
+        public float ExplosionDamageMOB => MobDefinition.ScaleForRun(Definition.ExplosionDamageMOB, completedRunAreas);
 
-        public void Initialize(MobDefinition definition, TestNavigation nav)
+        public void Initialize(MobDefinition definition, TestNavigation nav, int completedAreas = 0)
         {
             Definition = definition;
+            completedRunAreas = Mathf.Max(0, completedAreas);
             navigation = nav;
             actor = GetComponent<Combatant>();
-            actor.Initialize(Faction.MOB, definition.BaseStats, definition.Kind == MobKind.ZOMB05);
+            actor.Initialize(Faction.MOB, definition.StatsForRun(completedRunAreas), definition.Kind == MobKind.ZOMB05);
             actor.StateChanged += OnState;
             path = new NavMeshPath();
             nextAggro = Time.time + Random.value * Definition.AggroInterval;
@@ -53,7 +57,7 @@ namespace RogZombie.TestEngine
                 if (Time.time >= explosionAt)
                 {
                     CombatAttacks.Circular(transform.position, Definition.ExplosionRadius, 8,
-                        Definition.ExplosionDamagePG, Definition.ExplosionDamageMOB, actor);
+                        ExplosionDamagePG, ExplosionDamageMOB, actor);
                     TestVisuals.FlashOccludedArea(transform.position, Definition.ExplosionRadius, Color.red);
                     actor.Die();
                 }

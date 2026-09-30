@@ -13,7 +13,7 @@ PG01 controllato e PG02/03/04 IA. Il test parte da **AREA 3 già completata**, s
 4. **1,5 s**: camera dai PG al BOSS, con movimento morbido.
 5. **2 s**: ruggito visivo provvisorio, dilatazione e ritorno alla dimensione normale della sola sprite. Nessun audio, attacco o variazione del collider.
 6. **2 s**: camera si allontana realmente dal piano di gioco e si centra sull'arena, fino a visualizzare **55 m** orizzontali. Durante questo movimento le bandelle si ritirano progressivamente fino a scomparire.
-7. Riprende il gameplay: PG e BOSS liberi, primo speciale dopo **14 s dall'avvio della BOSS FIGHT**, non dall'ingresso in AREA 3 né dall'inizio della presentazione.
+7. Riprende il gameplay: PG e BOSS liberi, primo speciale dopo **13 s dall'avvio della BOSS FIGHT**, non dall'ingresso in AREA 3 né dall'inizio della presentazione.
 
 I quattro tempi e l'altezza delle bandelle (10% dello schermo ciascuna come impostazione visiva iniziale) sono configurabili sul componente **BossTestScene** dell'oggetto **BOSS 01 test**. L'offset iniziale rispetto all'uscita AREA 3 e le posizioni nell'arena sono anch'essi configurabili. Durante la presentazione il tempo di gameplay è sospeso; solo camera e animazione visiva procedono. Movimento, mira, armi e abilità non possono essere usati. La camera di combattimento mantiene i 55 m e il pan a 3 m dal bordo già previsto.
 
@@ -22,20 +22,20 @@ Il passaggio riutilizza il cambio AREA esistente: conserva il gruppo, applica il
 ## Configurazione
 
 `Assets/BossTest/BOSS01.asset` contiene dati indipendenti dal runtime, modificabili nell'Inspector.
-HP 15000, ATK 80, DEF interna 100, MOVE SPD 90 = 1,8 m/s, ATK SPD 50 = intervallo 2 s.
+HP 15000, ATK 80, DEF interna 100, MOVE SPD 95 = 1,9 m/s, ATK SPD 50 = intervallo 2 s.
 Diametro collider 5 m. RANGE interno 300 rappresenta l'attivazione dell'attacco base a 3 m dai bordi.
 Arena interna 60 x 40 m; camera mostra 55 m orizzontali, soglia pan 3 m, velocità del PG controllato.
 Posizioni provvisorie di PG e BOSS configurabili sul componente BossTestScene; non sono level design definitivo.
 
 ## Attacchi e controlli manuali
 
-- BASE: attivazione a 3 m tra bordi; arco 110°, profondità 4 m dal bordo BOSS. Fermo fino al termine a 1,5 s, ruota solo nel primo secondo, HIT a 1,2 s. Intervallo tra avvii invariato a 2 s: dopo il termine restano 0,5 s prima del successivo attacco base. Arco visualizzato brevemente alla HIT.
+- BASE: attivazione a 3 m tra bordi; arco 110°, profondità 4 m dal bordo BOSS. Fermo fino al termine a 1,5 s, ruota solo nel primo secondo, HIT a 1 s. Intervallo tra avvii invariato a 2 s: dopo il termine restano 0,5 s prima del successivo attacco base. Arco visualizzato brevemente alla HIT.
 - 01: tre rami 2,5 x 12 m, angoli 0°/+30°/-30°. Riempimento rosso in 2 s, rotazione solo nel primo secondo, HIT simultanea 70 una volta per PG, recupero 1 s.
-- 02: fino a tre posizioni di PG distinti casuali fissate alla comparsa. Cerchi raggio 3 m, riempimento dal centro in 3 s, impatti simultanei 40 + STUN 1 s. BOSS libero dopo 2 s. Sovrapposizione: più HIT, STUN non sommato.
-- 03: a 12000/9000/6000/3000 HP (80%/60%/40%/20%), attende la fine dell'attacco corrente. Se un singolo colpo supera più soglie, una sola carica. Bersaglio casuale entro 18 m dai bordi; in mancanza lo cerca. Preparazione 1,5 s, direzione fissa; carica 18 m a 8 m/s, larghezza 5 m. Una HIT 40 per PG e respinta 3 m in 0,25 s. Recupero 0,5 s oppure STUN 1,5 s se urta muro/ostacolo, interrompendo la carica.
-- 04: cono 150°, dieci spicchi e dieci proiettili da sinistra a destra rispetto al BOSS. Direzione fissa; primo sparo a 1 s, successivi ogni 0,33 s, ultimo a 3,97 s, recupero 0,5 s. Ogni spicchio si riempie dalla comparsa fino al proprio sparo. Proiettile: 10 m/s, percorso 12 m dal bordo BOSS, raggio collider 0,5 m. HIT 30, non perforante; veleno 5 HP/s per 3 s, istanze indipendenti senza cap specifico.
+- 02: fino a tre posizioni di PG distinti casuali fissate alla comparsa. Cerchi raggio 3 m, riempimento dal centro in 2,5 s, impatti simultanei 40 + STUN 1 s. BOSS libero dopo 2 s. Sovrapposizione: più HIT, STUN non sommato.
+- 03: a 12000/9000/6000/3000 HP (80%/60%/40%/20%), attende la fine dell'attacco corrente. Se un singolo colpo supera più soglie, una sola carica. Bersaglio casuale entro 18 m dai bordi; in mancanza lo cerca. Preparazione 1,5 s, direzione fissa; carica 18 m a 10 m/s, larghezza 5 m. Una HIT 40 per PG e respinta 3 m in 0,25 s. Recupero 0,5 s oppure STUN 1,5 s se urta muro/ostacolo, interrompendo la carica.
+- 04: cono 150°, dieci spicchi e dieci proiettili da sinistra a destra rispetto al BOSS. Direzione fissa; primo sparo a 1 s, successivi ogni 0,33 s, ultimo a 3,97 s, recupero 0,5 s. Ogni spicchio si riempie dalla comparsa fino al proprio sparo. Proiettile: 13 m/s, percorso 15 m dal bordo BOSS, raggio collider 0,5 m. HIT 30, non perforante; veleno 5 HP/s per 3 s, istanze indipendenti senza cap specifico.
 
-Sequenza speciale 01/02/01/04. Primo speciale dopo 14 s; successivi 14 s dopo conclusione, incluso recupero. Per 02 si conta dall'impatto dei massi. La carica azzera il timer, senza avanzare l'indice della sequenza.
+Sequenza speciale 01/02/01/04. Primo speciale dopo 13 s; successivi 13 s dopo conclusione, incluso recupero. Per 02 si conta dall'impatto dei massi. La carica azzera il timer, senza avanzare l'indice della sequenza.
 
 Aggro: PG attivo più vicino, parità casuale; non seleziona PG invisibili/DOWN/MORTI né PET. Un'area già lanciata può colpire anche un PG diventato invisibile. Con nessun bersaglio segue il movimento casuale MOB definito nel GDD. Le HIT usano il calcolo DEF esistente.
 

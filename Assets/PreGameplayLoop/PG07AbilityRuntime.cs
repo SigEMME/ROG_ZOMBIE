@@ -20,8 +20,10 @@ namespace RogZombie.PreGameplayLoop
         public int RainEmitted { get; private set; }
         public int PassiveRolls { get; private set; }
         public int PassiveTriggers { get; private set; }
+        public readonly HudPulse PassivePulse = new HudPulse();
         public bool EffectActive => rainPoints != null && RainEmitted < rainPoints.Length;
         public float CooldownRemaining => cooldown.Remaining;
+        public float CooldownProgress => cooldown.RecoveryProgress;
         public bool CanUse => session != null && session.GameplayRunning && actor.IsActive;
         public string Label => Selected == PG07Ability.MultiShot ? "MULTI SHOT" : "PIOGGIA DI FRECCE";
         public string PassiveLabel => Passive == PG07Passive.LuckyShot ? "LUCKY SHOT" : "CONCENTRAZIONE";
@@ -35,7 +37,7 @@ namespace RogZombie.PreGameplayLoop
             cooldown.Restart(data.BaseCooldown(Selected), session.CdReduction);
         }
         private bool Roll(float chance)
-        { PassiveRolls++; bool result = UnityEngine.Random.value < chance; if (result) PassiveTriggers++; return result; }
+        { PassiveRolls++; bool result = UnityEngine.Random.value < chance; if (result) { PassiveTriggers++; PassivePulse.Trigger(); } return result; }
         private void FireBase(Vector2 origin, Vector2 cursor, CombatStats stats)
         {
             bool piercing = Passive == PG07Passive.Concentrazione && Roll(data.ConcentrationChance);

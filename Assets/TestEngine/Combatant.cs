@@ -29,7 +29,8 @@ namespace RogZombie.TestEngine
         public Func<bool> InvisibleQuery { get; set; }
         public Func<float> MovementMultiplier { get; set; }
         public bool IsInvisible => (InvisibleQuery != null && InvisibleQuery()) || (GetComponent<RogZombie.PreGameplayLoop.ItemSmokeStatus>()?.Invisible ?? false);
-        public float CurrentMovementMultiplier => MovementMultiplier != null ? MovementMultiplier() : 1;
+        public float CurrentMovementMultiplier => (MovementMultiplier != null ? MovementMultiplier() : 1) *
+            (GetComponent<RogZombie.PreGameplayLoop.SprintRuntime>()?.SpeedMultiplier ?? 1);
         public void NotifyAction() => PerformedAction?.Invoke();
         public event Action<Combatant> Died;
         public event Action<Combatant> Killed;

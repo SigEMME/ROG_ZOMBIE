@@ -17,6 +17,7 @@ namespace RogZombie.PreGameplayLoop
         public float ActiveRemaining { get; private set; }
         public bool EffectActive => ActiveRemaining > 0;
         public float CooldownRemaining => cooldown.Remaining;
+        public float CooldownProgress => cooldown.RecoveryProgress;
         public bool CanUse => session != null && session.GameplayRunning && session.Player.Actor.IsActive;
         public string Label => Selected == PG02Ability.FuocoRapido ? "FUOCO RAPIDO" : "FUOCO DI SOPPRESSIONE";
 

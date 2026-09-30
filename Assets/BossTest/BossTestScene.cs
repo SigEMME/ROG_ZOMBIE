@@ -117,6 +117,7 @@ namespace RogZombie.BossTest
             System.Array.Resize(ref runtimeDefinition.AreaTotals, 4);
             System.Array.Resize(ref runtimeDefinition.AreaMobDistributions, 4);
             runtimeDefinition.AreaTotals[3] = population;
+            runtimeDefinition.BossAreaNumbers = new[] { 4 };
             runtimeDefinition.AreaMobDistributions[3] = distribution;
         }
 

@@ -37,6 +37,7 @@ namespace RogZombie.TestEngine
         public int TotalMobs = 330;
         public float FirstSpawnPercent = 30f;
         public float[] MobPercentages = { 32f, 33f, 21f, 10f, 4f };
+        [Tooltip("Passo di ampliamento della ricerca oltre la distanza minima OFF-SCREEN di 25 m; non è un limite massimo.")]
         public float OffscreenExtraRange = 15f;
         public int[] ExperienceThresholds = { 100, 120, 130, 150, 170, 200, 230, 270, 310, 350 };
         [Header("CHEST / MEDI KIT")]
