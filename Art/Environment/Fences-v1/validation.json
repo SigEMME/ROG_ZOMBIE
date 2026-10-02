@@ -1,0 +1,58 @@
+{
+  "Staccionata_Aperta": {
+    "triangles": 132,
+    "bounds_min": [
+      -2.0,
+      0.0,
+      -0.12
+    ],
+    "bounds_max": [
+      2.0,
+      1.85,
+      0.235
+    ],
+    "normals_and_indices": "PASS"
+  },
+  "Staccionata_Danneggiata": {
+    "triangles": 228,
+    "bounds_min": [
+      -2.0,
+      0.0,
+      -0.12
+    ],
+    "bounds_max": [
+      2.0,
+      1.85,
+      0.235
+    ],
+    "normals_and_indices": "PASS"
+  },
+  "Staccionata_Piena": {
+    "triangles": 204,
+    "bounds_min": [
+      -2.0,
+      0.0,
+      -0.12
+    ],
+    "bounds_max": [
+      2.0,
+      1.85,
+      0.235
+    ],
+    "normals_and_indices": "PASS"
+  },
+  "Staccionata_Rinforzata": {
+    "triangles": 132,
+    "bounds_min": [
+      -2.0,
+      0.0,
+      -0.295
+    ],
+    "bounds_max": [
+      2.0,
+      1.85,
+      0.235
+    ],
+    "normals_and_indices": "PASS"
+  }
+}

@@ -54,6 +54,7 @@ namespace RogZombie.TestEngine
             if (Failure != null) { Debug.LogError(Failure, this); yield break; }
             GameCamera.orthographic = true;
             GameCamera.orthographicSize = Settings.CameraSize;
+            GetComponent<RogZombie.PlayTests.TerrainGameplayBridge>()?.ConfigureCamera(GameCamera);
             GameCamera.backgroundColor = new Color(0.055f, 0.07f, 0.08f);
             runtimeRoot = new GameObject("TEST ENGINE #2 runtime").transform;
             TestVisuals.Root = runtimeRoot;
@@ -67,6 +68,9 @@ namespace RogZombie.TestEngine
             Navigation.ShowNavMesh = ShowDebug;
             Navigation.Build(Settings.AreaSize);
             if (!Navigation.Ready) { Failure = "NavMesh non disponibile: controllare la Console."; yield break; }
+            var terrainBridge = GetComponent<RogZombie.PlayTests.TerrainGameplayBridge>();
+            if (terrainBridge != null && !terrainBridge.ResolveStart(Navigation))
+            { Failure = "Nessun punto iniziale libero sulla nuova mappa."; yield break; }
             CreatePlayer();
             FollowCamera();
             Spawns = runtimeRoot.gameObject.AddComponent<SpawnManager>();
@@ -102,6 +106,8 @@ namespace RogZombie.TestEngine
 
         private void BuildGeometry()
         {
+            var terrainBridge = GetComponent<RogZombie.PlayTests.TerrainGameplayBridge>();
+            if (terrainBridge != null) { terrainBridge.BuildObstacles(runtimeRoot); return; }
             Vector2 size = Settings.AreaSize;
             TestVisuals.Box("Test floor", Vector2.zero, size, new Color(0.09f, 0.12f, 0.13f), -10);
             TestVisuals.FloorGrid(size);
@@ -201,7 +207,11 @@ namespace RogZombie.TestEngine
         private void FollowCamera()
         {
             if (Player != null && GameCamera != null)
-                GameCamera.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, -10f);
+            {
+                var terrainBridge = GetComponent<RogZombie.PlayTests.TerrainGameplayBridge>();
+                float distance = terrainBridge != null ? terrainBridge.CameraDistance : 10f;
+                GameCamera.transform.position = new Vector3(Player.transform.position.x, Player.transform.position.y, -distance);
+            }
         }
         public void AddGold(int value) => Gold += value;
         private void OnDestroy() => Time.timeScale = 1f;

@@ -1,0 +1,12 @@
+newmtl Bark
+Kd 1 1 1
+Ks 0 0 0
+d 1
+map_Kd BarkPixel.png
+
+newmtl FoliageSalvia
+Kd 1 1 1
+Ks 0 0 0
+d 1
+map_Kd FoliageSalviaPixel.png
+map_d FoliageSalviaPixel.png

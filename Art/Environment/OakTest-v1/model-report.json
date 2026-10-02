@@ -1,0 +1,16 @@
+{
+  "wood_triangles": 180,
+  "foliage_cards": 24,
+  "foliage_triangles": 48,
+  "triangles": 228,
+  "bounds_min": [
+    -3.125,
+    0,
+    -3.2375893284687463
+  ],
+  "bounds_max": [
+    3.590925970866296,
+    6.140809322498806,
+    3.2374511075572125
+  ]
+}

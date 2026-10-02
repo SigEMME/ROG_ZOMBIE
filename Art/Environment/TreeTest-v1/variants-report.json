@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Abete_02_Slanciato",
+    "height_m": 7.2,
+    "trunk_triangles": 60,
+    "foliage_cards": 42,
+    "total_triangles": 144
+  },
+  {
+    "name": "Abete_04_Giovane",
+    "height_m": 2.8,
+    "trunk_triangles": 60,
+    "foliage_cards": 24,
+    "total_triangles": 108
+  },
+  {
+    "name": "Abete_05_Irregolare",
+    "height_m": 6.2,
+    "trunk_triangles": 60,
+    "foliage_cards": 40,
+    "total_triangles": 140
+  },
+  {
+    "name": "Abete_06_Salvia",
+    "height_m": 6.8,
+    "trunk_triangles": 60,
+    "foliage_cards": 34,
+    "total_triangles": 128
+  },
+  {
+    "name": "Abete_07_Oliva",
+    "height_m": 4.9,
+    "trunk_triangles": 60,
+    "foliage_cards": 48,
+    "total_triangles": 156
+  }
+]

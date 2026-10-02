@@ -1,0 +1,644 @@
+[
+  {
+    "model": "CAR01",
+    "meshes": [
+      {
+        "name": "CAR01_Carrozzeria",
+        "vertices": 182,
+        "triangles": 360,
+        "uv_layers": 1,
+        "dimensions": [
+          1.8743585348129272,
+          1.206926703453064,
+          4.654074192047119
+        ],
+        "materials": [
+          "CAR01_Illustrated"
+        ]
+      },
+      {
+        "name": "CAR01_Ruota_Anteriore_SX",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.2582477033138275,
+          0.6161332726478577,
+          0.6161332726478577
+        ],
+        "materials": [
+          "CAR01_Illustrated"
+        ]
+      },
+      {
+        "name": "CAR01_Ruota_Anteriore_DX",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.2582477033138275,
+          0.6161332726478577,
+          0.6161332726478577
+        ],
+        "materials": [
+          "CAR01_Illustrated"
+        ]
+      },
+      {
+        "name": "CAR01_Ruota_Posteriore_SX",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.2582477033138275,
+          0.6161332726478577,
+          0.6161332726478577
+        ],
+        "materials": [
+          "CAR01_Illustrated"
+        ]
+      },
+      {
+        "name": "CAR01_Ruota_Posteriore_DX",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.2582477033138275,
+          0.6161332726478577,
+          0.6161332726478577
+        ],
+        "materials": [
+          "CAR01_Illustrated"
+        ]
+      },
+      {
+        "name": "CAR01_Specchietto_SX",
+        "vertices": 28,
+        "triangles": 52,
+        "uv_layers": 1,
+        "dimensions": [
+          0.17704331874847412,
+          0.19512775540351868,
+          0.06395938992500305
+        ],
+        "materials": [
+          "CAR01_Illustrated"
+        ]
+      },
+      {
+        "name": "CAR01_Specchietto_DX",
+        "vertices": 28,
+        "triangles": 52,
+        "uv_layers": 1,
+        "dimensions": [
+          0.1770433634519577,
+          0.19512774050235748,
+          0.06395944952964783
+        ],
+        "materials": [
+          "CAR01_Illustrated"
+        ]
+      }
+    ]
+  },
+  {
+    "model": "BUS01",
+    "meshes": [
+      {
+        "name": "Cubo",
+        "vertices": 112,
+        "triangles": 220,
+        "uv_layers": 1,
+        "dimensions": [
+          1.2041807174682617,
+          1.3128284215927124,
+          4.366518020629883
+        ],
+        "materials": [
+          "BUS01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cubo.001",
+        "vertices": 8,
+        "triangles": 12,
+        "uv_layers": 1,
+        "dimensions": [
+          0.3670960068702698,
+          0.06316010653972626,
+          0.28062915802001953
+        ],
+        "materials": [
+          "BUS01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cubo.002",
+        "vertices": 8,
+        "triangles": 12,
+        "uv_layers": 1,
+        "dimensions": [
+          0.3670960068702698,
+          0.06316010653972626,
+          0.2806292176246643
+        ],
+        "materials": [
+          "BUS01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cubo.003",
+        "vertices": 8,
+        "triangles": 12,
+        "uv_layers": 1,
+        "dimensions": [
+          0.3670960068702698,
+          0.06316010653972626,
+          0.2806292772293091
+        ],
+        "materials": [
+          "BUS01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cubo.004",
+        "vertices": 44,
+        "triangles": 84,
+        "uv_layers": 1,
+        "dimensions": [
+          0.1636463701725006,
+          0.28998860716819763,
+          0.20444785058498383
+        ],
+        "materials": [
+          "BUS01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cubo.005",
+        "vertices": 44,
+        "triangles": 84,
+        "uv_layers": 1,
+        "dimensions": [
+          0.16364631056785583,
+          0.28998860716819763,
+          0.2044478803873062
+        ],
+        "materials": [
+          "BUS01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.16096289455890656,
+          0.5250887274742126,
+          0.5250887274742126
+        ],
+        "materials": [
+          "BUS01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.001",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.16096289455890656,
+          0.5250887274742126,
+          0.5250887274742126
+        ],
+        "materials": [
+          "BUS01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.002",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.16096289455890656,
+          0.5250887274742126,
+          0.5250888466835022
+        ],
+        "materials": [
+          "BUS01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.003",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.16096289455890656,
+          0.5250887274742126,
+          0.5250888466835022
+        ],
+        "materials": [
+          "BUS01_Illustrato"
+        ]
+      }
+    ]
+  },
+  {
+    "model": "TRACK01",
+    "meshes": [
+      {
+        "name": "TRACK01_Trattore",
+        "vertices": 190,
+        "triangles": 356,
+        "uv_layers": 1,
+        "dimensions": [
+          1.3947864770889282,
+          1.1847831010818481,
+          2.337923526763916
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      },
+      {
+        "name": "TRACK01_Rimorchio_Carico",
+        "vertices": 348,
+        "triangles": 596,
+        "uv_layers": 1,
+        "dimensions": [
+          1.1325445175170898,
+          1.1883275508880615,
+          3.344055414199829
+        ],
+        "materials": [
+          "TRACK01_Illustrato",
+          "Acciaio_montanti"
+        ]
+      },
+      {
+        "name": "Cilindro.016",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.15706473588943481,
+          0.4389480650424957,
+          0.4389479458332062
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.017",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.15706473588943481,
+          0.4389480650424957,
+          0.4389479458332062
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.018",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.15706473588943481,
+          0.4389480650424957,
+          0.4389479458332062
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.019",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.15706473588943481,
+          0.4389480650424957,
+          0.4389479458332062
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.020",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.15706473588943481,
+          0.4389480650424957,
+          0.4389479458332062
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.021",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.15706473588943481,
+          0.4389480650424957,
+          0.4389479458332062
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.022",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.15706473588943481,
+          0.4389480650424957,
+          0.4389479458332062
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.023",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.15706473588943481,
+          0.4389480650424957,
+          0.4389479458332062
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.024",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.15706473588943481,
+          0.4389480650424957,
+          0.4389479458332062
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.025",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.15706473588943481,
+          0.4389480650424957,
+          0.4389479458332062
+        ],
+        "materials": [
+          "TRACK01_Illustrato"
+        ]
+      }
+    ]
+  },
+  {
+    "model": "Tractor01",
+    "meshes": [
+      {
+        "name": "Cubo",
+        "vertices": 84,
+        "triangles": 164,
+        "uv_layers": 1,
+        "dimensions": [
+          0.9060485363006592,
+          1.2555229663848877,
+          2.1533548831939697
+        ],
+        "materials": [
+          "Tractor01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cubo.001",
+        "vertices": 28,
+        "triangles": 52,
+        "uv_layers": 1,
+        "dimensions": [
+          0.21457859873771667,
+          0.7168983221054077,
+          1.0821962356567383
+        ],
+        "materials": [
+          "Tractor01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro",
+        "vertices": 24,
+        "triangles": 44,
+        "uv_layers": 1,
+        "dimensions": [
+          0.2432849407196045,
+          0.6074020266532898,
+          0.607401967048645
+        ],
+        "materials": [
+          "Tractor01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.001",
+        "vertices": 24,
+        "triangles": 44,
+        "uv_layers": 1,
+        "dimensions": [
+          0.2432849407196045,
+          0.6074020266532898,
+          0.607401967048645
+        ],
+        "materials": [
+          "Tractor01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.002",
+        "vertices": 24,
+        "triangles": 44,
+        "uv_layers": 1,
+        "dimensions": [
+          0.9037461280822754,
+          0.10822651535272598,
+          0.1082264855504036
+        ],
+        "materials": [
+          "Tractor01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cubo.002",
+        "vertices": 28,
+        "triangles": 52,
+        "uv_layers": 1,
+        "dimensions": [
+          0.21457859873771667,
+          0.7168983221054077,
+          1.0821962356567383
+        ],
+        "materials": [
+          "Tractor01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.003",
+        "vertices": 24,
+        "triangles": 44,
+        "uv_layers": 1,
+        "dimensions": [
+          0.36820635199546814,
+          0.9192895889282227,
+          0.9192895889282227
+        ],
+        "materials": [
+          "Tractor01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.004",
+        "vertices": 24,
+        "triangles": 44,
+        "uv_layers": 1,
+        "dimensions": [
+          0.36820635199546814,
+          0.9192895889282227,
+          0.9192895889282227
+        ],
+        "materials": [
+          "Tractor01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.005",
+        "vertices": 144,
+        "triangles": 284,
+        "uv_layers": 1,
+        "dimensions": [
+          0.2750645577907562,
+          0.804888129234314,
+          0.10821395367383957
+        ],
+        "materials": [
+          "Tractor01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cubo.003",
+        "vertices": 8,
+        "triangles": 12,
+        "uv_layers": 1,
+        "dimensions": [
+          0.3051879405975342,
+          0.1625528484582901,
+          0.12422096729278564
+        ],
+        "materials": [
+          "Tractor01_Illustrato"
+        ]
+      }
+    ]
+  },
+  {
+    "model": "Pickup01",
+    "meshes": [
+      {
+        "name": "Pickup01_Carrozzeria",
+        "vertices": 304,
+        "triangles": 588,
+        "uv_layers": 1,
+        "dimensions": [
+          1.975327968597412,
+          1.3299670219421387,
+          4.381890296936035
+        ],
+        "materials": [
+          "Pickup01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.002",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.25759202241897583,
+          0.6534028053283691,
+          0.6534028053283691
+        ],
+        "materials": [
+          "Pickup01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.003",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.25759202241897583,
+          0.6534028053283691,
+          0.6534028053283691
+        ],
+        "materials": [
+          "Pickup01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.004",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.25759202241897583,
+          0.6534028053283691,
+          0.6534028053283691
+        ],
+        "materials": [
+          "Pickup01_Illustrato"
+        ]
+      },
+      {
+        "name": "Cilindro.005",
+        "vertices": 16,
+        "triangles": 28,
+        "uv_layers": 1,
+        "dimensions": [
+          0.25759202241897583,
+          0.6534028053283691,
+          0.6534028053283691
+        ],
+        "materials": [
+          "Pickup01_Illustrato"
+        ]
+      }
+    ]
+  }
+]

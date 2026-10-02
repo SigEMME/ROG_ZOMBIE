@@ -1,0 +1,7 @@
+newmtl BushFoliage
+Kd 1 1 1
+Ks 0 0 0
+d 1
+illum 1
+map_Kd BushPixel.png
+map_d BushPixel.png

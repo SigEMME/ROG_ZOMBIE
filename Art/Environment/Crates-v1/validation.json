@@ -1,0 +1,44 @@
+[
+  {
+    "file": "Cassa_01_Rinforzata.obj",
+    "triangles": 154,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 1.009
+  },
+  {
+    "file": "Cassa_02_Invecchiata.obj",
+    "triangles": 114,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 0.90431
+  },
+  {
+    "file": "Cassa_03_Lunga.obj",
+    "triangles": 116,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 0.84521
+  },
+  {
+    "file": "Cassa_04_Danneggiata.obj",
+    "triangles": 196,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 0.31818
+  },
+  {
+    "file": "Cassa_05_Lunga_Rotta.obj",
+    "triangles": 184,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 0.39136
+  },
+  {
+    "file": "Sacchi_06_Pallet.obj",
+    "triangles": 996,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 0.50606
+  }
+]

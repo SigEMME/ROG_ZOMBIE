@@ -29,6 +29,11 @@ namespace RogZombie.PreGameplayLoop
     {
         [Header("Grafica TOP-DOWN provvisoria")]
         public Shader EnvironmentShader;
+        [Header("Prima AREA - terreno")]
+        public GameObject FirstAreaTerrain;
+        public Shader TerrainBackgroundShader;
+        public Vector2 TerrainPlayerStart;
+        public Vector2 TerrainExit;
         [Header("ITEMS di prova")]
         public PrototypeItem[] StartingItems = new PrototypeItem[4];
         public int[] StartingItemCounts = new int[4];
@@ -130,7 +135,7 @@ namespace RogZombie.PreGameplayLoop
             return null;
         }
         public TestAreaSettings GeometryForArea(int index) => Layout(index)?.Geometry ?? GeometryTemplate;
-        public Vector2 ExitForArea(int index) => Layout(index)?.ExitPosition ?? ExitPosition;
+        public Vector2 ExitForArea(int index) => index == 0 && FirstAreaTerrain != null ? TerrainExit : Layout(index)?.ExitPosition ?? ExitPosition;
 
         public WeaponDefinition SelectedWeapon => SelectedPlayer == LoopPlayer.PG01 ? PG01Weapon :
             SelectedPlayer == LoopPlayer.PG02 ? PG02Weapon : SelectedPlayer == LoopPlayer.PG03 ? PG03Weapon : SelectedPlayer == LoopPlayer.PG04 ? PG04Weapon : SelectedPlayer == LoopPlayer.PG05 ? PG05Weapon : SelectedPlayer == LoopPlayer.PG06 ? PG06Weapon : SelectedPlayer == LoopPlayer.PG07 ? PG07Weapon : PG08Weapon;
@@ -198,7 +203,14 @@ namespace RogZombie.PreGameplayLoop
                 if (g.ActorRadius <= 0 || g.CameraSize <= 0 || g.AreaSize.x <= 0 || g.AreaSize.y <= 0 || g.SearchAttemptsPerFrame < 1)
                     return "Geometria o budget di ricerca non valido.";
                 if (!g.EnableMobSeparation) return "Il test richiede collisione/separazione MOB attiva.";
-                if (Mathf.Abs(exit.x) + 4 >= g.AreaSize.x / 2 || Mathf.Abs(exit.y) + 4 >= g.AreaSize.y / 2)
+                Vector2 areaSize = g.AreaSize;
+                if (index == 0 && FirstAreaTerrain != null)
+                {
+                    var terrain = FirstAreaTerrain.GetComponentInChildren<Terrain>();
+                    if (terrain == null || TerrainBackgroundShader == null) return "Terreno prima AREA o shader mancante.";
+                    areaSize = new Vector2(terrain.terrainData.size.x, terrain.terrainData.size.z);
+                }
+                if (Mathf.Abs(exit.x) + 4 >= areaSize.x / 2 || Mathf.Abs(exit.y) + 4 >= areaSize.y / 2)
                     return "Il TRIGGER di uscita deve essere interno all'AREA.";
             }
             return null;

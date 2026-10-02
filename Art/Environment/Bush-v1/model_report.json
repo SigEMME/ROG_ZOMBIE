@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Cespuglio_01_Compatto",
+    "triangles": 60,
+    "dimensions": [
+      1.946,
+      0.934,
+      1.989
+    ]
+  },
+  {
+    "name": "Cespuglio_02_Largo",
+    "triangles": 84,
+    "dimensions": [
+      2.716,
+      0.85,
+      2.32
+    ]
+  },
+  {
+    "name": "Cespuglio_03_Ciuffi",
+    "triangles": 96,
+    "dimensions": [
+      2.491,
+      1.38,
+      2.188
+    ]
+  }
+]

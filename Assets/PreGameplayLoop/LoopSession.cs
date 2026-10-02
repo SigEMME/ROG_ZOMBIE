@@ -49,6 +49,10 @@ namespace RogZombie.PreGameplayLoop
         private float cdReduction;
         private Transform areaRoot;
         private TopDownEnvironment environment;
+        private bool UsesTerrain => AreaIndex == 0 && Definition.FirstAreaTerrain != null;
+        private Vector2 AreaExitPosition => UsesTerrain ? Definition.TerrainExit : Definition.ExitForArea(AreaIndex);
+        private HurryUpRuntime hurryUp;
+        public HurryUpRuntime HurryUp => hurryUp;
         private float previousTimeScale;
         private WeaponDefinition runtimeWeapon;
 
@@ -80,9 +84,10 @@ namespace RogZombie.PreGameplayLoop
         {
             State = LoopState.Loading;
             Time.timeScale = 0;
+            hurryUp = null;
             Settings = Instantiate(Definition.GeometryForArea(AreaIndex));
             Settings.TotalMobs = Definition.AreaTotals[AreaIndex];
-            Settings.FirstSpawnPercent = 30;
+            Settings.FirstSpawnPercent = 35;
             Settings.MobPercentages = (float[])Definition.AreaMobDistributions[AreaIndex].Percentages.Clone();
             Settings.OffscreenExtraRange = 15;
             Settings.PlayerMoveSpeedBase = 2; // GDD unit conversion, supersedes old test tuning only here.
@@ -95,14 +100,25 @@ namespace RogZombie.PreGameplayLoop
             areaRoot = new GameObject("AREA test " + (AreaIndex + 1)).transform;
             areaRoot.SetParent(transform);
             TestVisuals.Root = areaRoot;
-            environment = areaRoot.gameObject.AddComponent<TopDownEnvironment>();
-            environment.Initialize(Definition.EnvironmentShader);
-            BuildGeometry();
+            if (UsesTerrain)
+            {
+                Settings.StartPosition = Definition.TerrainPlayerStart;
+                var map = Instantiate(Definition.FirstAreaTerrain, areaRoot);
+                var bridge = areaRoot.gameObject.AddComponent<RogZombie.PlayTests.TerrainGameplayBridge>();
+                bridge.Initialize(this, map, Definition.TerrainBackgroundShader);
+                bridge.BuildObstacles(areaRoot);
+            }
+            else
+            {
+                environment = areaRoot.gameObject.AddComponent<TopDownEnvironment>();
+                environment.Initialize(Definition.EnvironmentShader);
+                BuildGeometry();
+            }
             Navigation = areaRoot.gameObject.AddComponent<TestNavigation>();
             Navigation.AgentRadius = Settings.ActorRadius;
             Navigation.Build(Settings.AreaSize);
             if (!Navigation.Ready || !Navigation.Sample(Settings.StartPosition, out var start, .1f) ||
-                !Navigation.Sample(Definition.ExitForArea(AreaIndex), out var exit, .1f) || !Navigation.Reachable(start, exit))
+                !Navigation.Sample(AreaExitPosition, out var exit, .1f) || !Navigation.Reachable(start, exit))
             { Fail("Inizio/uscita non validi o non collegati sulla NavMesh."); yield break; }
             if (Controlled == null) Controlled = this;
             if (Player == null) CreatePlayer();
@@ -118,7 +134,7 @@ namespace RogZombie.PreGameplayLoop
                 yield return BuildBossTestStage(bossTest);
                 yield break;
             }
-            var exitObject = TestVisuals.Box("USCITA AREA", Definition.ExitForArea(AreaIndex), Vector2.one, Color.gray, 1);
+            var exitObject = TestVisuals.Box("USCITA AREA", AreaExitPosition, Vector2.one, Color.gray, 1);
             Exit = exitObject.AddComponent<AreaExitTrigger>();
             Exit.Initialize(Player.Actor);
             Exit.Entered += OpenBonus;
@@ -126,6 +142,8 @@ namespace RogZombie.PreGameplayLoop
             var debug = areaRoot.gameObject.AddComponent<DamageNumbersDebug>();
             debug.Settings = Settings;
             debug.ViewCamera = GameCamera;
+            hurryUp = areaRoot.gameObject.AddComponent<HurryUpRuntime>();
+            hurryUp.Initialize(this);
             Spawns = areaRoot.gameObject.AddComponent<SpawnManager>();
             Spawns.Initialize(Settings, Navigation, this);
             // Unscaled diagnostic timeout is technical, not a spawn gameplay rule.
@@ -147,7 +165,7 @@ namespace RogZombie.PreGameplayLoop
             environment.Floor(size, Settings.UrbanArea01);
             if (!Settings.UrbanArea01) TestVisuals.FloorGrid(size);
             TestVisuals.Box("SPAWN PG", Settings.StartPosition, Vector2.one, Color.green, -8);
-            if (!bossArena) TestVisuals.Box("Riferimento USCITA", Definition.ExitForArea(AreaIndex), Vector2.one * 1.5f, Color.yellow, -8);
+            if (!bossArena) TestVisuals.Box("Riferimento USCITA", AreaExitPosition, Vector2.one * 1.5f, Color.yellow, -8);
             MakeObstacle(new Vector2(-wallHalf.x, 0), new Vector2(1, size.y), true, boundary: true);
             MakeObstacle(new Vector2(wallHalf.x, 0), new Vector2(1, size.y), true, boundary: true);
             MakeObstacle(new Vector2(0, -wallHalf.y), new Vector2(size.x, 1), true, boundary: true);
@@ -290,6 +308,7 @@ namespace RogZombie.PreGameplayLoop
             // Growth counts ordinary AREAS only, without resetting at city boundaries.
             go.AddComponent<MobBrain>().Initialize(definition, Navigation, Definition.OrdinaryAreasBefore(AreaIndex));
             go.AddComponent<MobSeparation>().Settings = Settings;
+            hurryUp?.Register(actor);
             return actor;
         }
 

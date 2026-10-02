@@ -35,7 +35,7 @@ namespace RogZombie.TestEngine
         [Min(0f)] public float MobSeparationSpeed = 2f;
         [Header("GDD C3_A5 population; single test AREA, no transition")]
         public int TotalMobs = 330;
-        public float FirstSpawnPercent = 30f;
+        public float FirstSpawnPercent = 35f;
         public float[] MobPercentages = { 32f, 33f, 21f, 10f, 4f };
         [Tooltip("Passo di ampliamento della ricerca oltre la distanza minima OFF-SCREEN di 25 m; non è un limite massimo.")]
         public float OffscreenExtraRange = 15f;

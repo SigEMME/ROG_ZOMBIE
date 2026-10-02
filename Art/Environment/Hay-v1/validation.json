@@ -1,0 +1,16 @@
+[
+  {
+    "model": "Fieno_01_Balla.obj",
+    "triangles": 92,
+    "outward_signed_volume": 1.2224,
+    "ground_pivot": true,
+    "uv_in_bounds": true
+  },
+  {
+    "model": "Fieno_02_Mucchio.obj",
+    "triangles": 92,
+    "outward_signed_volume": 3.2001,
+    "ground_pivot": true,
+    "uv_in_bounds": true
+  }
+]

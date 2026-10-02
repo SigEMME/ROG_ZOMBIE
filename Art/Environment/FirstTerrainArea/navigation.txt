@@ -1,0 +1,1 @@
+Spawn True; exit True; connected True; obstacles 1428

@@ -1,0 +1,22 @@
+{
+  "Staccionata_Piena": {
+    "triangles": 204,
+    "vertices_before_import_welding": 612,
+    "materials": 1
+  },
+  "Staccionata_Aperta": {
+    "triangles": 132,
+    "vertices_before_import_welding": 396,
+    "materials": 1
+  },
+  "Staccionata_Rinforzata": {
+    "triangles": 132,
+    "vertices_before_import_welding": 396,
+    "materials": 1
+  },
+  "Staccionata_Danneggiata": {
+    "triangles": 228,
+    "vertices_before_import_welding": 684,
+    "materials": 1
+  }
+}

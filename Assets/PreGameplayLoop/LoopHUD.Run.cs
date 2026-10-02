@@ -90,9 +90,7 @@ namespace RogZombie.PreGameplayLoop
             GUI.matrix = Matrix4x4.TRS(Vector3.zero, Quaternion.identity, new Vector3(scale, scale, 1));
             float w = Screen.width / scale, h = Screen.height / scale;
             hoverText = null;
-            var inactive = new Rect(11, 10, 84, 33);
-            Fill(inactive, Panel); Frame(inactive, new Color(.17f, .32f, .2f));
-            Hint(inactive, "Slot riservato — inattivo");
+            DrawHurryUp(new Rect(11, 10, 84, 33));
             var mobRect = new Rect(11, 58, 84, 44);
             Fill(mobRect, Panel); Frame(mobRect, new Color(.6f, .4f, .85f));
             int total = loop.Settings != null ? loop.Settings.TotalMobs : 0;
@@ -151,6 +149,7 @@ namespace RogZombie.PreGameplayLoop
                 if (count > 1) { Fill(new Rect(rect.xMax - 18, rect.yMax - 13, 18, 13), Panel); Text(new Rect(rect.xMax - 18, rect.yMax - 13, 18, 13), "×" + count, 9, Color.white); }
                 Hint(rect, kind == PrototypeItem.None ? "SLOT ITEM " + (i + 1) + " — VUOTO" : ItemRuntime.Label(kind) + " ×" + count + "\nTieni " + (i + 1) + ": anteprima; rilascia: usa");
             }
+
             if (hoverText != null)
             {
                 var mouse = Event.current.mousePosition;

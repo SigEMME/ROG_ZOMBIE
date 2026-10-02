@@ -235,7 +235,7 @@ namespace RogZombie.PreGameplayLoop.Editor
                         Check(!SpawnManager.HasOffscreenClearance(new Vector2(35, 0), 10, 5, .5f), "Whole MOB remains beyond clearance");
                         Check(!SpawnManager.HasOffscreenClearance(new Vector2(27, 22), 10, 5, 0), "Reject diagonal point closer than 25m to corner");
                         Check(SpawnManager.HasOffscreenClearance(new Vector2(25, 25), 10, 5, 0), "Accept corner distance exactly 25m");
-                        Check(loop.Spawns.TotalSpawned == 30 && loop.Spawns.Alive == 30, "FIRST SPAWN A1 = 30");
+                        Check(loop.Spawns.TotalSpawned == 35 && loop.Spawns.Alive == 35, "FIRST SPAWN A1 = 35");
                         Check(Combatant.All.FindAll(a => a.Faction == Faction.PG).Count == 1, "Exactly one PG");
                         Check(UnityEngine.Object.FindObjectsByType<AreaPickup>(FindObjectsSortMode.None).Length == 0, "No CHEST/MEDI KIT");
                         Check(loop.Player.GetComponent<ExperienceProgression>() != null, "RUN includes EXP and LEVEL UP choices");
@@ -334,7 +334,7 @@ namespace RogZombie.PreGameplayLoop.Editor
                         foreach (var actor in Combatant.All)
                             if (actor.Faction == Faction.MOB && actor.IsActive)
                                 Check(actor.Stats.Equals(loop.Definition.MobAt(0).StatsForRun(1)), "AREA 2 FIRST SPAWN uses +5% base stats");
-                        Check(loop.Spawns.TotalSpawned == 36 && loop.Spawns.Alive == 36, "FIRST SPAWN A2 = 36");
+                        Check(loop.Spawns.TotalSpawned == 42 && loop.Spawns.Alive == 42, "FIRST SPAWN A2 = 42");
                         Check(!loop.Sprint.Active && loop.Sprint.CooldownRemaining > 14, "Real transition starts fixed sprint recovery");
                         Check(loop.Player.Actor.Stats.ATK == atkAfterBonus, "Runtime bonus persists");
                         Check(Mathf.Approximately(loop.Player.Actor.CurrentHP, Mathf.Min(loop.Player.Actor.Stats.HP, hpAfterBonus + loop.Player.Actor.Stats.HP * .15f)), "Transition heals 15% current max HP");

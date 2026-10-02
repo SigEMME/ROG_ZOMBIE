@@ -39,7 +39,7 @@ MonoBehaviour:
   EnableMobSeparation: 1
   MobSpacing: 0.05
   MobSeparationSpeed: 2
-  FirstSpawnPercent: 30
+  FirstSpawnPercent: 35
   MobPercentages:
   - 32
   - 33

@@ -54,3 +54,6 @@ sysinfo.txt
 .DS_Store
 Thumbs.db
 Desktop.ini
+# Python asset-authoring cache
+__pycache__/
+*.pyc

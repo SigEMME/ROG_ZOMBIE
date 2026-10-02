@@ -1,0 +1,38 @@
+fileFormatVersion: 2
+guid: b439fba8a96249399c73e8cbc201501c
+ModelImporter:
+  serializedVersion: 22200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Bark
+    second: {fileID: 2100000, guid: f00e77adb29446859f870d06f272cdb1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Foliage
+    second: {fileID: 2100000, guid: e3992bc3bbb24305be653a05d1e8430b, type: 2}
+  materials:
+    materialImportMode: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  meshes:
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useFileUnits: 0
+    importBlendShapes: 0
+    generateSecondaryUV: 0
+    isReadable: 0
+    weldVertices: 1
+    optimizeMeshPolygons: 1
+    optimizeMeshVertices: 1
+    indexFormat: 1
+  tangentSpace:
+    normalImportMode: 0
+    tangentImportMode: 2
+  animations:
+    importAnimation: 0

@@ -1,6 +1,6 @@
 # ROG ZOMBIE — Game Design Document
 
-Versione consolidata — 11/09/2026 — aggiornamento SCONFITTA, CD REDUCTION, DEF/SCUDO, EFFETTI PERSISTENTI, PROF e CHEST  
+Versione consolidata — 30/09/2026 — aggiornamento BOSS01, FIRST SPAWN, HURRY UP e stato del prototipo  
 Destinazione nel repository Unity: `Docs/ROG_ZOMBIE_GDD.md`  
 Fonti: `ROG_ZOMBIE_WORLD_2026-09-08`, documento «ROG ZOMBIE — WORLD — Documento di riferimento»; GDD con revisione CD REDUCTION; conversazione «Funzionamento ASTRA» (`6a9fce64-149c-83ed-ade6-79f191001021`).
 
@@ -1102,6 +1102,74 @@ Nessuna PASSIVA richiede nuovi TAG o LAYER. Le modifiche logiche mantengono laye
 
 Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole specifiche delle sezioni 13.1–13.9.
 
+### 13.11 BOSS01 — CITTÀ 1 — CONFERMATO
+
+Scheda consolidata dalle decisioni del proprietario e dalla configurazione BOSS01.asset. Prevale sui precedenti valori storici di BOSS01.
+
+| STAT / proprietà | Valore |
+| --- | --- |
+| HP | 15000 |
+| ATK | 80 |
+| DEF interna | 100 = 0% mitigazione |
+| MOVE SPD | 95 = 1,9 m/s |
+| ATK SPD | 50 = intervallo base 2 s |
+| Distanza di attivazione BASE | 3 m tra bordi dei collider |
+| Diametro collider | 5 m |
+
+**AREA e camera**
+- AREA dedicata dopo AREA 3 di CITTÀ 1, dimensioni 60 × 40 m; soltanto il BOSS, salvo future meccaniche esplicitamente approvate.
+- Camera di combattimento: 55 m di larghezza visibile; quando il PG controllato arriva a 3 m dal bordo dell'inquadratura, scorrimento alla velocità del PG, limitato ai confini dell'AREA.
+- In CO-OP ogni PLAYER ha la propria camera. Il test locale usa 16:9; rapporti più stretti di 55:40 non permettono di conservare contemporaneamente larghezza 55 m e inquadratura tutta interna all'arena.
+- All'ingresso i PG restano fermi fino all'avvio della BOSS FIGHT. Sequenza provvisoria approvata: camera sui PG ferma 1 s con bandelle nere; spostamento sul BOSS 1,5 s; ruggito visivo 2 s; allontanamento e centratura 2 s fino a 55 m. Durante l'allontanamento le bandelle scompaiono.
+- Il ruggito del prototipo dilata soltanto la rappresentazione grafica; collider invariato. Animazione e audio definitivi restano da realizzare.
+
+**AGGRO**
+- Bersaglio iniziale e mantenuto: PG valido più vicino, misurando tra bordi dei collider; parità risolta casualmente.
+- PG IA validi; PET, PG in DOWN, MORTE o INVISIBILITÀ esclusi dalla selezione.
+- Un attacco avviato termina sul bersaglio già scelto; una zona già lanciata può colpire anche un PG diventato invisibile.
+- In assenza di bersagli validi segue le regole di movimento senza AGGRO dei MOB.
+
+**ATTACCO BASE**
+- Arco frontale 110°, profondità 4 m dal bordo BOSS; danno derivato da ATK (80 prima della DEF).
+- BOSS fermo per l'intero attacco; ruota verso il bersaglio solo nel primo secondo.
+- HIT a 1 s, termine a 1,5 s; intervallo tra avvii 2 s.
+
+**ATTACCO_01**
+- Tre diramazioni larghe 2,5 m e lunghe 12 m, centrale 0° e laterali ±30°.
+- Incanalamento 2 s; fermo, ruota solo nel primo secondo puntando la diramazione centrale verso il bersaglio.
+- Area visibile con bordo rosso e riempimento fino alla HIT simultanea di tutte le diramazioni: 70 danni, una HIT per PG.
+- Dopo la HIT rimane fermo per 1 s.
+
+**ATTACCO_02**
+- Fino a tre PG validi distinti scelti casualmente; con meno di tre PG cadono meno massi.
+- Posizioni fissate alla comparsa degli indicatori: cerchi raggio 3 m, bordo rosso e riempimento dal centro verso l'esterno.
+- Impatto simultaneo dopo 2,5 s: 40 danni e STUN 1 s. Aree sovrapposte infliggono più HIT; lo STUN non si cumula.
+- BOSS fermo per i primi 2 s, poi può muoversi verso il PG più vicino e attaccare.
+
+**ATTACCO_03**
+- Attivazione alle soglie HP 80% / 60% / 40% / 20%: 12000 / 9000 / 6000 / 3000 HP.
+- Attende la conclusione dell'attacco precedente. Una singola HIT che supera più soglie produce una sola carica.
+- PG valido casuale entro 18 m tra bordi; se manca un bersaglio valido il BOSS lo cerca prima di iniziare.
+- Preparazione 1,5 s da fermo, senza ruotare; direzione fissata all'avvio.
+- Carica lunga 18 m a 10 m/s, larghezza pari al collider (5 m); prosegue per tutta la lunghezza salvo MURO/OSTACOLO.
+- Una HIT per bersaglio lungo il percorso: 40 danni e respinta di 3 m in 0,25 s.
+- Recupero 0,5 s; urtando MURO/OSTACOLO interrompe la carica e subisce STUN 1,5 s, che sostituisce il recupero.
+
+**ATTACCO_04**
+- Bersaglio casuale; direzione fissata immediatamente. Cono frontale 150°, suddiviso in 10 spicchi, un proiettile per spicchio da sinistra a destra.
+- BOSS fermo; incanalamento iniziale 1 s. Indicatore dell'intero cono diviso in spicchi: ciascuno si riempie fino al proprio sparo.
+- Sequenza di sparo circa 3 s: primo proiettile a 1 s, successivi ogni 0,33 s, ultimo a 3,97 s dall'avvio; recupero 0,5 s dopo l'ultimo.
+- Proiettili non perforanti: velocità 13 m/s, portata 15 m dal bordo BOSS, raggio collider 0,5 m.
+- Ogni HIT: 30 danni e VELENO 5 HP/s per 3 s. Lo stesso PG può ricevere più HIT.
+- Regola specifica approvata: applicazioni del veleno indipendenti per danno e durata, senza limite specifico per questo attacco; supera la regola generale delle istanze condivise e non modifica il veleno delle altre fonti.
+
+**Sequenza e vittoria**
+- Speciali ordinari in ciclo 01 → 02 → 01 → 04.
+- Primo speciale 13 s dopo l'avvio effettivo della BOSS FIGHT; successivi 13 s dopo la conclusione del precedente, recupero incluso. Per ATTACCO_02 il conteggio parte dall'impatto dei massi.
+- ATTACCO_03 riavvia il timer degli speciali senza avanzare l'indice del ciclo.
+- Alla sconfitta compare il banner «VITTORIA — BOSS SCONFITTO».
+- Implementati test Boss01Test e integrazione HubPrototype. Premi BOSS e avanzamento dopo la vittoria non sono ancora implementati; la regola generale della scelta HOST tra PROSEGUIRE e TORNARE ALL'HUB resta definita. Nessuna ricompensa numerica BOSS è introdotta da questa scheda.
+
 <a id="sezione-14"></a>
 
 ## 14. MOB PER AREA
@@ -1161,9 +1229,17 @@ Non sono introdotti TAG o LAYER aggiuntivi; restano valide tutte le regole speci
 - MINI BOSS e BOSS non sono conteggiati né nel totale/massimo dei MOB dell’AREA né nel limite massimo dei MOB contemporaneamente presenti.
 - Il punto di SPAWN di MINI BOSS e BOSS è un punto specifico stabilito in fase di LEVEL DESIGN. Tutto il resto del loro funzionamento rimane DA DEFINIRE.
 
+### 15.0 HURRY UP
+
+- All'ingresso di ogni AREA ordinaria, al termine del caricamento, parte un timer di 3 minuti. Le AREE BOSS sono escluse.
+- PAUSA e scelta BONUS sospendono il timer.
+- Alla scadenza gli zombie rimanenti entrano in RAGE: MOVE SPD e ATK SPD aumentano del 50% dei rispettivi valori correnti. Il bonus si applica una sola volta, include la crescita già applicata nella RUN e non modifica le altre STATS.
+- Anche gli zombie generati dopo la scadenza ricevono RAGE. L'effetto dura fino alla fine dell'AREA; ogni nuova AREA riparte con il proprio timer.
+- HUD: silhouette fornita in HARRY_UP.png, riempimento progressivo ROSSO durante il timer; in RAGE resta ROSSA con fiamme animate attorno. Presentazione nello spazio del precedente riquadro VERDE SCURO in alto a sinistra, riempimento dal basso; animazione sospesa con il gioco; sottile contorno nero attorno alla silhouette. Indicatore assente nelle AREE BOSS.
+
 ### 15.1 FIRST SPAWN E COMPOSIZIONE
 
-- FIRST SPAWN = 30% del totale MOB previsto nell’AREA: questi MOB sono già presenti quando i PG entrano. Il restante 70% viene generato progressivamente durante il combattimento.
+- FIRST SPAWN = 35% del totale MOB previsto nell’AREA: questi MOB sono già presenti quando i PG entrano. Il restante 65% viene generato progressivamente durante il combattimento.
 - La porzione inizialmente visibile dell’AREA è libera da MOB. Il numero di MOB contemporaneamente presenti non supera il FIRST SPAWN.
 - All’inizio dell’AREA si determinano le quantità totali di ogni tipo usando il totale MOB e le percentuali della sezione 14.1.
 - La composizione del FIRST SPAWN segue le stesse percentuali dell’AREA, con l’eccezione di ZOMB05 descritta sotto.
@@ -1694,7 +1770,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - PG IA (GRIGIO): icone a destra del PG PLAYER, fino a tre; il terzo slot viene aggiunto quando presente. Bordo HP con le stesse regole del PLAYER. Le loro ABILITÀ ATTIVE (BLU), sopra le icone, seguono la stessa visualizzazione del CD.
 - Quattro SLOT ITEM (ROSA): icone degli ITEMS già utilizzate nel MERCHANT, con tasto e quantità disponibili; gli slot vuoti rimangono riconoscibili.
 - Indicatore G (MARRONE): G della RUN. Indicatore MOB (VIOLA): totale MOB previsti nell'AREA meno le KILL, inclusi i MOB ancora da generare, fino a zero; non coincide con i soli MOB attualmente vivi/spawnati.
-- Slot VERDE SCURO: inattivo e riservato per ora. Nessun indicatore SCATTO in questo HUD.
+- Lo spazio del precedente slot VERDE SCURO ospita il logo/timer HURRY UP; assente nelle AREE BOSS. Nessun indicatore SCATTO in questo HUD.
 - Per il prototipo: icone provvisorie con sigle per PG, ABILITÀ e PASSIVE; nomi e valori completi visibili al passaggio del mouse. Restano gli avvisi DOWN/RIANIMAZIONE e le schermate di scelta BONUS.
 
 <a id="sezione-30"></a>
@@ -1703,8 +1779,8 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 
 **DA DEFINIRE / DA SVILUPPARE:** tutti i punti seguenti restano aperti secondo la fonte.
 
-- Definire BOSS di ogni CITTÀ, relative STATS, fasi e meccaniche.
-- Definire MINI BOSS ed EVENTI SPECIALI. Per MINI BOSS e BOSS sono già definiti l’esclusione dal totale/massimo dei MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti, e il punto di SPAWN specifico stabilito in fase di LEVEL DESIGN; tutto il resto rimane DA DEFINIRE.
+- BOSS01 definito nella sezione 13.11 e implementato nel prototipo; definire BOSS02–BOSS05, relative STATS, fasi e meccaniche.
+- Definire MINI BOSS ed EVENTI SPECIALI. Per MINI BOSS e BOSS sono già definiti l’esclusione dal totale/massimo dei MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti, e il punto di SPAWN specifico stabilito in fase di LEVEL DESIGN; per MINI BOSS ed EVENTI SPECIALI restano da definire le altre regole; BOSS01 è descritto nella sezione 13.11.
 - Definire nomi propri, mappe, layout e identità visiva dettagliata delle CITTÀ e delle AREE.
 - Definire eventuali ulteriori MOB/varianti oltre ZOMB01–ZOMB05; la progettazione dei MOB è per ora conclusa con ZOMB05.
 - Comportamento dei PG IA e formazione fino a tre compagni definiti nella sezione 8.5. Equipaggiamento, progressione, DOWN e cambio controllo sono definiti nelle sezioni 8 e 28. Definire le specifiche dei futuri MOB. AGGRO, MOVIMENTO/COLLISIONI, HIT/DANNO/STUN, MORTE/DROP e le schede ZOMB01–ZOMB05 sono consolidati nella sezione 13.
@@ -1714,7 +1790,7 @@ Nessun nuovo TAG o LAYER; valori, durate, frequenze e regole specifiche delle se
 - Ribilanciare i COSTI degli UPGRADE permanenti del PROF in fase di TEST; per ora restano quelli della sezione 27. Restano aperti solo gli aspetti PROF indicati nella sezione 32.
 - Bilanciamento complessivo di EXP/LVL, G, MOB per AREA, danni, cure, cooldown e probabilità.
 - Direzione Pixel Art, animazioni, VFX, SFX e musica.
-- Prototipo Unity del movimento, mira, attacco, abilità, spawn, BONUS, HUB e loop RUN.
+- Prototipo locale già disponibile per movimento, mira, attacco, abilità, spawn, BONUS, ITEMS, MERCHANT, preparazione RUN e BOSS01. Completare il flusso dopo il BOSS, la progressione permanente e le funzionalità ancora escluse dai test.
 - Architettura tecnica multiplayer CO-OP fino a 4 giocatori, sincronizzazione e gestione host/client.
 - Testing, performance, salvataggio/progressione permanente e build finale.
 
@@ -1801,7 +1877,7 @@ Le voci seguenti sono note editoriali di verifica. Evidenziano ciò che la fonte
 | PARTY e sblocchi | 4 PG, roster di 8; PG selezionati BLOCKED; non sbloccati in silhouette. PG01–PG04 disponibili fin dall’inizio; PG05–PG08 inizialmente BLOCCATI, tutti immediatamente acquistabili dal RECLUTATORE dopo CITTÀ 1 a 5000 G ciascuno, senza ordine obbligatorio e con sblocco permanente. | Movimento, fuoco condiviso, comando ABILITÀ e formazione dei PG IA sono definiti nella sezione 8.5; restano i dettagli esplicitamente indicati in quella sezione. Equipaggiamento, progressione, responsabilità delle scelte e distribuzione dei PG IA sono definiti nella sezione 8; DOWN, RESURREZIONE e CAMBIO CONTROLLO nella sezione 28. |
 | HUB e NPC | MERCHANT, PROF, EXIT; RECLUTATORE sbloccato al completamento di CITTÀ 1, inserito permanentemente nell’HUB e necessario per sbloccare nuovi PG (sezione 7); possibili NPC liberati nelle quest. | Identità, dialoghi, condizioni di sblocco e servizi degli altri NPC. |
 | Attacchi base e ITEMS | Armi, ATK, RANGE, ATTACCHI ad AREA e PROIETTILI definiti nelle sezioni 10–12. I PROIETTILI FISICI dei PG attraversano gli alleati senza effetti (sezione 10.1). Gli ATTACCHI BASE PG01–PG08, il raggio delle esplosioni PG04 e le eccezioni sono descritti nelle sezioni 10–12. ITEMS definitivamente CONFERMATI: comandi, consumo, mira, RANGE, bersagli, assenza di FRIENDLY FIRE e interazione con MURI/OSTACOLI nelle sezioni 9 e 10.3. Alcuni ITEMS del MERCHANT richiedono sblocco tramite QUEST. | ITEMS e obiettivi delle QUEST di sblocco definiti nella sezione 9.5; restano i dettagli operativi elencati in quella sezione. |
-| MOB, BOSS e spawn | Totali per AREA, distribuzione ZOMB01–ZOMB05, FIRST SPAWN 30%, arrotondamenti a discapito di ZOMB01, quantità residue, probabilità e OFF-SCREEN globale consolidati nelle sezioni 14–15. MINI BOSS e BOSS esclusi dal totale/massimo MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti; punto di SPAWN specifico stabilito in fase di LEVEL DESIGN. | Tutto il resto del funzionamento di MINI BOSS e BOSS, comprese STATS, fasi e meccaniche. |
+| MOB, BOSS e spawn | Totali per AREA, distribuzione ZOMB01–ZOMB05, FIRST SPAWN 35%, arrotondamenti a discapito di ZOMB01, quantità residue, probabilità e OFF-SCREEN globale consolidati nelle sezioni 14–15. MINI BOSS e BOSS esclusi dal totale/massimo MOB dell’AREA e dal limite massimo dei MOB contemporaneamente presenti; punto di SPAWN specifico stabilito in fase di LEVEL DESIGN. | STATS, fasi e meccaniche di MINI BOSS e BOSS02–BOSS05. BOSS01 è definito nella sezione 13.11; premi specifici non definiti. |
 | PROF | Incrementi e prezzi nella sezione 27; nessun cap per HP, ATK, MOVE SPD, ATK SPD, G DROP, MEDI KIT; DEF massimo 90%, CD REDUCTION minimo 10; ITEM SLOT massimo 3 UPGRADE / 4 SLOT. HP, ATK, DEF, MOVE SPD, ATK SPD e CD REDUCTION legati al singolo PG; CHEST RATE, G DROP, ITEM SLOT e MEDI KIT legati al PLAYER. CHEST RATE +1 punto percentuale per acquisto, CAP 100%; in CO-OP, all’inizio RUN si applica il BONUS più alto tra i PLAYER presenti. | Costi da ribilanciare in TEST, invariati per ora. |
 | DOWN e morte | A 0 HP: DOWN con timer di 20 s, poi MORTE. SCONFITTA con nessun PG ATTIVO. RIANIMAZIONE con F entro TRIGGER_PG di raggio 2 m, timer 5 s, ritorno al 50% degli HP MASSIMI correnti e 2 s di invulnerabilità; solo PG sotto controllo diretto di un PLAYER. Timer DOWN in pausa durante l’interazione; all’interruzione riprende dal valore congelato e il timer di RIANIMAZIONE regredisce verso 0, riprendendo dal residuo se riavviato prima dello 0. Nessun altro evento interrompe la RIANIMAZIONE. Rientro in formazione dei PG IA, CAMBIO CONTROLLO e SPETTATORE definiti nella sezione 28. | Nessun punto residuo: regressione di 1 s di progresso al secondo; con più bersagli si rianima soltanto il più vicino. |
 | Passaggio AREA | TRIGGER USCITA CIRCOLARE con RAGGIO 4 m; tutti i PG VIVI devono trovarsi contemporaneamente al suo interno. Resurrezione automatica dei PG in MORTE al 50%, senza +15%; cura di ingresso del 15% ai VIVI; DOWN da resuscitare prima (sezione 6). | Nessun punto residuo relativo alla forma e alle dimensioni del TRIGGER USCITA. |
@@ -2049,3 +2125,15 @@ I punti di bilanciamento, produzione artistica, prototipazione, multiplayer, sal
 
 - La verifica per bersaglio già introdotta sull’ATTACCO BASE PG04 sostituisce tutte le precedenti regole di eliminazione degli SPICCHI delle AREE elencate in 10.3. Le precedenti revisioni storiche che citano tali SPICCHI sono superate. SEZIONI, sequenze di proiettili ed eccezioni esplicite restano invariate.
 - Nessun test né build eseguito per questa revisione, su richiesta.
+
+### REVISIONE — 30/09/2026 — BOSS01, FIRST SPAWN E HURRY UP
+
+- Consolidata la scheda BOSS01 nella sezione 13.11: i precedenti richiami storici ai BOSS interamente DA DEFINIRE non si applicano più a BOSS01.
+- FIRST SPAWN e massimo MOB contemporanei al 35% del totale AREA, arrotondato per eccesso come nel prototipo: C1 A1 130 → 46; A2 160 → 56; A3 200 → 70. Rimpiazzi e composizione restano invariati.
+- HURRY UP: 180 s di gioco nelle AREE ordinarie, PAUSA e scelta BONUS sospendono il timer; +50% MOVE SPD e ATK SPD correnti, una sola applicazione, anche agli spawn successivi, fino al termine AREA. BOSS esclusi.
+- Logo HURRY UP fornito dal proprietario: riempimento rosso progressivo, rosso pieno e fiamme in RAGE, sottile contorno nero; posizione al posto del riquadro VERDE SCURO.
+- Segnaposto PET blu. Asset definitivi, animazioni e audio restano lavoro artistico da completare.
+- AREA_01 urbana del prototipo: 144 × 144 m, strade 8 m, marciapiedi 3 m con cordolo incluso. Asfalto ripetuto 4 × 4 m; marciapiede 1 × 1 m; cordolo largo 20 cm con segmenti lunghi 1 m; mattonellato modulo 4 × 4 m. Sono impostazioni del prototipo, non dimensioni imposte a tutte le AREE.
+- Stato di verifica: nuovi FIRST SPAWN, HURRY UP e relativa presentazione compilati; verifica Play Mode ancora da eseguire. I report HUD precedenti non validano queste modifiche.
+- LAG multiplayer segnalato resta da verificare. QUEST rimandate per scelta del proprietario; salvataggio/progressione permanente e flusso post-BOSS da completare.
+- Questa revisione aggiorna la documentazione e non introduce ulteriori regole di gameplay.

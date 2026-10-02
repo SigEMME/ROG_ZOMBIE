@@ -1,0 +1,65 @@
+[
+  {
+    "file": "Casa_03_Abbandonata.obj",
+    "triangles": 358,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 132.03186
+  },
+  {
+    "file": "Casa_03_Abbandonata_Azzurro.obj",
+    "triangles": 556,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 398.25592
+  },
+  {
+    "file": "Casa_03_Abbandonata_Salvia.obj",
+    "triangles": 456,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 238.30922
+  },
+  {
+    "file": "Fienile_01_Annesso.obj",
+    "triangles": 486,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 321.14588
+  },
+  {
+    "file": "Fienile_01_Annesso_Azzurro.obj",
+    "triangles": 728,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 1113.19608
+  },
+  {
+    "file": "Fienile_01_Annesso_Salvia.obj",
+    "triangles": 628,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 676.60282
+  },
+  {
+    "file": "Rimessa_02_Rurale.obj",
+    "triangles": 292,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 111.60419
+  },
+  {
+    "file": "Rimessa_02_Rurale_Azzurro.obj",
+    "triangles": 480,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 474.55754
+  },
+  {
+    "file": "Rimessa_02_Rurale_Salvia.obj",
+    "triangles": 332,
+    "valid_indices_normals_uv": true,
+    "base_y": 0.0,
+    "signed_volume": 267.63348
+  }
+]

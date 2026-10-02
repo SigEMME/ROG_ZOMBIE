@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Cassa_01_Rinforzata",
+    "triangles": 154,
+    "dimensions": [
+      1.004,
+      1.002,
+      1.038
+    ]
+  },
+  {
+    "name": "Cassa_02_Invecchiata",
+    "triangles": 114,
+    "dimensions": [
+      1.0,
+      0.95,
+      1.038
+    ]
+  },
+  {
+    "name": "Cassa_03_Lunga",
+    "triangles": 116,
+    "dimensions": [
+      1.65,
+      0.65,
+      0.858
+    ]
+  },
+  {
+    "name": "Cassa_04_Danneggiata",
+    "triangles": 196,
+    "dimensions": [
+      1.0,
+      0.85,
+      0.988
+    ]
+  },
+  {
+    "name": "Cassa_05_Lunga_Rotta",
+    "triangles": 184,
+    "dimensions": [
+      1.65,
+      0.68,
+      0.938
+    ]
+  },
+  {
+    "name": "Sacchi_06_Pallet",
+    "triangles": 996,
+    "dimensions": [
+      1.4,
+      1.036,
+      1.055
+    ]
+  }
+]

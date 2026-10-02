@@ -1,0 +1,26 @@
+Texture generate con image_gen integrato; immagini sorgenti preservate.
+SALVIA
+One evergreen spruce foliage fan texture for a flat low-poly game card,
+transparent background. Narrow attachment at top center; broad spreading
+layered drooping bough towards bottom, jagged needles and irregular tips.
+Cool muted sage and blue-green, subtle dusty silver green highlights,
+dark teal forest shadows. Very subtle blue tint, natural tree color.
+Retro 32-bit pixel art, chunky clear clusters equivalent 128x128 nearest
+neighbor enlarged. Sparse gaps between distinct branchlets, more airy
+irregular silhouette. Square, fan fills 90 percent, true alpha cutout.
+No entire tree, no trunk, no background haze, no glow, no shadow outside
+foliage, no text. Flat orthographic texture, restrained detail, for top-down
+tree foliage planes.
+
+OLIVA
+One dense evergreen fir foliage fan texture for flat low-poly game card,
+TRUE transparent background. Narrow attachment top center, compact broad
+fan widening toward bottom, short dense overlapping rounded triangular
+needle branchlets, irregular jagged perimeter. Warm muted olive green mids,
+subdued yellow green fresh tips, deep moss green shadows; subtle warm
+variation natural not autumn orange. Retro 32-bit pixel art, bold coarse
+clusters equivalent to 128x128 enlarged nearest-neighbor, clear low-resolution
+shapes. Dense layered branch composition noticeably different from airy
+spruce sprays. Square, foliage fills 90 percent. Flat orthographic texture,
+no whole tree, no trunk, no background, no halo, no ground shadow, no text.
+Alpha cutout for double sided top-down tree planes.

@@ -11,13 +11,28 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e023cddd396747c3b0a88dbfb7fe7794, type: 3}
   m_Name: PreGameplayLoop
-  EnvironmentShader: {fileID: 4800000, guid: 4f069dc050d64e66999b2e302ffc7260, type: 3}
   m_EditorClassIdentifier: 
+  EnvironmentShader: {fileID: 4800000, guid: 4f069dc050d64e66999b2e302ffc7260, type: 3}
+  FirstAreaTerrain: {fileID: 8276497207567871963, guid: d07b51b6f03ffc24395baa7287e9231a, type: 3}
+  TerrainBackgroundShader: {fileID: 4800000, guid: 97e8668b1d6e43ab8c7db40759fadd8e, type: 3}
+  TerrainPlayerStart: {x: 34, y: -60}
+  TerrainExit: {x: -62, y: 33}
+  StartingItems: 00000000000000000000000000000000
+  StartingItemCounts: 00000000000000000000000000000000
   SelectedPlayer: 6
   EnableCompanion: 0
   CompanionPlayer: 1
   CompanionAbility: 0
   CompanionPassive: 0
+  AdditionalCompanions:
+  - Enabled: 0
+    Player: 2
+    Ability: 0
+    Passive: 0
+  - Enabled: 0
+    Player: 3
+    Ability: 0
+    Passive: 0
   PG01Weapon: {fileID: 11400000, guid: 80e0fe24276941b8b4c54fa8bbe9a970, type: 2}
   PG01Abilities: {fileID: 11400000, guid: cc5762ad2fd24c72a3a143040eaa04b2, type: 2}
   SelectedAbility: 0
@@ -55,14 +70,7 @@ MonoBehaviour:
   GeometryTemplate: {fileID: 11400000, guid: 496b5d3b9635460cba4e2455a16aa84c, type: 2}
   ZOMB01: {fileID: 11400000, guid: f46a94a6bfed4325b96f3d2bd548d3a7, type: 2}
   AreaTotals: 82000000a0000000c8000000
-  ExitPosition: {x: -1.6, y: 45.5}
-  AreaLayouts:
-  - AreaNumber: 1
-    Geometry: {fileID: 11400000, guid: f5678af9b0a44ac782b12b74f27c9af8, type: 2}
-    ExitPosition: {x: -3, y: 65}
-  - AreaNumber: 3
-    Geometry: {fileID: 11400000, guid: b63f453066534ddc860fbc61f4abbc57, type: 2}
-    ExitPosition: {x: 0, y: 59}
+  BossAreaNumbers: 
   AreaMobDistributions:
   - Percentages:
     - 75
@@ -82,3 +90,11 @@ MonoBehaviour:
     - 15
     - 0
     - 0
+  ExitPosition: {x: -1.6, y: 45.5}
+  AreaLayouts:
+  - AreaNumber: 1
+    Geometry: {fileID: 11400000, guid: f5678af9b0a44ac782b12b74f27c9af8, type: 2}
+    ExitPosition: {x: -3, y: 65}
+  - AreaNumber: 3
+    Geometry: {fileID: 11400000, guid: b63f453066534ddc860fbc61f4abbc57, type: 2}
+    ExitPosition: {x: 0, y: 59}

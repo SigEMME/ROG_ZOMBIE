@@ -6,7 +6,7 @@ Shader "ROG/TopDownStudy"
         Tags { "RenderPipeline"="UniversalPipeline" "Queue"="Geometry" }
         Pass
         {
-            Tags { "LightMode"="Universal2D" }
+            Tags { "LightMode"="UniversalForward" }
             ZWrite On Cull Off
             HLSLPROGRAM
             #pragma vertex Vert

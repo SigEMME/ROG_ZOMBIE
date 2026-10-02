@@ -1,0 +1,10 @@
+VEICOLI - verifica importazione Unity
+CAR01_Nero: 576 triangoli; dimensioni XYZ (2.116, 1.514, 4.654) m; 7 renderer; UV OK; BoxCollider statico; pivot a terra.
+CAR01_Rosso: 576 triangoli; dimensioni XYZ (2.116, 1.514, 4.654) m; 7 renderer; UV OK; BoxCollider statico; pivot a terra.
+BUS01_Blu: 536 triangoli; dimensioni XYZ (1.462, 1.570, 4.367) m; 10 renderer; UV OK; BoxCollider statico; pivot a terra.
+TRACK01_Bianco: 1232 triangoli; dimensioni XYZ (1.395, 1.517, 4.428) m; 12 renderer; UV OK; BoxCollider statico; pivot a terra.
+TRACK01_Blu: 1232 triangoli; dimensioni XYZ (1.395, 1.517, 4.428) m; 12 renderer; UV OK; BoxCollider statico; pivot a terra.
+Tractor01_Giallo: 768 triangoli; dimensioni XYZ (1.493, 1.590, 2.477) m; 10 renderer; UV OK; BoxCollider statico; pivot a terra.
+Tractor01_Verde: 768 triangoli; dimensioni XYZ (1.493, 1.590, 2.477) m; 10 renderer; UV OK; BoxCollider statico; pivot a terra.
+Pickup01_Beige: 700 triangoli; dimensioni XYZ (1.975, 1.688, 4.382) m; 5 renderer; UV OK; BoxCollider statico; pivot a terra.
+Pickup01_Blu: 700 triangoli; dimensioni XYZ (1.975, 1.688, 4.382) m; 5 renderer; UV OK; BoxCollider statico; pivot a terra.

@@ -1,0 +1,95 @@
+[
+  {
+    "name": "Fienile_01_Annesso",
+    "triangles": 486,
+    "dimensions": [
+      9.02,
+      7.555,
+      8.62
+    ]
+  },
+  {
+    "name": "Rimessa_02_Rurale",
+    "triangles": 292,
+    "dimensions": [
+      5.067,
+      4.905,
+      6.62
+    ]
+  },
+  {
+    "name": "Casa_03_Abbandonata",
+    "triangles": 358,
+    "dimensions": [
+      5.866,
+      5.44,
+      7.62
+    ]
+  },
+  {
+    "name": "Fienile_01_Annesso_Salvia",
+    "triangles": 628,
+    "dimensions": [
+      11.562,
+      7.557,
+      12.62
+    ],
+    "texture": "FarmAtlas_Salvia.png",
+    "features": "4 campate, corpo e annesso ampliati"
+  },
+  {
+    "name": "Rimessa_02_Rurale_Salvia",
+    "triangles": 332,
+    "dimensions": [
+      7.251,
+      4.905,
+      10.62
+    ],
+    "texture": "FarmAtlas_Salvia.png",
+    "features": "3 campate e maggiore superficie di deposito"
+  },
+  {
+    "name": "Casa_03_Abbandonata_Salvia",
+    "triangles": 456,
+    "dimensions": [
+      7.654,
+      5.43,
+      11.31
+    ],
+    "texture": "FarmAtlas_Salvia.png",
+    "features": "3 campate, veranda e nuove finestre"
+  },
+  {
+    "name": "Fienile_01_Annesso_Azzurro",
+    "triangles": 728,
+    "dimensions": [
+      13.558,
+      7.558,
+      16.62
+    ],
+    "texture": "FarmAtlas_Azzurro.png",
+    "features": "5 campate, due portoni, annesso lungo"
+  },
+  {
+    "name": "Rimessa_02_Rurale_Azzurro",
+    "triangles": 480,
+    "dimensions": [
+      9.441,
+      4.906,
+      15.61
+    ],
+    "texture": "FarmAtlas_Azzurro.png",
+    "features": "4 campate, due portoni, tettoia di carico"
+  },
+  {
+    "name": "Casa_03_Abbandonata_Azzurro",
+    "triangles": 556,
+    "dimensions": [
+      9.445,
+      5.43,
+      14.81
+    ],
+    "texture": "FarmAtlas_Azzurro.png",
+    "features": "4 campate, veranda ampia, due camini"
+  }
+]

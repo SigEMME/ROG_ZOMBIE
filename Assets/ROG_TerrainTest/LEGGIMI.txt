@@ -1,0 +1,19 @@
+TERRENO TEST 140 x 140 - INSTALLAZIONE DA CARTELLA
+
+1. Chiudi la finestra Import Unity Package che mostra l'errore. Non utilizzare i precedenti file .unitypackage.
+2. Estrai questo ZIP in una cartella temporanea.
+3. Copia la cartella ROG_TerrainTest in C:/UnityProjects/ROG_ZOMBIE/Assets/.
+   Il percorso finale deve essere Assets/ROG_TerrainTest/Editor/TerrainTestSetup.cs.
+   Non creare una seconda cartella Assets dentro Assets.
+4. Torna in Unity e attendi il termine della compilazione.
+5. Menu ROG ZOMBIE > Terreno > Crea scena test 140 x 140.
+6. Seleziona Ground_140x140_DipingiQui nella Hierarchy.
+7. Inspector > Paint Terrain > Paint Texture: scegli il layer e dipingi nella Scene view, fuori da Play Mode.
+
+Il comando crea e salva una scena nuova, il TerrainData, sei Terrain Layer e il materiale. Le texture colore e le Normal Map sono incluse. Il terreno inizia con prato chiaro, superficie 140 x 140 metri, centro all'origine, collider, luce e camera. La ripetizione iniziale e 8 metri per texture e si modifica nei Terrain Layer.
+Ogni esecuzione crea una nuova cartella Test_140x140 senza sovrascrivere le prove precedenti.
+Se hai gia una cartella ROG_TerrainTest con lavori salvati, conserva le sottocartelle Test_140x140: copia soltanto Editor e Textures.
+
+COMPATIBILITA E VERIFICA
+Codice compilato con le librerie Unity 6000.3.16f1. Le 12 PNG e lo ZIP sono verificati. La creazione della scena non e stata eseguita nell'Editor locale. La consegna da cartella evita la finestra PackageImportTreeView che genera l'errore di importazione.
+Il generatore sceglie lo shader Terrain Built-in, URP o HDRP del progetto. Un progetto URP con renderer solo 2D richiede un renderer 3D compatibile per visualizzare un Terrain 3D. La pittura usa gli strumenti nativi Unity, non un editor in Play Mode.

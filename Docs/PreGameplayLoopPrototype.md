@@ -24,7 +24,7 @@ Base: `6fa6b25` — GDD ufficiale `Docs/ROG_ZOMBIE_GDD.md`, revisione finale CLA
 
 Aprire `Assets/Scenes/PreGameplayLoopPrototype.unity` in Unity 6000.3.16f1 e premere Play. WASD muove il PG selezionato, mouse orienta, LMB attacca; Q usa l'ABILITA selezionata. Per BARRIERA, tenere Q mostra l'anteprima e rilasciare piazza il muro. Dettagli in Docs/PG01AbilitiesPrototype.md. Il pulsante Riprova test ripristina la RUN senza dipendere dalle Build Settings.
 
-Il caricamento costruisce NavMesh e FIRST SPAWN off-screen. A1: 130 MOB, 39 iniziali. A2: 160 MOB, 48 iniziali. A3: 200 MOB, 60 iniziali. Una morte effettiva genera un rimpiazzo finché il totale è esaurito. All'ultima morte l'uscita diventa verde; raggiungere il cerchio di raggio 4 m. La freccia compare quando il centro uscita è off-screen. Scegliere una delle tre STATS e confermare. La seconda AREA conserva PG, selezioni ABILITÀ/PASSIVA, STATS, HP e G; il passaggio cura il 15% degli HP massimi correnti. Dopo il secondo BONUS il test termina, senza simulare vittoria RUN o BOSS. Il PG in DOWN termina il test perché non resta alcun PG attivo.
+Il caricamento costruisce NavMesh e FIRST SPAWN off-screen. A1: 130 MOB, 46 iniziali. A2: 160 MOB, 56 iniziali. A3: 200 MOB, 70 iniziali. Una morte effettiva genera un rimpiazzo finché il totale è esaurito. All'ultima morte l'uscita diventa verde; raggiungere il cerchio di raggio 4 m. La freccia compare quando il centro uscita è off-screen. Scegliere una delle tre STATS e confermare. La seconda AREA conserva PG, selezioni ABILITÀ/PASSIVA, STATS, HP e G; il passaggio cura il 15% degli HP massimi correnti. Dopo il secondo BONUS il test termina, senza simulare vittoria RUN o BOSS. Il PG in DOWN termina il test perché non resta alcun PG attivo.
 
 ## Struttura
 
