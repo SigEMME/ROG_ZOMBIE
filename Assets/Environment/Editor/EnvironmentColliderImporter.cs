@@ -9,11 +9,11 @@ namespace ROGZOMBIE.EnvironmentArt
     {
         internal static readonly string[] Roots =
         {
-            "Assets/Environment/CratesLowPoly",
-            "Assets/Environment/FarmBuildingsLowPoly",
+            "Assets/C1/Environment/CratesLowPoly",
+            "Assets/C1/Environment/FarmBuildingsLowPoly",
             "Assets/Environment/TreeLowPolyTest",
-            "Assets/Environment/OakLowPolyTest",
-            "Assets/Environment/BirchLowPolyTest"
+            "Assets/C1/Environment/OakLowPolyTest",
+            "Assets/C1/Environment/BirchLowPolyTest"
         };
 
         public override uint GetVersion() => 1;

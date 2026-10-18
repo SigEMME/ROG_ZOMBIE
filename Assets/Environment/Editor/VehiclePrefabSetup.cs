@@ -29,7 +29,7 @@ namespace ROGZOMBIE.EnvironmentArt
             var report = new StringBuilder("VEICOLI - verifica importazione Unity\n");
             foreach (string name in Names)
             {
-                string folder = "Assets/Environment/" + name;
+                string folder = "Assets/C1/Environment/" + name;
                 var model = AssetDatabase.LoadAssetAtPath<GameObject>(folder + "/" + name + "_Unity.fbx");
                 if (model == null) throw new InvalidOperationException("FBX non importato: " + name);
                 foreach (string png in Directory.GetFiles(folder, "*_BaseColor_*.png"))

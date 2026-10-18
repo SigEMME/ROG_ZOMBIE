@@ -1,29 +1,37 @@
-PRIMA AREA - TEST_TERRENO
-La RUN di HubPrototype usa Area01_Terreno.prefab per AREA 1.
-Origine: scena salvata Assets/ROG_TerrainTest/Test_140x140/Test_Terreno_140x140.unity.
-Dimensione: 140 x 140 m.
-Spawn gruppo: XY gameplay (34, -60), corrispondente a XZ terreno (34, -60).
-Uscita: XY gameplay (-62, 33), sul termine della strada in alto a sinistra.
-Confine provvisorio: quattro muri, spessore 1 m, altezza 2 m, con collider.
-Materiale: Boundary.mat.
+MAPPE TERRENO - PRE GAMEPLAY LOOP
+AREA 1: Assets/Scenes/C1_A1.unity, terreno 90 x 90 m.
+Prefab: Assets/Environment/C1_Mappe/C1_A1_Terreno.prefab.
+SPAWN sulla strada SUD: XY gameplay (-7, -39), XZ terreno (-7, -39).
+USCITA sulla strada NORD: XY gameplay (8.3, 39), XZ terreno (8.3, 39).
+Entrambi i punti sono al centro della strada, 6 m all'interno del bordo.
 
-Aprire HubPrototype, selezionare i PG, confermare la preparazione RUN.
-Verificare spawn sulla strada bassa, movimento/collisioni e camera prospettica.
-Completare AREA 1 per aprire l'uscita sulla strada in alto a sinistra.
-La transizione alle altre aree mantiene il flusso esistente.
+AREA 2: Assets/Scenes/C1_A2.unity, terreno 140 x 140 m.
+Prefab: Assets/Environment/C1_Mappe/C1_A2_Terreno.prefab.
+SPAWN e USCITA precedenti conservati: (34, -60) e (-62, 33).
+AREA 3: layout di prova precedente, invariato.
 
-Dati configurabili su PreGameplayLoop.asset: FirstAreaTerrain, TerrainBackgroundShader,
-TerrainPlayerStart, TerrainExit.
-Il prefab fotografa gli oggetti della scena salvata; modifiche successive alla disposizione
-in Test_Terreno non si trasferiscono automaticamente. TerrainData e asset restano condivisi.
-Il collegamento riusa TerrainGameplayBridge: rendering 3D, combattimento e collisioni XY.
-Restano i limiti del test precedente: nessuna gestione dei dislivelli e nessuna occlusione
-di PG/MOB sotto chiome e tetti. Collider complessi proiettati in ingombri rettangolari.
-Nessuna variazione a statistiche, conteggi MOB o regole di apertura dell'uscita.
+Aprire HubPrototype, preparare la RUN e avviare; oppure usare PreGameplayLoopPrototype.
+Ogni uscita mantiene le condizioni esistenti di completamento AREA e scelta ricompensa.
+PG, BONUS, ITEMS e G mantengono le regole esistenti durante il cambio AREA.
+
+AGGIORNAMENTO DA UNITY
+Fuori dal Play Mode: ROG ZOMBIE > Mappe > Salva C1_A1 e C1_A2 e aggiorna PreGameplayLoop.
+Salva le due scene se aperte e modificate; se chiuse usa la versione su disco.
+Non salva altre scene. Attendere il messaggio in Console, quindi avviare una nuova RUN.
+I prefab sono copie esportate delle scene: disposizione degli oggetti, luci e foschia
+richiedono questo comando dopo le modifiche. TerrainData e materiali sono condivisi.
+
+CONFIGURAZIONE
+PreGameplayLoop.asset: FirstAreaTerrain, TerrainPlayerStart, TerrainExit;
+SecondAreaTerrain, SecondTerrainPlayerStart, SecondTerrainExit; TerrainBackgroundShader.
+Confini generati dalle dimensioni reali del terreno, spessore 1 m e altezza 2 m.
+Luci, profilo colore e foschia sono inclusi; il riferimento della foschia al Terrain
+viene rimappato durante l'esportazione. Il cambio AREA rimuove la presentazione precedente.
+Limiti: nessuna gestione dei dislivelli; collider complessi proiettati in ingombri rettangolari.
 
 VERIFICA
-Compilazione runtime ed Editor riuscita; warning CS0649 preesistenti runtime.
-Unity ha esportato il prefab e verificato la navigazione con 1428 collider della mappa:
-spawn valido, uscita valida, percorso completo fra i due.
-Play Mode della RUN completa e prova multiplayer non eseguiti.
-Nessuna build esportata, nessun commit.
+ROG ZOMBIE > Tests > Verifica sequenza mappe C1, con PreGameplayLoopPrototype aperta e salvata.
+Il test verifica caricamento, FIRST SPAWN, percorsi, persistenza PG/G, pulizia atmosfera,
+AREA 3 e reset RUN. Richiama direttamente le transizioni per isolare le mappe;
+non sostituisce una RUN manuale completa di combattimento e ricompense.
+Risultato in output/terrain-map-sequence-result.txt.

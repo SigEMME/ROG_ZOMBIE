@@ -1,0 +1,1 @@
+Spawn (-7.00, -39.00) valid True; exit (8.30, 39.00) valid True; connected True; obstacles 469

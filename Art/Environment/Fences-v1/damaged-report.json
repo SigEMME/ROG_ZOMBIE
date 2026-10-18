@@ -1,0 +1,32 @@
+{
+  "Staccionata_Aperta_Danneggiata": {
+    "triangles": 240,
+    "vertices_before_import_welding": 720,
+    "materials": 1,
+    "bounds_min": [
+      -2.0,
+      0.0,
+      -0.12
+    ],
+    "bounds_max": [
+      2.0159725087533897,
+      1.85,
+      0.23500000000000001
+    ]
+  },
+  "Staccionata_Rinforzata_Danneggiata": {
+    "triangles": 256,
+    "vertices_before_import_welding": 768,
+    "materials": 1,
+    "bounds_min": [
+      -2.0,
+      0.0,
+      -0.29500000000000004
+    ],
+    "bounds_max": [
+      2.0,
+      1.85,
+      0.23500000000000001
+    ]
+  }
+}

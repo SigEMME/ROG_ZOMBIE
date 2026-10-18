@@ -133,12 +133,8 @@ namespace RogZombie.TestEngine
             var weapon = Settings.Weapons[StartingPG];
             var go = TestVisuals.Box(weapon.PG.PlayerId, Settings.StartPosition, Vector2.one, Color.white, 3);
             go.SetActive(false);
-            if (Settings.PlayerSprite != null)
-            {
-                var sprite = go.GetComponent<SpriteRenderer>();
-                sprite.drawMode = SpriteDrawMode.Simple;
-                sprite.sprite = Settings.PlayerSprite;
-            }
+            go.GetComponent<SpriteRenderer>().color = ActorCapsuleVisual.PlayerColor;
+            go.AddComponent<ActorCapsuleVisual>().Initialize(Settings.ActorRadius);
             go.AddComponent<CircleCollider2D>().radius = Settings.ActorRadius;
             go.AddComponent<Combatant>();
             go.AddComponent<PlayerMovement>().TestSettings = Settings;
@@ -162,6 +158,7 @@ namespace RogZombie.TestEngine
             Color[] colors = { new Color(0.4f, 0.7f, 0.4f), new Color(0.6f, 0.8f, 0.25f),
                 new Color(0.65f, 0.35f, 0.8f), new Color(1f, 0.45f, 0.55f), new Color(1f, 0.5f, 0.15f) };
             var go = TestVisuals.Circle(Settings.Mobs[index].Kind.ToString(), position, Settings.ActorRadius, colors[index], 2);
+            go.AddComponent<ActorCapsuleVisual>().Initialize(Settings.ActorRadius);
             go.AddComponent<CircleCollider2D>().radius = Settings.ActorRadius;
             var actor = go.AddComponent<Combatant>();
             var brain = go.AddComponent<MobBrain>();

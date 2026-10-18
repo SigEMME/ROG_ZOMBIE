@@ -1,0 +1,11 @@
+newmtl Bark
+Kd 1 1 1
+map_Kd ../OakLowPolyTest/BarkPixel.png
+
+newmtl Foliage
+Kd 1 1 1
+map_Kd ../OakLowPolyTest/FoliagePixel.png
+map_d ../OakLowPolyTest/FoliagePixel.png
+
+newmtl Apple
+Kd 0.72 0.055 0.035

@@ -49,8 +49,8 @@ namespace RogZombie.PreGameplayLoop
         private float cdReduction;
         private Transform areaRoot;
         private TopDownEnvironment environment;
-        private bool UsesTerrain => AreaIndex == 0 && Definition.FirstAreaTerrain != null;
-        private Vector2 AreaExitPosition => UsesTerrain ? Definition.TerrainExit : Definition.ExitForArea(AreaIndex);
+        private bool UsesTerrain => Definition.TerrainForArea(AreaIndex) != null;
+        private Vector2 AreaExitPosition => Definition.ExitForArea(AreaIndex);
         private HurryUpRuntime hurryUp;
         public HurryUpRuntime HurryUp => hurryUp;
         private float previousTimeScale;
@@ -102,8 +102,8 @@ namespace RogZombie.PreGameplayLoop
             TestVisuals.Root = areaRoot;
             if (UsesTerrain)
             {
-                Settings.StartPosition = Definition.TerrainPlayerStart;
-                var map = Instantiate(Definition.FirstAreaTerrain, areaRoot);
+                Settings.StartPosition = Definition.TerrainStartForArea(AreaIndex);
+                var map = Instantiate(Definition.TerrainForArea(AreaIndex), areaRoot);
                 var bridge = areaRoot.gameObject.AddComponent<RogZombie.PlayTests.TerrainGameplayBridge>();
                 bridge.Initialize(this, map, Definition.TerrainBackgroundShader);
                 bridge.BuildObstacles(areaRoot);
@@ -193,12 +193,8 @@ namespace RogZombie.PreGameplayLoop
             go.SetActive(false);
             go.transform.SetParent(transform); // Keep runtime HP/stats across area teardown.
             go.layer = LayerMask.NameToLayer("PG");
-            if (Settings.PlayerSprite != null)
-            {
-                var sprite = go.GetComponent<SpriteRenderer>();
-                sprite.drawMode = SpriteDrawMode.Simple;
-                sprite.sprite = Settings.PlayerSprite;
-            }
+            go.GetComponent<SpriteRenderer>().color = ActorCapsuleVisual.PlayerColor;
+            go.AddComponent<ActorCapsuleVisual>().Initialize(Settings.ActorRadius);
             go.AddComponent<CircleCollider2D>().radius = Settings.ActorRadius;
             go.AddComponent<Combatant>();
             go.AddComponent<PlayerMovement>();
@@ -303,6 +299,7 @@ namespace RogZombie.PreGameplayLoop
                 index == 2 ? new Color(.7f, .35f, .9f) : index == 3 ? Color.cyan : new Color(.9f, .25f, .25f);
             var go = TestVisuals.Circle(definition.Kind.ToString(), position, Settings.ActorRadius, color, 2);
             go.layer = LayerMask.NameToLayer("MOB");
+            go.AddComponent<ActorCapsuleVisual>().Initialize(Settings.ActorRadius);
             go.AddComponent<CircleCollider2D>().radius = Settings.ActorRadius;
             var actor = go.AddComponent<Combatant>();
             // Growth counts ordinary AREAS only, without resetting at city boundaries.

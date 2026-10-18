@@ -1,0 +1,29 @@
+CIUFFI 3D - CITTA 1
+
+Erba_01_Bassa: altezza 0,15 m, 35 triangoli.
+Erba_02_Aperta: altezza 0,25 m, 45 triangoli.
+Erba_03_Alta: altezza 0,35 m, 55 triangoli.
+Dimensioni riferite a scala 1. Pivot al suolo. Ciuffi statici, senza collider.
+
+USO SUL TERRAIN
+1. Seleziona il GameObject Terrain nella gerarchia.
+2. Menu ROG ZOMBIE > Art > Aggiungi ciuffi C1 al Terrain selezionato.
+3. Inspector del Terrain > Paint Details: seleziona una delle tre varianti e dipingi.
+Il comando aggiunge solo i tipi mancanti, conserva quelli esistenti e supporta Undo.
+Se la risoluzione dei dettagli e zero, inizializza una griglia 512 x 512 con patch
+di 16 celle. Le griglie esistenti non vengono ridimensionate per preservare il dipinto.
+Non dipinge automaticamente e non cambia densita o distanza dei dettagli del Terrain.
+La registrazione modifica il TerrainData: le scene che condividono quel dato vedono
+gli stessi dettagli. Per distribuzioni differenti usa TerrainData distinti.
+Si possono anche trascinare i prefab direttamente nella scena.
+
+MATERIALE
+Materiale Grass condiviso, GPU instancing abilitato, superficie opaca a due facce.
+Riutilizza Texture_Prato_Chiaro senza modificarla. Illuminazione principale URP,
+luce ambientale e nebbia; riceve ombre ma non le proietta. Nessuna animazione vento.
+Pensato per il renderer 3D URP usato dal Terrain, non per luci 2D.
+La densita va valutata dalla camera di gioco: questi asset non fissano un budget
+di popolamento e non costituiscono un benchmark delle prestazioni della mappa.
+
+Menu ROG ZOMBIE > Art > Crea ciuffi erba C1 ricrea solo asset mancanti;
+non sovrascrive prefab, mesh o materiale gia presenti.

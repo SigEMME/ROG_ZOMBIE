@@ -34,6 +34,12 @@ namespace RogZombie.PreGameplayLoop
         public Shader TerrainBackgroundShader;
         public Vector2 TerrainPlayerStart;
         public Vector2 TerrainExit;
+        [Header("Seconda AREA - terreno")]
+        public GameObject SecondAreaTerrain;
+        public Vector2 SecondTerrainPlayerStart;
+        public Vector2 SecondTerrainExit;
+        public GameObject TerrainForArea(int index) => index == 0 ? FirstAreaTerrain : index == 1 ? SecondAreaTerrain : null;
+        public Vector2 TerrainStartForArea(int index) => index == 0 ? TerrainPlayerStart : SecondTerrainPlayerStart;
         [Header("ITEMS di prova")]
         public PrototypeItem[] StartingItems = new PrototypeItem[4];
         public int[] StartingItemCounts = new int[4];
@@ -135,7 +141,7 @@ namespace RogZombie.PreGameplayLoop
             return null;
         }
         public TestAreaSettings GeometryForArea(int index) => Layout(index)?.Geometry ?? GeometryTemplate;
-        public Vector2 ExitForArea(int index) => index == 0 && FirstAreaTerrain != null ? TerrainExit : Layout(index)?.ExitPosition ?? ExitPosition;
+        public Vector2 ExitForArea(int index) => TerrainForArea(index) != null ? (index == 0 ? TerrainExit : SecondTerrainExit) : Layout(index)?.ExitPosition ?? ExitPosition;
 
         public WeaponDefinition SelectedWeapon => SelectedPlayer == LoopPlayer.PG01 ? PG01Weapon :
             SelectedPlayer == LoopPlayer.PG02 ? PG02Weapon : SelectedPlayer == LoopPlayer.PG03 ? PG03Weapon : SelectedPlayer == LoopPlayer.PG04 ? PG04Weapon : SelectedPlayer == LoopPlayer.PG05 ? PG05Weapon : SelectedPlayer == LoopPlayer.PG06 ? PG06Weapon : SelectedPlayer == LoopPlayer.PG07 ? PG07Weapon : PG08Weapon;
@@ -204,10 +210,10 @@ namespace RogZombie.PreGameplayLoop
                     return "Geometria o budget di ricerca non valido.";
                 if (!g.EnableMobSeparation) return "Il test richiede collisione/separazione MOB attiva.";
                 Vector2 areaSize = g.AreaSize;
-                if (index == 0 && FirstAreaTerrain != null)
+                if (TerrainForArea(index) != null)
                 {
-                    var terrain = FirstAreaTerrain.GetComponentInChildren<Terrain>();
-                    if (terrain == null || TerrainBackgroundShader == null) return "Terreno prima AREA o shader mancante.";
+                    var terrain = TerrainForArea(index).GetComponentInChildren<Terrain>();
+                    if (terrain == null || terrain.terrainData == null || TerrainBackgroundShader == null) return "Terreno AREA o shader mancante.";
                     areaSize = new Vector2(terrain.terrainData.size.x, terrain.terrainData.size.z);
                 }
                 if (Mathf.Abs(exit.x) + 4 >= areaSize.x / 2 || Mathf.Abs(exit.y) + 4 >= areaSize.y / 2)

@@ -1,0 +1,22 @@
+MELO 01 - Asset ambientale C1
+
+Trascinare Melo_01.prefab nella scena. Scala 1 = metri; pivot alla base.
+Ingombro circa 4 x 4,12 m, altezza 3,57 m.
+2340 triangoli, 24 mele tridimensionali, 18 piani di fogliame.
+Tronco e chioma condividono i materiali e le texture delle querce esistenti.
+Il materiale Apple e' opaco, low-poly, rosso. Le mele sono solo decorative.
+Un solo CapsuleCollider sul tronco (raggio 0,23 m, altezza 2,5 m).
+Nessun collider sulla chioma o sui frutti; nessuna raccolta o logica gameplay.
+Materiali URP come gli alberi esistenti; usare la presentazione 3D del Terrain.
+Nessuna animazione vento o LOD aggiunta.
+
+Per ricreare un prefab mancante: ROG ZOMBIE > Art > Crea prefab melo.
+Sorgente riproducibile: Art/Environment/AppleTree-v1/build_apple.py.
+
+MELO 03 MATURO
+Nuova mesh a scala 1: tronco piu' robusto e rami articolati, chioma asimmetrica.
+Altezza 4,75 m; chioma 5,77 x 6,16 m; 3580 triangoli, 36 mele, 27 piani fogliame.
+Melo_03_Maturo.prefab usa materiali condivisi e un collider sul tronco: raggio 0,36 m, altezza 3,5 m.
+Il precedente prefab ingrandito Melo_02_Grande e' stato eliminato.
+Sorgente: Art/Environment/AppleTree-v1/build_mature_apple.py.
+Menu: ROG ZOMBIE > Art > Crea variante melo grande.

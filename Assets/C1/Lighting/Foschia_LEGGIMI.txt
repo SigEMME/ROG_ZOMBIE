@@ -1,0 +1,32 @@
+FOSCHIA C1
+Nella scena C1_A2 selezionare Foschia_C1 e modificare Ground Mist nell'Inspector.
+
+Densita: opacita dei banchi; valore iniziale 0,14. Zero nasconde l'effetto.
+Colore: tinta e trasparenza della foschia.
+Scala delle nuvole: dimensione delle variazioni interne, in metri.
+Numero banchi: da 1 a 32; valore iniziale 12.
+Estensione area X/Z: zona di distribuzione centrata sull'oggetto.
+Dimensioni banco X/Z: ingombro medio di ciascun banco, con variazioni leggere.
+Altezza sul terreno: quota rispetto al Terrain indicato (inizialmente 0,65 m).
+Seme distribuzione: cambiare questo numero per una disposizione diversa ma ripetibile.
+Velocita X/Z: scorrimento delle nuvole in m/s; (0,0) ferma il movimento.
+Animazione in Editor: abilita lo scorrimento anche fuori dal Play Mode.
+Disattivare il componente o l'oggetto per spegnere interamente la foschia.
+
+Effetto di presentazione con superfici trasparenti, non nebbia volumetrica.
+Non modifica fisica, visibilita dei bersagli o regole di combattimento.
+I banchi sono piu' frequenti fuori dal centro. Non rilevano automaticamente strade o edifici.
+La geometria si ricrea a ogni modifica nell'Inspector, non ogni frame.
+Il movimento in Play Mode usa il tempo scalato di Unity.
+12 banchi = 24 triangoli in un solo renderer; il costo GPU dipende dai pixel trasparenti coperti.
+Nessun benchmark FPS effettuato. Alte densita e sovrapposizioni possono ridurre la leggibilita.
+La foschia di C1_A2 e' inclusa anche nell'esportazione della prima AREA di PreGameplayLoop.
+Per aggiornare parametri o distribuzione nella RUN occorre riesportare la scena salvata.
+
+ALTEZZA CASUALE
+Anima altezza: ogni banco passa fra quote casuali indipendenti con transizioni fluide.
+Range altezza min/max (m): quote sopra il terreno; sostituiscono Altezza sul terreno quando l'animazione e' attiva.
+Velocita cambio altezza: transizioni al secondo; 0,15 significa una nuova quota ogni circa 6,7 secondi.
+Zero mantiene una quota casuale ferma; min=max mantiene una quota uniforme.
+Disattivando Anima altezza si torna alla quota fissa Altezza sul terreno.
+Pausa e Animazione in Editor valgono anche per il movimento verticale.

@@ -1,0 +1,16 @@
+TERRENI CITTA 1
+Assets/C1/Terrain contiene soltanto:
+- Textures: texture diffuse, normal map e Terrain Layer condivisi per la pittura.
+- C1_A1: Terrain_asset.asset e Terrain_mat.mat (90x90 m).
+- C1_A2: Terrain_asset.asset e Terrain_mat.mat (140x140 m).
+- C1_A3: Terrain_asset.asset e Terrain_mat.mat (115x115 m).
+Ogni terreno e materiale mantiene il proprio GUID e i riferimenti esistenti.
+Dati dipinti, vegetazione e geometria sono preservati.
+Scene in Assets/Scenes; luci, profili colore e foschia in Assets/C1/Lighting.
+Strumenti Editor in Assets/C1/Editor.
+Il generatore di prove 140x140 salva ora in Assets/Environment/TerrainStudies.
+RenderingTest3D e Terreno_GameplayTest sono stati rimossi dal progetto.
+
+PreGameplayLoop usa C1_A1 e C1_A2; C1_A3 resta una scena di authoring indipendente.
+Per aggiornare le copie del loop:
+ROG ZOMBIE > Mappe > Salva C1_A1 e C1_A2 e aggiorna PreGameplayLoop.
